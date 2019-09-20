@@ -11,12 +11,12 @@ const databaseConnect: any = process.env.DB_Connect;
 
 // connect to mongooseDB
 mongoose.connect(databaseConnect,
-{ useNewUrlParser: true },
-() => {
-    console.log('connected to mongooseDB');
-});
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    () => {
+        console.log('connected to mongooseDB');
+    });
 
-// intializinf the app instance
+// intializing the app instance
 const app: Application = express();
 
 
