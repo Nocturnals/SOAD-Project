@@ -64,8 +64,15 @@ router.post('/login', async (req, res) => {
 
 });
 
+
 router.get('/viewpost1', verifyToken ,(req, res) => {
-    res.json({'message': 'asdfkljsdf'});
+    jwt.verify(req.token, process.env.Token_Secret, (err, authData) => {
+        if(err) {
+            res.status(401).json({'Error_Message': 'Access Denied'})
+        } else {
+            res.json({'message': 'asdfkljsdf'});
+        }
+    });
 })
 
 // verify the token for authentication
@@ -84,7 +91,7 @@ function verifyToken(req, res, next) {
         // run the next function
         next()
     } else {
-        res.status(401).json({'message': 'Forbidden'});
+        res.status(401).json({'message': 'Access Denied'});
     }
 }
 
