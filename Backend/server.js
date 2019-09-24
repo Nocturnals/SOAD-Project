@@ -1,13 +1,13 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
+const express = require( 'express');
 
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
+const dotenv = require( 'dotenv');
+const mongoose = require( 'mongoose');
 
-import { authRouter } from './routes/auth';
+const authRouter = require( './routes/auth');
 
 // load the local environment varaibles
 dotenv.config();
-const databaseConnect: any = process.env.DB_Connect;
+const databaseConnect = process.env.DB_Connect;
 
 // connect to mongooseDB
 mongoose.connect(databaseConnect,
@@ -17,7 +17,7 @@ mongoose.connect(databaseConnect,
     });
 
 // intializing the app instance
-const app: Application = express();
+const app = express();
 
 
 // Middleware

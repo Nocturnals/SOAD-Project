@@ -5,9 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/server.js",
-    "server": "nodemon src/server.ts",
-    "build": "tsc -p ."
+    "start": "node server.js",
+    "server": "nodemon server.ts"
   },
   "repository": {
     "type": "git",
@@ -20,22 +19,15 @@
   },
   "homepage": "https://github.com/Nocturnals/SOAD-Project#readme",
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.2",
-    "@types/dotenv": "^6.1.1",
-    "@types/express": "^4.17.0",
-    "@types/hapi__joi": "^15.0.4",
-    "@types/joi": "^14.3.3",
-    "@types/mongoose": "^5.5.17",
-    "@types/node": "^12.7.1",
     "nodemon": "^1.19.1",
-    "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "ts-node": "^8.3.0"
   },
   "dependencies": {
     "@hapi/joi": "^15.0.3",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.1"
   }
 }
