@@ -1,5 +1,5 @@
 {
-  "name": "com.artist_latform.webapp",
+  "name": "com.artist_platform.webapp",
   "version": "1.0.0",
   "description": "This is our 3rd year btech project for SOAD course ",
   "main": "server.js",
@@ -27,7 +27,9 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
+    "helmet": "^3.21.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.7.1"
+    "mongoose": "^5.7.1",
+    "morgan": "^1.9.1"
   }
 }

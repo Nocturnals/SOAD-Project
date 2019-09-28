@@ -59,7 +59,7 @@ router.post('/login', async (req, res) => {
 
     // Assign a json web token
     const tokenSecret = process.env.Token_Secret;
-    const jToken = jwt.sign({_id: user._id}, tokenSecret);
+    const jToken = jwt.sign({_id: user._id}, tokenSecret, { expiresIn: '1hr' });
     res.status(200).header('auth-token', jToken).json(user);
 
 });
@@ -68,9 +68,9 @@ router.post('/login', async (req, res) => {
 router.get('/viewpost1', verifyToken ,(req, res) => {
     jwt.verify(req.token, process.env.Token_Secret, (err, authData) => {
         if(err) {
-            res.status(401).json({'Error_Message': 'Access Denied'})
+            res.status(401).json({Error_Message: 'Access Denied'})
         } else {
-            res.json({'message': 'asdfkljsdf'});
+            res.json({message: 'asdfkljsdf'});
         }
     });
 })

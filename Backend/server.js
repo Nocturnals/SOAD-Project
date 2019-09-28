@@ -1,5 +1,7 @@
 const express = require( 'express');
 
+const helmet = require('helmet')
+const morgan = require('morgan');
 const dotenv = require( 'dotenv');
 const mongoose = require( 'mongoose');
 
@@ -21,11 +23,18 @@ const app = express();
 
 
 // Middleware
-app.use(express.json());
+app.use(express.json());        // for converting the json part of the request body
+app.use(morgan('tiny'));      // for logging the infomation
+if (process.env.Node_Env === 'development') {
+    app.use(helmet());      // for securing the routes with adding headers
+    console.log('Logging the data using morgan');
+}
 
 // Route for login
 app.use('/api/user', authRouter);
 
-app.listen(3000, () => {
-    console.log('Server is up and running!!');
+const port = process.env.port || 3000 
+
+app.listen(port, () => {
+    console.log(`Server is up and running on port: ${port}!!`);
 });
