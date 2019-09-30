@@ -1,7 +1,8 @@
 const express = require('express');
 
 const bcrypt = require('bcryptjs');
-jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
+const _ = require('lodash');
 
 const UserModel = require('../models/user')
 const { RegistrerValidation, LoginValidation } = require('./authValidation')
@@ -35,8 +36,7 @@ router.post('/register', async (req, res) => {
     // save the user to cloud or database
     try{
         var savedUser = await user.save();
-        delete savedUser.password;
-        res.send(savedUser);
+        res.send(_.pick(savedUser, ['_id', 'name', 'email']));
     } catch (err) {
         res.status(400).json({Error_message: err});
     };
@@ -60,7 +60,8 @@ router.post('/login', async (req, res) => {
     // Assign a json web token
     const tokenSecret = process.env.Token_Secret;
     const jToken = jwt.sign({_id: user._id}, tokenSecret, { expiresIn: '1hr' });
-    res.status(200).header('auth-token', jToken).json(user);
+
+    res.status(200).header('auth-token', jToken).json(_.pick(user, ['_id', 'name', 'email']));
 
 });
 
