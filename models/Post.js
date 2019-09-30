@@ -1,4 +1,8 @@
 const mongoose  = require('mongoose');
+const otheruserschema = require('./otheruser');
+const {commentsmodel ,CommentsSchema } = require('./Commments');
+const imageschema = require('./Image');
+
 
 const PostSchema = mongoose.Schema({
     title:{
@@ -16,7 +20,32 @@ const PostSchema = mongoose.Schema({
     likes:{
         type : Number,
         default:0,
-    }
+    },
+
+    owner:{
+        type:[otheruserschema],
+        required:true,
+    },
+
+    category :{
+        enum :["cat1" , 'cat2'],
+    },
+
+    sharedby : {
+        type : [otheruserschema],
+    },
+
+    sharedcount :{
+        type: Number,
+    },
+    
+    comments : {
+        type : CommentsSchema,
+    },
+
+    imageurls: {
+        type : [imageschema],
+    },
 
 })
 
