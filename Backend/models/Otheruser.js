@@ -2,7 +2,8 @@ const mongoose  = require('mongoose');
 
 const OtherUserSchema = mongoose.Schema({
     id : {
-        type:String,
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required:true,
     },
     username : {

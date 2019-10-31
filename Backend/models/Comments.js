@@ -11,6 +11,7 @@ const ReplySchema = mongoose.Schema({
     date:{
         type:Date,
         default:Date.now,
+        required: true
     },
     likes:{
         type : Number,
