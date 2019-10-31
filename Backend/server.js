@@ -28,10 +28,6 @@ app.use(express.static('public'));
 
 if(process.env.Node_Env === 'development') {
     app.use(morgan('tiny'));      // for logging the infomation
-}
-
-
-if (process.env.Node_Env === 'development') {
     app.use(helmet());      // for securing the routes with adding headers
     console.log('Logging the data using morgan');
 }
