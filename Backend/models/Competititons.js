@@ -1,6 +1,5 @@
 const mongoose  = require('mongoose');
 const otheruserschema = require('./otheruser');
-const othercompetititonschema = require('./Othercompetitions');
 const commentsmodel = require('./Comments');
 
 
@@ -16,7 +15,8 @@ const FaqSchema  =mongoose.Schema({
 
 const ResultSchema = mongoose.Schema({
     id : {
-        type : String,
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'User'
     },
 
     name : {
