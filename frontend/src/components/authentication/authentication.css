@@ -1,0 +1,111 @@
+@import '../fonts/fonts.css';
+
+.auth_page {
+    position: absolute;
+    top: 0; bottom: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.auth_page {
+    background-color: rgb(66, 19, 88);
+    background-image: url('../media/images/authentication/login_back.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: bottom;
+    background-clip: border-box;
+    background-size: cover;
+}
+
+h2 {
+    margin-bottom: 50px;
+    color: rgb(119, 107, 223);
+    text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+
+
+/* LOGIN */
+.login_main {
+    position: relative;
+    margin-top: 70px;
+    text-align: center
+}
+.login_form {
+    position: relative;
+    width: 49.9%;
+    text-align: center;
+}
+.login_image {
+    position: relative;
+    width: 49.9%;
+}
+.login_comp {display: inline-block;}
+
+.login_main input {
+    padding: 20px 20px 10px 20px;
+    width: 300px;
+    margin: 15px 0px 20px 0px;
+    background: none;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid rgb(195, 133, 214);
+    letter-spacing: 1px;
+    color: aliceblue;
+    font-size: 1.0rem;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+.login_main input::placeholder {
+    color: rgb(192, 220, 245, 0.6);
+    font-size: 1.1rem;
+    font-family: 'LALORG'
+}
+
+.has-error input {
+    /* border-radius: 5px; */
+    border-bottom: 1px solid rgb(214, 93, 93);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.form_group button {
+    outline: none;
+    margin-top: 30px;
+    padding: 10px 40px;
+    color: aliceblue;
+    border: 1px solid rgb(113, 47, 175);
+    background: none;
+    border-radius: 50px;
+    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.5);
+    font-size: 0.95rem;
+    letter-spacing: 1.5px;
+    font-family: 'Optien';
+    transition: 0.1s linear all;
+}
+.form_group button:hover {
+    cursor: pointer;
+    background-color: rgb(237, 188, 252);
+    color: rgb(48, 9, 63);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+
+.reg_btn {
+    margin-top: 35px;
+    color: rgb(217, 198, 252);
+}
+.reg_link {
+    color: rgb(157, 158, 255);
+}
+.reg_link:hover {
+    color: aliceblue;
+}
+
+
+
+/* Responsive Css */
+@media only screen and (max-width: 1074px) {
+    .login_image {
+        display: none;
+    }
+}

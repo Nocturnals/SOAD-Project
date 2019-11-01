@@ -1,0 +1,45 @@
+@font-face {
+    font-family: 'Balkeno';
+    font-style: normal;
+    src: local('Balkeno'), url('./Balkeno.woff') format('woff');
+}
+@font-face {
+    font-family: 'dennisvallera';
+    font-style: normal;
+    src: local('dennisvallera'), url('./dennisvallera.woff') format('woff');
+}
+@font-face {
+    font-family: 'LALORG';
+    font-style: normal;
+    src: local('LALORG'), url('./LALORG__.woff') format('woff');
+}
+@font-face {
+    font-family: 'maagkramp';
+    font-style: normal;
+    src: local('maagkramp'), url('./maagkramp.ttf') format('woff');
+}
+@font-face {
+    font-family: 'Antaro';
+    font-style: normal;
+    src: local('Antaro'), url('./Antaro.woff') format('woff');
+}
+@font-face {
+    font-family: 'EatnCake';
+    font-style: normal;
+    src: local('EatnCake'), url('./EatnCake.ttf') format('woff');
+}
+@font-face {
+    font-family: 'Optien';
+    font-style: normal;
+    src: local('Optien'), url('./Optien.woff') format('woff');
+}
+@font-face {
+    font-family: 'PatinioBasica';
+    font-style: normal;
+    src: local('PatinioBasica'), url('./PatinioBasica.woff') format('woff');
+}
+@font-face {
+    font-family: 'Ubuntu-Title';
+    font-style: normal;
+    src: local('Ubuntu-Title'), url('./Ubuntu-Title.woff') format('woff');
+}

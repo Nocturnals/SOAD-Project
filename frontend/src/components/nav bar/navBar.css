@@ -1,0 +1,111 @@
+@import "../fonts/fonts.css";
+
+
+.nav-bar button {
+    background: none;
+    border: none; outline: none;
+}
+.nav-bar button:hover {cursor: pointer;}
+
+.nav-bar {
+    position: sticky; top: 0;
+    padding: 20px 150px 50px 150px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 100;
+    transition: all 0.2s linear;
+}
+
+.leftNav {
+    float: left;
+}
+.rightNav {
+    float: right;
+}
+.navTitle {
+    text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.6);
+    font-size: 2.0rem;
+    font-family: 'LALORG';
+    transition: 0.2s all linear;
+}
+.navTitle:hover {text-shadow: 5px 4px 1px rgba(0, 0, 0, 0.9);}
+.navTitle .fname {color: rgba(108, 238, 177, 1.0);}
+.navTitle .lname {color: rgb(241, 218, 189);}
+.navTitle:hover > .fname {color: rgb(241, 218, 189);}
+.navTitle:hover > .lname {color: rgba(108, 238, 177, 1.0);}
+.rightNav button {
+    padding: 5px 20px 5px 20px;
+    border-left: 1px solid rgb(0, 0, 0, 0);
+    border-right: 1px solid rgb(0, 0, 0, 0);
+    color: rgba(238, 219, 196, 0.9);
+    font-size: 1.2rem;
+    font-family: 'maagkramp';
+    transition: 0.3s all ease-in;
+}
+.rightNav .navBtn {display: inline-block;}
+.rightNav .navBtn:hover {
+    color: rgba(255, 255, 255, 1.0);
+    border-left: 1px solid rgba(238, 219, 196, 0.9);
+    border-right: 1px solid rgba(238, 219, 196, 0.9);
+}
+.rightNav .navMenuIcon:hover {
+    color: rgba(255, 255, 255, 1.0);
+}
+.nav-bar i {display: none;}
+.navMenuIcon {display: none;}
+
+
+
+
+
+
+
+
+/* Expanded Navigation bar */
+.expandedNav {
+    position: absolute;
+    width: 100%; height: 100vh; margin: 0;
+    margin-top: 20px;
+    text-align: center;
+    background-color: rgb(38, 19, 80);
+    display: none;
+}
+.expNavBtn {
+    position: relative;
+    margin-top: 15px; margin-bottom: 11px;
+    padding: 20px; width: 100%;
+    color: rgba(203, 222, 238, 0.756);
+    font-size: 1.5rem;
+    font-family: 'maagkramp';
+    border-bottom: 1px solid rgba(236, 213, 213, 0);
+    transition: 0.3s all ease-in;
+}
+.expNavBtn:hover {
+    color: rgba(203, 222, 238, 1.0);
+    letter-spacing: 0.08mm;
+    border-bottom: 1px solid rgba(236, 213, 213, 0.383);
+}
+
+
+
+
+
+
+/* Responsive Css */
+@media only screen and (max-width: 1074px) {
+    .rightNav .navBtn {
+        display: none;
+    }
+    .leftNav {
+        float: none;
+    }
+    .nav-bar {
+        padding: 20px 0px 20px 0px;
+    }
+    .nav-bar i {
+        display: block;
+    }
+    .navMenuIcon {
+        display: inline-block;
+    }
+}
