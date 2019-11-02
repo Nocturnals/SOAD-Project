@@ -3,7 +3,7 @@ const otheruserschema = required('./otheruser');
 
 
 
-const ReplySchema = mongoose.Schema({
+const ReplySchema = new mongoose.Schema({
     message:{
         type:String,
         required:true,
@@ -24,7 +24,7 @@ const ReplySchema = mongoose.Schema({
 
 
 
-const CommentSchema = mongoose.Schema({
+const CommentSchema = new mongoose.Schema({
     owner  :{
         type : otheruserschema,
     },

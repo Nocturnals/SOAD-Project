@@ -4,7 +4,7 @@ const {commentsmodel ,CommentsSchema } = require('./Commments');
 const imageschema = require('./Image');
 
 
-const PostSchema = mongoose.Schema({
+const PostSchema = new mongoose.Schema({
     title:{
         type:String,
         required:true,

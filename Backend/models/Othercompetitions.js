@@ -1,6 +1,6 @@
 const mongoose  = require('mongoose');
 
-const OtherCompetitionSchema = mongoose.Schema({
+const OtherCompetitionSchema = new mongoose.Schema({
     id : {
         type : mongoose.Schema.Types.ObjectId,
         ref: 'Competitions',
