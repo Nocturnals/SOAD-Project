@@ -29,6 +29,7 @@ const PostSchema = mongoose.Schema({
 
     category :{
         enum :["cat1" , 'cat2'],
+        type: String,
     },
 
     sharedby : {
