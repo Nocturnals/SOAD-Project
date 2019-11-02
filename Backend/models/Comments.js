@@ -8,15 +8,18 @@ const ReplySchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+
     date:{
         type:Date,
         default:Date.now,
         required: true
     },
+
     likes:{
         type : Number,
         default:0,
     },
+    
     likedby :{
         type :otheruserschema,
     }
@@ -25,29 +28,33 @@ const ReplySchema = new mongoose.Schema({
 
 
 const CommentSchema = new mongoose.Schema({
-    owner  :{
+    owner: {
         type : otheruserschema,
+        required: true,
     },
 
     message:{
         type:String,
         required:true,
     },
+
     date:{
         type:Date,
         default:Date.now,
     },
+
     likes:{
         type : Number,
         default:0,
     },
+    
     likedby  :{
         type : otheruserschema,
     },
+
     replies : {
         type : [ReplySchema],
     },
-
 });
 
 

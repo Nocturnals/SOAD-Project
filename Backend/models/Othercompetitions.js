@@ -5,7 +5,8 @@ const OtherCompetitionSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref: 'Competitions',
     },
-    name  :{
+
+    name :{
         type : String,
     },
 })
