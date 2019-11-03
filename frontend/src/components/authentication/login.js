@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 import { login, logout } from '../../actions';
+import isValidEmail from '../../validation/emailValidation';
 
 
 class LoginComp extends Component {
@@ -15,7 +16,8 @@ class LoginComp extends Component {
         this.state = {
             email: '',
             password: '',
-            submitted: false
+            submitted: false,
+            validEmail: true,
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -25,6 +27,15 @@ class LoginComp extends Component {
     handleChange(e) {
         const { name, value } = e.target;
         this.setState({ [name]: value });
+        const { email } = this.state;
+        if (email && !isValidEmail(email)) {
+            console.log(email);
+            
+            this.setState({validEmail: false});
+        }
+        else {
+            this.setState({validEmail: true});
+        }
     }
 
     handleSubmit(e) {
@@ -38,19 +49,21 @@ class LoginComp extends Component {
     }
 
     render() {
-        const img = require('../media/images/authentication/login_sideback.png')
+        // const img = require('../media/images/authentication/login_sideback.png')
 
         const { isLoading } = this.props.auth;
-        const { email, password, submitted } = this.state;
+        const { email, password, submitted, validEmail } = this.state;
+        
         return (
             <div className="login_main">
-                <form name="form" onSubmit={this.handleSubmit} className="login_form login_comp">
+                {console.log(validEmail)}
+                <form name="form" onSubmit={this.handleSubmit} className="form comp">
                     <h2>LOG IN</h2>
-                    <div className={'form_group email' + (submitted && !email ? ' has-error' : '')}>
+                    <div className={'form_group email' + ((submitted && !email) || !validEmail ? ' has-error' : 'no-error')}>
                         {/* <label htmlFor="email">Email</label> */}
                         <input type="email" className="form-control" name="email" value={email} onChange={this.handleChange} placeholder="Email..." />
                         {submitted && !email &&
-                            <div className="help-block">Username is required</div>
+                            <div className="help-block">Email is required</div>
                         }
                     </div>
                     <div className={'form_group password' + (submitted && !password ? ' has-error' : '')}>
@@ -72,9 +85,7 @@ class LoginComp extends Component {
                         &nbsp;now
                     </div>
                 </form>
-                <div className="login_image login_comp">
-                    <img src={img}></img>
-                </div>
+                <div className="image comp"></div>
             </div>
         )
     }

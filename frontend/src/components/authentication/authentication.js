@@ -10,7 +10,14 @@ class AuthenticationPage extends Component {
     render () {
         return (
             <div className="auth_page">
-                <div className="cover"></div>
+                <div className='homeLink'>
+                    <Link to='/'>
+                        <button className='navTitle'>
+                            <span className="fname">Artist </span>
+                            <span className="lname"> Colab</span>
+                        </button>
+                    </Link>
+                </div>
                 <Route exact path="/login" component={ LoginComp } />
                 <Route exact path="/register" component={ RegisterComp } />
             </div>
