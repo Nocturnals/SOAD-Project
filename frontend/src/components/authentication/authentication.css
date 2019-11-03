@@ -6,6 +6,7 @@
     margin: 0;
     width: 100%;
     height: 100%;
+    text-align: center;
     overflow: hidden;
 }
 .auth_page {
@@ -19,29 +20,49 @@
 }
 
 h2 {
-    margin-bottom: 50px;
+    margin-bottom: 25px;
     color: rgb(119, 107, 223);
-    text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+
+.homeLink {
+    padding: 40px 0 0 0;
+}
+.homeLink button {
+    background: none;
+    border: none;
+    outline: none
+}
+.homeLink button:hover {
+    cursor: pointer;
 }
 
 
 
 /* LOGIN */
-.login_main {
+.login_main, .register_main {
     position: relative;
-    margin-top: 70px;
-    text-align: center
+    width: 100%;
+    height: 100%;
 }
-.login_form {
+.form {
     position: relative;
     width: 49.9%;
     text-align: center;
 }
-.login_image {
+.image {
     position: relative;
     width: 49.9%;
+    height: 67%;
 }
-.login_comp {display: inline-block;}
+.image {
+    background-image: url('../media/images/authentication/login_sideback.png');
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.comp {display: inline-block;}
 
 .login_main input {
     padding: 20px 20px 10px 20px;
@@ -53,8 +74,9 @@ h2 {
     border-bottom: 1px solid rgb(195, 133, 214);
     letter-spacing: 1px;
     color: aliceblue;
+    caret-color: rgb(253, 224, 185);
     font-size: 1.0rem;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 .login_main input::placeholder {
     color: rgb(192, 220, 245, 0.6);
@@ -103,9 +125,28 @@ h2 {
 
 
 
-/* Responsive Css */
+
+
+
+
+
+
+
+.reg_email::before, .reg_password::before {
+    content: 'Email';
+    position: absolute;
+    bottom: 0;
+    font-size: 1rem;
+}
+
+
+
+
+
+
+/* Responsive css */
 @media only screen and (max-width: 1074px) {
-    .login_image {
+    .image {
         display: none;
     }
 }

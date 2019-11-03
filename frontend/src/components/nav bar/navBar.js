@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from "react-router-dom";
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
 
 import './navBar.css'
 import './animations'
@@ -28,26 +30,11 @@ class NavComponents {
 
 
 // Component Class
-class NavBar extends React.Component {
+class NavBar extends Component {
 
-    leftNavBtns = [
-        new NavBtnNames('Artist', ' Colab', '/', 'navTitle')
-    ]
-    rightNavBtns = [
-        new NavBtnNames('Home', '', '/'),
-        new NavBtnNames('Features'),
-        new NavBtnNames('Services'),
-        new NavBtnNames('About Us'),
-        new NavBtnNames('Log In', '', '/login'),
-        new NavBtnNames('', '', '', 'navMenuIcon', 'fa fa-bars')
-    ]
-    expandNavBtns = [
-        new NavBtnNames('Home', '', '/', 'expNavBtn'),
-        new NavBtnNames('Features', '', '', 'expNavBtn'),
-        new NavBtnNames('Services', '', '', 'expNavBtn'),
-        new NavBtnNames('About Us', '', '', 'expNavBtn'),
-        new NavBtnNames('LOG IN', '', '/login', 'expNavBtn'),
-    ]
+    constructor(props) {
+        super(props);
+    }
 
 
     // Creating Buttons...
@@ -62,7 +49,6 @@ class NavBar extends React.Component {
                         <button className={button.class_name}>
                             <span className="fname">{button.fname}</span>
                             <span className="lname">{button.lname}</span>
-                            <i className={button.iconClass} aria-hidden="true"></i>
                         </button>
                     </Link> :
                     <button className={button.class_name} onClick={ToggleNavBar()}>
@@ -73,11 +59,6 @@ class NavBar extends React.Component {
 
         return nav_buttons;
     }
-
-    components = [
-        new NavComponents('leftNav', this.navBtn(this.leftNavBtns)),
-        new NavComponents('rightNav', this.navBtn(this.rightNavBtns))
-    ]
 
     navBarComponents = (comps) => {
         let nav_components = []
@@ -93,6 +74,7 @@ class NavBar extends React.Component {
 
         return nav_components;
     }
+
     expandNavBarBtns = (buttons) => {
         let buttonBlocks = []
 
@@ -109,11 +91,47 @@ class NavBar extends React.Component {
     }
 
     render() {
+        const { isAuthed } = this.props.auth;
+
+        const leftNavBtns = [
+            new NavBtnNames('Artist', ' Colab', '/', 'navTitle')
+        ];
+
+        const rightNavBtns = [
+            new NavBtnNames('Home', '', '/'),
+            new NavBtnNames('Features'),
+            new NavBtnNames('Services'),
+            new NavBtnNames('About Us'),
+            !isAuthed ? new NavBtnNames('Log In', '', '/login')
+            : new NavBtnNames('Profile', '', '/'),
+        ];
+        rightNavBtns.push(new NavBtnNames('', '', '', 'navMenuIcon', 'fa fa-bars'));
+
+        const expandNavBtns = !isAuthed ? [
+            new NavBtnNames('Home', '', '/', 'expNavBtn'),
+            new NavBtnNames('Features', '', '', 'expNavBtn'),
+            new NavBtnNames('Services', '', '', 'expNavBtn'),
+            new NavBtnNames('About Us', '', '', 'expNavBtn'),
+            new NavBtnNames('LOG IN', '', '/login', 'expNavBtn'),
+        ] : [
+            new NavBtnNames('Home', '', '/', 'expNavBtn'),
+            new NavBtnNames('Features', '', '', 'expNavBtn'),
+            new NavBtnNames('Services', '', '', 'expNavBtn'),
+            new NavBtnNames('About Us', '', '', 'expNavBtn'),
+            new NavBtnNames('Profile', '', '/login', 'expNavBtn'),
+        ];
+
+        const components = [
+            new NavComponents('leftNav', this.navBtn(leftNavBtns)),
+            new NavComponents('rightNav', this.navBtn(rightNavBtns))
+        ];
+
+
         return (
             <div className="nav-bar" id="nav-bar">
-                {this.navBarComponents(this.components)}
+                {this.navBarComponents(components)}
                 <div id="expandedNav" className="expandedNav">
-                    {this.expandNavBarBtns(this.expandNavBtns)}
+                    {this.expandNavBarBtns(expandNavBtns)}
                 </div>
             </div>
         );
@@ -121,4 +139,15 @@ class NavBar extends React.Component {
 }
 
 
-export default NavBar;
+NavBar.propTypes = {
+    auth: PropTypes.object.isRequired,
+    alert: PropTypes.object.isRequired
+}
+
+const mapStateToProps = (state) => ({
+    auth: state.auth,
+    alert: state.alert
+})
+
+
+export default connect(mapStateToProps)(NavBar);

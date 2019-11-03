@@ -6,7 +6,6 @@ import jwt_decode from 'jwt-decode';
 import setAuthToken from './setAuthToken';
 import { setCurrentUser, logout } from './actions/user.athentication'
 import './App.css';
-import NavBar from './components/nav bar/navBar'
 import LandingPage from './components/landing page/landing_page'
 import AuthenticationPage from './components/authentication/authentication'
 
@@ -30,7 +29,6 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-          <NavBar />
           <Route exact path="/" component={LandingPage} />
           <Route exact path="/:type" component={AuthenticationPage} />
         </Router>
