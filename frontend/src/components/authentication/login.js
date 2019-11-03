@@ -17,7 +17,6 @@ class LoginComp extends Component {
             email: '',
             password: '',
             submitted: false,
-            validEmail: true,
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -27,15 +26,6 @@ class LoginComp extends Component {
     handleChange(e) {
         const { name, value } = e.target;
         this.setState({ [name]: value });
-        const { email } = this.state;
-        if (email && !isValidEmail(email)) {
-            console.log(email);
-            
-            this.setState({validEmail: false});
-        }
-        else {
-            this.setState({validEmail: true});
-        }
     }
 
     handleSubmit(e) {
@@ -43,25 +33,23 @@ class LoginComp extends Component {
 
         this.setState({ submitted: true });
         const { email, password } = this.state;
-        if (email && password) {
+        if (email && isValidEmail(email) && password) {
             this.props.login(email, password);
         }
     }
 
     render() {
-        // const img = require('../media/images/authentication/login_sideback.png')
 
         const { isLoading } = this.props.auth;
-        const { email, password, submitted, validEmail } = this.state;
+        const { email, password, submitted } = this.state;
         
         return (
             <div className="login_main">
-                {console.log(validEmail)}
                 <form name="form" onSubmit={this.handleSubmit} className="form comp">
                     <h2>LOG IN</h2>
-                    <div className={'form_group email' + ((submitted && !email) || !validEmail ? ' has-error' : 'no-error')}>
+                    <div className={'form_group email' + ((submitted && !email) || (email && !isValidEmail(email)) ? ' has-error' : 'no-error')}>
                         {/* <label htmlFor="email">Email</label> */}
-                        <input type="email" className="form-control" name="email" value={email} onChange={this.handleChange} placeholder="Email..." />
+                        <input type="email" className="form-control" name="email" value={email} onChange={this.handleChange} placeholder="Email..." autoComplete="off" />
                         {submitted && !email &&
                             <div className="help-block">Email is required</div>
                         }
