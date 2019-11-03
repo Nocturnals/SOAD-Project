@@ -1,7 +1,12 @@
 window.addEventListener('resize', () => {
     var expandedNav = document.getElementById('expandedNav');
-    if (window.innerWidth >= 1075) {
+    var nav = document.getElementById('nav-bar');
+    if (window.innerWidth >= 1075 && expandedNav) {
         expandedNav.style.display = 'none';
+        document.body.style.overflowY = 'scroll';
+        if (document.body.scrollTop === 0) {
+            nav.style.backgroundColor = 'rgb(0, 0, 0, 0.8)';
+        }
     }
 })
 
