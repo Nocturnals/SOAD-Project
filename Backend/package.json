@@ -6,7 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "server": "nodemon server.ts"
+    "server": "nodemon server.js",
+    "client": "cd ../frontend && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "client-install": "cd ../frontend && npm install"
   },
   "repository": {
     "type": "git",
@@ -25,6 +28,7 @@
   "dependencies": {
     "@hapi/joi": "^15.0.3",
     "bcryptjs": "^2.4.3",
+    "concurrently": "^5.0.0",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "helmet": "^3.21.1",
