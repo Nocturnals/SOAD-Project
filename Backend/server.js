@@ -21,10 +21,19 @@ mongoose.connect(databaseConnect,
 // intializing the app instance
 const app = express();
 
+//CORS middleware
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+    next();
+}
 
 // Middleware
 app.use(express.json());        // for converting the json part of the request body
 app.use(express.static('public'));
+app.use(allowCrossDomain);
 
 if(process.env.Node_Env === 'development') {
     app.use(morgan('tiny'));      // for logging the infomation

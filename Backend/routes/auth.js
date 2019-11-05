@@ -61,7 +61,7 @@ router.post('/login', async (req, res) => {
     const tokenSecret = process.env.Token_Secret;
     const jToken = jwt.sign({_id: user._id}, tokenSecret, { expiresIn: '1hr' });
 
-    res.status(200).header('auth-token', jToken).json(_.pick(user, ['_id', 'name', 'email']));
+    res.status(200).header('authorization', jToken).json(_.pick(user, ['_id', 'name', 'email']));
 
 });
 
