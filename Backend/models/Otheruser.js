@@ -1,6 +1,6 @@
 const mongoose  = require('mongoose');
 
-const OtherUserSchema = mongoose.Schema({
+const OtherUserSchema = new mongoose.Schema({
     id : {
         type:mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -14,8 +14,6 @@ const OtherUserSchema = mongoose.Schema({
         type:String,
         required:true,
     }
-
-
 });
 
 

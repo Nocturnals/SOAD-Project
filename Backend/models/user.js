@@ -33,10 +33,12 @@ const userSchema = new mongoose.Schema({
 
     primaryinterest :{
         enum : ["cat1","cat2"],
+        type: String,
     },
 
     otherinterest : {
         enum : ["cat1","cat2"],
+        type: String,
     },
 
     lastactive : {
@@ -75,5 +77,4 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-// export { User as UserModel };
 module.exports = User

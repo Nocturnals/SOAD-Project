@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { userAuthConst } from '../constants'
 import { userService } from '../services'
 import { history } from '../helpers'
@@ -12,17 +13,51 @@ export function login(email, password) {
             password: password
         };
 
+        axios.post('http://localhost:4000/api/user/login', user)
+        // .then(handleResponse)
+        .then(res => {
+            console.log(res)
+            const { authorization } = res.header;
+            console.log(authorization);
+            
+            localStorage.setItem('userToken', authorization);
+            setAuthToken(authorization);
+            dispatch(setCurrentUser(authorization));
+        })
+        .catch(err => {
+            console.log(err);
+            
+            dispatch(failureAction(err))
+        })
 
-        userService.login(user)
-            .then(
-                user => {
-                    dispatch(successAction(user))
-                    history.push('/')
-                },
-                error => {
-                    dispatch(failureAction(error.toString()))
+
+        // userService.login(user)
+        //     .then(
+        //         user => {
+        //             dispatch(successAction(user))
+        //             history.push('/')
+        //         },
+        //         error => {
+        //             dispatch(failureAction(error.toString()))
+        //         }
+        //     )
+    }
+
+    function handleResponse(response) {
+        return response.text().then(text => {
+            const data = text && JSON.parse(text);
+            if (!response.ok) {
+                if (response.status === 401) {
+                    logout();
+                    // location.reload(true);
                 }
-            )
+    
+                const error = (data && data.message) || response.statusText;
+                return Promise.reject(error);
+            }
+    
+            return data;
+        });
     }
 
     function requestAction(email) {

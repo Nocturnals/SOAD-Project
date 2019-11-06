@@ -3,9 +3,10 @@ const otheruserschema = require('./otheruser');
 const commentsmodel = require('./Comments');
 
 
-const FaqSchema  =mongoose.Schema({
+const FaqSchema = new mongoose.Schema({
     question : {
         type : String,
+        required: true,
     },
 
     answer :{
@@ -13,14 +14,16 @@ const FaqSchema  =mongoose.Schema({
     },
 });
 
-const ResultSchema = mongoose.Schema({
+const ResultSchema = new mongoose.Schema({
     id : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : 'User'
+        ref : 'User',
+        required: true,
     },
 
     name : {
         type : String,
+        required: true,
     },
 
     score : {
@@ -33,21 +36,26 @@ const ResultSchema = mongoose.Schema({
 })
 
 
-const CompetitionsSchema = mongoose.Schema({
+const CompetitionsSchema = new mongoose.Schema({
     hosts : {
         type : [otheruserschema],
+        required: true,
     },
     
     starttime : {
         type :Date,
+        required: true
     },
 
     endtime : {
         type :Date,
+        required: true
     },
 
     noofparticipants :{
         type : Number,
+        default: 0,
+        required: true,
     },
 
     participants : {
