@@ -31,15 +31,16 @@ function login(user) {
         axios.post('/api/users/login', user)
             .then(handleResponse)
             .then(res => {
-                const { token } = res.data;
-                localStorage.setItem('userToken', token);
-                setAuthToken(token);
-                const decoded = jwt_decode(token);
-                dispatch(setCurrentUser(decoded));
+                const { authorization } = res.header;
+                console.log(authorization);
+                
+                localStorage.setItem('userToken', authorization);
+                setAuthToken(authorization);
+                dispatch(setCurrentUser(authorization));
             })
             .catch(err => {
                 dispatch({
-                    type: 'ALERT_ERROR',
+                    type: 'LOGIN_FAILURE',
                     message: err.response.data
                 });
             });

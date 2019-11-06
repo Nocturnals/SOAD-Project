@@ -1,8 +1,8 @@
 const express = require('express');
 
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const _ = require('lodash');
+const jwt = require('jsonwebtoken');  
+const _ = require('lodash');        // for modifing the array contents
 
 const UserModel = require('../models/user')
 const { RegistrerValidation, LoginValidation } = require('./authValidation')
@@ -61,7 +61,7 @@ router.post('/login', async (req, res) => {
     const tokenSecret = process.env.Token_Secret;
     const jToken = jwt.sign({_id: user._id}, tokenSecret, { expiresIn: '1hr' });
 
-    res.status(200).header('auth-token', jToken).json(_.pick(user, ['_id', 'name', 'email']));
+    res.status(200).header('authorization', jToken).json(_.pick(user, ['_id', 'name', 'email']));
 
 });
 
@@ -69,7 +69,7 @@ router.post('/login', async (req, res) => {
 router.get('/viewpost1', verifyToken ,(req, res) => {
     jwt.verify(req.token, process.env.Token_Secret, (err, authData) => {
         if(err) {
-            res.status(401).json({Error_Message: 'Access Denied'})
+            res.status(401).json({Error_Message: 'Access Denied'});
         } else {
             res.json({message: 'asdfkljsdf'});
         }
@@ -80,6 +80,7 @@ router.get('/viewpost1', verifyToken ,(req, res) => {
 function verifyToken(req, res, next) {
     // Get auth header value
     const bearerHeader = req.headers['authorization'];
+
     // Check if bearer is undefined
     if(typeof bearerHeader !== 'undefined') {
         // Split the header
@@ -90,7 +91,7 @@ function verifyToken(req, res, next) {
         req.token = bearerToken;
 
         // run the next function
-        next()
+        next();
     } else {
         res.status(401).json({'message': 'Access Denied'});
     }

@@ -1,10 +1,10 @@
 const mongoose  = require('mongoose');
 const otheruserschema = require('./otheruser');
-const {commentsmodel ,CommentsSchema } = require('./Commments');
+const { CommentsSchema } = require('./Commments');
 const imageschema = require('./Image');
 
 
-const PostSchema = mongoose.Schema({
+const PostSchema = new mongoose.Schema({
     title:{
         type:String,
         required:true,
@@ -14,33 +14,34 @@ const PostSchema = mongoose.Schema({
         required:true,
     },
     date:{
-        type:Date,
-        default:Date.now,
+        type: Date,
+        default: Date.now,
     },
     likes:{
-        type : Number,
-        default:0,
+        type: Number,
+        default: 0,
     },
 
     owner:{
-        type:[otheruserschema],
-        required:true,
+        type: [otheruserschema],
+        required: true,
     },
 
     category :{
-        enum :["cat1" , 'cat2'],
+        enum: ["cat1" , 'cat2'],
+        type: String,
     },
 
-    sharedby : {
-        type : [otheruserschema],
+    sharedby: {
+        type: [otheruserschema],
     },
 
-    sharedcount :{
+    sharedcount: {
         type: Number,
     },
     
     comments : {
-        type : CommentsSchema,
+        type : [CommentsSchema],
     },
 
     imageurls: {

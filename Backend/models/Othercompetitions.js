@@ -1,10 +1,12 @@
 const mongoose  = require('mongoose');
 
-const OtherCompetitionSchema = mongoose.Schema({
+const OtherCompetitionSchema = new mongoose.Schema({
     id : {
-        type : String,
+        type : mongoose.Schema.Types.ObjectId,
+        ref: 'Competitions',
     },
-    name  :{
+
+    name :{
         type : String,
     },
 })
