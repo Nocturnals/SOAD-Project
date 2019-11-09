@@ -1,64 +1,58 @@
-const mongoose  = require('mongoose');
-const otheruserschema = required('./otheruser');
-
-
+const mongoose = require("mongoose");
+const otheruserschema = required("./otheruser");
 
 const ReplySchema = new mongoose.Schema({
-    message:{
-        type:String,
-        required:true,
-    },
-
-    date:{
-        type:Date,
-        default:Date.now,
+    message: {
+        type: String,
         required: true
     },
 
-    likes:{
-        type : Number,
-        default:0,
+    date: {
+        type: Date,
+        default: Date.now,
+        required: true
     },
-    
-    likedby :{
-        type :otheruserschema,
+
+    likes: {
+        type: Number,
+        default: 0
+    },
+
+    likedby: {
+        type: otheruserschema
     }
-})
-
-
+});
 
 const CommentSchema = new mongoose.Schema({
     owner: {
-        type : otheruserschema,
-        required: true,
+        type: otheruserschema,
+        required: true
     },
 
-    message:{
-        type:String,
-        required:true,
+    message: {
+        type: String,
+        required: true
     },
 
-    date:{
-        type:Date,
-        default:Date.now,
+    date: {
+        type: Date,
+        default: Date.now
     },
 
-    likes:{
-        type : Number,
-        default:0,
-    },
-    
-    likedby  :{
-        type : otheruserschema,
+    likes: {
+        type: Number,
+        default: 0
     },
 
-    replies : {
-        type : [ReplySchema],
+    likedby: {
+        type: otheruserschema
     },
+
+    replies: {
+        type: [ReplySchema]
+    }
 });
 
+commentmodel = mongoose.model("Comments", CommentSchema);
 
- 
-commentmodel = mongoose.model("Comments" , CommentSchema);
-
-module.exports = {commentmodel , CommentSchema};
+module.exports = { commentmodel, CommentSchema };
