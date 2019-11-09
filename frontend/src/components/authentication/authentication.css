@@ -1,15 +1,13 @@
 @import '../fonts/fonts.css';
 
-.auth_page {
-    position: absolute;
+.background {
+    position: fixed;
     top: 0; bottom: 0;
     margin: 0;
     width: 100%;
     height: 100%;
-    text-align: center;
-    overflow: hidden;
 }
-.auth_page {
+.background {
     background-color: rgb(66, 19, 88);
     background-image: url('../media/images/authentication/login_back.png');
     background-repeat: no-repeat;
@@ -17,6 +15,29 @@
     background-position: bottom;
     background-clip: border-box;
     background-size: cover;
+    z-index: -1;
+}
+.auth_page {
+    text-align: center;
+    padding-bottom: 30px;
+}
+.auth_page input {
+    padding: 20px 20px 10px 20px;
+    margin: 15px 5px 20px 10px;
+    background: none;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid rgb(195, 133, 214);
+    letter-spacing: 1px;
+    color: aliceblue;
+    caret-color: rgb(253, 224, 185);
+    font-size: 1.0rem;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+.auth_page input::placeholder {
+    color: rgb(192, 220, 245, 0.6);
+    font-size: 1.1rem;
+    font-family: 'LALORG'
 }
 
 h2 {
@@ -27,7 +48,13 @@ h2 {
 
 
 .homeLink {
-    padding: 40px 0 0 0;
+    position: sticky;
+    top: 0;
+    padding: 20px 0 10px 0;
+    background-color: rgb(38, 19, 80);
+    box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    text-align: left;
 }
 .homeLink button {
     background: none;
@@ -40,11 +67,20 @@ h2 {
 
 
 
+
+
+
+
+
+
+
+
+
+
 /* LOGIN */
 .login_main, .register_main {
     position: relative;
     width: 100%;
-    height: 100%;
 }
 .form {
     position: relative;
@@ -54,34 +90,19 @@ h2 {
 .image {
     position: relative;
     width: 49.9%;
-    height: 67%;
+    height: 500px;
 }
 .image {
     background-image: url('../media/images/authentication/login_sideback.png');
-    background-position: top;
+    background-position: left;
+    background-attachment: fixed;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
 }
 .comp {display: inline-block;}
 
 .login_main input {
-    padding: 20px 20px 10px 20px;
-    width: 300px;
-    margin: 15px 0px 20px 0px;
-    background: none;
-    border: none;
-    outline: none;
-    border-bottom: 1px solid rgb(195, 133, 214);
-    letter-spacing: 1px;
-    color: aliceblue;
-    caret-color: rgb(253, 224, 185);
-    font-size: 1.0rem;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-}
-.login_main input::placeholder {
-    color: rgb(192, 220, 245, 0.6);
-    font-size: 1.1rem;
-    font-family: 'LALORG'
+    width: 350px;
 }
 
 .has-error input {
@@ -111,14 +132,14 @@ h2 {
 }
 
 
-.reg_btn {
+.reg_btn, .login_btn {
     margin-top: 35px;
     color: rgb(217, 198, 252);
 }
-.reg_link {
+.reg_link, .login_link {
     color: rgb(157, 158, 255);
 }
-.reg_link:hover {
+.reg_link:hover, .login_link:hover {
     color: aliceblue;
 }
 
@@ -131,11 +152,41 @@ h2 {
 
 
 
-.reg_email::before, .reg_password::before {
-    content: 'Email';
-    position: absolute;
-    bottom: 0;
-    font-size: 1rem;
+
+
+/* REGISTER */
+.register_main .container {
+    padding: 0 100px;
+}
+.register_main input {
+    width: 100%;
+}
+.register_main input::placeholder {
+    font-size: 1.1rem;
+}
+
+.reg_btns {
+    margin-top: 30px;
+}
+.reg_btns button {
+    width: 50%;
+    background: none;
+    outline: none;
+    color: aliceblue;
+    border: 1px solid rgb(113, 47, 175);
+    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-family: 'Optien';
+    letter-spacing: 1.5px;
+    transition: 0.1s linear all;
+}
+.reg_btns button:hover {
+    cursor: pointer;
+    background-color: rgb(237, 188, 252);
+    color: rgb(48, 9, 63);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 
@@ -147,5 +198,13 @@ h2 {
 @media only screen and (max-width: 1074px) {
     .image {
         display: none;
+    }
+    .form {
+        width: 100%;
+        padding: 0 50px;
+    }
+
+    .register_main .container {
+        padding: 0;
     }
 }
