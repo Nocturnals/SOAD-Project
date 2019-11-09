@@ -1,18 +1,16 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { connect } from 'react-redux';
-
+import { connect } from "react-redux";
 
 class RegInputFieldProps {
-    constructor(type, class_name, name, placeholder = '') {
+    constructor(type, class_name, name, placeholder = "") {
         this.type = type;
         this.class_name = class_name;
         this.name = name;
         this.placeholder = placeholder;
     }
 }
-
 
 class RegisterComp extends Component {
     constructor(props) {
@@ -48,7 +46,6 @@ class RegisterComp extends Component {
         }
     }
 
-
     regInputFields = (inputFieldProps, values) => {
         let inputFields = []
 
@@ -56,33 +53,73 @@ class RegisterComp extends Component {
             let iF = inputFieldProps[index];
 
             inputFields.push(
-                <input type={iF.type} className={iF.class_name} name={iF.name} value={values[index]} placeholder={iF.placeholder} onChange={this.handleChange} autoComplete="off" />
-            )
+                <div className={iF.class_name}>
+                    <input
+                        type={iF.type}
+                        name={iF.name}
+                        value={values[index]}
+                        placeholder={iF.placeholder}
+                        onChange={this.handleChange}
+                    />
+                </div>
+            );
         }
 
         return inputFields;
-    }
-
+    };
 
     render() {
-        const { email, username, dateOfBirth, password, re_password } = this.state;
-        const inputValues = [email, username, dateOfBirth, password, re_password];
+        const {
+            firstName,
+            lastName,
+            email,
+            dateOfBirth,
+            password,
+            re_password
+        } = this.state;
+        const inputValues = [
+            firstName,
+            lastName,
+            email,
+            dateOfBirth,
+            password,
+            re_password
+        ];
 
         const inputFields = [
-            new RegInputFieldProps('email', 'reg_email', 'email', 'Email...'),
-            new RegInputFieldProps('text', 'username', 'username', 'Username...'),
+            new RegInputFieldProps(
+                "text",
+                "username",
+                "username",
+                "Username..."
+            ),
             // new RegInputFieldProps('text', 'name first', 'firstName', 'First Name...'),
             // new RegInputFieldProps('text', 'name last', 'lastName', 'Last Name...'),
-            new RegInputFieldProps('text', 'date', 'dateOfBirth', 'dd/mm/yyyy'),
-            new RegInputFieldProps('password', 'reg_password', 'password', 'Password'),
-            new RegInputFieldProps('password', 'reg_password', 're_password', 'Re-enter Password'),
+            new RegInputFieldProps(
+                "email",
+                "ed reg_email",
+                "email",
+                "Email..."
+            ),
+            // new RegInputFieldProps('text', 'ed date', 'dateOfBirth', 'dd/mm/yyyy'),
+            new RegInputFieldProps(
+                "password",
+                "reg_password",
+                "password",
+                "Password"
+            )
+            // new RegInputFieldProps('password', 'password', 're_password', 'Re-enter Password'),
         ];
         const inputs = this.regInputFields(inputFields, inputValues);
 
         return (
             <div className="register_main">
                 <div className="image comp"></div>
-                <form name="form" onSubmit={this.handleSubmit} className="form comp">
+                <form
+                    name="form"
+                    onSubmit={this.handleSubmit}
+                    className="form comp"
+                >
                     <h2>REGISTER</h2>
                     <div className="reg_inputs container">
                         <div className="row">
@@ -119,9 +156,8 @@ class RegisterComp extends Component {
                     </div>
                 </form>
             </div>
-        )
+        );
     }
 }
-
 
 export default RegisterComp;

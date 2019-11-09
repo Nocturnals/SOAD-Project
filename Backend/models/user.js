@@ -1,6 +1,6 @@
-const mongoose  = require('mongoose');
-const otheruserschema = require('./otheruser');
-const othercompetititonschema = require('./Othercompetitions');
+const mongoose = require("mongoose");
+const otheruserschema = require("./otheruser");
+const othercompetititonschema = require("./Othercompetitions");
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         min: 5,
-        max: 255,
+        max: 255
     },
     password: {
         type: String,
@@ -25,56 +25,55 @@ const userSchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        default: Date.now,
+        default: Date.now
     },
-    dateofbirth : {
-        type : Date,
-    },
-
-    primaryinterest :{
-        enum : ["cat1","cat2"],
-        type: String,
+    dateofbirth: {
+        type: Date
     },
 
-    otherinterest : {
-        enum : ["cat1","cat2"],
-        type: String,
+    primaryinterest: {
+        enum: ["cat1", "cat2"],
+        type: String
     },
 
-    lastactive : {
-        type : Date,
+    otherinterest: {
+        enum: ["cat1", "cat2"],
+        type: String
     },
 
-    profileurl :{
-        type : String,
+    lastactive: {
+        type: Date
     },
 
-    coverphotourl : {
-        type :String,
+    profileurl: {
+        type: String
     },
 
-    profilephotourl : {
-        type :String,
+    coverphotourl: {
+        type: String
     },
 
-    competitionsparticipated : {
-        type : [othercompetititonschema],
+    profilephotourl: {
+        type: String
     },
 
-    competitionsparticipating : {
-        type : [othercompetititonschema],
+    competitionsparticipated: {
+        type: [othercompetititonschema]
     },
 
-    followers : {
-        type : [otheruserschema],
+    competitionsparticipating: {
+        type: [othercompetititonschema]
     },
 
-    following  : {
-        type : [otheruserschema],
+    followers: {
+        type: [otheruserschema]
+    },
+
+    following: {
+        type: [otheruserschema]
     }
-
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
-module.exports = User
+module.exports = User;
