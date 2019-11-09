@@ -50,7 +50,7 @@ class LoginComp extends Component {
                     <h2>LOG IN</h2>
                     <div
                         className={
-                            "form_group email" +
+                            "email" +
                             ((submitted && !email) ||
                             (email && !isValidEmail(email))
                                 ? " has-error"
@@ -60,7 +60,7 @@ class LoginComp extends Component {
                         {/* <label htmlFor="email">Email</label> */}
                         <input
                             type="email"
-                            className="form-control"
+                            className=""
                             name="email"
                             value={email}
                             onChange={this.handleChange}
@@ -73,14 +73,14 @@ class LoginComp extends Component {
                     </div>
                     <div
                         className={
-                            "form_group password" +
+                            "password" +
                             (submitted && !password ? " has-error" : "")
                         }
                     >
                         {/* <label htmlFor="password">Password</label> */}
                         <input
                             type="password"
-                            className="form-control"
+                            className=""
                             name="password"
                             value={password}
                             onChange={this.handleChange}

@@ -15,6 +15,7 @@ class AuthenticationPage extends Component {
     render() {
         return (
             <div className="auth_page">
+                <div className="background"></div>
                 <div className="homeLink">
                     <Link to="/">
                         <button className="navTitle">
