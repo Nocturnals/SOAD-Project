@@ -5,7 +5,11 @@ const jwt = require("jsonwebtoken");
 const _ = require("lodash"); // for modifing the array contents
 
 const UserModel = require("../models/user");
-const { RegistrerValidation, LoginValidation } = require("./authValidation");
+const {
+    RegistrerValidation,
+    LoginValidation,
+    UserIDValidation
+} = require("./authValidation");
 
 // intance of a router
 const router = express.Router();
@@ -63,6 +67,7 @@ router.post("/login", async (req, res) => {
         req.body.password,
         user.password
     );
+
     if (!validPassword)
         return res.status(400).json({ Error_message: "Password is invalid" });
 
@@ -75,6 +80,43 @@ router.post("/login", async (req, res) => {
     res.status(200)
         .header("authorization", jToken)
         .json(_.pick(user, ["_id", "name", "email"]));
+});
+
+// route to load get a userby id
+router.get("/user", verifyToken, async (req, res, next) => {
+    // checks the correct format of the fields
+    const validateData = UserIDValidation(req.body);
+    if (validateData.error) {
+        return res
+            .status(400)
+            .json({ Error_Message: "Field with userid is needed" });
+    }
+
+    // verifies the given token is correct and gets the user data
+    jwt.verify(req.token, process.env.Token_Secret, async (err, authData) => {
+        if (err) {
+            return res.status(401).json({ Error_Message: "Access Denied" });
+        } else {
+            const loggedUser = await UserModel.findById(authData._id).select(
+                "-password"
+            );
+            if (!loggedUser) {
+                return res.status(400).json({
+                    Error_Message: "No user exists with given id"
+                });
+            } else {
+                if (req.body.user._id == loggedUser._id) {
+                    return res
+                        .status(200)
+                        .json(_.pick(loggedUser, ["_id", "name", "email"]));
+                } else {
+                    return res
+                        .status(401)
+                        .json({ Error_Message: "Access Denied" });
+                }
+            }
+        }
+    });
 });
 
 router.get("/viewpost1", verifyToken, (req, res) => {

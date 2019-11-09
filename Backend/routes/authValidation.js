@@ -35,4 +35,14 @@ const LoginValidation = data => {
     return Joi.validate(data, schema);
 };
 
-module.exports = { RegistrerValidation, LoginValidation };
+const UserIDValidation = data => {
+    const schema = {
+        user: {
+            _id: Joi.string().required()
+        }
+    };
+
+    return Joi.validate(data, schema);
+};
+
+module.exports = { RegistrerValidation, LoginValidation, UserIDValidation };
