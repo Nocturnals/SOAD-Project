@@ -46,7 +46,7 @@ class FirstSection extends React.Component {
                             <button id="know-more">
                                 Know More &nbsp;
                                 <i
-                                    class="fa fa-arrow-down"
+                                    className="fa fa-arrow-down"
                                     aria-hidden="true"
                                 ></i>
                             </button>
