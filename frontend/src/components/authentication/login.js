@@ -47,16 +47,16 @@ class LoginComp extends Component {
             <div className="login_main">
                 <form name="form" onSubmit={this.handleSubmit} className="form comp">
                     <h2>LOG IN</h2>
-                    <div className={'form_group email' + ((submitted && !email) || (email && !isValidEmail(email)) ? ' has-error' : 'no-error')}>
+                    <div className={'email' + ((submitted && !email) || (email && !isValidEmail(email)) ? ' has-error' : 'no-error')}>
                         {/* <label htmlFor="email">Email</label> */}
-                        <input type="email" className="form-control" name="email" value={email} onChange={this.handleChange} placeholder="Email..." autoComplete="off" />
+                        <input type="email" className="" name="email" value={email} onChange={this.handleChange} placeholder="Email..." autoComplete="off" />
                         {submitted && !email &&
                             <div className="help-block">Email is required</div>
                         }
                     </div>
-                    <div className={'form_group password' + (submitted && !password ? ' has-error' : '')}>
+                    <div className={'password' + (submitted && !password ? ' has-error' : '')}>
                         {/* <label htmlFor="password">Password</label> */}
-                        <input type="password" className="form-control" name="password" value={password} onChange={this.handleChange} placeholder="Password..." />
+                        <input type="password" className="" name="password" value={password} onChange={this.handleChange} placeholder="Password..." />
                         {submitted && !password &&
                             <div className="help-block">Password is required</div>
                         }
@@ -67,7 +67,7 @@ class LoginComp extends Component {
                             <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                         }
                     </div>
-                    <div className="form_group reg_btn">
+                    <div className="reg_btn">
                         Don't have an account?&nbsp;
                         <Link to="/register" className="reg_link"> Register</Link>
                         &nbsp;now

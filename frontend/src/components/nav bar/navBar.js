@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import './navBar.css'
 import './animations'
-import ToggleNavBar from './animations'
+import { toggleNavBar, enableBodyScroll } from './animations'
 
 
 
@@ -51,7 +51,7 @@ class NavBar extends Component {
                             <span className="lname">{button.lname}</span>
                         </button>
                     </Link> :
-                    <button className={button.class_name} onClick={ToggleNavBar()}>
+                    <button className={button.class_name} onClick={toggleNavBar()}>
                         <i className={button.iconClass} aria-hidden="true"></i>
                     </button>
             )
@@ -82,7 +82,9 @@ class NavBar extends Component {
             let button = buttons[index];
             buttonBlocks.push(
                 <div>
-                    <button className={button.class_name}>{button.fname}</button>
+                    <Link to={button.link}>
+                        <button className={button.class_name}>{button.fname}</button>
+                    </Link>
                 </div>
             )
         }
@@ -103,22 +105,17 @@ class NavBar extends Component {
             new NavBtnNames('Services'),
             new NavBtnNames('About Us'),
             !isAuthed ? new NavBtnNames('Log In', '', '/login')
-            : new NavBtnNames('Profile', '', '/'),
+                : new NavBtnNames('Profile', '', '/'),
         ];
         rightNavBtns.push(new NavBtnNames('', '', '', 'navMenuIcon', 'fa fa-bars'));
 
-        const expandNavBtns = !isAuthed ? [
+        const expandNavBtns = [
             new NavBtnNames('Home', '', '/', 'expNavBtn'),
             new NavBtnNames('Features', '', '', 'expNavBtn'),
             new NavBtnNames('Services', '', '', 'expNavBtn'),
             new NavBtnNames('About Us', '', '', 'expNavBtn'),
-            new NavBtnNames('LOG IN', '', '/login', 'expNavBtn'),
-        ] : [
-            new NavBtnNames('Home', '', '/', 'expNavBtn'),
-            new NavBtnNames('Features', '', '', 'expNavBtn'),
-            new NavBtnNames('Services', '', '', 'expNavBtn'),
-            new NavBtnNames('About Us', '', '', 'expNavBtn'),
-            new NavBtnNames('Profile', '', '/login', 'expNavBtn'),
+            !isAuthed ? new NavBtnNames('LOG IN', '', '/login', 'expNavBtn')
+                : new NavBtnNames('Profile', '', '/login', 'expNavBtn'),
         ];
 
         const components = [

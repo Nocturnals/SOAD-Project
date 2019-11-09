@@ -22,9 +22,13 @@ document.body.addEventListener('scroll', () => {
         nav.style.boxShadow = 'none';
     }
     if (document.body.scrollTop >= 100) {
-        if (scrollHeight < document.body.scrollTop) {
-            nav.style.top = '-110px';
+        nav.style.paddingTop = '10px';
+        if (scrollHeight < document.body.scrollTop - 30) {
+            nav.style.top = '-50px';
         }
+    }
+    if (document.body.scrollTop <= 60) {
+        nav.style.paddingTop = '40px';
     }
     if (scrollHeight > document.body.scrollTop) {
         nav.style.top = '0px';
@@ -33,7 +37,7 @@ document.body.addEventListener('scroll', () => {
 })
 
 // Animations...
-function toggleNavBar() {
+export function toggleNavBar() {
     return () => {
         var expandedNav = document.getElementById('expandedNav');
         var nav = document.getElementById('nav-bar');
@@ -54,6 +58,10 @@ function toggleNavBar() {
             document.body.style.overflowY = 'scroll';
         }
     }
+}
+
+export function enableBodyScroll() {
+    document.body.style.overflowY = 'scroll';
 }
 
 export default toggleNavBar;

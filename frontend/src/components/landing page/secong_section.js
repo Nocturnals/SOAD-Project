@@ -47,13 +47,13 @@ class SecondSection extends React.Component {
     }
 
     render() {
-        const img = require('../media/images/cat.svg');
-
         return (
-            <div className="section secondSection" id="secondSection">
-                <h2>SEE POSTS RELATED TO...</h2>
-                <div className="categories">
-                    {this.categoryBlocks(this.categories)}
+            <div className="section secondSection row" id="secondSection">
+                <div className="col-12">
+                    <h2>SEE POSTS RELATED TO...</h2>
+                    <div className="categories">
+                        {this.categoryBlocks(this.categories)}
+                    </div>
                 </div>
             </div>
         )

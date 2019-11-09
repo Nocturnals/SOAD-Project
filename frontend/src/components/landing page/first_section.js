@@ -1,17 +1,16 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from "react-router-dom";
 
 import './landing_page.css'
 
 
 
-class FirstSection extends React.Component {
-
+class FirstSection extends Component {
     render() {
         const img = require('../media/images/v10-header4.svg');
 
         return (
-            <div className="section firstSection">
+            <div id="firstSection" className="section firstSection row">
                 <div className="block">
                     <img src={img} alt="Artist Colab" className="cont"></img>
                 </div>
@@ -28,7 +27,9 @@ class FirstSection extends React.Component {
                         </div>
                         <div className="login-signup">
                             <Link to="/register"><button>Join Us</button></Link>
-                            <button id="know-more">Know More &nbsp;<i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+                            <button id="know-more">
+                                Know More &nbsp;<i class="fa fa-arrow-down" aria-hidden="true"></i>
+                            </button>
                         </div>
                     </div>
                 </div>

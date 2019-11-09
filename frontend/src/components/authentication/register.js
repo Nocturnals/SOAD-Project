@@ -21,9 +21,8 @@ class RegisterComp extends Component {
         // this.props.logout();
 
         this.state = {
-            firstName: '',
-            lastName: '',
             email: '',
+            username: '',
             dateOfBirth: '',
             password: '',
             re_password: '',
@@ -51,15 +50,13 @@ class RegisterComp extends Component {
 
 
     regInputFields = (inputFieldProps, values) => {
-         let inputFields = []
+        let inputFields = []
 
         for (let index = 0; index < inputFieldProps.length; index++) {
             let iF = inputFieldProps[index];
-            
+
             inputFields.push(
-                <div className={iF.class_name}>
-                    <input type={iF.type} name={iF.name} value={values[index]} placeholder={iF.placeholder} onChange={this.handleChange} />
-                </div>
+                <input type={iF.type} className={iF.class_name} name={iF.name} value={values[index]} placeholder={iF.placeholder} onChange={this.handleChange} autoComplete="off" />
             )
         }
 
@@ -67,29 +64,59 @@ class RegisterComp extends Component {
     }
 
 
-    render () {
-        const {firstName, lastName, email, dateOfBirth, password, re_password} = this.state;
-        const inputValues = [ firstName, lastName, email, dateOfBirth, password, re_password ];
+    render() {
+        const { email, username, dateOfBirth, password, re_password } = this.state;
+        const inputValues = [email, username, dateOfBirth, password, re_password];
 
         const inputFields = [
+            new RegInputFieldProps('email', 'reg_email', 'email', 'Email...'),
             new RegInputFieldProps('text', 'username', 'username', 'Username...'),
             // new RegInputFieldProps('text', 'name first', 'firstName', 'First Name...'),
             // new RegInputFieldProps('text', 'name last', 'lastName', 'Last Name...'),
-            new RegInputFieldProps('email', 'ed reg_email', 'email', 'Email...'),
-            // new RegInputFieldProps('text', 'ed date', 'dateOfBirth', 'dd/mm/yyyy'),
+            new RegInputFieldProps('text', 'date', 'dateOfBirth', 'dd/mm/yyyy'),
             new RegInputFieldProps('password', 'reg_password', 'password', 'Password'),
-            // new RegInputFieldProps('password', 'password', 're_password', 'Re-enter Password'),
+            new RegInputFieldProps('password', 'reg_password', 're_password', 'Re-enter Password'),
         ];
+        const inputs = this.regInputFields(inputFields, inputValues);
 
         return (
             <div className="register_main">
                 <div className="image comp"></div>
                 <form name="form" onSubmit={this.handleSubmit} className="form comp">
                     <h2>REGISTER</h2>
-                    <div className="reg_inputs">
-                        {this.regInputFields(inputFields, inputValues)}
+                    <div className="reg_inputs container">
+                        <div className="row">
+                            <div className="col-12">
+                                {inputs[0]}
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-7">
+                                {inputs[1]}
+                            </div>
+                            <div className="col-5">
+                                {inputs[2]}
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12">
+                                {inputs[3]}
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12">
+                                {inputs[4]}
+                            </div>
+                        </div>
                     </div>
-                    <div className="reg_btns"></div>
+                    <div className="reg_btns">
+                        <button type="submit">REGISTER</button>
+                    </div>
+                    <div className="form_group login_btn">
+                        Have an account already?&nbsp;
+                        <Link to="/login" className="login_link"> LogIn</Link>
+                        &nbsp;now
+                    </div>
                 </form>
             </div>
         )
