@@ -1,6 +1,5 @@
 import axios from "axios";
 import { userAuthConst } from "../constants";
-import { userService } from "../services";
 import { history } from "../helpers";
 import setAuthToken from "../setAuthToken";
 

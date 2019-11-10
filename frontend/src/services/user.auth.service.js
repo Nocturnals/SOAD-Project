@@ -3,7 +3,6 @@ import axios from "axios";
 import { logout } from "../actions/user.athentication";
 import setAuthToken from "../setAuthToken";
 import { setCurrentUser } from "../actions/user.athentication";
-import jwt_decode from "jwt-decode";
 
 export const userService = {
     login,
