@@ -33,6 +33,8 @@ var allowCrossDomain = function(req, res, next) {
     // Request headers which are allowed to this backend server
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
+    res.header("Access-Control-Expose-Headers", "*");
+
     // Pass to next layer
     next();
 };

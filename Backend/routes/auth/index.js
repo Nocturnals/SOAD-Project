@@ -79,7 +79,7 @@ router.post("/login", async (req, res) => {
     });
 
     res.status(200)
-        .header("authorization", jToken)
+        .header("Authorization", jToken)
         .json(_.pick(user, ["_id", "name", "email"]));
 });
 

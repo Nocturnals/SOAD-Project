@@ -13,16 +13,16 @@ export function login(email, password) {
         };
 
         axios
-            .post("http://localhost:4000/api/user/login", user)
+            .post("http://localhost:4000/api/auth/login", user)
             // .then(handleResponse)
             .then(res => {
                 console.log(res);
-                const { authorization } = res.header;
-                console.log(authorization);
+                const { Authorization } = res.header;
+                console.log(Authorization);
 
-                localStorage.setItem("userToken", authorization);
-                setAuthToken(authorization);
-                dispatch(setCurrentUser(authorization));
+                localStorage.setItem("userToken", Authorization);
+                setAuthToken(Authorization);
+                dispatch(setCurrentUser(Authorization));
             })
             .catch(err => {
                 console.log(err);

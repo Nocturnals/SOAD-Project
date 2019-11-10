@@ -9,6 +9,7 @@ class LoginComp extends Component {
     constructor(props) {
         super(props);
 
+        // TODO:: change the logout fuction to redirect to home page when user is logged in
         this.props.logout();
 
         this.state = {
@@ -118,6 +119,7 @@ class LoginComp extends Component {
     }
 }
 
+// specifiying the class to have these objects using propTypes
 LoginComp.propTypes = {
     login: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
@@ -129,6 +131,7 @@ const mapStateToProps = state => ({
     auth: state.auth,
     alert: state.alert
 });
+
 export default connect(
     mapStateToProps,
     { login, logout }
