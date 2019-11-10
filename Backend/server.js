@@ -55,7 +55,7 @@ if (process.env.Node_Env === "development") {
 }
 
 // Route for login
-app.use("/api/user", require("./routes/auth"));
+app.use("/api/auth", require("./routes/auth"));
 
 if (process.env.Node_Env === "production") {
     // for loading the static frontend app
