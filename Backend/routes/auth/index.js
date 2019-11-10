@@ -53,6 +53,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
     // validate the user inputs
     const validatedData = LoginValidation(req.body);
+
     if (validatedData.error)
         return res
             .status(400)
@@ -79,7 +80,7 @@ router.post("/login", async (req, res) => {
     });
 
     res.status(200)
-        .header("Authorization", jToken)
+        .header("authorization", jToken)
         .json(_.pick(user, ["_id", "name", "email"]));
 });
 
@@ -114,6 +115,11 @@ router.get("/user", verifyToken, async (req, res, next) => {
             }
         }
     });
+});
+
+// testing routes
+router.get("/test", (req, res, next) => {
+    return res.json({ message: "working perfectly" });
 });
 
 // exports the routers

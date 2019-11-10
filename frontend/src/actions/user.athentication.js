@@ -11,35 +11,22 @@ export function login(email, password) {
             email: email,
             password: password
         };
-
         axios
             .post("http://localhost:4000/api/auth/login", user)
-            // .then(handleResponse)
             .then(res => {
                 console.log(res);
-                const { Authorization } = res.header;
-                console.log(Authorization);
+                const { authorization } = res.headers;
+                console.log(authorization);
 
-                localStorage.setItem("userToken", Authorization);
-                setAuthToken(Authorization);
-                dispatch(setCurrentUser(Authorization));
+                localStorage.setItem("userToken", authorization);
+                setAuthToken(authorization);
+                dispatch(setCurrentUser(authorization));
             })
             .catch(err => {
                 console.log(err);
 
                 dispatch(failureAction(err));
             });
-
-        // userService.login(user)
-        //     .then(
-        //         user => {
-        //             dispatch(successAction(user))
-        //             history.push('/')
-        //         },
-        //         error => {
-        //             dispatch(failureAction(error.toString()))
-        //         }
-        //     )
     };
 
     function handleResponse(response) {
