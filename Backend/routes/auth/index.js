@@ -117,15 +117,11 @@ router.post(
                 "Email confirmation"
             );
 
-            if (sentStatus == true) {
-                return res
-                    .status(200)
-                    .json({ message: "emailVerification sent" });
-            } else {
-                return res
-                    .status(500)
-                    .json({ message: "Internal server error" });
-            }
+            return res
+                .status(200)
+                .json({
+                    message: "Mail with verification link Sent to your mail"
+                });
         } catch (error) {
             console.log(error);
             return res.status(500).json({ message: "Internal server error" });
