@@ -90,7 +90,7 @@ class NavBar extends Component {
                                 aria-labelledby="navbarDropdownMenuLink-333"
                             >
                                 <Link
-                                    to={!isAuthed ? "/login" : "/profile"}
+                                    to={!isAuthed ? "/auth/login" : "/profile"}
                                     style={{
                                         textDecoration: "none",
                                         textTransform: "uppercase"
@@ -101,7 +101,9 @@ class NavBar extends Component {
                                     </button>
                                 </Link>
                                 <Link
-                                    to={!isAuthed ? "/register" : "/logout"}
+                                    to={
+                                        !isAuthed ? "/auth/register" : "/logout"
+                                    }
                                     style={{
                                         textDecoration: "none",
                                         textTransform: "uppercase"

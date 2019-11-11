@@ -1,0 +1,57 @@
+.navigators .col {
+    padding: 0;
+}
+.active::before {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    border: 1.5px solid rgb(196, 248, 248);
+    transition: all 0.2s linear;
+    animation: active 0.2s linear;
+}
+.navigators:hover > .active::before {
+    box-shadow: 0 -2px 15px rgba(255, 255, 255, 0.7);
+}
+.navigators .btn {
+    width: 100%; height: 100%; margin: 0;
+    padding: 40px 0;
+    font-size: 2rem;
+    text-align: center;
+    transition: all 0.2s linear;
+}
+.navigators .btn, .navigators .btn:active, .navigators .btn:focus {
+    border-radius: 0;
+    border: none;
+    outline: none !important;
+    box-shadow: none;
+}
+.navigators .btn i, .navigators .btn h6 {
+    color: rgba(187, 240, 247, 0.904);
+}
+
+.navigators .even .btn {
+    background-color: rgb(30, 85, 102);
+    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.4)
+}
+.navigators .odd .btn {
+    background-color: rgb(22, 53, 80);
+}
+
+.active .btn {
+    background-image: linear-gradient()
+}
+.active .btn i, .active .btn h6 {
+    color: rgba(226, 160, 250, 0.931);
+}
+
+
+
+
+@keyframes active {
+    from {
+        border: 0;
+    }
+    to {
+        border: 1.5px solid rgb(196, 248, 248);
+    }
+}

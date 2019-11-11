@@ -1,3 +1,5 @@
+import { Redirect } from "react-router-dom";
+
 import axios from "axios";
 import { userAuthConst } from "../constants";
 import { history } from "../helpers";
@@ -14,13 +16,13 @@ export function login(email, password) {
         axios
             .post("http://localhost:4000/api/auth/login", user)
             .then(res => {
-                console.log(res);
+                console.log(res.data);
                 const { authorization } = res.headers;
                 console.log(authorization);
 
                 localStorage.setItem("userToken", authorization);
                 setAuthToken(authorization);
-                dispatch(setCurrentUser(authorization));
+                dispatch(successAction(res.data));
             })
             .catch(err => {
                 console.log(err);

@@ -34,7 +34,7 @@ class FirstSection extends Component {
                             </ul>
                         </div>
                         <div className="login-signup">
-                            <Link to="/register">
+                            <Link to="/auth/register">
                                 <button>Join Us</button>
                             </Link>
                             <button id="know-more">
