@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+
 // verify the token for authentication
 function verifyToken(req, res, next) {
     // Get auth header value
@@ -19,4 +21,34 @@ function verifyToken(req, res, next) {
     }
 }
 
-module.exports = { verifyToken };
+const verifyUserWithToken = async (req, res, next) => {
+    // verifies the given token is correct and gets the user data
+    jwt.verify(req.token, process.env.Token_Secret, async (err, authData) => {
+        if (err) {
+            return res.status(401).json({ message: "Access Denied" });
+        } else {
+            try {
+                const loggedUser = await UserModel.findById(
+                    authData._id
+                ).select("-password");
+
+                // if user doesn't exist
+                if (!loggedUser) {
+                    return res.status(400).json({
+                        message: "No user exists with given id"
+                    });
+                }
+
+                // when user exists
+                else {
+                    req.loggedUser = loggedUser;
+                    next();
+                }
+            } catch (error) {
+                return res.status(500).json({ message: "Error finding user" });
+            }
+        }
+    });
+};
+
+module.exports = { verifyToken, verifyUserWithToken };
