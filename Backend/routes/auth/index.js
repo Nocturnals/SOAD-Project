@@ -5,13 +5,9 @@ const jwt = require("jsonwebtoken");
 const _ = require("lodash"); // for modifing the array contents
 
 const UserModel = require("../../models/user");
-const { SendMail } = require("../../services/mailer");
+const { MailingService } = require("../../services/mailer");
 const { verifyToken, verifyUserWithToken } = require("./helper");
-const {
-    RegistrerValidation,
-    LoginValidation,
-    UserIdValidation
-} = require("./authValidation");
+const { RegistrerValidation, LoginValidation } = require("./authValidation");
 
 // intance of a router
 const router = express.Router();
@@ -81,7 +77,7 @@ router.post("/login", async (req, res) => {
     // Assign a json web token
     const tokenSecret = process.env.Token_Secret;
     const jToken = jwt.sign({ _id: user._id }, tokenSecret, {
-        expiresIn: "1hr"
+        expiresIn: "1d"
     });
 
     res.status(200)
@@ -113,12 +109,27 @@ router.post(
             "host"
         )}/api/auth/emailVerify/${jToken}`;
 
-        // send the mail
-        SendMail(
-            `To Verify your account click the link <br> ${verification_link} <br> The above link expires in one day`,
-            req.loggedUser.email,
-            "Email confirmation"
-        );
+        try {
+            // send the mail
+            const sentStatus = MailingService.Sendmail(
+                `To Verify your account click the link <br> ${verification_link} <br> The above link expires in one day`,
+                req.loggedUser.email,
+                "Email confirmation"
+            );
+
+            if (sentStatus == true) {
+                return res
+                    .status(200)
+                    .json({ message: "emailVerification sent" });
+            } else {
+                return res
+                    .status(500)
+                    .json({ message: "Internal server error" });
+            }
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
     }
 );
 
