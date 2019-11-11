@@ -1,12 +1,11 @@
-import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from "react-router-dom";
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
-import './navBarN.css'
-import './animationsN'
-import { toggleNavBar } from './animationsN'
-
+import "./navBarN.css";
+import "./animationsN";
+import { toggleNavBar } from "./animationsN";
 
 class LinkClass {
     constructor(toLink, name) {
@@ -15,27 +14,27 @@ class LinkClass {
     }
 }
 
-
 class NavBar extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    linkComp = (links) => {
+    linkComp = links => {
         let linkComps = [];
         for (let index = 0; index < links.length; index++) {
-            const link = links[index]
+            const link = links[index];
             linkComps.push(
                 <li class="nav-item">
-                    <Link to={link.toLink} style={{ textDecoration: 'none', textTransform: "uppercase" }}>
+                    <Link
+                        to={link.toLink}
+                        style={{
+                            textDecoration: "none",
+                            textTransform: "uppercase"
+                        }}
+                    >
                         <button class="nav-link">{link.name}</button>
                     </Link>
                 </li>
-            )
+            );
         }
         return linkComps;
-    }
-
+    };
 
     // Rednering...
     render() {
@@ -45,7 +44,7 @@ class NavBar extends Component {
             new LinkClass("/", "Home"),
             new LinkClass("/", "Features"),
             new LinkClass("/", "About Us")
-        ]
+        ];
 
         return (
             <nav class="navbar sticky-top navbar-expand-lg" id="nav-bar">
@@ -55,25 +54,62 @@ class NavBar extends Component {
                         <span className="lname">Colab</span>
                     </button>
                 </Link>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
-                    aria-controls="navbarSupportedContent-333" aria-expanded="false" aria-label="Toggle navigation" onClick={toggleNavBar()}>
-                    <span class="navbar-toggler-icon"><i className="fa fa-bars" aria-hidden="true"></i></span>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarSupportedContent-333"
+                    aria-controls="navbarSupportedContent-333"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                    onClick={toggleNavBar()}
+                >
+                    <span class="navbar-toggler-icon">
+                        <i className="fa fa-bars" aria-hidden="true"></i>
+                    </span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+                <div
+                    class="collapse navbar-collapse"
+                    id="navbarSupportedContent-333"
+                >
                     <ul class="navbar-nav ml-auto nav-flex-icons">
                         {this.linkComp(links)}
                         <li class="nav-item dropdown">
-                            <button class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
+                            <button
+                                class="nav-link dropdown-toggle"
+                                id="navbarDropdownMenuLink-333"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
                                 <i class="fa fa-user"></i>
                             </button>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-default" id="dropdown-menu"
-                                aria-labelledby="navbarDropdownMenuLink-333">
-                                <Link to={!isAuthed ? ('/login') : ('/profile')} style={{ textDecoration: 'none', textTransform: "uppercase" }}>
-                                    <button class="dropdown-item">{!isAuthed ? ('Login') : ('Profile')}</button>
+                            <div
+                                class="dropdown-menu dropdown-menu-right dropdown-default"
+                                id="dropdown-menu"
+                                aria-labelledby="navbarDropdownMenuLink-333"
+                            >
+                                <Link
+                                    to={!isAuthed ? "/login" : "/profile"}
+                                    style={{
+                                        textDecoration: "none",
+                                        textTransform: "uppercase"
+                                    }}
+                                >
+                                    <button class="dropdown-item">
+                                        {!isAuthed ? "Login" : "Profile"}
+                                    </button>
                                 </Link>
-                                <Link to={!isAuthed ? ('/register') : ('/logout')} style={{ textDecoration: 'none', textTransform: "uppercase" }}>
-                                    <button class="dropdown-item">{!isAuthed ? ('Register') : ('Logout')}</button>
+                                <Link
+                                    to={!isAuthed ? "/register" : "/logout"}
+                                    style={{
+                                        textDecoration: "none",
+                                        textTransform: "uppercase"
+                                    }}
+                                >
+                                    <button class="dropdown-item">
+                                        {!isAuthed ? "Register" : "Logout"}
+                                    </button>
                                 </Link>
                             </div>
                         </li>
@@ -84,15 +120,14 @@ class NavBar extends Component {
     }
 }
 
-
 NavBar.propTypes = {
     auth: PropTypes.object.isRequired,
     alert: PropTypes.object.isRequired
-}
+};
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     auth: state.auth,
     alert: state.alert
-})
+});
 
-export default connect(mapStateToProps)(NavBar)
+export default connect(mapStateToProps)(NavBar);
