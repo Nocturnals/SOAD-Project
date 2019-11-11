@@ -24,8 +24,8 @@ class AuthenticationPage extends Component {
                         </button>
                     </Link>
                 </div>
-                <Route exact path="/login" component={LoginComp} />
-                <Route exact path="/register" component={RegisterComp} />
+                <Route exact path="/auth/login" component={LoginComp} />
+                <Route exact path="/auth/register" component={RegisterComp} />
             </div>
         );
     }

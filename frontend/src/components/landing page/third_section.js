@@ -1,9 +1,13 @@
-import React from 'react'
-import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from "react-router-dom";
+import React from "react";
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    withRouter
+} from "react-router-dom";
 
-import './landing_page.css'
-
-
+import "./landing_page.css";
 
 class CompetitionCard {
     constructor(title, toLink, descr) {
@@ -13,26 +17,24 @@ class CompetitionCard {
     }
 }
 
-
-
 class ThirdSection extends React.Component {
-    cardComp = (card) => {
+    cardComp = card => {
         return (
             <div className="col-5 p-3 mb-4">
                 <div className="title">
                     <h4>{card.title}</h4>
                 </div>
                 <h3>
-                    <Link to={card.toLink} style={{ textDecoration: 'none' }}>
+                    <Link to={card.toLink} style={{ textDecoration: "none" }}>
                         {card.title}
                     </Link>
                 </h3>
                 <p>{card.descr}</p>
             </div>
-        )
-    }
+        );
+    };
 
-    cardComps = (cards) => {
+    cardComps = cards => {
         let comps = [];
         for (let index = 0; index < cards.length; index++) {
             const card1 = cards[index];
@@ -40,26 +42,39 @@ class ThirdSection extends React.Component {
             comps.push(
                 <div className="row justify-content-around">
                     {this.cardComp(card1)}
-                    {card2 ? (
-                        this.cardComp(card2)
-                    ) : (null)}
+                    {card2 ? this.cardComp(card2) : null}
                 </div>
             );
             index++;
         }
         return comps;
-    }
-
+    };
 
     render() {
-        const img = require('../media/images/cat.svg');
+        const img = require("../media/images/cat.svg");
 
         const competitionCards = [
-            new CompetitionCard('Competition-1', '/', 'Use our powerful mobile-first flexbox grid to build layouts of all shapes and sizes thanks to a twelve column system'),
-            new CompetitionCard('Competition-2', '/', 'Use our powerful mobile-first flexbox grid to build layouts of all shapes and sizes thanks to a twelve column system'),
-            new CompetitionCard('Competition-3', '/', 'Use our powerful mobile-first flexbox grid to build layouts of all shapes and sizes thanks to a twelve column system'),
-            new CompetitionCard('Competition-4', '/', 'Use our powerful mobile-first flexbox grid to build layouts of all shapes and sizes thanks to a twelve column system'),
-        ]
+            new CompetitionCard(
+                "Competition-1",
+                "/",
+                "Use our powerful mobile-first flexbox grid to build layouts of all shapes and sizes thanks to a twelve column system"
+            ),
+            new CompetitionCard(
+                "Competition-2",
+                "/",
+                "Use our powerful mobile-first flexbox grid to build layouts of all shapes and sizes thanks to a twelve column system"
+            ),
+            new CompetitionCard(
+                "Competition-3",
+                "/",
+                "Use our powerful mobile-first flexbox grid to build layouts of all shapes and sizes thanks to a twelve column system"
+            ),
+            new CompetitionCard(
+                "Competition-4",
+                "/",
+                "Use our powerful mobile-first flexbox grid to build layouts of all shapes and sizes thanks to a twelve column system"
+            )
+        ];
 
         return (
             <div className="section thirdSection row">
@@ -68,15 +83,16 @@ class ThirdSection extends React.Component {
                     <div className="container competition">
                         {this.cardComps(competitionCards)}
                     </div>
-                    <Link to="/login" style={{float: 'right'}}>More Competitions --> </Link>
+                    <Link to="/login" style={{ float: "right" }}>
+                        More Competitions -->{" "}
+                    </Link>
                 </div>
                 <div className="block">
                     <img src={img} alt="Artist Colab" className="cont"></img>
                 </div>
             </div>
-        )
+        );
     }
 }
-
 
 export default ThirdSection;

@@ -4,10 +4,14 @@ import { Provider } from "react-redux";
 import store from "./store";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./setAuthToken";
-import { setCurrentUser, logout } from "./actions/user.athentication";
+
 import "./App.css";
+
+import { setCurrentUser, logout } from "./actions/user.athentication";
+
 import LandingPage from "./components/landing page/landing_page";
 import AuthenticationPage from "./components/authentication/authentication";
+import Combo from "./components/combo/combo";
 
 if (localStorage.userToken) {
     setAuthToken(localStorage.userToken);
@@ -27,7 +31,12 @@ class App extends Component {
             <Provider store={store}>
                 <Router>
                     <Route exact path="/" component={LandingPage} />
-                    <Route exact path="/:type" component={AuthenticationPage} />
+                    <Route exact path="/user/:type" component={Combo} />
+                    <Route
+                        exact
+                        path="/auth/:type"
+                        component={AuthenticationPage}
+                    />
                 </Router>
             </Provider>
         );
