@@ -1,6 +1,7 @@
+import { Redirect } from "react-router-dom";
+
 import axios from "axios";
 import { userAuthConst } from "../constants";
-import { userService } from "../services";
 import { history } from "../helpers";
 import setAuthToken from "../setAuthToken";
 
@@ -12,35 +13,22 @@ export function login(email, password) {
             email: email,
             password: password
         };
-
         axios
-            .post("http://localhost:4000/api/user/login", user)
-            // .then(handleResponse)
+            .post("http://localhost:4000/api/auth/login", user)
             .then(res => {
-                console.log(res);
-                const { authorization } = res.header;
+                console.log(res.data);
+                const { authorization } = res.headers;
                 console.log(authorization);
 
                 localStorage.setItem("userToken", authorization);
                 setAuthToken(authorization);
-                dispatch(setCurrentUser(authorization));
+                dispatch(successAction(res.data));
             })
             .catch(err => {
                 console.log(err);
 
                 dispatch(failureAction(err));
             });
-
-        // userService.login(user)
-        //     .then(
-        //         user => {
-        //             dispatch(successAction(user))
-        //             history.push('/')
-        //         },
-        //         error => {
-        //             dispatch(failureAction(error.toString()))
-        //         }
-        //     )
     };
 
     function handleResponse(response) {

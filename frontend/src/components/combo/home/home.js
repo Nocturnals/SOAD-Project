@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 
+import PostComp from "./post/post";
+
 import "./home.css";
 
 // Post Element Class...
@@ -21,11 +23,7 @@ class HomePage extends Component {
         let postCards = [];
         for (let index = 0; index < postDetails.length; index++) {
             const post = postDetails[index];
-            postCards.push(
-                <div className="post" key={index}>
-                    <h2>{post.title}</h2>
-                </div>
-            );
+            postCards.push(Post(post.title));
         }
 
         return postCards;

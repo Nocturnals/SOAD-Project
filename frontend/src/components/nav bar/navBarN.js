@@ -1,11 +1,5 @@
 import React, { Component } from "react";
-import {
-    BrowserRouter as Router,
-    Route,
-    Link,
-    Redirect,
-    withRouter
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -21,10 +15,6 @@ class LinkClass {
 }
 
 class NavBar extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     linkComp = links => {
         let linkComps = [];
         for (let index = 0; index < links.length; index++) {
@@ -100,7 +90,7 @@ class NavBar extends Component {
                                 aria-labelledby="navbarDropdownMenuLink-333"
                             >
                                 <Link
-                                    to={!isAuthed ? "/user/login" : "/profile"}
+                                    to={!isAuthed ? "/auth/login" : "/profile"}
                                     style={{
                                         textDecoration: "none",
                                         textTransform: "uppercase"
@@ -112,7 +102,7 @@ class NavBar extends Component {
                                 </Link>
                                 <Link
                                     to={
-                                        !isAuthed ? "/user/register" : "/logout"
+                                        !isAuthed ? "/auth/register" : "/logout"
                                     }
                                     style={{
                                         textDecoration: "none",

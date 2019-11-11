@@ -1,11 +1,5 @@
 import React, { Component } from "react";
-import {
-    BrowserRouter as Router,
-    Route,
-    Link,
-    Redirect,
-    withRouter
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import "./landing_page.css";
 
@@ -40,7 +34,7 @@ class FirstSection extends Component {
                             </ul>
                         </div>
                         <div className="login-signup">
-                            <Link to="/user/register">
+                            <Link to="/auth/register">
                                 <button>Join Us</button>
                             </Link>
                             <button id="know-more">
