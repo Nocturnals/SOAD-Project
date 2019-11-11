@@ -9,27 +9,31 @@ import { Provider } from "react-redux";
 import store from "./store";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./setAuthToken";
-import { setCurrentUser, logout } from "./actions/user.athentication";
+
 import "./App.css";
+
+import { setCurrentUser, logout } from "./actions/user.athentication";
+
 import LandingPage from "./components/landing page/landing_page";
 import AuthenticationPage from "./components/authentication/authentication";
+import Combo from "./components/combo/combo";
 
 class App extends Component {
     // to verify user already logged in
-    componentDidMount() {
-        if (localStorage.userToken) {
-            setAuthToken(localStorage.userToken);
-            const decoded = jwt_decode(localStorage.userToken);
-            store.dispatch(setCurrentUser(decoded));
+    // componentDidMount() {
+    //     if (localStorage.userToken) {
+    //         setAuthToken(localStorage.userToken);
+    //         const decoded = jwt_decode(localStorage.userToken);
+    //         store.dispatch(setCurrentUser(decoded));
 
-            // if token is expired then logout and redirect to
-            const currentTime = Date.now() / 1000;
-            if (decoded.exp < currentTime) {
-                store.dispatch(logout());
-                return <Redirect to="/login" />;
-            }
-        }
-    }
+    //         // if token is expired then logout and redirect to
+    //         const currentTime = Date.now() / 1000;
+    //         if (decoded.exp < currentTime) {
+    //             store.dispatch(logout());
+    //             return <Redirect to="/user/home" />;
+    //         }
+    //     }
+    // }
 
     render() {
         return (
@@ -37,9 +41,10 @@ class App extends Component {
                 <Router>
                     <Switch>
                         <Route exact path="/" component={LandingPage} />
+                        <Route exact path="/user/:type" component={Combo} />
                         <Route
                             exact
-                            path="/:type"
+                            path="/auth/:type"
                             component={AuthenticationPage}
                         />
                     </Switch>

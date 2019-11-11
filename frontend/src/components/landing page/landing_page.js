@@ -11,6 +11,7 @@ class LandingPage extends React.Component {
             <div>
                 <NavBar />
                 <div className="lpMainDiv container-fluid">
+                    <div className="lpBackground"></div>
                     <FirstSection />
                     <SecondSection />
                     <ThirdSection />

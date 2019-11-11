@@ -106,7 +106,7 @@ class LoginComp extends Component {
                     </div>
                     <div className="reg_btn">
                         Don't have an account?&nbsp;
-                        <Link to="/register" className="reg_link">
+                        <Link to="/user/register" className="reg_link">
                             {" "}
                             Register
                         </Link>

@@ -10,12 +10,12 @@ const initialState = {
 
 export default function authentication(state = initialState, action) {
     switch (action.type) {
-        case "SET_CURRENT_USER":
-            return {
-                ...state,
-                isAuthed: !isEmpty(action.payload),
-                user: action.payload
-            };
+        // case "SET_CURRENT_USER":
+        //     return {
+        //         ...state,
+        //         user: action.user,
+        //         isAuthed: true
+        //     };
         case userAuthConst.LOGIN_REQUEST:
             return {
                 user: action.user,
@@ -23,7 +23,10 @@ export default function authentication(state = initialState, action) {
                 isLoading: true
             };
         case userAuthConst.LOGIN_SUCCESS:
+            console.log(action.user);
+
             return {
+                ...state,
                 user: action.user,
                 isAuthed: true,
                 isLoading: false

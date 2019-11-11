@@ -137,7 +137,7 @@ class RegisterComp extends Component {
                     </div>
                     <div className="form_group login_btn">
                         Have an account already?&nbsp;
-                        <Link to="/login" className="login_link">
+                        <Link to="/user/login" className="login_link">
                             {" "}
                             LogIn
                         </Link>
