@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
 
 class RegInputFieldProps {
     constructor(type, class_name, name, placeholder = "") {
