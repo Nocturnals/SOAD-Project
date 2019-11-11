@@ -36,16 +36,18 @@ const LoginValidation = data => {
     return Joi.validate(data, schema);
 };
 
-const UserIDValidation = data => {
+const UserIdValidation = data => {
     const schema = {
-        user: {
-            _id: Joi.string()
-                .required()
-                .email()
-        }
+        _id: Joi.string()
+            .uuid()
+            .required()
     };
 
     return Joi.validate(data, schema);
 };
 
-module.exports = { RegistrerValidation, LoginValidation, UserIDValidation };
+module.exports = {
+    RegistrerValidation,
+    LoginValidation,
+    UserIdValidation
+};

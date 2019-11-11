@@ -5,11 +5,12 @@ const jwt = require("jsonwebtoken");
 const _ = require("lodash"); // for modifing the array contents
 
 const UserModel = require("../../models/user");
-const { verifyToken } = require("./helper");
+const { SendMail } = require("../../services/mailer");
+const { verifyToken, verifyUserWithToken } = require("./helper");
 const {
     RegistrerValidation,
     LoginValidation,
-    UserIDValidation
+    UserIdValidation
 } = require("./authValidation");
 
 // intance of a router
@@ -25,7 +26,11 @@ router.post("/register", async (req, res) => {
             .json({ message: validatedData.error.details[0].message });
 
     // check user if already exists and give error
-    const emailExists = await UserModel.findOne({ email: req.body.email });
+    try {
+        const emailExists = await UserModel.findOne({ email: req.body.email });
+    } catch (error) {
+        return res.status(500).json({ message: "Database didn't respond" });
+    }
     if (emailExists)
         return res.status(400).json({ message: "Email already exists!" });
 
@@ -85,40 +90,72 @@ router.post("/login", async (req, res) => {
 });
 
 // route to load get a userby id
-router.get("/user", verifyToken, async (req, res, next) => {
-    // checks the correct format of the fields
-    const validateData = UserIDValidation(req.body);
-    if (validateData.error) {
-        return res.status(400).json({ message: "Field with userid is needed" });
-    }
+router.get("/user", verifyToken, verifyUserWithToken, (req, res) => {
+    return res.status(200).json({ user: req.loggedUser });
+});
 
-    // verifies the given token is correct and gets the user data
-    jwt.verify(req.token, process.env.Token_Secret, async (err, authData) => {
-        if (err) {
-            return res.status(401).json({ message: "Access Denied" });
-        } else {
-            const loggedUser = await UserModel.findById(authData._id).select(
-                "-password"
-            );
-            if (!loggedUser) {
-                return res.status(400).json({
-                    message: "No user exists with given id"
-                });
+// route to verify email of given user
+router.post(
+    "/sendEmailVerification",
+    verifyToken,
+    verifyUserWithToken,
+    (req, res, next) => {
+        const jToken = jwt.sign(
+            { _id: req.loggedUser._id },
+            process.env.MAIL_SECRET,
+            {
+                expiresIn: "1d"
+            }
+        );
+
+        // email verification link
+        const verification_link = `http://${req.get(
+            "host"
+        )}/api/auth/emailVerify/${jToken}`;
+
+        // send the mail
+        SendMail(
+            `To Verify your account click the link <br> ${verification_link} <br> The above link expires in one day`,
+            req.loggedUser.email,
+            "Email confirmation"
+        );
+    }
+);
+
+// router to verify the token for email verification
+router.get("/emailVerify/:jToken", async (req, res) => {
+    // verify the jwtoken from the url
+    jwt.verify(
+        req.params.jToken,
+        process.env.MAIL_SECRET,
+        async (err, authData) => {
+            if (err) {
+                return res.status(400).json({ message: "Invalid Token" });
             } else {
-                if (req.body.user._id == loggedUser._id) {
+                try {
+                    // finds the user document
+                    const user = await UserModel.findById({
+                        _id: authData._id
+                    });
+
+                    // verify the email of the user
+                    user.emailVerified = true;
+                    const verifiedUser = await user.save();
+                    res.status(200).json({
+                        message: `${verifiedUser.email} is verified`
+                    });
+                } catch (error) {
                     return res
-                        .status(200)
-                        .json(_.pick(loggedUser, ["_id", "name", "email"]));
-                } else {
-                    return res.status(401).json({ message: "Access Denied" });
+                        .status(500)
+                        .json({ message: "Internal server error" });
                 }
             }
         }
-    });
+    );
 });
 
 // testing routes
-router.get("/test", (req, res, next) => {
+router.get("/test", (req, res) => {
     return res.json({ message: "working perfectly" });
 });
 
