@@ -71,6 +71,11 @@ const userSchema = new mongoose.Schema({
 
     following: {
         type: [otheruserschema]
+    },
+
+    emailVerified: {
+        type: Boolean,
+        default: false
     }
 });
 
