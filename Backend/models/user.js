@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const otheruserschema = require("./otheruser");
+const otheruserschema = require("./Otheruser");
 const othercompetititonschema = require("./Othercompetitions");
 
 const userSchema = new mongoose.Schema({
