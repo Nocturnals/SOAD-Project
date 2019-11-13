@@ -3,6 +3,9 @@ html, body {
   margin: 0;
   overflow-x: hidden;
 }
+body {
+  background-color: rgb(240, 240, 240);
+}
 
 body::-webkit-scrollbar {
   width: 7px;

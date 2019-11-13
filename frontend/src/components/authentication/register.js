@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 class RegInputFieldProps {
     constructor(type, class_name, name, placeholder = "") {
@@ -13,8 +16,6 @@ class RegInputFieldProps {
 class RegisterComp extends Component {
     constructor(props) {
         super(props);
-
-        // this.props.logout();
 
         this.state = {
             email: "",
@@ -108,6 +109,11 @@ class RegisterComp extends Component {
         ];
         const inputs = this.regInputFields(inputFields, inputValues);
 
+        if (this.props.auth.isAuthed) {
+            console.log(this.props.auth);
+            return <Redirect to="/user/home" />;
+        }
+
         return (
             <div className="register_main">
                 <div className="image comp"></div>
@@ -137,7 +143,7 @@ class RegisterComp extends Component {
                     </div>
                     <div className="form_group login_btn">
                         Have an account already?&nbsp;
-                        <Link to="/user/login" className="login_link">
+                        <Link to="/auth/login" className="login_link">
                             {" "}
                             LogIn
                         </Link>
@@ -149,4 +155,12 @@ class RegisterComp extends Component {
     }
 }
 
-export default RegisterComp;
+RegisterComp.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(RegisterComp);

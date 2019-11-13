@@ -20,20 +20,20 @@ import Combo from "./components/combo/combo";
 
 class App extends Component {
     // to verify user already logged in
-    // componentDidMount() {
-    //     if (localStorage.userToken) {
-    //         setAuthToken(localStorage.userToken);
-    //         const decoded = jwt_decode(localStorage.userToken);
-    //         store.dispatch(setCurrentUser(decoded));
+    componentDidMount() {
+        if (localStorage.userToken) {
+            setAuthToken(localStorage.userToken);
+            const decoded = jwt_decode(localStorage.userToken);
+            store.dispatch(setCurrentUser(decoded));
 
-    //         // if token is expired then logout and redirect to
-    //         const currentTime = Date.now() / 1000;
-    //         if (decoded.exp < currentTime) {
-    //             store.dispatch(logout());
-    //             return <Redirect to="/user/home" />;
-    //         }
-    //     }
-    // }
+            // if token is expired then logout and redirect to
+            const currentTime = Date.now() / 1000;
+            if (decoded.exp < currentTime) {
+                store.dispatch(logout());
+                return <Redirect to="/user/home" />;
+            }
+        }
+    }
 
     render() {
         return (

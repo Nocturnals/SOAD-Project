@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { login, logout } from "../../actions";
 import isValidEmail from "../../validation/emailValidation";
@@ -8,9 +8,6 @@ import isValidEmail from "../../validation/emailValidation";
 class LoginComp extends Component {
     constructor(props) {
         super(props);
-
-        // TODO:: change the logout fuction to redirect to home page when user is logged in
-        this.props.logout();
 
         this.state = {
             email: "",
@@ -40,6 +37,10 @@ class LoginComp extends Component {
     render() {
         const { isLoading } = this.props.auth;
         const { email, password, submitted } = this.state;
+
+        if (this.props.auth.isAuthed) {
+            return <Redirect to="/user/home" />;
+        }
 
         return (
             <div className="login_main">
@@ -106,7 +107,7 @@ class LoginComp extends Component {
                     </div>
                     <div className="reg_btn">
                         Don't have an account?&nbsp;
-                        <Link to="/user/register" className="reg_link">
+                        <Link to="/auth/register" className="reg_link">
                             {" "}
                             Register
                         </Link>
