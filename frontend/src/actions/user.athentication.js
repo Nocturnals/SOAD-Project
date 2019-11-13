@@ -1,5 +1,3 @@
-import { Redirect } from "react-router-dom";
-
 import axios from "axios";
 import { userAuthConst } from "../constants";
 import { history } from "../helpers";
@@ -64,7 +62,6 @@ export function logout() {
         localStorage.removeItem("userToken");
         setAuthToken(false);
         dispatch(setCurrentUser({}));
-        history.push("/login");
     };
 }
 
