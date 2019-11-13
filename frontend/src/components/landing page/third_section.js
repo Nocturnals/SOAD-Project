@@ -34,7 +34,7 @@ class ThirdSection extends React.Component {
             const card1 = cards[index];
             const card2 = cards[index + 1];
             comps.push(
-                <div className="row justify-content-around">
+                <div className="row justify-content-around" key={index}>
                     {this.cardComp(card1)}
                     {card2 ? this.cardComp(card2) : null}
                 </div>
