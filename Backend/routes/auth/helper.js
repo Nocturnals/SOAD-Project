@@ -28,7 +28,7 @@ const verifyUserWithToken = async (req, res, next) => {
     jwt.verify(req.token, process.env.Token_Secret, async (err, authData) => {
         if (err) {
             console.log(`Error at verifying jwt token: ${err}`);
-            return res.status(401).json({ message: "Access Denied" });
+            return res.status(401).json({ message: err.message });
         } else {
             try {
                 const loggedUser = await UserModel.findById({
@@ -44,7 +44,7 @@ const verifyUserWithToken = async (req, res, next) => {
 
                 // when user exists
                 else {
-                    req.loggedUser = loggedUser;
+                    req.loggedUser = loggedUser._doc;
                     next();
                 }
             } catch (error) {

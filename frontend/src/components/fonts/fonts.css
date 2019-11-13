@@ -39,6 +39,31 @@
     src: local('PatinioBasica'), url('./PatinioBasica.woff') format('woff');
 }
 @font-face {
+    font-family: 'GenghisKhan';
+    font-style: normal;
+    src: local('GenghisKhan'), url('./GenghisKhan.woff') format('woff');
+}
+@font-face {
+    font-family: 'VOODD';
+    font-style: normal;
+    src: local('VOODD'), url('./VOODD.woff') format('woff');
+}
+@font-face {
+    font-family: 'ChiselMark';
+    font-style: normal;
+    src: local('ChiselMark'), url('./ChiselMark.woff') format('woff');
+}
+@font-face {
+    font-family: 'turntableaux';
+    font-style: normal;
+    src: local('turntableaux'), url('./turntableaux.woff') format('woff');
+}
+@font-face {
+    font-family: 'CAPTKD';
+    font-style: normal;
+    src: local('CAPTKD'), url('./CAPTKD.woff') format('woff');
+}
+@font-face {
     font-family: 'Ubuntu-Title';
     font-style: normal;
     src: local('Ubuntu-Title'), url('./Ubuntu-Title.woff') format('woff');

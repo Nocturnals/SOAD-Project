@@ -26,7 +26,7 @@ class MailingService {
                 console.log(`Error while sending mail: ${err}`);
                 return false;
             } else {
-                console.log("Message sent: " + response.message);
+                console.log("Message sent: " + response);
                 return true;
             }
         });

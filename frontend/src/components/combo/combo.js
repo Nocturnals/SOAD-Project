@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Link, Redirect, Route } from "react-router-dom";
 
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+
 import HomePage from "./home/home";
 import Profile from "./profile/profile";
 
@@ -21,8 +24,6 @@ class Combo extends Component {
         super(props);
     }
 
-    componentDidMount() {}
-
     // Generates Navigation Blocks...
     navigators = navBlocks => {
         const { type } = this.props.match.params;
@@ -30,7 +31,6 @@ class Combo extends Component {
         let navigators = [];
         for (let index = 0; index < navBlocks.length; index++) {
             const nav = navBlocks[index];
-            console.log(type + " " + nav.title);
             navigators.push(
                 <div
                     className={
@@ -63,7 +63,7 @@ class Combo extends Component {
         ];
 
         return (
-            <div className="home container-fluid">
+            <div className="combo container-fluid">
                 <div className="navigators row">
                     {this.navigators(navigators)}
                 </div>
@@ -75,4 +75,12 @@ class Combo extends Component {
     }
 }
 
-export default Combo;
+Combo.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(Combo);

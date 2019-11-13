@@ -1,7 +1,7 @@
 import { userAuthConst } from "../constants";
-import isEmpty from "../validation/is-empty";
 
-// let userToken = JSON.parse(localStorage.getItem('userToken'));
+let userToken = localStorage.getItem("userToken");
+
 const initialState = {
     user: {},
     isAuthed: false,

@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
         max: 1024,
         trim: true
     },
-    date: {
+    dateJoined: {
         type: Date,
         default: Date.now
     },
