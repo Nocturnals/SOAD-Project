@@ -22,7 +22,7 @@ router.get("/allcompetitions"  , (req,res) => {
 })
 
 
-router.post("/register" , verifyToken , verifyUserWithToken , (req,res,next)=>{
+router.post("/register" , verifyToken , verifyUserWithToken , async (req,res,next)=>{
 
 
     const validatedData = CompRegisterValidation(req.body);
@@ -58,9 +58,7 @@ router.post("/register" , verifyToken , verifyUserWithToken , (req,res,next)=>{
 
 
 
-router.post("/createcompetition" , verifyToken , verifyUserWithToken , (req,res,next) =>{
-        
-
+router.post("/createcompetition" , verifyToken , verifyUserWithToken , async (req,res,next) =>{
 
     const validatedData = CompCreateValidation(req.body);
     if (validatedData.error)
@@ -102,7 +100,7 @@ router.post("/createcompetition" , verifyToken , verifyUserWithToken , (req,res,
 
 // retrieve a comp
 
-router.post("/:id" , verifyToken , verifyUserWithToken , (req,res,next) =>{
+router.post("/:id" , verifyToken , verifyUserWithToken , async (req,res,next) =>{
 
 
 
@@ -124,7 +122,7 @@ router.post("/:id" , verifyToken , verifyUserWithToken , (req,res,next) =>{
 
 // delete a competition
 
-router.delete("/delete" , verifyToken , verifyUserWithToken , (req,res,next) => {
+router.delete("/delete" , verifyToken , verifyUserWithToken , async (req,res,next) => {
     
    
     const validatedData = deleteValidation(req.body);
@@ -151,7 +149,7 @@ catch(error){
 
 // update a competition
 
-router.patch("/edit" , verifyToken , verifyUserWithToken , (req,res,next) => {
+router.patch("/edit" , verifyToken , verifyUserWithToken , async (req,res,next) => {
   
 
 
@@ -168,7 +166,6 @@ router.patch("/edit" , verifyToken , verifyUserWithToken , (req,res,next) => {
     comp.hosts.forEach(i => {
         if(i._id == req.loggedUser._id){
             flag = 1;
-            break;
         }  
     });
     if(flag){
@@ -191,7 +188,7 @@ catch(error){
 // how to add a host
 
 
-router.post("/addhost" , verifyToken , verifyUserWithToken , (req,res,next)=>{
+router.post("/addhost" , verifyToken , verifyUserWithToken , async (req,res,next)=>{
 
 
 
@@ -213,7 +210,6 @@ router.post("/addhost" , verifyToken , verifyUserWithToken , (req,res,next)=>{
     comp.hosts.forEach(i => {
         if(i._id == req.loggedUser._id){
             ishost = true;
-            break;
         }   
     });
     
@@ -233,6 +229,8 @@ router.post("/addhost" , verifyToken , verifyUserWithToken , (req,res,next)=>{
 })
 
 
+
+module.exports = router;
 
 
 

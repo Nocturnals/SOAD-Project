@@ -4,8 +4,8 @@ class MailingService {
     static smtpTransport = nodemailer.createTransport({
         service: "Gmail",
         auth: {
-            user: process.env.MAIL_ID,
-            pass: process.env.MAIL_PASSWORD
+            user: process.env.MAIL_ID || 'mail id',
+            pass: process.env.MAIL_PASSWORD || 'password'
         }
     });
 

@@ -59,6 +59,10 @@ if (process.env.Node_Env === "development") {
 // Route for login
 app.use("/api/auth", require("./routes/auth"));
 
+//Route for Competitions
+app.use("/api/competition" , require("./routes/competitions/utils") )
+
+
 if (process.env.Node_Env === "production") {
     // for loading the static frontend app
     app.use(express.static("../frontend/build"));
@@ -72,9 +76,6 @@ if (process.env.Node_Env === "production") {
 
 
 
-//Route for Competitions
-
-app.use("/api/competition" , require("./routes/competitions") )
 
 
 

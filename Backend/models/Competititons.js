@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const otheruserschema = require("./otheruser");
-const commentsmodel = require("./Comments");
+const otheruserschema = require("./Otheruser");
+const {commentsmodel, commentschema} = require("./Comments");
 
 const FaqSchema = new mongoose.Schema({
     question: {
