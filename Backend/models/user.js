@@ -46,7 +46,8 @@ const userSchema = new mongoose.Schema({
     },
 
     profileurl: {
-        type: String
+        type: String,
+        default: "defalutPic"
     },
 
     coverphotourl: {
