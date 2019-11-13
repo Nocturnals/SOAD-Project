@@ -3,19 +3,23 @@ import { userAuthConst } from "../constants";
 let userToken = localStorage.getItem("userToken");
 
 const initialState = {
-    user: {},
+    user: {
+        name: null,
+        _id: null,
+        email: null
+    },
     isAuthed: false,
     isLoading: false
 };
 
 export default function authentication(state = initialState, action) {
     switch (action.type) {
-        // case "SET_CURRENT_USER":
-        //     return {
-        //         ...state,
-        //         user: action.user,
-        //         isAuthed: true
-        //     };
+        case "SET_CURRENT_USER":
+            return {
+                ...state,
+                user: action.user,
+                isAuthed: true
+            };
         case userAuthConst.LOGIN_REQUEST:
             return {
                 user: action.user,
@@ -23,8 +27,6 @@ export default function authentication(state = initialState, action) {
                 isLoading: true
             };
         case userAuthConst.LOGIN_SUCCESS:
-            console.log(action.user);
-
             return {
                 ...state,
                 user: action.user,
