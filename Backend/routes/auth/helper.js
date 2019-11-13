@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 
+const UserModel = require("../../models/user");
+
 // verify the token for authentication
 function verifyToken(req, res, next) {
     // Get auth header value
@@ -25,12 +27,13 @@ const verifyUserWithToken = async (req, res, next) => {
     // verifies the given token is correct and gets the user data
     jwt.verify(req.token, process.env.Token_Secret, async (err, authData) => {
         if (err) {
-            return res.status(401).json({ message: "Access Denied" });
+            console.log(`Error at verifying jwt token: ${err}`);
+            return res.status(401).json({ message: err.message });
         } else {
             try {
-                const loggedUser = await UserModel.findById(
-                    authData._id
-                ).select("-password");
+                const loggedUser = await UserModel.findById({
+                    _id: authData._id
+                }).select("-password");
 
                 // if user doesn't exist
                 if (!loggedUser) {
@@ -41,10 +44,11 @@ const verifyUserWithToken = async (req, res, next) => {
 
                 // when user exists
                 else {
-                    req.loggedUser = loggedUser;
+                    req.loggedUser = loggedUser._doc;
                     next();
                 }
             } catch (error) {
+                console.log(error);
                 return res.status(500).json({ message: "Error finding user" });
             }
         }
