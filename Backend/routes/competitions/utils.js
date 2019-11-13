@@ -1,8 +1,14 @@
 const express = require("express");
 const { verifyToken, verifyUserWithToken } = require("./../auth/helper");
 const CompetiitonsModel = require("./../../models/Competititons");
-
-
+const UserModel = require("./../../models/user");
+const {
+    CompRegisterValidation,
+    CompCreateValidation,
+    deleteValidation,
+    editValidation,
+    hostValidation
+} = require("./compValidation")
 
 const router = express.Router();
 
@@ -16,11 +22,19 @@ router.get("/allcompetitions"  , (req,res) => {
 })
 
 
-router.post("/register/:id" , verifyToken , verifyUserWithToken , (req,res,next)=>{
+router.post("/register" , verifyToken , verifyUserWithToken , (req,res,next)=>{
+
+
+    const validatedData = CompRegisterValidation(req.body);
+    if (validatedData.error)
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
+
 
     try{
     var comp = await  CompetiitonsModel.findById({
-        _id : req.params.id
+        _id : req.body.compid
     })
 
     
@@ -46,6 +60,16 @@ router.post("/register/:id" , verifyToken , verifyUserWithToken , (req,res,next)
 
 router.post("/createcompetition" , verifyToken , verifyUserWithToken , (req,res,next) =>{
         
+
+
+    const validatedData = CompCreateValidation(req.body);
+    if (validatedData.error)
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
+
+
+
         user =  req.loggedUser,
         comp.participants.append({
             id : user._id,
@@ -55,7 +79,8 @@ router.post("/createcompetition" , verifyToken , verifyUserWithToken , (req,res,
 
         const comp = new CompetiitonsModel({
             title : req.body.title,
-            description : req.body.description,
+            shortdescription : req.body.shortdescription,
+            fulldescription : req.body.fulldescription,
             starttime : req.body.starttime,
             endtime : req.body.endtime,
             host : host.append(user)
@@ -77,7 +102,11 @@ router.post("/createcompetition" , verifyToken , verifyUserWithToken , (req,res,
 
 // retrieve a comp
 
-router.post("/competition/:id" , verifyToken , verifyUserWithToken , (req,res,next) =>{
+router.post("/:id" , verifyToken , verifyUserWithToken , (req,res,next) =>{
+
+
+
+
 
     try{
         const comp = await  CompetiitonsModel.findById({
@@ -95,11 +124,21 @@ router.post("/competition/:id" , verifyToken , verifyUserWithToken , (req,res,ne
 
 // delete a competition
 
-router.delete("/competition/:id" , verifyToken , verifyUserWithToken , (req,res,next) => {
+router.delete("/delete" , verifyToken , verifyUserWithToken , (req,res,next) => {
     
+   
+    const validatedData = deleteValidation(req.body);
+    if (validatedData.error)
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
+
+
+   
+   
     try{
         var comp = await  CompetiitonsModel.findByIdAndRemove({
-        _id : req.params.id
+        _id : req.body.compid
     })
     return res.json(comp)
 }
@@ -112,26 +151,27 @@ catch(error){
 
 // update a competition
 
-router.patch("/competition/edit/:id" , verifyToken , verifyUserWithToken , (req,res,next) => {
+router.patch("/edit" , verifyToken , verifyUserWithToken , (req,res,next) => {
   
+
+
+    const validatedData = editValidation(req.body);
+    if (validatedData.error)
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
+
     const comp = await  CompetiitonsModel.findById({
-        _id : req.params.id
+        _id : req.body.compid
     })
-
-
     var flag =0;
-
     comp.hosts.forEach(i => {
         if(i._id == req.loggedUser._id){
             flag = 1;
             break;
-        }
-        
+        }  
     });
-
-    if(flag)    
-    {
-  
+    if(flag){
     try{
         comp.updateone(
             {id : req.params.id},
@@ -153,9 +193,19 @@ catch(error){
 
 router.post("/addhost" , verifyToken , verifyUserWithToken , (req,res,next)=>{
 
-    var ishost = false;
 
-    
+
+
+    const validatedData = hostValidation(req.body);
+    if (validatedData.error)
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
+
+
+
+
+    var ishost = false;
     const comp = await  CompetiitonsModel.findById({
         _id : req.body.compid
     })
@@ -168,8 +218,17 @@ router.post("/addhost" , verifyToken , verifyUserWithToken , (req,res,next)=>{
     });
     
     if(ishost){
-        res.send()
+        
+        const user = UserModel.findById({
+            _id : req.body.userid,
+    })      
+        comp.hosts.append({
+            id : user._id,
+            username : user.username,
+            profileurl : user.profileurl
+        })
     }
+    res.json({message : "host added succesfully!"})
 
 })
 
