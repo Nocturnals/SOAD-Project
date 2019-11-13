@@ -4,8 +4,8 @@ const helmet = require('helmet')
 const morgan = require('morgan');
 const dotenv = require( 'dotenv');
 const mongoose = require( 'mongoose');
-
 const authRouter = require( './routes/auth');
+const docMatch = require('./routes/documentMatching')
 
 // load the local environment varaibles
 dotenv.config();
@@ -21,7 +21,7 @@ mongoose.connect(databaseConnect,
 // intializing the app instance
 const app = express();
 
-
+app.use
 // Middleware
 app.use(express.json());        // for converting the json part of the request body
 app.use(express.static('public'));
@@ -34,6 +34,7 @@ if(process.env.Node_Env === 'development') {
 
 // Route for login
 app.use('/api/user', authRouter);
+app.use('/', docMatch);
 
 const port = process.env.port || 3000 
 
