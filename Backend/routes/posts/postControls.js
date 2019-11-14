@@ -1,6 +1,7 @@
 const Post = require('../../models/post');
 const OtherUser = require('../../models/Otheruser');
 const User = require('../../models/user');
+const Comment = require('../../models/Comments')
 const formidable = require('formidable');
 const fs = require('fs');
 const _ = require('lodash');
@@ -117,3 +118,46 @@ exports.unlike = (req, res) => {
     post.likes = post.likes - 1;
 };
 
+exports.comment = (req, res) => {
+    let comment = req.body.comment;
+    const user = req.loggedUser;
+
+    const comment = new Comment({
+        message: req.body.comment,
+        owner: [
+            {
+                _id: user._id,
+                username: user.name,
+                profileurl: user.profileurl || "random string"
+            }
+        ],
+    });
+
+    await comment.save()
+    .then(result => {
+        res.status(200).json({
+            docs:[comments]
+        });
+    })
+    .catch(err => {
+        console.log(err);
+    });
+
+    const post = await Post.findById({_id: req.body.postId}).exec(
+        (err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            } else {
+                res.json(result);
+            }
+        }
+    );
+
+    post.comments.append({
+        comment
+    });
+
+
+};

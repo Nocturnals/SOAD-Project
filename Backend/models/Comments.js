@@ -19,7 +19,7 @@ const ReplySchema = new mongoose.Schema({
     },
 
     likedby: {
-        type: otheruserschema
+        type: [otheruserschema]
     }
 });
 
@@ -45,7 +45,7 @@ const CommentSchema = new mongoose.Schema({
     },
 
     likedby: {
-        type: otheruserschema
+        type: [otheruserschema]
     },
 
     replies: {

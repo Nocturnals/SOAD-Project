@@ -3,10 +3,13 @@ const {
     createPost,
     like,
     unlike,
+    comment,
 } = require('./postControls');
-const auth = require('../auth/index');
 
-const { requireSignin } = require('./authControls');
+const{
+    verifyToken,
+    verifyUserWithToken,
+} = require('../auth/helper');
 const { createPostValidator } = require('./postValidation');
 
 const router = express.Router();
@@ -17,6 +20,9 @@ router.post('/posts/new', verifyToken, verifyUserWithToken,  createPost, createP
 // like unlike
 router.put('/post/like', verifyToken, verifyUserWithToken, like);
 router.put('/post/unlike', verifyToken, verifyUserWithToken, unlike);
+
+// comments
+router.put('/post/comment',  verifyToken, verifyUserWithToken, comment);
 
 
 
