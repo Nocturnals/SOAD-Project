@@ -60,8 +60,7 @@ if (process.env.Node_Env === "development") {
 app.use("/api/auth", require("./routes/auth"));
 
 //Route for Competitions
-app.use("/api/competition" , require("./routes/competitions/utils") )
-
+app.use("/api/competition", require("./routes/competitions/utils"));
 
 if (process.env.Node_Env === "production") {
     // for loading the static frontend app
@@ -74,13 +73,7 @@ if (process.env.Node_Env === "production") {
     });
 }
 
-
-
-
-
-
-
-const port = process.env.port || 3000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is up and running on port: ${port}!!`);
 });

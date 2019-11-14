@@ -58,16 +58,21 @@ export function login(email, password) {
 }
 
 export function logout() {
-    return dispatch => {
-        localStorage.removeItem("userToken");
-        setAuthToken(false);
-        dispatch(setCurrentUser({}));
+    // remove authorization token from the storage
+    localStorage.removeItem("userToken");
+
+    // remove the token authorization header from the future requests
+    setAuthToken(false);
+
+    // return logout action to reducer
+    return {
+        type: userAuthConst.LOGOUT
     };
 }
 
 export function setCurrentUser(decoded) {
     return {
-        type: "SET_CURRENT_USER",
+        type: userAuthConst.LOAD_USER,
         payload: decoded
     };
 }
