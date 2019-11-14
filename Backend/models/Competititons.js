@@ -1,80 +1,103 @@
-const mongoose  = require('mongoose');
-const otheruserschema = require('./otheruser');
-const commentsmodel = require('./Comments');
-
+const mongoose = require("mongoose");
+const otheruserschema = require("./Otheruser");
+const {commentsmodel, commentschema} = require("./Comments");
 
 const FaqSchema = new mongoose.Schema({
-    question : {
-        type : String,
-        required: true,
+    question: {
+        type: String,
+        required: true
     },
 
-    answer :{
-        type : String,
-    },
+    answer: {
+        type: String
+    }
 });
 
 const ResultSchema = new mongoose.Schema({
-    id : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : 'User',
-        required: true,
+    id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
 
-    name : {
+    name: {
+        type: String,
+        required: true
+    },
+
+    score: {
+        type: Number
+    },
+
+    time: {
+        type: Date
+    }
+});
+
+const CompetitionsSchema = new mongoose.Schema({
+
+    title:{
         type : String,
         required: true,
     },
 
-    score : {
-        type : Number,
+    shortdescription:{
+        type :String,
+        required :true,
     },
 
-    time : {
-        type :Date,
+    fulldescription:{
+        type :String,
+        required :true,
     },
-})
 
 
-const CompetitionsSchema = new mongoose.Schema({
-    hosts : {
-        type : [otheruserschema],
-        required: true,
+    prize :{
+        type :String,
+        required :true,
     },
-    
-    starttime : {
-        type :Date,
+
+    hosts: {
+        type: [otheruserschema],
         required: true
     },
 
-    endtime : {
-        type :Date,
+    starttime: {
+        type: Date,
         required: true
     },
 
-    noofparticipants :{
-        type : Number,
+    endtime: {
+        type: Date,
+        required: true
+    },
+
+    noofparticipants: {
+        type: Number,
         default: 0,
-        required: true,
+        required: true
     },
 
-    participants : {
-        type : [ResultSchema],
+    participants: {
+        type: [otheruserschema]
     },
 
-    faqs :{
-        type:[FaqSchema],
+    rules :{
+        type : String,
+        required :true
     },
 
-    comments : {
-        type : [commentsmodel],
+    faqs: {
+        type: [FaqSchema]
     },
 
-    top10 : {
-        type : [ResultSchema], 
+    comments: {
+        type: [commentsmodel]
     },
 
+    top10: {
+        type: [ResultSchema]
+    }
 });
 
-
-module.exports = mongoose.model("Competitions" , CompetitionsSchema);
+module.exports = mongoose.model("Competitions", CompetitionsSchema);

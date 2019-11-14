@@ -1,0 +1,81 @@
+.combo {
+    text-align: center;
+}
+
+.navigators .col {
+    padding: 0;
+}
+.active::before {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    border: 2px solid rgb(69, 176, 247);
+    transition: all 0.2s linear;
+    animation: active 0.3s linear;
+}
+.navigators:hover > .active::before {
+    box-shadow: 0 -2px 15px rgba(255, 255, 255, 0.7);
+}
+.navigators .btn {
+    width: 100%; height: 100%; margin: 0;
+    padding: 20px 0;
+    font-size: 2rem;
+    text-align: center;
+    transition: all 0.2s linear;
+}
+.navigators .btn, .navigators .btn:active, .navigators .btn:focus {
+    border-radius: 0;
+    border: none;
+    outline: none !important;
+    box-shadow: none;
+}
+.navigators .btn i {
+    font-size: 0;
+}
+.navigators .btn h6 {
+    font-size: 1.3rem;
+    font-family: 'ChiselMark';
+    letter-spacing: 1px;
+}
+.navigators .btn i, .navigators .btn h6 {
+    color: rgb(222, 233, 235);
+    transition: all 0.2s linear;
+}
+.navigators .btn:hover > i {
+    font-size: 2rem;
+}
+.navigators .btn:hover > h6 {
+    font-size: 0.9rem;
+}
+
+.navigators .even .btn {
+    /* background-color: rgb(30, 85, 102); */
+    background-color: #4a0c6d;
+    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.4)
+}
+.navigators .odd .btn {
+    /* background-color: rgb(22, 53, 80); */
+    background-color: #6f21a3;
+}
+
+.active .btn i, .active .btn h6 {
+    color: rgba(0, 0, 0, 0.931);
+}
+.active .btn h6 {
+    font-size: 0.9rem;
+}
+.active .btn i {
+    font-size: 2rem;
+}
+
+
+
+
+@keyframes active {
+    from {
+        left: 50%; right: 50%;
+    }
+    to {
+        left: 0; right: 0;
+    }
+}

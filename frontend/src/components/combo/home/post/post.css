@@ -1,0 +1,312 @@
+@import "../../../fonts/fonts.css";
+
+.post {
+  margin: 0 0 100px 0;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+  background-color: rgb(255, 255, 255);
+}
+
+.post-header {
+  padding: 10px 0 15px 0;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+.post-header .user-photo {
+  position: absolute;
+  bottom: 10px;
+  left: 35px;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.4);
+}
+.post-header .user-photo {
+  background-color: rgb(236, 196, 255);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.post-header .user-details .col-5 {
+  text-align: left;
+}
+.post-header .user-details .user-name {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.post-header .user-details .time {
+  font-size: 0.72rem;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.5);
+}
+.post-header .user-details .user-about {
+  padding-top: 5px;
+}
+.post-header .user-details .user-job,
+.post-header .user-details .user-loc {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.7);
+  font-weight: 500;
+}
+.post-header .user-details .user-job i {
+  color: #7018a3;
+}
+.post-header .user-details .user-loc i {
+  color: #1e41b4;
+}
+.post-header .user-details .more-options button {
+  height: 100%;
+}
+.post-header .user-details .more-options i {
+  color: rgba(0, 0, 0, 0.3);
+  margin-top: 10px;
+  font-size: 1.2rem;
+  transition: all 0.3s linear;
+}
+.post-header .user-details .more-options button:hover > i {
+  color: rgba(124, 47, 160, 1);
+}
+.moreOptions {
+  position: absolute;
+  top: 35px;
+  right: 35px;
+  display: none;
+  z-index: 100;
+}
+.moreOptions .dropDown {
+  position: relative;
+  border-radius: 5px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  background-color: rgb(213, 212, 230);
+}
+.moreOptions .dropDown button {
+  display: block;
+  width: 100%;
+  padding: 10px 35px;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.8);
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-weight: 600;
+  transition: all 0.2s linear;
+}
+.moreOptions .dropDown button:last-child {
+  border-bottom: none;
+}
+.moreOptions .dropDown button:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: rgb(251, 250, 250);
+}
+.moColor { color: rgba(124, 47, 160, 1); }
+
+
+
+
+
+
+
+.post-content .post-descr {
+    margin-top: 10px;
+    text-align: left;
+    font-size: 0.9rem;
+}
+.post-content .post-image {
+  height: 300px;
+}
+.post-content .post-image {
+  background-color: rgb(231, 230, 230);
+  background-attachment: scroll;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+
+
+
+
+
+
+.post-impressions {
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+.post-impressions .col {
+  margin: 15px 0;
+}
+
+.liked,
+.liked button {
+  color: rgba(241, 65, 100, 0.9);
+}
+.liked:hover,
+.liked:hover > button {
+  color: rgb(241, 65, 100);
+}
+.comments,
+.comments button {
+  color: rgb(114, 107, 117, 0.9);
+}
+.comments:hover,
+.comments:hover > button {
+  color: rgb(114, 107, 117);
+}
+.likes,
+.comments {
+  padding: 0 20px;
+  margin: 0 5px;
+  font-family: "Optien";
+}
+.likes i:hover {
+  color: rgba(241, 65, 100, 0.9);
+}
+
+
+
+
+
+
+
+
+
+.commentsSection {
+  display: none;
+}
+.commentsSection::before {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  border: 0.25px solid rgba(0, 0, 0, 0.2);
+}
+.commentsSection .col {
+  padding: 20px;
+}
+.commentsSection .col .row {
+  margin: 0;
+  padding: 15px 0;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.2);
+}
+.commentsSection .col .row:last-child {
+  border-bottom: none;
+}
+.commentsSection .col .row:nth-last-child(2) {
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.6);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+.commentsSection .col .row::before {
+  content: "";
+  position: relative;
+  border: 2px solid rgb(129, 33, 192);
+}
+.commentsSection .col .cmnt_img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: burlywood;
+}
+.commentsSection .col .cmnt_img {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.commentsSection .col .col-9 p {
+  position: relative;
+  margin-top: 10px;
+}
+.commentsSection .col .col-9,
+.commentsSection .col .col-7,
+.commentsSection .inputCmnt {
+  text-align: left;
+  font-size: 0.8rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 500;
+}
+
+.commentsSection .col .addCmnt {
+  margin-top: 10px;
+  border-radius: 50px;
+  border-left: 3px solid rgb(129, 33, 192);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.commentsSection .col .addCmnt::before {
+  display: none;
+}
+.commentsSection .col .addCmnt {
+  padding: 2px 0;
+}
+.commentsSection .addCmnt .cmnt_img {
+  margin: 10px;
+}
+.commentsSection .inputCmnt {
+  margin-top: 15px;
+  padding: 5px 10px;
+  width: 100%;
+  height: 40px;
+  resize: none;
+  border: none;
+  outline: none;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.5);
+  background: none;
+}
+.commentsSection .inputCmnt::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+.commentsSection .addCmnt button {
+  width: 80%;
+  height: 80%;
+  margin: 5px;
+  border-radius: 50%;
+  color: rgba(37, 77, 199, 0.8);
+  font-size: 1.3rem;
+  transition: all 0.4s ease-in-out;
+}
+.commentsSection .addCmnt button:hover {
+  border-radius: 0;
+  color: rgba(37, 77, 199, 1);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.commentsSection .addCmnt button:active {
+  background: none;
+  border-radius: 50%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.show {
+  display: block;
+}
+.post button {
+  background: none;
+  outline: none;
+  border: none;
+}
+
+.commentsSection .inputCmnt::-webkit-scrollbar {
+  width: 7px;
+  background: rgb(251, 250, 250);
+}
+.commentsSection .inputCmnt::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.commentsSection .inputCmnt::-webkit-scrollbar-thumb {
+  background: rgb(117, 58, 245);
+  border-radius: 60px;
+  outline: 1px solid slategrey;
+}

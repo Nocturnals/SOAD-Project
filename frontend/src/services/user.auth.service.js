@@ -1,14 +1,13 @@
 // import config from 'config'
-import axios from 'axios';
-import { logout } from '../actions/user.athentication'
-import setAuthToken from '../setAuthToken'
-import { setCurrentUser } from '../actions/user.athentication'
-import jwt_decode from 'jwt-decode';
+import axios from "axios";
+import { logout } from "../actions/user.athentication";
+import setAuthToken from "../setAuthToken";
+import { setCurrentUser } from "../actions/user.athentication";
 
 export const userService = {
     login,
     logout
-}
+};
 
 // function login(email, password) {
 //     const requestOptions = {
@@ -28,24 +27,25 @@ export const userService = {
 // }
 function login(user) {
     return dispatch => {
-        axios.post('/api/users/login', user)
+        axios
+            .post("/api/users/login", user)
             .then(handleResponse)
             .then(res => {
-                const { token } = res.data;
-                localStorage.setItem('userToken', token);
-                setAuthToken(token);
-                const decoded = jwt_decode(token);
-                dispatch(setCurrentUser(decoded));
+                const { authorization } = res.header;
+                console.log(authorization);
+
+                localStorage.setItem("userToken", authorization);
+                setAuthToken(authorization);
+                dispatch(setCurrentUser(authorization));
             })
             .catch(err => {
                 dispatch({
-                    type: 'ALERT_ERROR',
+                    type: "LOGIN_FAILURE",
                     message: err.response.data
                 });
             });
-    }
+    };
 }
-
 
 function handleResponse(response) {
     return response.text().then(text => {
