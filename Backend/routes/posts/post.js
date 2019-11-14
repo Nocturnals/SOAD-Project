@@ -25,8 +25,8 @@ router.put('/post/unlike', verifyToken, verifyUserWithToken, unlike);
 
 // comments
 router.post('/post/comment',  verifyToken, verifyUserWithToken, comment);
-router.put('/post/comment/like',  verifyToken, verifyUserWithToken, like);
-router.put('/post/comment/unlike',  verifyToken, verifyUserWithToken, unlike);
+router.put('/post/comment/like',  verifyToken, verifyUserWithToken, likeComment);
+router.put('/post/comment/unlike',  verifyToken, verifyUserWithToken, unlikeComment);
 
 
 
