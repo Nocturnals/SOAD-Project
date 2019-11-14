@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 const otheruserschema = require("./Otheruser");
 
 const ReplySchema = new mongoose.Schema({
+    owner: {
+        type: otheruserschema,
+        required: true
+    },
+
     message: {
         type: String,
         required: true
@@ -19,7 +24,7 @@ const ReplySchema = new mongoose.Schema({
     },
 
     likedby: {
-        type: otheruserschema
+        type: [otheruserschema]
     }
 });
 
@@ -45,7 +50,7 @@ const CommentSchema = new mongoose.Schema({
     },
 
     likedby: {
-        type: otheruserschema
+        type: [otheruserschema]
     },
 
     replies: {
