@@ -230,7 +230,48 @@ exports.likeComment = (req, res) => {
         profileurl: req.loggedUser.profileurl
     });
 
-    comment.likes = post.likes + 1;
+    comment.likes = comment.likes + 1;
+
+    const post = await Post.findById({_id: postId}).exec(
+        (err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            } else {
+                res.json(result);
+            }
+        }
+    );
+
+    var updateIndex = apps.map(function(item) { return item.id; }).indexOf(commentId);
+
+    post.comments[updateIndex] = comment; 
+
+
+};
+
+exports.unlikeComment = (req, res) => {
+    const user = req.loggedUser;
+    const commentId = req.body.commentId;
+    const postId = req.body.postId;
+
+    const comment = await Comment.findById({_id: commentId}).exec(
+        (err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            } else {
+                res.json(result);
+            }
+        }
+    );
+
+    var removeIndex = apps.map(function(item) { return item.id; }).indexOf(userid);
+
+    comment.likedBy.splice(removeIndex,1);
+    comment.likes = comment.likes - 1;
 
     const post = await Post.findById({_id: postId}).exec(
         (err, result) => {
