@@ -114,7 +114,7 @@ exports.unlike = (req, res) => {
 
     var removeIndex = apps.map(function(item) { return item.id; }).indexOf(userid);
 
-    post.likedBy.slice;(removeIndex,1);
+    post.likedBy.splice(removeIndex,1);
     post.likes = post.likes - 1;
 };
 
@@ -202,6 +202,51 @@ exports.comment = (req, res) => {
     post.comments.append({
         comment
     });
+
+
+};
+
+
+exports.likeComment = (req, res) => {
+    const user = req.loggedUser;
+    const commentId = req.body.commentId;
+    const postId = req.body.postId;
+
+    const comment = await Comment.findById({_id: commentId}).exec(
+        (err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            } else {
+                res.json(result);
+            }
+        }
+    );
+
+    comment.likedBy.append({
+        id: req.loggedUser._id,
+        username: req.loggedUser.username,
+        profileurl: req.loggedUser.profileurl
+    });
+
+    comment.likes = post.likes + 1;
+
+    const post = await Post.findById({_id: postId}).exec(
+        (err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            } else {
+                res.json(result);
+            }
+        }
+    );
+
+    var updateIndex = apps.map(function(item) { return item.id; }).indexOf(commentId);
+
+    post.comments[updateIndex] = comment; 
 
 
 };
