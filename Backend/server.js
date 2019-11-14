@@ -62,6 +62,9 @@ app.use("/api/auth", require("./routes/auth"));
 //Route for Competitions
 app.use("/api/competition", require("./routes/competitions/utils"));
 
+//Route for Posts
+app.use("api/posts", require("./routes/posts/post"));
+
 if (process.env.Node_Env === "production") {
     // for loading the static frontend app
     app.use(express.static("../frontend/build"));
