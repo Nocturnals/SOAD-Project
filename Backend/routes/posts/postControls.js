@@ -118,49 +118,6 @@ exports.unlike = (req, res) => {
     post.likes = post.likes - 1;
 };
 
-exports.comment = (req, res) => {
-    let comment = req.body.comment;
-    const user = req.loggedUser;
-
-    const comment = new Comment({
-        message: req.body.comment,
-        owner: [
-            {
-                _id: user._id,
-                username: user.name,
-                profileurl: user.profileurl || "random string"
-            }
-        ],
-    });
-
-    await comment.save()
-    .then(result => {
-        res.status(200).json({
-            docs:[comments]
-        });
-    })
-    .catch(err => {
-        console.log(err);
-    });
-
-    const post = await Post.findById({_id: req.body.postId}).exec(
-        (err, result) => {
-            if (err) {
-                return res.status(400).json({
-                    error: err
-                });
-            } else {
-                res.json(result);
-            }
-        }
-    );
-
-    post.comments.append({
-        comment
-    });
-
-
-};
 
 exports.comment = (req, res) => {
     let comment = req.body.comment;
@@ -292,3 +249,61 @@ exports.unlikeComment = (req, res) => {
 
 };
 
+
+exports.replyComment = (req, res) => {
+    let reply = req.body.reply;
+    const user = req.loggedUser;
+    const commentId = req.body.commentId;
+    const postId = req.body.postId;
+
+
+
+    const comment = await Comment.findById({_id: commentId}).exec(
+        (err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            } else {
+                res.json(result);
+            }
+        }
+    );
+
+    comment.replies.append(
+        [
+            {
+                _id: mongoose.Types.ObjectId(),
+                owner: [
+                    {
+                        _id: user._id,
+                        username: user.name,
+                        profileurl: user.profileurl || "random string"
+                    }
+                ],
+                date: Date.now,
+                likes: 0,
+                likedBy: [{}]
+
+            }
+        ]
+    );
+
+    const post = await Post.findById({_id: req.body.postId}).exec(
+        (err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            } else {
+                res.json(result);
+            }
+        }
+    );
+
+    var updateIndex = apps.map(function(item) { return item.id; }).indexOf(commentId);
+
+    post.comments[updateIndex] = comment; 
+
+
+};
