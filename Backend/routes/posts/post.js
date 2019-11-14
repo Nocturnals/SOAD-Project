@@ -6,6 +6,7 @@ const {
     comment,
     likeComment,
     unlikeComment,
+    replyComment,
 } = require('./postControls');
 
 const{
@@ -27,6 +28,8 @@ router.put('/post/unlike', verifyToken, verifyUserWithToken, unlike);
 router.post('/post/comment',  verifyToken, verifyUserWithToken, comment);
 router.put('/post/comment/like',  verifyToken, verifyUserWithToken, likeComment);
 router.put('/post/comment/unlike',  verifyToken, verifyUserWithToken, unlikeComment);
+router.post('/post/comment/reply',  verifyToken, verifyUserWithToken, replyComment);
+
 
 
 
