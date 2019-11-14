@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 const otheruserschema = require("./Otheruser");
 
 const ReplySchema = new mongoose.Schema({
+    owner: {
+        type: otheruserschema,
+        required: true
+    },
+
     message: {
         type: String,
         required: true
