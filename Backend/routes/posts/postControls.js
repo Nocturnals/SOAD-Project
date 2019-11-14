@@ -161,3 +161,48 @@ exports.comment = (req, res) => {
 
 
 };
+
+exports.comment = (req, res) => {
+    let comment = req.body.comment;
+    const user = req.loggedUser;
+
+    const comment = new Comment({
+        message: req.body.comment,
+        owner: [
+            {
+                _id: user._id,
+                username: user.name,
+                profileurl: user.profileurl || "random string"
+            }
+        ],
+    });
+
+    await comment.save()
+    .then(result => {
+        res.status(200).json({
+            docs:[comments]
+        });
+    })
+    .catch(err => {
+        console.log(err);
+    });
+
+    const post = await Post.findById({_id: req.body.postId}).exec(
+        (err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            } else {
+                res.json(result);
+            }
+        }
+    );
+
+    post.comments.append({
+        comment
+    });
+
+
+};
+
