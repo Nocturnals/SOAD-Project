@@ -108,3 +108,5 @@ const CompetitionsSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Competitions", CompetitionsSchema);
+module.exports.faqModel = mongoose.model("FaqModel", FaqSchema);
+module.exports.resultsModel = mongoose.model("ResultsModel", ResultSchema);

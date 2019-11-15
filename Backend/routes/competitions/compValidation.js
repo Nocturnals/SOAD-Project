@@ -2,7 +2,7 @@ const Joi = require("@hapi/joi");
 
 const CompRegisterValidation = data => {
     const schema = {
-        compid: Joi.string()
+        _id: Joi.string()
             .min(4)
             .required()
     };
@@ -40,7 +40,7 @@ const CompCreateValidation = data => {
 
 const deleteValidation = data => {
     const schema = {
-        compid: Joi.string()
+        _id: Joi.string()
             .min(4)
             .required()
     };
@@ -50,7 +50,7 @@ const deleteValidation = data => {
 
 const editValidation = data => {
     const schema = {
-        compid: Joi.string()
+        _id: Joi.string()
             .min(4)
             .required(),
 
@@ -73,7 +73,13 @@ const editValidation = data => {
         category: Joi.string()
             .min(4)
             .required(),
-        comments: Joi.object().required()
+        hosts: Joi.array(),
+        comments: Joi.array(),
+        faqs: Joi.array(),
+        top10: Joi.array(),
+        results: Joi.array(),
+        noofparticipants: Joi.number(),
+        participants: Joi.array()
     };
 
     return Joi.validate(data, schema);
@@ -81,7 +87,7 @@ const editValidation = data => {
 
 const hostValidation = data => {
     const schema = {
-        compid: Joi.string()
+        _id: Joi.string()
             .min(4)
             .required(),
 
@@ -95,7 +101,7 @@ const hostValidation = data => {
 
 const resultValidation = data => {
     const schema = {
-        compid: Joi.string()
+        _id: Joi.string()
             .min(4)
             .required(),
 
@@ -111,11 +117,134 @@ const resultValidation = data => {
     return Joi.validate(data, schema);
 };
 
+const edittitleValidation = data => {
+    const schema = {
+        title: Joi.string()
+            .min(4)
+            .required()
+    };
+    return Joi.validate(data, schema);
+};
+
+const editshortdescriptionValidation = data => {
+    const schema = {
+        shortdescription: Joi.string()
+            .min(4)
+            .required()
+    };
+    return Joi.validate(data, schema);
+};
+
+const editfulldescriptionValidation = data => {
+    const schema = {
+        fulldescription: Joi.string()
+            .min(4)
+            .required()
+    };
+    return Joi.validate(data, schema);
+};
+
+const editrulesValidation = data => {
+    const schema = {
+        rules: Joi.string()
+            .min(4)
+            .required()
+    };
+    return Joi.validate(data, schema);
+};
+
+const editprizeValidation = data => {
+    const schema = {
+        prize: Joi.number().required()
+    };
+    return Joi.validate(data, schema);
+};
+
+const editstarttimeValidation = data => {
+    const schema = {
+        starttime: Joi.date().required()
+    };
+    return Joi.validate(data, schema);
+};
+
+const editendtimeValidation = data => {
+    const schema = {
+        endtime: Joi.date().required()
+    };
+    return Joi.validate(data, schema);
+};
+
+const editcategoryValidation = data => {
+    const schema = {
+        category: Joi.string()
+            .min(4)
+            .required()
+    };
+    return Joi.validate(data, schema);
+};
+
+const editfaqValidation = data => {
+    const schema = {
+        question: Joi.string()
+            .min(4)
+            .required(),
+        answer: Joi.string()
+            .min(4)
+            .required()
+    };
+    return Joi.validate(data, schema);
+};
+
+const editresultsValidation = data => {
+    const schema = {
+        id: Joi.string()
+            .min(4)
+            .required(),
+        name: Joi.string()
+            .min(4)
+            .required(),
+        score: Joi.number().required(),
+        time: Joi.date().required()
+    };
+    return Joi.validate(data, schema);
+};
+
+const addcommentValidation = data => {
+    const schema = {
+        message: Joi.string()
+            .min(4)
+            .required(),
+        likes: Joi.number().required()
+    };
+    return Joi.validate(data, schema);
+};
+
+const editcommentValidation = data => {
+    const schema = {
+        message: Joi.string()
+            .min(4)
+            .required()
+    };
+    return Joi.validate(data, schema);
+};
+
 module.exports = {
     CompRegisterValidation,
     CompCreateValidation,
     deleteValidation,
     editValidation,
     hostValidation,
-    resultValidation
+    resultValidation,
+    editcategoryValidation,
+    editendtimeValidation,
+    editfulldescriptionValidation,
+    editprizeValidation,
+    editrulesValidation,
+    editshortdescriptionValidation,
+    editstarttimeValidation,
+    edittitleValidation,
+    editfaqValidation,
+    editresultsValidation,
+    addcommentValidation,
+    editcommentValidation
 };
