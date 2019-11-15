@@ -281,8 +281,14 @@ router.post(
         // find the logged user and edit the user details
         try {
             const userDoc = await UserModel.findById(req.loggedUser._id);
+
+            // update the editable varaibles
             userDoc.dateofbirth = req.body.dateofbirth;
+
+            // save the new data to the mongoose database
             const newdoc = await userDoc.save();
+
+            // return updated user data
             return res.status(200).json(newdoc);
         } catch (error) {
             return res.status(400).json({ message: "failed" });
@@ -292,17 +298,6 @@ router.post(
 
 // testing routes
 router.get("/test", verifyToken, verifyUserWithToken, (req, res) => {
-    let user = req.loggedUser;
-    const someobject = {
-        email: "hello",
-        message: "nice to meet u"
-    };
-    const newuser = _.pick(someobject, ["email"]);
-    user = {
-        ...user,
-        ...newuser
-    };
-    console.log(user);
     return res.json({ message: "working perfectly" });
 });
 
