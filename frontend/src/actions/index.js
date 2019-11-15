@@ -1,2 +1,2 @@
-export * from "./alert.actions";
-export * from "./user.athentication";
+export * from "./alertActions";
+export * from "./authActions";
