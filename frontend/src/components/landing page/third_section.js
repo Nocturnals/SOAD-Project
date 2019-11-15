@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import "./landing_page.css";
-
 class CompetitionCard {
     constructor(title, toLink, descr) {
         this.title = title;

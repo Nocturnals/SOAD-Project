@@ -22,7 +22,37 @@ class Navigator {
 class Combo extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            dropNavigator: true
+        };
+
+        this.toggleNavigator = this.toggleNavigator.bind(this);
+        this.bodyScrollEventListener = this.bodyScrollEventListener.bind(this);
+
+        this.bodyScrollEventListener();
     }
+
+    // After Mounring the Component...
+    componentDidMount() {
+        document.body.scrollTo(0, 0);
+    }
+
+    // Window Scroll Event Listener...
+    bodyScrollEventListener = () => {
+        document.body.addEventListener("scroll", () => {
+            var scrollHeight = document.body.scrollTop;
+            console.log(scrollHeight);
+
+            if (scrollHeight == 0) {
+                this.setState({
+                    dropNavigator: true
+                });
+            }
+            if (scrollHeight > 10) {
+            }
+        });
+    };
 
     // Generates Navigation Blocks...
     navigators = navBlocks => {
@@ -51,6 +81,13 @@ class Combo extends Component {
         return navigators;
     };
 
+    // Drop Navigator Bar...
+    toggleNavigator = () => {
+        this.setState({
+            dropNavigator: !this.state.dropNavigator
+        });
+    };
+
     // Rendering Combo Cmponent...
     render() {
         // Defining Navigation Elements
@@ -64,7 +101,30 @@ class Combo extends Component {
 
         return (
             <div className="combo container-fluid">
-                <div className="navigators row">
+                <div
+                    className={
+                        "navigators row " +
+                        (!this.state.dropNavigator ? "dropNavigator" : "")
+                    }
+                >
+                    <div
+                        className={
+                            "nav-toggler " +
+                            (!this.state.dropNavigator ? "navBtnDwn" : "")
+                        }
+                        id="nav-toggler"
+                    >
+                        <button onClick={this.toggleNavigator}>
+                            <i
+                                class={
+                                    this.state.dropNavigator
+                                        ? "fa fa-chevron-down"
+                                        : "fa fa-chevron-up"
+                                }
+                                aria-hidden="true"
+                            ></i>
+                        </button>
+                    </div>
                     {this.navigators(navigators)}
                 </div>
                 <Route exact path="/user/home" component={HomePage} />
