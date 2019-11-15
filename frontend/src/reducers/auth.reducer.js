@@ -16,7 +16,7 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 user: action.user,
-                isAuthed: true
+                isAuthed: action.user === undefined ? false : true
             };
         case userAuthConst.LOGIN_REQUEST:
             return {
@@ -27,12 +27,12 @@ export default function(state = initialState, action) {
         case userAuthConst.LOGIN_SUCCESS:
             return {
                 ...state,
-                user: action.user,
                 isAuthed: true,
                 isLoading: false
             };
         case userAuthConst.LOGIN_FAILURE:
         case userAuthConst.LOGOUT:
+            localStorage.removeItem("userToken");
             return initialState;
 
         default:
