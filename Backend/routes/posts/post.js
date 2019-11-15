@@ -36,7 +36,7 @@ router.get("/allposts", (req, res) => {
 router.post("/createpost", verifyToken, verifyUserWithToken, createPost);
 
 // like unlike
-router.put('/like', like);
+router.put('/like', verifyToken, verifyUserWithToken, like);
 
 router.put('/unlike', verifyToken, verifyUserWithToken, unlike);
 

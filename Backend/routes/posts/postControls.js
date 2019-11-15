@@ -95,8 +95,7 @@ exports.like = async (req, res) => {
             .status(400)
             .json({ message: validatedData.error.details[0].message });
     
-    const user = req.loggedUser;
-    console.log(user)
+    
     console.log(req.body)
 
     try{
@@ -105,14 +104,23 @@ exports.like = async (req, res) => {
                 _id: req.body.postId
             }
         )
+        const user = req.loggedUser;
 
-        post.likedBy.append({
-            id: req.loggedUser._id,
-            username: req.loggedUser.username,
-            profileurl: req.loggedUser.profileurl
-        });
+
+
+
+        let likeduser = {
+            _id: user._id,
+            username: user.name,
+            profileurl: user.profileurl
+        };
+
+
+        post.likedBy.push(likeduser);
+        
 
         post.likes = post.likes + 1;
+
         try {
             const savedpost = await post.save();
             res.json(savedpost);
@@ -142,7 +150,7 @@ exports.unlike = async (req, res, next) => {
     console.log(req.body)
 
     try {
-        const post = Post.findById(
+        const post = await Post.findById(
             {
                 _id: req.body.postId
             }
@@ -150,7 +158,7 @@ exports.unlike = async (req, res, next) => {
         
         const userid = req.loggedUser._id;
     
-        var removeIndex = apps.map(function(item) { return item.id; }).indexOf(userid);
+        var removeIndex = post.likedBy.map(function(item) { return item._id; }).indexOf(userid);
     
         post.likedBy.splice(removeIndex,1);
         post.likes = post.likes - 1;
