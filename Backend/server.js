@@ -13,6 +13,7 @@ const databaseConnect = process.env.DB_Connect;
 // connect to mongooseDB
 mongoose.connect(
     databaseConnect,
+    
     { useNewUrlParser: true, useUnifiedTopology: true },
     () => {
         console.log("connected to mongooseDB");
@@ -63,7 +64,7 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/competition" , require("./routes/competitions/utils") )
 
 //Route for Posts
-app.use("api/posts", require("./routes/posts/post"))
+app.use("/api/post", require("./routes/posts/post"))
 
 if (process.env.Node_Env === "production") {
     // for loading the static frontend app

@@ -1,4 +1,13 @@
-const Post = require('../../models/post');
+const Post = require('../../models/Post');
+const {
+    createPostValidation,
+    postLikeValidation,
+    postUnlikeValidation,
+    createCommentValidation,
+} = require('./postValidation');
+
+const Comment = require("../../models/Comments");
+/*
 const OtherUser = require('../../models/Otheruser');
 const User = require('../../models/user');
 const Comment = require('../../models/Comments')
@@ -6,6 +15,7 @@ const formidable = require('formidable');
 const fs = require('fs');
 const _ = require('lodash');
 const auth = require('../auth/index');
+*/
 
 
 
@@ -14,35 +24,40 @@ const auth = require('../auth/index');
 
 exports.createPost = async (req, res, next) => {
     
-    const user = req.loggedUser;
-
+    const validatedData = createPostValidation(req.body);
     
-
-
-    const post = new Post({
-        _id: mongoose.Types.ObjectId(),
-        title: req.body.title,
-        content:req.body.content,
-        owner: [
+    if (validatedData.error)
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
+    
+    const user = req.loggedUser;
+    console.log(user)
+    console.log(req.body)
+        
+    
+        const post = new Post(
             {
-                _id: user._id,
-                username: user.name,
-                profileurl: user.profileurl || "random string"
+                title: req.body.title,
+                content:req.body.content,
+                owner: [
+                    {
+                        _id: user._id,
+                        username: user.name,
+                        profileurl: user.profileurl || "random string"
+                    }
+                ],
             }
-        ],
-    });
+        );
 
+        try {
+            const savedpost = await post.save();
+            res.json(savedpost);
+        } catch (err) {
+            res.status(500).json({ message: err });
+        }
 
-    await post.save()
-    .then(result => {
-        res.status(200).json({
-            docs:[posts]
-        });
-    })
-    .catch(err => {
-        console.log(err);
-    });
-};
+    };
 
 
 
@@ -69,107 +84,162 @@ router.post("/delete", (req, res, next) => {
 
 
 
-exports.like = (req, res) => {
+exports.like = async (req, res) => {
 
+    const validatedData = postLikeValidation(req.body);
     
-
-
-    const post = await Post.findById({_id: req.body.postId}).exec(
-        (err, result) => {
-            if (err) {
-                return res.status(400).json({
-                    error: err
-                });
-            } else {
-                res.json(result);
-            }
-        }
-    );
-
-    post.likedBy.append({
-        id: req.loggedUser._id,
-        username: req.loggedUser.username,
-        profileurl: req.loggedUser.profileurl
-    });
-
-    post.likes = post.likes + 1;
-};
-
-
-exports.unlike = (req, res) => {
+    if (validatedData.error)
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
     
-    const post = await Post.findById({_id: req.body.postId}).exec(
-        (err, result) => {
-            if (err) {
-                return res.status(400).json({
-                    error: err
-                });
-            } else {
-                res.json(result);
-            }
-        }
-    );
-    
-    const userid = req.loggedUser._id;
-
-    var removeIndex = apps.map(function(item) { return item.id; }).indexOf(userid);
-
-    post.likedBy.splice(removeIndex,1);
-    post.likes = post.likes - 1;
-};
-
-
-exports.comment = (req, res) => {
-    let comment = req.body.comment;
     const user = req.loggedUser;
+    console.log(user)
+    console.log(req.body)
 
-    const comment = new Comment({
-        message: req.body.comment,
-        owner: [
+    try{
+        const post = await Post.findById(
             {
-                _id: user._id,
-                username: user.name,
-                profileurl: user.profileurl || "random string"
+                _id: req.body.postId
             }
-        ],
-    });
+        )
 
-    await comment.save()
-    .then(result => {
-        res.status(200).json({
-            docs:[comments]
+        post.likedBy.append({
+            id: req.loggedUser._id,
+            username: req.loggedUser.username,
+            profileurl: req.loggedUser.profileurl
         });
-    })
-    .catch(err => {
-        console.log(err);
-    });
 
-    const post = await Post.findById({_id: req.body.postId}).exec(
-        (err, result) => {
-            if (err) {
-                return res.status(400).json({
-                    error: err
-                });
-            } else {
-                res.json(result);
-            }
+        post.likes = post.likes + 1;
+        try {
+            const savedpost = await post.save();
+            res.json(savedpost);
+        } catch (err) {
+            res.status(500).json({ message: err });
         }
-    );
 
-    post.comments.append({
-        comment
-    });
+        return res.json({ message: "liked successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: "Post not found !!" });
+    }
 
-
+   
 };
 
 
+exports.unlike = async (req, res, next) => {
+    const validatedData = postUnlikeValidation(req.body);
+    
+    if (validatedData.error)
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
+    
+    const user = req.loggedUser;
+    console.log(user)
+    console.log(req.body)
+
+    try {
+        const post = Post.findById(
+            {
+                _id: req.body.postId
+            }
+        )
+        
+        const userid = req.loggedUser._id;
+    
+        var removeIndex = apps.map(function(item) { return item.id; }).indexOf(userid);
+    
+        post.likedBy.splice(removeIndex,1);
+        post.likes = post.likes - 1;
+        
+        try {
+            const savedpost = await post.save();
+            res.json(savedpost);
+        } catch (err) {
+            res.status(500).json({ message: err });
+        }
+        
+        return res.json({ message: "Unliked successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: "Post not found !!" });
+    }
+    
+
+
+    
+    
+};
+
+
+exports.commentPost = async (req, res, next) => {
+    const validatedData = createCommentValidation(req.body);
+    
+    if (validatedData.error)
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
+    
+    const user = req.loggedUser;
+    console.log(user)
+    console.log(req.body)
+
+    
+
+    try {
+        const post =  Post.findById(
+            {
+                _id: req.body.postId
+            }
+        )
+
+        const user = req.loggedUser;
+
+        const comment = new Comment({
+            message: req.body.comment,
+            owner: [
+                {
+                    _id: user._id,
+                    username: user.name,
+                    profileurl: user.profileurl || "random string"
+                }
+            ],
+        });
+    
+        try {
+            const savedcomment = await comment.save();
+            res.json(savedcomment);
+        } catch (err) {
+            res.status(500).json({ message: err });
+        }
+    
+        
+    
+        post.comments.append({
+            comment
+        });
+        
+        try {
+            const savedpost = await post.save();
+            res.json(savedpost);
+        } catch (err) {
+            res.status(500).json({ message: err });
+        }
+
+        return res.json({ message: "Commented successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: "Post not found !!" });
+    }
+
+};
+
+/*
 exports.likeComment = (req, res) => {
     const user = req.loggedUser;
     const commentId = req.body.commentId;
     const postId = req.body.postId;
 
-    const comment = await Comment.findById({_id: commentId}).exec(
+    const comment =  Comment.findById({_id: commentId}).exec(
         (err, result) => {
             if (err) {
                 return res.status(400).json({
@@ -189,7 +259,7 @@ exports.likeComment = (req, res) => {
 
     comment.likes = comment.likes + 1;
 
-    const post = await Post.findById({_id: postId}).exec(
+    const post =  Post.findById({_id: postId}).exec(
         (err, result) => {
             if (err) {
                 return res.status(400).json({
@@ -213,7 +283,7 @@ exports.unlikeComment = (req, res) => {
     const commentId = req.body.commentId;
     const postId = req.body.postId;
 
-    const comment = await Comment.findById({_id: commentId}).exec(
+    const comment =  Comment.findById({_id: commentId}).exec(
         (err, result) => {
             if (err) {
                 return res.status(400).json({
@@ -230,7 +300,7 @@ exports.unlikeComment = (req, res) => {
     comment.likedBy.splice(removeIndex,1);
     comment.likes = comment.likes - 1;
 
-    const post = await Post.findById({_id: postId}).exec(
+    const post =  Post.findById({_id: postId}).exec(
         (err, result) => {
             if (err) {
                 return res.status(400).json({
@@ -258,7 +328,7 @@ exports.replyComment = (req, res) => {
 
 
 
-    const comment = await Comment.findById({_id: commentId}).exec(
+    const comment =  Comment.findById({_id: commentId}).exec(
         (err, result) => {
             if (err) {
                 return res.status(400).json({
@@ -289,7 +359,7 @@ exports.replyComment = (req, res) => {
         ]
     );
 
-    const post = await Post.findById({_id: req.body.postId}).exec(
+    const post =  Post.findById({_id: req.body.postId}).exec(
         (err, result) => {
             if (err) {
                 return res.status(400).json({
@@ -307,3 +377,59 @@ exports.replyComment = (req, res) => {
 
 
 };
+
+
+
+exports.replyCommentLike = (req, res) => {
+    let replyId = req.body.replyId;
+    const user = req.loggedUser;
+    const commentId = req.body.commentId;
+    const postId = req.body.postId;
+
+
+
+    const comment =  Comment.findById({_id: commentId}).exec(
+        (err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            } else {
+                res.json(result);
+            }
+        }
+    );
+    var updateReplyIndex = apps.map(function(item) { return item.id; }).indexOf(replyId);
+
+
+    comment.replies[updateReplyIndex].likedBy.append(
+        {
+            id: req.loggedUser._id,
+            username: req.loggedUser.username,
+            profileurl: req.loggedUser.profileurl
+        }
+    );
+
+    comment.replies[updateReplyIndex].likes = comment.replies[updateReplyIndex].likes + 1; 
+
+
+    const post =  Post.findById({_id: req.body.postId}).exec(
+        (err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            } else {
+                res.json(result);
+            }
+        }
+    );
+
+    var updateIndex = apps.map(function(item) { return item.id; }).indexOf(commentId);
+
+    post.comments[updateIndex] = comment; 
+
+
+};
+*/
+
