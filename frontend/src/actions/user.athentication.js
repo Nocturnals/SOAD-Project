@@ -1,7 +1,8 @@
 import axios from "axios";
-import { userAuthConst } from "../constants";
+
+import { userAuthConst, alertConstants } from "../constants";
 import { history } from "../helpers";
-import setAuthToken from "../setAuthToken";
+import alertActions from "./alert.actions";
 
 export function login(email, password) {
     return dispatch => {
@@ -19,13 +20,11 @@ export function login(email, password) {
                 console.log(authorization);
 
                 localStorage.setItem("userToken", authorization);
-                setAuthToken(authorization);
                 dispatch(successAction(res.data));
             })
             .catch(err => {
-                console.log(err);
-
                 dispatch(failureAction(err));
+                dispatch(alertActions.error(err.response.data));
             });
     };
 
@@ -53,21 +52,48 @@ export function login(email, password) {
         return { type: userAuthConst.LOGIN_SUCCESS, user: user };
     }
     function failureAction(error) {
-        return { type: userAuthConst.LOGIN_FAILURE, error: error };
+        return { type: userAuthConst.LOGIN_FAILURE };
     }
 }
 
-export function logout() {
+export function getUserWithToken(token) {
     return dispatch => {
-        localStorage.removeItem("userToken");
-        setAuthToken(false);
-        dispatch(setCurrentUser({}));
+        // set the token to headers
+        // setAuthToken(token);
+
+        const config = {
+            headers: {
+                "Content-type": "application/json"
+            }
+        };
+
+        if (token) {
+            config.headers.authorization = token;
+        }
+
+        axios.get("http://localhost:4000/api/auth/user", config).then(res => {
+            // res.data.user
+            dispatch({
+                type: userAuthConst.LOAD_USER,
+                user: res.data.user
+            });
+        });
+    };
+}
+
+export function logout() {
+    // remove authorization token from the storage
+    localStorage.removeItem("userToken");
+
+    // return logout action to reducer
+    return {
+        type: userAuthConst.LOGOUT
     };
 }
 
 export function setCurrentUser(decoded) {
     return {
-        type: "SET_CURRENT_USER",
+        type: userAuthConst.LOAD_USER,
         payload: decoded
     };
 }

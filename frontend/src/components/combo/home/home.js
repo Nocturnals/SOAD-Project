@@ -44,7 +44,7 @@ class HomePage extends Component {
                 liked: post.liked,
                 location: post.location
             };
-            postCards.push(<PostComp post_details={post_details} index={i} />);
+            postCards.push(<PostComp post_details={post_details} key={i} />);
         }
 
         return postCards;

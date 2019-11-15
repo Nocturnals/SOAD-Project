@@ -81,7 +81,7 @@ class PostComp extends Component {
         for (let index = 0; index < comments.length; index++) {
             const comment = comments[index];
             comments_section.push(
-                <div className="row">
+                <div className="row" key={index}>
                     <div className="col-2">
                         <div
                             className="cmnt_img"

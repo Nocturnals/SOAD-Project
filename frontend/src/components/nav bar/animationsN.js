@@ -35,7 +35,7 @@ export function toggleNavBar() {
         var nav = document.getElementById("nav-bar");
         console.log(expandedNav.style);
 
-        if (expandedNav.style.display != "none") {
+        if (expandedNav.style.display !== "none") {
             if (document.body.scrollTop === 0) {
                 nav.style.backgroundColor = "rgb(0, 0, 0, 0.6)";
             }

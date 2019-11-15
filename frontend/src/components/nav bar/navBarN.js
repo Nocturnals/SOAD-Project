@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import "./navBarN.css";
 import "./animationsN";
 import { toggleNavBar } from "./animationsN";
+import { logout } from "../../actions/user.athentication";
 
 class LinkClass {
     constructor(toLink, name) {
@@ -15,12 +16,22 @@ class LinkClass {
 }
 
 class NavBar extends Component {
+    constructor(props) {
+        super(props);
+        this.logoutUser = this.logoutUser.bind(this);
+    }
+
+    // logout function
+    logoutUser() {
+        this.props.onLogout();
+    }
+
     linkComp = links => {
         let linkComps = [];
         for (let index = 0; index < links.length; index++) {
             const link = links[index];
             linkComps.push(
-                <li class="nav-item">
+                <li className="nav-item" key={index}>
                     <Link
                         to={link.toLink}
                         style={{
@@ -28,7 +39,7 @@ class NavBar extends Component {
                             textTransform: "uppercase"
                         }}
                     >
-                        <button class="nav-link">{link.name}</button>
+                        <button className="nav-link">{link.name}</button>
                     </Link>
                 </li>
             );
@@ -47,7 +58,7 @@ class NavBar extends Component {
         ];
 
         return (
-            <nav class="navbar sticky-top navbar-expand-lg" id="nav-bar">
+            <nav className="navbar sticky-top navbar-expand-lg" id="nav-bar">
                 <Link to="/">
                     <button className="navbar-brand navTitle">
                         <span className="fname">Artist </span>
@@ -55,7 +66,7 @@ class NavBar extends Component {
                     </button>
                 </Link>
                 <button
-                    class="navbar-toggler"
+                    className="navbar-toggler"
                     type="button"
                     data-toggle="collapse"
                     data-target="#navbarSupportedContent-333"
@@ -64,28 +75,28 @@ class NavBar extends Component {
                     aria-label="Toggle navigation"
                     onClick={toggleNavBar()}
                 >
-                    <span class="navbar-toggler-icon">
+                    <span className="navbar-toggler-icon">
                         <i className="fa fa-bars" aria-hidden="true"></i>
                     </span>
                 </button>
                 <div
-                    class="collapse navbar-collapse"
+                    className="collapse navbar-collapse"
                     id="navbarSupportedContent-333"
                 >
-                    <ul class="navbar-nav ml-auto nav-flex-icons">
+                    <ul className="navbar-nav ml-auto nav-flex-icons">
                         {this.linkComp(links)}
-                        <li class="nav-item dropdown">
+                        <li className="nav-item dropdown">
                             <button
-                                class="nav-link dropdown-toggle"
+                                className="nav-link dropdown-toggle"
                                 id="navbarDropdownMenuLink-333"
                                 data-toggle="dropdown"
                                 aria-haspopup="true"
                                 aria-expanded="false"
                             >
-                                <i class="fa fa-user"></i>
+                                <i className="fa fa-user"></i>
                             </button>
                             <div
-                                class="dropdown-menu dropdown-menu-right dropdown-default"
+                                className="dropdown-menu dropdown-menu-right dropdown-default"
                                 id="dropdown-menu"
                                 aria-labelledby="navbarDropdownMenuLink-333"
                             >
@@ -96,23 +107,30 @@ class NavBar extends Component {
                                         textTransform: "uppercase"
                                     }}
                                 >
-                                    <button class="dropdown-item">
+                                    <button className="dropdown-item">
                                         {!isAuthed ? "Login" : "Profile"}
                                     </button>
                                 </Link>
-                                <Link
-                                    to={
-                                        !isAuthed ? "/auth/register" : "/logout"
-                                    }
-                                    style={{
-                                        textDecoration: "none",
-                                        textTransform: "uppercase"
-                                    }}
-                                >
-                                    <button class="dropdown-item">
+                                {!isAuthed ? (
+                                    <Link
+                                        to="/auth/register"
+                                        style={{
+                                            textDecoration: "none",
+                                            textTransform: "uppercase"
+                                        }}
+                                    >
+                                        <button className="dropdown-item">
+                                            {!isAuthed ? "Register" : "Logout"}
+                                        </button>
+                                    </Link>
+                                ) : (
+                                    <button
+                                        className="dropdown-item"
+                                        onClick={this.logoutUser}
+                                    >
                                         {!isAuthed ? "Register" : "Logout"}
                                     </button>
-                                </Link>
+                                )}
                             </div>
                         </li>
                     </ul>
@@ -132,4 +150,4 @@ const mapStateToProps = state => ({
     alert: state.alert
 });
 
-export default connect(mapStateToProps)(NavBar);
+export default connect(mapStateToProps, { onLogout: logout })(NavBar);

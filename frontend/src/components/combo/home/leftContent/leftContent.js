@@ -118,7 +118,7 @@ class LeftContent extends Component {
                             <div className="col copyright">
                                 <h6>
                                     <i
-                                        class="fa fa-copyright"
+                                        className="fa fa-copyright"
                                         aria-hidden="true"
                                     ></i>
                                     &nbsp;Copyright 2019

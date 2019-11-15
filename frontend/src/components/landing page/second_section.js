@@ -54,7 +54,7 @@ class SecondSection extends React.Component {
         for (let index = 0; index < blocks.length; index++) {
             let block = blocks[index];
             catBlocks.push(
-                <div className="cat-block">
+                <div className="cat-block" key={index}>
                     <div className={block.imgClass}>
                         <div></div>
                     </div>
