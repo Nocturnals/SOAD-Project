@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import "./navBarN.css";
 import "./animationsN";
 import { toggleNavBar } from "./animationsN";
-import { logout } from "../../actions/user.athentication";
+import { logout } from "../../actions/authActions";
 
 class LinkClass {
     constructor(toLink, name) {
