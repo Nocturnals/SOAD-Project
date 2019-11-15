@@ -11,7 +11,7 @@ import jwt_decode from "jwt-decode";
 
 import "./App.css";
 
-import { logout, getUserWithToken } from "./actions/user.athentication";
+import { logout, getUserWithToken } from "./actions/authActions";
 
 import LandingPage from "./components/landing page/landing_page";
 import AuthenticationPage from "./components/authentication/authentication";
