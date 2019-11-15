@@ -8,7 +8,7 @@ const {
     postCommentUnlikeValidation,
 } = require('./postValidation');
 
-const Comment = require("../../models/Comments");
+const {commentsmodel, commentschema} = require("../../models/Comments");
 /*
 const OtherUser = require('../../models/Otheruser');
 const User = require('../../models/user');
@@ -191,30 +191,25 @@ exports.commentPost = async (req, res, next) => {
             .json({ message: validatedData.error.details[0].message });
     
     const user = req.loggedUser;
-    console.log(user)
     console.log(req.body)
 
     
+        console.log(user);
 
-    try {
-        const post =  Post.findById(
+        const comment = new commentschema(
             {
-                _id: req.body.postId
+                message: req.body.comment,
+                owner: [
+                    {
+                        _id: user._id,
+                        username: user.name,
+                        profileurl: user.profileurl || "random string"
+                    }
+                ],
             }
-        )
+        );
 
-        const user = req.loggedUser;
-
-        const comment = new Comment({
-            message: req.body.comment,
-            owner: [
-                {
-                    _id: user._id,
-                    username: user.name,
-                    profileurl: user.profileurl || "random string"
-                }
-            ],
-        });
+        console.log(comment);
     
         try {
             const savedcomment = await comment.save();
@@ -222,12 +217,23 @@ exports.commentPost = async (req, res, next) => {
         } catch (err) {
             res.status(500).json({ message: err });
         }
+
+    try {
+        const post =  await Post.findById(
+            {
+                _id: req.body.postId
+            }
+        )
+
+        console.log(post._id);
+
+
+
+        
     
         
     
-        post.comments.append({
-            comment
-        });
+        post.comments.push(comment);
         
         try {
             const savedpost = await post.save();
