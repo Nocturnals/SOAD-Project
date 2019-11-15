@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const otheruserschema = require("./otheruser");
-const commentsmodel = require("./Comments");
+const otheruserschema = require("./Otheruser");
+const {commentsmodel, commentschema} = require("./Comments");
 
 const FaqSchema = new mongoose.Schema({
     question: {
@@ -35,6 +35,28 @@ const ResultSchema = new mongoose.Schema({
 });
 
 const CompetitionsSchema = new mongoose.Schema({
+
+    title:{
+        type : String,
+        required: true,
+    },
+
+    shortdescription:{
+        type :String,
+        required :true,
+    },
+
+    fulldescription:{
+        type :String,
+        required :true,
+    },
+
+
+    prize :{
+        type :String,
+        required :true,
+    },
+
     hosts: {
         type: [otheruserschema],
         required: true
@@ -57,7 +79,12 @@ const CompetitionsSchema = new mongoose.Schema({
     },
 
     participants: {
-        type: [ResultSchema]
+        type: [otheruserschema]
+    },
+
+    rules :{
+        type : String,
+        required :true
     },
 
     faqs: {

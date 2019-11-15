@@ -8,11 +8,15 @@ import {
 import { Provider } from "react-redux";
 import store from "./store";
 import jwt_decode from "jwt-decode";
-import setAuthToken from "./setAuthToken";
 
 import "./App.css";
 
-import { setCurrentUser, logout } from "./actions/user.athentication";
+import {
+    setCurrentUser,
+    logout,
+    login,
+    getUserWithToken
+} from "./actions/user.athentication";
 
 import LandingPage from "./components/landing page/landing_page";
 import AuthenticationPage from "./components/authentication/authentication";
@@ -22,9 +26,10 @@ class App extends Component {
     // to verify user already logged in
     componentDidMount() {
         if (localStorage.userToken) {
-            setAuthToken(localStorage.userToken);
+            // check for the token
             const decoded = jwt_decode(localStorage.userToken);
-            store.dispatch(setCurrentUser(decoded));
+
+            store.dispatch(getUserWithToken(localStorage.userToken));
 
             // if token is expired then logout and redirect to
             const currentTime = Date.now() / 1000;

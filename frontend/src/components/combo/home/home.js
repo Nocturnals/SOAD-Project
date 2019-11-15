@@ -24,6 +24,8 @@ class Post {
 class HomePage extends Component {
     constructor(props) {
         super(props);
+
+        console.log(this.props.auth);
     }
 
     // Generates Cards of Posts...
