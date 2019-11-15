@@ -51,9 +51,40 @@ const createCommentValidation = data => {
     return Joi.validate(data, schema);
   };
 
+const postCommentLikeValidation = data => {
+    const schema = {
+      postId: Joi.string()
+        .min(4)
+        .required(),
+      commentId: Joi.string()
+        .min(4)
+        .required()
+    };
+  
+    return Joi.validate(data, schema);
+  };
+  
+
+const postCommentUnlikeValidation = data => {
+    const schema = {
+      postId: Joi.string()
+        .min(4)
+        .required(),
+      commentId: Joi.string()
+        .min(4)
+        .required()
+    };
+  
+    return Joi.validate(data, schema);
+  };
+
+
+
 module.exports = {
     createPostValidation,
     postLikeValidation,
     postUnlikeValidation,
     createCommentValidation,
+    postCommentLikeValidation,
+    postCommentUnlikeValidation,
 };

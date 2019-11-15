@@ -4,6 +4,8 @@ const {
     postLikeValidation,
     postUnlikeValidation,
     createCommentValidation,
+    postCommentLikeValidation,
+    postCommentUnlikeValidation,
 } = require('./postValidation');
 
 const Comment = require("../../models/Comments");
@@ -233,51 +235,76 @@ exports.commentPost = async (req, res, next) => {
 
 };
 
-/*
+
 exports.likeComment = (req, res) => {
-    const user = req.loggedUser;
-    const commentId = req.body.commentId;
-    const postId = req.body.postId;
+    const validatedData = postCommentLikeValidation(req.body);
+    
+    if (validatedData.error)
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
 
-    const comment =  Comment.findById({_id: commentId}).exec(
-        (err, result) => {
-            if (err) {
-                return res.status(400).json({
-                    error: err
-                });
-            } else {
-                res.json(result);
+
+    
+    try {
+        const user = req.loggedUser;
+        const commentId = req.body.commentId;
+        const postId = req.body.postId;
+
+        const comment =  Comment.findById(
+            {
+                _id: commentId
             }
+        )
+
+        comment.likedBy.append({
+            id: req.loggedUser._id,
+            username: req.loggedUser.username,
+            profileurl: req.loggedUser.profileurl
+        });
+
+        comment.likes = comment.likes + 1;
+
+        try {
+            const savedcomment = await comment.save();
+            res.json(savedcomment);
+        } catch (err) {
+            res.status(500).json({ message: err });
         }
-    );
+        
 
-    comment.likedBy.append({
-        id: req.loggedUser._id,
-        username: req.loggedUser.username,
-        profileurl: req.loggedUser.profileurl
-    });
-
-    comment.likes = comment.likes + 1;
-
-    const post =  Post.findById({_id: postId}).exec(
-        (err, result) => {
-            if (err) {
-                return res.status(400).json({
-                    error: err
-                });
-            } else {
-                res.json(result);
+        const post =  Post.findById({_id: postId}).exec(
+            (err, result) => {
+                if (err) {
+                    return res.status(400).json({
+                        error: err
+                    });
+                } else {
+                    res.json(result);
+                }
             }
+        );
+
+        var updateIndex = apps.map(function(item) { return item.id; }).indexOf(commentId);
+
+        post.comments[updateIndex] = comment;
+        
+        try {
+            const savedpost = await post.save();
+            res.json(savedpost);
+        } catch (err) {
+            res.status(500).json({ message: err });
         }
-    );
 
-    var updateIndex = apps.map(function(item) { return item.id; }).indexOf(commentId);
-
-    post.comments[updateIndex] = comment; 
+        return res.json({ message: "Comment liked successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: "Post not found !!" });
+    } 
 
 
 };
 
+/*
 exports.unlikeComment = (req, res) => {
     const user = req.loggedUser;
     const commentId = req.body.commentId;
