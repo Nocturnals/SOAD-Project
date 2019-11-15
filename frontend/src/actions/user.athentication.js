@@ -2,6 +2,7 @@ import axios from "axios";
 
 import { userAuthConst, alertConstants } from "../constants";
 import { history } from "../helpers";
+import setAuthToken from "../setAuthToken";
 import alertActions from "./alert.actions";
 
 export function login(email, password) {
@@ -20,6 +21,7 @@ export function login(email, password) {
                 console.log(authorization);
 
                 localStorage.setItem("userToken", authorization);
+                setAuthToken(authorization);
                 dispatch(successAction(res.data));
             })
             .catch(err => {
@@ -59,19 +61,10 @@ export function login(email, password) {
 export function getUserWithToken(token) {
     return dispatch => {
         // set the token to headers
-        // setAuthToken(token);
+        setAuthToken(token);
 
-        const config = {
-            headers: {
-                "Content-type": "application/json"
-            }
-        };
-
-        if (token) {
-            config.headers.authorization = token;
-        }
-
-        axios.get("http://localhost:4000/api/auth/user", config).then(res => {
+        // request to get user data from backend
+        axios.get("http://localhost:4000/api/auth/user").then(res => {
             // res.data.user
             dispatch({
                 type: userAuthConst.LOAD_USER,
@@ -84,6 +77,9 @@ export function getUserWithToken(token) {
 export function logout() {
     // remove authorization token from the storage
     localStorage.removeItem("userToken");
+
+    // remove the token authorization header from the future requests
+    setAuthToken(false);
 
     // return logout action to reducer
     return {
