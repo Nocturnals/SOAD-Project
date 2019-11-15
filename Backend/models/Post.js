@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const otheruserschema = require("./otheruser");
-const { CommentsSchema } = require("./Commments");
+const otheruserschema = require("./Otheruser");
+const { CommentsSchema } = require("./Comments");
 const imageschema = require("./Image");
 
 const PostSchema = new mongoose.Schema({
@@ -17,8 +17,8 @@ const PostSchema = new mongoose.Schema({
         default: Date.now
     },
 
-    likedBy:{
-        type: [otheruserschema],
+    likedBy: {
+        type: [otheruserschema]
     },
 
     likes: {

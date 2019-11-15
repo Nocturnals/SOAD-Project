@@ -1,7 +1,5 @@
 import { userAuthConst } from "../constants";
 
-let userToken = localStorage.getItem("userToken");
-
 const initialState = {
     user: {
         name: null,

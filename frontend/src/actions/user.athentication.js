@@ -1,7 +1,9 @@
 import axios from "axios";
-import { userAuthConst } from "../constants";
+
+import { userAuthConst, alertConstants } from "../constants";
 import { history } from "../helpers";
 import setAuthToken from "../setAuthToken";
+import alertActions from "./alert.actions";
 
 export function login(email, password) {
     return dispatch => {
@@ -26,6 +28,7 @@ export function login(email, password) {
                 console.log(err);
 
                 dispatch(failureAction(err));
+                dispatch(alertActions.error(err));
             });
     };
 
@@ -53,7 +56,7 @@ export function login(email, password) {
         return { type: userAuthConst.LOGIN_SUCCESS, user: user };
     }
     function failureAction(error) {
-        return { type: userAuthConst.LOGIN_FAILURE, error: error };
+        return { type: userAuthConst.LOGIN_FAILURE };
     }
 }
 
