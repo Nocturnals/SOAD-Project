@@ -236,7 +236,7 @@ exports.commentPost = async (req, res, next) => {
 };
 
 
-exports.likeComment = (req, res) => {
+exports.likeComment = async (req, res, next) => {
     const validatedData = postCommentLikeValidation(req.body);
     
     if (validatedData.error)
