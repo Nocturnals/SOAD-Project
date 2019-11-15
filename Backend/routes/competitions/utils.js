@@ -7,15 +7,23 @@ const {
     CompCreateValidation,
     deleteValidation,
     editValidation,
-    hostValidation
+    hostValidation,
+    resultValidation
 } = require("./compValidation");
 
 const router = express.Router();
 
-router.get("/allcompetitions", (req, res) => {
-    var titles = CompetitionsModel.find().select("title", "shortdescription");
-    console.log(titles);
-    return res.status(200).json({ titles });
+router.get("/allcompetitions", async (req, res) => {
+    try {
+        const titles = await CompetitionsModel.find().select(
+            "title , shortdescription"
+        );
+        console.log(titles);
+        return res.status(200).json({ titles });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "internal server error" });
+    }
 });
 
 router.post(
@@ -30,20 +38,20 @@ router.post(
                 .json({ message: validatedData.error.details[0].message });
 
         try {
-            const comp = await CompetitionsModel.findById({
-                _id: req.body.compid
-            });
+            const comp = await CompetitionsModel.findById(req.body.compid);
 
-            comp.participants.append({
+            comp.participants[comp.noofparticipants] = {
                 id: req.loggedUser._id,
                 username: req.loggedUser.username,
                 profileurl: req.loggedUser.profileurl
-            });
+            };
 
-            comp.noofparticipants = comp.nooofparticipants + 1;
+            comp.noofparticipants = comp.noofparticipants + 1;
 
+            console.log(comp.noofparticipants);
             return res.json({ message: "sucessfully registered" });
         } catch (error) {
+            console.log(error);
             return res.status(500).json({ message: "Competition not found" });
         }
     }
@@ -76,6 +84,7 @@ router.post(
                     profileurl: user.profileurl || "random string"
                 }
             ],
+            category: req.body.category,
             prize: req.body.prize,
             rules: req.body.rules
         });
@@ -93,12 +102,14 @@ router.post(
 
 router.get("/:id", verifyToken, verifyUserWithToken, async (req, res, next) => {
     try {
-        const comp = await CompetitionsModel.findById({
-            _id: req.params.id
-        });
-        return comp;
+        const comp = await CompetitionsModel.findById(req.params.id);
+        if (comp) {
+            return res.status(200).json(comp);
+        } else {
+            return res.status(400).json({ message: "competition not found" });
+        }
     } catch (error) {
-        return res.status(500).json({ message: "Competiiton not found" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 });
 
@@ -116,9 +127,9 @@ router.delete(
                 .json({ message: validatedData.error.details[0].message });
 
         try {
-            var comp = await CompetitionsModel.findByIdAndRemove({
-                _id: req.body.compid
-            });
+            var comp = await CompetitionsModel.findByIdAndRemove(
+                req.body.compid
+            );
             return res.json(comp);
         } catch (error) {
             return res.status(500).json({ message: "Competiiton not found" });
@@ -139,9 +150,7 @@ router.patch(
                 .status(400)
                 .json({ message: validatedData.error.details[0].message });
 
-        const comp = await CompetitionsModel.findById({
-            _id: req.body.compid
-        });
+        const comp = await CompetitionsModel.findById(req.body.compid);
         var flag = 0;
         comp.hosts.forEach(i => {
             if (i._id == req.loggedUser._id) {
@@ -153,7 +162,16 @@ router.patch(
                 comp.updateone(
                     { id: req.body.id },
                     {
-                        $set: { shortdescription: req.body.shortdescription }
+                        $set: {
+                            shortdescription: req.body.shortdescription,
+                            title: req.body.title,
+                            fulldescription: req.body.fulldescription,
+                            rules: req.body.rules,
+                            prize: req.body.prize,
+                            category: req.body.category,
+                            starttime: req.body.starttime,
+                            endtime: req.body.endtime
+                        }
                     }
                 );
 
@@ -179,9 +197,48 @@ router.post(
                 .json({ message: validatedData.error.details[0].message });
 
         var ishost = false;
-        const comp = await CompetitionsModel.findById({
-            _id: req.body.compid
+        const comp = await CompetitionsModel.findById(req.body.compid);
+
+        comp.hosts.forEach(i => {
+            if (i._id == req.loggedUser._id) {
+                ishost = true;
+            }
         });
+
+        if (ishost) {
+            const user = UserModel.findById(req.body.userid);
+
+            const noofhosts = comp.hosts.length;
+
+            comp.hosts[noofhosts] = {
+                id: user._id,
+                username: user.username,
+                profileurl: user.profileurl
+            };
+
+            res.send(comp);
+        }
+        console.log(ishost);
+        console.log(comp);
+        res.json({ message: "You cannot add a host" });
+    }
+);
+
+// get results
+
+router.get(
+    "/results",
+    verifyToken,
+    verifyUserWithToken,
+    async (req, res, next) => {
+        const validatedData = resultValidation(req.body);
+        if (validatedData.error)
+            return res
+                .status(400)
+                .json({ message: validatedData.error.details[0].message });
+
+        var ishost = false;
+        const comp = await CompetitionsModel.findById(req.body.compid);
 
         comp.hosts.forEach(i => {
             if (i._id == req.loggedUser._id) {
@@ -193,14 +250,12 @@ router.post(
             const user = UserModel.findById({
                 _id: req.body.userid
             });
-            comp.hosts.append({
-                id: user._id,
-                username: user.username,
-                profileurl: user.profileurl
+            // *******************************************checkthis**************************************************
+            comp.results.append({
+                results: req.body.results
             });
             res.send(comp);
         }
-        res.json({ message: "You cannot add a host" });
     }
 );
 
