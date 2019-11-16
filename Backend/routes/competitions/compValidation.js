@@ -105,13 +105,7 @@ const resultValidation = data => {
             .min(4)
             .required(),
 
-        userid: Joi.string()
-            .min(4)
-            .required(),
-
-        results: Joi.object()
-            .min(4)
-            .required()
+        score: Joi.number().required()
     };
 
     return Joi.validate(data, schema);
@@ -213,14 +207,44 @@ const addcommentValidation = data => {
     const schema = {
         message: Joi.string()
             .min(4)
-            .required(),
-        likes: Joi.number().required()
+            .required()
+        // likes: Joi.number()
     };
     return Joi.validate(data, schema);
 };
 
 const editcommentValidation = data => {
     const schema = {
+        commentid: Joi.string()
+            .min(4)
+            .required(),
+        message: Joi.string()
+            .min(4)
+            .required()
+    };
+    return Joi.validate(data, schema);
+};
+
+const commentlikeValidation = data => {
+    const schema = {
+        _id: Joi.string()
+            .min(4)
+            .required(),
+        commentid: Joi.string()
+            .min(4)
+            .required()
+    };
+    return Joi.validate(data, schema);
+};
+
+const commentreplyValidation = data => {
+    const schema = {
+        _id: Joi.string()
+            .min(4)
+            .required(),
+        commentid: Joi.string()
+            .min(4)
+            .required(),
         message: Joi.string()
             .min(4)
             .required()
@@ -246,5 +270,7 @@ module.exports = {
     editfaqValidation,
     editresultsValidation,
     addcommentValidation,
-    editcommentValidation
+    editcommentValidation,
+    commentlikeValidation,
+    commentreplyValidation
 };
