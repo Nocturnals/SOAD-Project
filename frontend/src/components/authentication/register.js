@@ -4,6 +4,8 @@ import { Link, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
+import { register } from "../../actions";
+
 class RegInputFieldProps {
     constructor(type, class_name, name, placeholder = "") {
         this.type = type;
@@ -30,6 +32,14 @@ class RegisterComp extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    componentDidMount() {
+        // if the user is logged in redirect to home page
+        if (this.props.auth.isAuthed) {
+            console.log(this.props.auth);
+            return <Redirect to="/user/home" />;
+        }
+    }
+
     handleChange(e) {
         const { name, value } = e.target;
         this.setState({ [name]: value });
@@ -39,9 +49,9 @@ class RegisterComp extends Component {
         e.preventDefault();
 
         this.setState({ submitted: true });
-        const { email, password } = this.state;
-        if (email && password) {
-            this.props.login(email, password);
+        const { email, password, username, dateOfBirth } = this.state;
+        if (email && password && username && dateOfBirth) {
+            this.props.register(email, username, dateOfBirth, password);
         }
     }
 
@@ -83,6 +93,12 @@ class RegisterComp extends Component {
             re_password
         ];
 
+        // if the user is logged in redirect to home page
+        if (this.props.auth.isAuthed) {
+            console.log(this.props.auth);
+            return <Redirect to="/user/home" />;
+        }
+
         const inputFields = [
             new RegInputFieldProps("email", "reg_email", "email", "Email..."),
             new RegInputFieldProps(
@@ -108,11 +124,6 @@ class RegisterComp extends Component {
             )
         ];
         const inputs = this.regInputFields(inputFields, inputValues);
-
-        if (this.props.auth.isAuthed) {
-            console.log(this.props.auth);
-            return <Redirect to="/user/home" />;
-        }
 
         return (
             <div className="register_main">
@@ -155,12 +166,15 @@ class RegisterComp extends Component {
     }
 }
 
+// specifing the proptypes the registercomp should have
 RegisterComp.propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    register: PropTypes.func.isRequired
 };
 
+// mapping the reducer states to register component as props
 const mapStateToProps = state => ({
     auth: state.auth
 });
 
-export default connect(mapStateToProps)(RegisterComp);
+export default connect(mapStateToProps, { register })(RegisterComp);

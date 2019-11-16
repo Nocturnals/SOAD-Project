@@ -30,7 +30,7 @@ class App extends Component {
             const currentTime = Date.now() / 1000;
             if (decoded.exp < currentTime) {
                 store.dispatch(logout());
-                return <Redirect to="/user/home" />;
+                return <Redirect to="/" />;
             }
         }
     }
