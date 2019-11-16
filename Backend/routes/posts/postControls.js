@@ -229,6 +229,7 @@ exports.commentPost = async (req, res, next) => {
             } catch (err) {
                 res.status(500).json({ message: err });
             }
+            return res.json({ message: "Commented successfully" });
         }
         else{
             post.comments[removeIndex].message = req.body.comment;
@@ -240,9 +241,10 @@ exports.commentPost = async (req, res, next) => {
                 res.status(500).json({ message: err });
             }
             console.log("You've already commented to this post");
+            return res.json({ message: "Comment updated successfully" });
         }
 
-        return res.json({ message: "Commented successfully" });
+        
     } catch (error) {
         return res.status(500).json({ message: "Post not found !!" });
     }
@@ -259,47 +261,34 @@ exports.likeComment = async (req, res, next) => {
             .json({ message: validatedData.error.details[0].message });
 
 
-    
+    console.log(req.body);
     try {
         const user = req.loggedUser;
         const commentId = req.body.commentId;
         const postId = req.body.postId;
 
-        const comment =  Comment.findById(
+        const post =  await Post.findById(
             {
-                _id: commentId
+                _id: postId
             }
         )
 
-        comment.likedBy.append({
-            id: req.loggedUser._id,
-            username: req.loggedUser.username,
-            profileurl: req.loggedUser.profileurl
-        });
+        var updateIndex = post.comments.map(function(item) { return item._id; }).indexOf(commentId);
 
-        comment.likes = comment.likes + 1;
-
-        try {
-            const savedcomment = await comment.save();
-            res.json(savedcomment);
-        } catch (err) {
-            res.status(500).json({ message: err });
-        }
+        const comment = post.comments[updateIndex];
+        
         
 
-        const post =  Post.findById({_id: postId}).exec(
-            (err, result) => {
-                if (err) {
-                    return res.status(400).json({
-                        error: err
-                    });
-                } else {
-                    res.json(result);
-                }
-            }
-        );
+        let likeduser = {
+            _id: user._id,
+            username: user.name,
+            profileurl: user.profileurl
+        };
 
-        var updateIndex = apps.map(function(item) { return item.id; }).indexOf(commentId);
+        comment.likedby.push(likeduser);
+        console.log(comment.likedby);
+
+        comment.likes = comment.likes + 1;
 
         post.comments[updateIndex] = comment;
         
@@ -318,8 +307,17 @@ exports.likeComment = async (req, res, next) => {
 
 };
 
-/*
-exports.unlikeComment = (req, res) => {
+
+exports.unlikeComment = async (req, res, next) => {
+    const validatedData = postCommentUnlikeValidation(req.body);
+    
+    if (validatedData.error)
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
+
+
+    console.log(req.body);
     const user = req.loggedUser;
     const commentId = req.body.commentId;
     const postId = req.body.postId;
@@ -360,7 +358,7 @@ exports.unlikeComment = (req, res) => {
 
 };
 
-
+/*
 exports.replyComment = (req, res) => {
     let reply = req.body.reply;
     const user = req.loggedUser;
