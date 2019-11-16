@@ -27,6 +27,7 @@ export default function(state = initialState, action) {
         case userAuthConst.LOGIN_SUCCESS:
             return {
                 ...state,
+                user: action.user,
                 isAuthed: true,
                 isLoading: false
             };
