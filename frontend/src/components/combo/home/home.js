@@ -4,7 +4,7 @@ import { Link, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import PostComp from "./post/post";
+import PostComp from "../post/post";
 import LeftContent from "./leftContent/leftContent";
 import RightContent from "./rightContent/rightContent";
 

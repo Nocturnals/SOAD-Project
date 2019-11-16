@@ -1,9 +1,21 @@
 import React, { Component } from "react";
 
+import PostComp from "../post/post";
 import LeftContent from "./leftContent/leftContent";
-import PostComp from "./post/post";
+import RightContent from "./rightContent/rightContent";
 
 import "./profile.css";
+
+// Post Element Class...
+class Post {
+    constructor(name, time, job, location, liked) {
+        this.name = name;
+        this.time = time;
+        this.job = job;
+        this.location = location;
+        this.liked = liked;
+    }
+}
 
 class ProfilePage extends Component {
     componentDidMount() {
@@ -33,10 +45,10 @@ class ProfilePage extends Component {
 
         // Defining Elements
         const posts = [
-            new Post("John Doe", "3 min", "Epic Coder", "India", false),
-            new Post("Hemanth", "10 min", "Epic Coder", "India", true),
+            new Post("Vishwanth", "3 min", "Epic Coder", "India", false),
+            new Post("Vishwanth", "10 min", "Epic Coder", "India", true),
             new Post("Vishwanth", "20 min", "Epic Coder", "India", false),
-            new Post("Nikhil", "59 min", "Epic Coder", "India", true)
+            new Post("Vishwanth", "59 min", "Epic Coder", "India", true)
         ];
 
         return (
@@ -48,28 +60,72 @@ class ProfilePage extends Component {
                             <LeftContent email="mail.mail.com" />
                         </div>
                         <div className="col-6">
-                            <div className="uploadPost row">
+                            <div className="userContent row">
                                 <div className="col">
-                                    <div className="row justify-content-between">
-                                        <div className="col-4">
-                                            <div
-                                                className="post-user-image"
-                                                style={{
-                                                    backgroundImage: `url(${postUserImage})`
-                                                }}
-                                            ></div>
+                                    <div className="row">
+                                        <div className="userName col">
+                                            <h3>Vishwanth</h3>
                                         </div>
-                                        <div className="col-4 align-self-center">
-                                            <div className="post-button">
-                                                <button>Post Update</button>
-                                            </div>
+                                        <div className="userMail col align-self-center">
+                                            <h6>
+                                                <i
+                                                    class="fa fa-envelope"
+                                                    aria-hidden="true"
+                                                ></i>
+                                                &nbsp;&nbsp;&nbsp;venkatvishwanth.s17@iiits.in
+                                            </h6>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="userJob col">
+                                            <h4>Professional Red Hat Hacker</h4>
+                                        </div>
+                                        <div className="userLocation col">
+                                            <h4>
+                                                <i
+                                                    class="fa fa-map-marker"
+                                                    aria-hidden="true"
+                                                ></i>
+                                                &nbsp;&nbsp;India
+                                            </h4>
+                                        </div>
+                                    </div>
+                                    <div className="nav row">
+                                        <div className="col-2">
+                                            <button>
+                                                <i
+                                                    className="fa fa-newspaper-o"
+                                                    aria-hidden="true"
+                                                ></i>
+                                                <h6>Feed</h6>
+                                            </button>
+                                        </div>
+                                        <div className="col-2">
+                                            <button>
+                                                <i
+                                                    className="fa fa-info"
+                                                    aria-hidden="true"
+                                                ></i>
+                                                <h6>Info</h6>
+                                            </button>
+                                        </div>
+                                        <div className="col-2">
+                                            <button>
+                                                <i
+                                                    className="fa fa-newspaper-o"
+                                                    aria-hidden="true"
+                                                ></i>
+                                                <h6>Work</h6>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             {this.postCards(posts)}
                         </div>
-                        <div className="col-3"></div>
+                        <div className="col-3">
+                            <RightContent />
+                        </div>
                     </div>
                 </div>
             </div>

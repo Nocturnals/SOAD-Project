@@ -11,9 +11,7 @@ class Subscriptions extends Component {
             <div class="app-container">
                 <div class="app-header">
                     <a href="/customerView">
-                        <p class="{% if not admin %} active {% endif %}">
-                            CUSTOMER VIEW
-                        </p>
+                        <p>CUSTOMER VIEW</p>
                     </a>
                 </div>
                 <CustomerView products="" />
