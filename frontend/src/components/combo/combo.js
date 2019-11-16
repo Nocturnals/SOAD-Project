@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, Redirect, Route } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -20,10 +20,6 @@ class Navigator {
 
 // Combination of (Home, Organisations, Chats, Profile, etc)...
 class Combo extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     // Generates Navigation Blocks...
     navigators = navBlocks => {
         const { type } = this.props.match.params;
