@@ -19,13 +19,11 @@ function verifyToken(req, res, next) {
         // run the next function
         next();
     } else {
-        res.status(401).json({ message: "Access Denied" });
+        return res.status(401).json({ message: "Access Denied" });
     }
 }
 
 const verifyUserWithToken = async (req, res, next) => {
-    console.log(req.token);
-
     // verifies the given token is correct and gets the user data
     jwt.verify(req.token, process.env.Token_Secret, async (err, authData) => {
         if (err) {
