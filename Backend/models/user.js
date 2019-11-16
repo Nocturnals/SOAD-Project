@@ -1,13 +1,14 @@
-const mongoose  = require('mongoose');
-const otheruserschema = require('./otheruser');
-const othercompetititonschema = require('./Othercompetitions');
+const mongoose = require("mongoose");
+const otheruserschema = require("./Otheruser");
+const othercompetititonschema = require("./Othercompetitions");
 
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
         min: 4,
-        max: 255
+        max: 255,
+        trim: true
     },
     email: {
         type: String,
@@ -19,59 +20,66 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         min: 8,
-        max: 1024
+        max: 1024,
+        trim: true
     },
-    date: {
+    dateJoined: {
         type: Date,
-        default: Date.now,
+        default: Date.now
     },
-    dateofbirth : {
-        type : Date,
-    },
-
-    primaryinterest :{
-        enum : ["cat1","cat2"],
+    dateofbirth: {
+        type: Date
     },
 
-    otherinterest : {
-        enum : ["cat1","cat2"],
+    primaryinterest: {
+        enum: ["cat1", "cat2"],
+        type: String
     },
 
-    lastactive : {
-        type : Date,
+    otherinterest: {
+        enum: ["cat1", "cat2"],
+        type: String
     },
 
-    profileurl :{
-        type : String,
+    lastactive: {
+        type: Date
     },
 
-    coverphotourl : {
-        type :String,
+    profileurl: {
+        type: String,
+        default: "defalutPic"
     },
 
-    profilephotourl : {
-        type :String,
+    coverphotourl: {
+        type: String
     },
 
-    competitionsparticipated : {
-        type : [othercompetititonschema],
+    profilephotourl: {
+        type: String
     },
 
-    competitionsparticipating : {
-        type : [othercompetititonschema],
+    competitionsparticipated: {
+        type: [othercompetititonschema]
     },
 
-    followers : {
-        type : [otheruserschema],
+    competitionsparticipating: {
+        type: [othercompetititonschema]
     },
 
-    following  : {
-        type : [otheruserschema],
+    followers: {
+        type: [otheruserschema]
+    },
+
+    following: {
+        type: [otheruserschema]
+    },
+
+    emailVerified: {
+        type: Boolean,
+        default: false
     }
-
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
-// export { User as UserModel };
-module.exports = User
+module.exports = User;

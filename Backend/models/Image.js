@@ -1,17 +1,14 @@
-const mongoose  = require('mongoose');
+const mongoose = require("mongoose");
 
-const ImageSchema = mongoose.Schema({
+const ImageSchema = new mongoose.Schema({
+    url: {
+        type: String,
+        required: true
+    },
 
-        url : {
-            type : String,
-            required :true
-        },
-        
-        name : {
-            type : String,
-        }
-})
-
-
+    name: {
+        type: String
+    }
+});
 
 module.exports = ImageSchema;
