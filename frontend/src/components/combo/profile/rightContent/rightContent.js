@@ -36,7 +36,13 @@ class RightContent extends Component {
                     <div className="userDetails row">
                         <div className="col">
                             <h5>{fSComp.username}</h5>
-                            <h6>{fSComp.job}</h6>
+                            <h6>
+                                <i
+                                    class="fa fa-bookmark"
+                                    aria-hidden="true"
+                                ></i>
+                                &nbsp;&nbsp;{fSComp.job}
+                            </h6>
                         </div>
                     </div>
                     <div className="folIgn row">
@@ -70,8 +76,15 @@ class RightContent extends Component {
                     <div className="uploadPostBtn row">
                         <button>Post Update</button>
                     </div>
-                    <div className="friend-suggestions row">
-                        {this.friendSuggestionsComp(friendSuggestions)}
+                    <div className="friend-suggestions-cards row">
+                        <div className="col">
+                            <div className="suggestions-header row">
+                                <h6>Suggestions</h6>
+                            </div>
+                            <div className="friend-suggestions row">
+                                {this.friendSuggestionsComp(friendSuggestions)}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
