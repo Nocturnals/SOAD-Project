@@ -25,7 +25,9 @@ const {
     editfaqValidation,
     editresultsValidation,
     addcommentValidation,
-    editcommentValidation
+    editcommentValidation,
+    commentlikeValidation,
+    commentreplyValidation
 } = require("./compValidation");
 
 const router = express.Router();
@@ -58,13 +60,13 @@ router.post(
             const comp = await CompetitionsModel.findById(req.body._id);
 
             comp.participants[comp.noofparticipants] = {
-                id: req.loggedUser._id,
-                username: req.loggedUser.username,
+                _id: req.loggedUser._id,
+                username: req.loggedUser.name,
                 profileurl: req.loggedUser.profileurl
             };
 
             comp.noofparticipants = comp.noofparticipants + 1;
-
+            comp.save();
             console.log(comp.noofparticipants);
             return res.json({ message: "sucessfully registered" });
         } catch (error) {
@@ -372,7 +374,7 @@ router.patch(
                 answer: req.body.answer
             });
             if (!comp.faqs) {
-                // comp.faqs = [];
+                comp.faqs = [];
             }
             const faqlength = comp.faqs.length;
             comp.faqs[faqlength] = faq;
@@ -385,93 +387,8 @@ router.patch(
     }
 );
 
-// router.patch(
-//     "/edit/:compid/comments",
-//     verifyToken,
-//     verifyUserWithToken,
-//     UpdateCompetition,
-//     async (req, res, next) => {
-//         try {
-//             // const comp = await CompetitionsModel.findById(req.body._id);
-//             const comp = req.comp;
-
-//             comp.comments = req.body.comments;
-//             await comp.save();
-//             return res.json(comp);
-//         } catch (error) {
-//             console.log(error);
-//             return res.json({ message: " failed  to update competitiion" });
-//         }
-//     }
-// );
-
-// router.patch(
-//     "/edit/:compid/top10",
-//     verifyToken,
-//     verifyUserWithToken,
-//     UpdateCompetition,
-//     async (req, res, next) => {
-//         try {
-//             // const comp = await CompetitionsModel.findById(req.body._id);
-//             const comp = req.comp;
-//             const top10 = new resultsModel({
-//                 id: req.body.userid,
-//                 name: req.body.name,
-//                 score: req.body.score,
-//                 time: req.body.time
-//             });
-//             if (!comp.results) {
-//                 // comp.faqs = [];
-//             }
-//             const top10length = comp.top10.length;
-//             comp.top10[top10length] = top10;
-//             await comp.save();
-//             await comp.save();
-//             return res.json(comp);
-//         } catch (error) {
-//             console.log(error);
-//             return res.json({ message: " failed  to update competitiion" });
-//         }
-//     }
-// );
-
 router.patch(
-    "/edit/:compid/results",
-    verifyToken,
-    verifyUserWithToken,
-    UpdateCompetition,
-    async (req, res, next) => {
-        const validatedData = editresultsValidation(req.body);
-        if (validatedData.error)
-            return res
-                .status(400)
-                .json({ message: validatedData.error.details[0].message });
-
-        try {
-            // const comp = await CompetitionsModel.findById(req.body._id);
-            const comp = req.comp;
-            const results = new resultsModel({
-                id: req.body.id,
-                name: req.body.name,
-                score: req.body.score,
-                time: req.body.time
-            });
-            if (!comp.results) {
-                // comp.faqs = [];
-            }
-            const resultslength = comp.results.length;
-            comp.results[resultslength] = results;
-            await comp.save();
-            return res.json(comp);
-        } catch (error) {
-            console.log(error);
-            return res.json({ message: " failed  to update competitiion" });
-        }
-    }
-);
-
-router.patch(
-    "/edit/:id/addcomment",
+    "/edit/:compid/addcomment",
     verifyToken,
     verifyUserWithToken,
     UpdateCompetition,
@@ -485,39 +402,44 @@ router.patch(
         try {
             // const comp = await CompetitionsModel.findById(req.body._id);
             const comp = req.comp;
+            // console.log(comp);
 
             const otheruser = new OtheruserModel({
                 _id: req.loggedUser._id,
-                username: req.loggedUser.username,
+                username: req.loggedUser.name,
                 profileurl: req.loggedUser.profileurl
             });
+
+            if (!comp.comments) {
+                comp.comments = [];
+            }
 
             const comment = new CommentsModel({
                 owner: otheruser,
                 message: req.body.message,
-                likes: req.body.likes
-                // *************************** leiked by>*********************
-                // likedby: req.body.likedby
+                likedby: []
             });
 
-            const commentslength = comp.comments.length;
+            // const commentslength = comp.comments.length;
+            console.log(comp.comments);
+            // comp.comments[commentslength] = comment;
+            comp.comments.push(comment);
+            // await comp.comments[0].save();
+            const updatedcomp = await comp.save();
 
-            comp.comments[commentslength] = comment;
-
-            await comp.save();
-            return res.json(comp);
+            return res.json(updatedcomp);
         } catch (error) {
             console.log(error);
-            return res.json({ message: " failed  to update competitiion" });
+            return res.json({ message: " failed  to update comment" });
         }
     }
 );
 
 router.patch(
-    "/edit/:id/editcomment",
+    "/edit/:compid/editcomment",
     verifyToken,
     verifyUserWithToken,
-    UpdateCompetition,
+
     async (req, res, next) => {
         const validatedData = editcommentValidation(req.body);
         if (validatedData.error)
@@ -526,15 +448,33 @@ router.patch(
                 .json({ message: validatedData.error.details[0].message });
 
         try {
+            const comp = await CompetitionsModel.findById(req.params.compid);
+            if (!comp) {
+                return res
+                    .status(400)
+                    .json({ message: "competition not found" });
+            }
+            req.comp = comp;
             // const comp = await CompetitionsModel.findById(req.body._id);
-            const comp = req.comp;
+            // const comp = req.comp;
+            var commentIndex;
+            comp.comments.forEach((i, index) => {
+                if (
+                    JSON.stringify(req.body.commentid) ==
+                        JSON.stringify(i._id) &&
+                    JSON.stringify(req.loggedUser._id) ==
+                        JSON.stringify(i.owner._id)
+                ) {
+                    commentIndex = index;
+                }
+            });
 
             var flag = false;
             comp.hosts.forEach(i => {
                 if (
                     JSON.stringify(i._id) ==
                         JSON.stringify(req.loggedUser._id) ||
-                    JSON.stringify(comp.comments.owner._id) ==
+                    JSON.stringify(comp.comments[commentIndex].owner._id) ==
                         JSON.stringify(req.loggedUser._id)
                 ) {
                     flag = true;
@@ -546,10 +486,7 @@ router.patch(
             });
 
             if (flag) {
-                const comment = await CompetitionsModel.findById(
-                    req.body.commentid
-                );
-                comment.message = req.body.message;
+                comp.comments[commentIndex].message = req.body.message;
             } else {
                 return res
                     .status(401)
@@ -559,13 +496,13 @@ router.patch(
             return res.json(comp);
         } catch (error) {
             console.log(error);
-            return res.json({ message: " failed  to update competitiion" });
+            return res.json({ message: " failed  to update comment" });
         }
     }
 );
 
 router.patch(
-    "/edit/:id/deleteallcomments",
+    "/edit/:compid/deleteallcomments",
     verifyToken,
     verifyUserWithToken,
     UpdateCompetition,
@@ -574,37 +511,19 @@ router.patch(
             // const comp = await CompetitionsModel.findById(req.body._id);
             const comp = req.comp;
 
-            var flag = false;
-            comp.hosts.forEach(i => {
-                if (
-                    JSON.stringify(i._id) == JSON.stringify(req.loggedUser._id)
-                ) {
-                    flag = true;
-                } else {
-                    return res
-                        .status(401)
-                        .json({ message: "You cannot delete the comment" });
-                }
-            });
+            comp.comments.splice(0, comp.comments.length);
 
-            if (flag) {
-                comp.comments = [];
-            } else {
-                return res
-                    .status(401)
-                    .json({ message: "You cannot delete the comment" });
-            }
             await comp.save();
             return res.json(comp);
         } catch (error) {
             console.log(error);
-            return res.json({ message: " failed  to update competitiion" });
+            return res.json({ message: " failed  to delete all comments" });
         }
     }
 );
 
 router.patch(
-    "/edit/:id/deletecomment",
+    "/edit/:compid/deletecomment",
     verifyToken,
     verifyUserWithToken,
     UpdateCompetition,
@@ -612,26 +531,38 @@ router.patch(
         try {
             // const comp = await CompetitionsModel.findById(req.body._id);
             const comp = req.comp;
+
+            var commentIndex;
+            comp.comments.forEach((i, index) => {
+                if (
+                    JSON.stringify(req.body.commentid) ==
+                        JSON.stringify(i._id) &&
+                    JSON.stringify(req.loggedUser._id) ==
+                        JSON.stringify(i.owner._id)
+                ) {
+                    commentIndex = index;
+                }
+            });
 
             var flag = false;
             comp.hosts.forEach(i => {
                 if (
                     JSON.stringify(i._id) ==
                         JSON.stringify(req.loggedUser._id) ||
-                    JSON.stringify(comp.comments.owner._id) ==
+                    JSON.stringify(comp.comments[commentIndex].owner._id) ==
                         JSON.stringify(req.loggedUser._id)
                 ) {
                     flag = true;
                 } else {
                     return res
                         .status(401)
-                        .json({ message: "You cannot delete all comments" });
+                        .json({ message: "You cannot edit the comment" });
                 }
             });
 
             if (flag) {
                 // ***************************************************************************************
-                comp.comments = [];
+                comp.comments.splice(commentIndex, 1);
             } else {
                 return res
                     .status(401)
@@ -673,16 +604,16 @@ router.post(
             });
 
             if (ishost) {
-                const user = UserModel.findById(req.body.userid);
+                const user = await UserModel.findById(req.body.userid);
 
                 const noofhosts = comp.hosts.length;
 
                 comp.hosts[noofhosts] = {
-                    id: user._id,
-                    username: user.username,
+                    _id: user._id,
+                    username: user.name,
                     profileurl: user.profileurl
                 };
-
+                comp.save();
                 res.send(comp);
             } else {
                 console.log(ishost);
@@ -710,6 +641,7 @@ router.get(
                 .json({ message: validatedData.error.details[0].message });
         try {
             var ishost = false;
+            console.log("eaflihrewth");
             const comp = await CompetitionsModel.findById(req.body._id);
 
             comp.hosts.forEach(i => {
@@ -717,18 +649,17 @@ router.get(
                     ishost = true;
                 }
             });
-
+            console.log(comp);
             if (ishost) {
                 const user = UserModel.findById(req.body.userid);
                 // *******************************************checkthis**************************************************
                 const results = new resultsModel({
-                    id: req.body.id,
-                    name: req.body.name,
-                    score: req.body.score,
-                    time: req.body.time
+                    _id: user._id,
+                    name: user.name,
+                    score: req.body.score
                 });
                 if (!comp.results) {
-                    // comp.faqs = [];
+                    comp.results = [];
                 }
                 const resultslength = comp.results.length;
                 comp.results[resultslength] = results;
@@ -738,9 +669,93 @@ router.get(
                 return res.json({ message: "Access denied" });
             }
         } catch (error) {
-            return express
-                .status(500)
-                .json({ message: "internal server error" });
+            console.log(error);
+            return res.status(500).json({ message: "internal server error" });
+        }
+    }
+);
+
+router.post(
+    "/comment/like",
+    verifyToken,
+    verifyUserWithToken,
+    async (req, res, next) => {
+        const validatedData = commentlikeValidation(req.body);
+        if (validatedData.error)
+            return res
+                .status(400)
+                .json({ message: validatedData.error.details[0].message });
+        try {
+            const comp = await CompetitionsModel.findById(req.body._id);
+            req.comp = comp;
+            var commentIndex = -1;
+            comp.comments.forEach((i, index) => {
+                if (
+                    JSON.stringify(req.body.commentid) == JSON.stringify(i._id)
+                ) {
+                    commentIndex = index;
+                }
+            });
+
+            const user = new OtheruserModel({
+                _id: req.loggedUser._id,
+                username: req.loggedUser.name,
+                profileurl: req.loggedUser.profileurl
+            });
+
+            comp.comments[commentIndex].likedby.push(user);
+            comp.comments[commentIndex].likes =
+                comp.comments[commentIndex].likes + 1;
+            await comp.save({ safe: false }, (err, doc) => {
+                console.log(doc);
+                return res.send(comp);
+            });
+        } catch (error) {
+            console.log(error);
+            return res.json({ message: " Access denied" });
+        }
+    }
+);
+
+router.post(
+    "/comment/reply",
+    verifyToken,
+    verifyUserWithToken,
+    async (req, res, next) => {
+        const validatedData = commentreplyValidation(req.body);
+        if (validatedData.error)
+            return res
+                .status(400)
+                .json({ message: validatedData.error.details[0].message });
+        try {
+            const comp = await CompetitionsModel.findById(req.body._id);
+
+            const user = new OtheruserModel({
+                _id: req.loggedUser._id,
+                username: req.loggedUser.name,
+                profileurl: req.loggedUser.profileurl
+            });
+            var commentIndex = -1;
+            comp.comments.forEach((i, index) => {
+                if (
+                    JSON.stringify(req.body.commentid) == JSON.stringify(i._id)
+                ) {
+                    commentIndex = index;
+                }
+            });
+
+            const reply = new ReplyModel({
+                owner: user,
+                message: req.body.message,
+                likedby: []
+            });
+
+            comp.comments[commentIndex].replies.push(reply);
+            comp.save();
+            res.send(comp);
+        } catch (error) {
+            console.log(error);
+            return res.json({ message: " Access denied" });
         }
     }
 );
