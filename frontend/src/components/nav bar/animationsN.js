@@ -2,7 +2,6 @@ window.addEventListener("resize", () => {
     console.log(window.innerWidth);
 });
 
-var scrollHeight = 0;
 document.body.addEventListener("scroll", () => {
     var nav = document.getElementById("nav-bar");
     if (nav != null) {
@@ -15,17 +14,10 @@ document.body.addEventListener("scroll", () => {
         }
         if (document.body.scrollTop >= 80) {
             nav.style.minHeight = "60px";
-            // if (scrollHeight < document.body.scrollTop - 30) {
-            //     nav.style.top = "-80px";
-            // }
         }
         if (document.body.scrollTop <= 30) {
             nav.style.minHeight = "120px";
         }
-        // if (scrollHeight > document.body.scrollTop) {
-        //     nav.style.top = "0px";
-        // }
-        scrollHeight = document.body.scrollTop;
     }
 });
 

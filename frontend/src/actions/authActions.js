@@ -1,12 +1,13 @@
 import axios from "axios";
 
-import { userAuthConst, alertConstants } from "../constants";
-import { history } from "../helpers";
+import { userAuthConst } from "../constants";
 import setAuthTokenHeader from "../setAuthTokenHeader";
 import alertActions from "./alertActions";
 
+// for logging into account
 export function login(email, password) {
     return dispatch => {
+        // change the loading state to true
         dispatch(requestAction({ email }));
 
         const user = {
@@ -30,25 +31,8 @@ export function login(email, password) {
             });
     };
 
-    function handleResponse(response) {
-        return response.text().then(text => {
-            const data = text && JSON.parse(text);
-            if (!response.ok) {
-                if (response.status === 401) {
-                    logout();
-                    // location.reload(true);
-                }
-
-                const error = (data && data.message) || response.statusText;
-                return Promise.reject(error);
-            }
-
-            return data;
-        });
-    }
-
     function requestAction(email) {
-        return { type: userAuthConst.LOGIN_REQUEST, user: email };
+        return { type: userAuthConst.LOGIN_REQUEST };
     }
     function successAction(user) {
         return { type: userAuthConst.LOGIN_SUCCESS, user: user };
@@ -56,6 +40,16 @@ export function login(email, password) {
     function failureAction(error) {
         return { type: userAuthConst.LOGIN_FAILURE };
     }
+}
+
+// for registering new user
+export function register(email, username, dateofbirth, password) {
+    return dispatch => {
+        // change the loading state to true
+        dispatch({
+            type: userAuthConst.REGISTER_REQUEST
+        });
+    };
 }
 
 export function getUserWithToken(token) {
