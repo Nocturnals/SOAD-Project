@@ -78,6 +78,15 @@ const postCommentUnlikeValidation = data => {
     return Joi.validate(data, schema);
   };
 
+  const deletePostValidation = data => {
+    const schema = {
+      postId: Joi.string()
+        .min(4)
+        .required(),
+    };
+  
+    return Joi.validate(data, schema);
+  };
 
 
 module.exports = {
@@ -87,4 +96,5 @@ module.exports = {
     createCommentValidation,
     postCommentLikeValidation,
     postCommentUnlikeValidation,
+    deletePostValidation,
 };

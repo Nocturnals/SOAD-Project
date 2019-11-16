@@ -4,7 +4,7 @@ const {
     like,
     unlike,
     commentPost,
-    likeComment,
+    deletePost,
 } = require('./postControls');
 
 const{
@@ -35,6 +35,9 @@ router.get("/allposts", (req, res) => {
 // post routes
 router.post("/createpost", verifyToken, verifyUserWithToken, createPost);
 
+router.delete("/deletepost", verifyToken, verifyUserWithToken, deletePost);
+
+
 // like unlike
 router.put('/like', verifyToken, verifyUserWithToken, like);
 
@@ -42,10 +45,12 @@ router.put('/unlike', verifyToken, verifyUserWithToken, unlike);
 
 // comments
 router.post('/comment',  verifyToken, verifyUserWithToken, commentPost);
-
-router.put('/comment/like',  verifyToken, verifyUserWithToken, likeComment);
 /*
-router.put('/post/comment/unlike',  verifyToken, verifyUserWithToken, unlikeComment);
+router.put('/comment/like',  verifyToken, verifyUserWithToken, likeComment);
+
+router.put('/comment/unlike',  verifyToken, verifyUserWithToken, unlikeComment);
+*/
+/*
 router.post('/post/comment/reply',  verifyToken, verifyUserWithToken, replyComment);
 
 */
