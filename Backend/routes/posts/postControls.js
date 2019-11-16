@@ -8,7 +8,7 @@ const {
     postCommentUnlikeValidation,
 } = require('./postValidation');
 
-const {commentsmodel, commentschema} = require("../../models/Comments");
+const Comment = require("../../models/Comments");
 /*
 const OtherUser = require('../../models/Otheruser');
 const User = require('../../models/user');
@@ -190,33 +190,23 @@ exports.commentPost = async (req, res, next) => {
             .status(400)
             .json({ message: validatedData.error.details[0].message });
     
-    const user = req.loggedUser;
     console.log(req.body)
 
-    
-        console.log(user);
-
-        const comment = new commentschema(
+        const comment = new Comment(
             {
                 message: req.body.comment,
                 owner: [
                     {
-                        _id: user._id,
-                        username: user.name,
-                        profileurl: user.profileurl || "random string"
+                        _id: req.loggedUser._id,
+                        username: req.loggedUser.name,
+                        profileurl: req.loggedUser.profileurl || "random string"
                     }
                 ],
             }
         );
-
+        
         console.log(comment);
-    
-        try {
-            const savedcomment = await comment.save();
-            res.json(savedcomment);
-        } catch (err) {
-            res.status(500).json({ message: err });
-        }
+        
 
     try {
         const post =  await Post.findById(
@@ -225,21 +215,31 @@ exports.commentPost = async (req, res, next) => {
             }
         )
 
-        console.log(post._id);
+        const uid = req.loggedUser._id;
 
+        var removeIndex = post.comments.map(function(item) { return item.owner[0]._id; }).indexOf(uid);
 
-
+        if (removeIndex == -1)
+        {
+            post.comments.push(comment);
         
-    
+            try {
+                const savedpost = await post.save();
+                res.json(savedpost);
+            } catch (err) {
+                res.status(500).json({ message: err });
+            }
+        }
+        else{
+            post.comments[removeIndex].message = req.body.comment;
         
-    
-        post.comments.push(comment);
-        
-        try {
-            const savedpost = await post.save();
-            res.json(savedpost);
-        } catch (err) {
-            res.status(500).json({ message: err });
+            try {
+                const savedpost = await post.save();
+                res.json(savedpost);
+            } catch (err) {
+                res.status(500).json({ message: err });
+            }
+            console.log("You've already commented to this post");
         }
 
         return res.json({ message: "Commented successfully" });
