@@ -67,7 +67,7 @@ app.use("api/posts", require("./routes/posts/post"));
 
 // Route for Subscriptions
 
-app.use("api/sunscription", require("./routes/subscription/stripefunctions"));
+app.use("api/subscription", require("./routes/subscription/stripefunctions"));
 
 if (process.env.Node_Env === "production") {
     // for loading the static frontend app
