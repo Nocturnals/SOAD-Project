@@ -51,7 +51,18 @@ const PostSchema = new mongoose.Schema({
 
     imageurls: {
         type: [imageschema]
+    },
+
+    isPrivate: {
+        type: Boolean,
+        required: true
+    },
+
+    description: {
+        type : String,
+        required : true,
     }
+
 });
 
 module.exports = mongoose.model("Posts", PostSchema);

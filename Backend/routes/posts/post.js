@@ -6,7 +6,9 @@ const {
     commentPost,
     deletePost,
     deleteAllComments,
-    deleteComment,    
+    deleteComment,   
+    likeComment,
+    unlikeComment,
 } = require('./postControls');
 
 const{
@@ -32,7 +34,8 @@ router.get("/allposts", (req, res) => {
     return res.status(200).json({ posts });
 });
 
-
+// get posts
+//router.get("/getposts", verifyToken, verifyUserWithToken, getRandomPosts);
 
 // post routes
 router.post("/createpost", verifyToken, verifyUserWithToken, createPost);
@@ -52,10 +55,11 @@ router.put('/unlike', verifyToken, verifyUserWithToken, unlike);
 
 // comments
 router.post('/comment',  verifyToken, verifyUserWithToken, commentPost);
-/*
+
 router.put('/comment/like',  verifyToken, verifyUserWithToken, likeComment);
 
 router.put('/comment/unlike',  verifyToken, verifyUserWithToken, unlikeComment);
+/*
 */
 /*
 router.post('/post/comment/reply',  verifyToken, verifyUserWithToken, replyComment);

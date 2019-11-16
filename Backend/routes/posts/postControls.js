@@ -11,6 +11,7 @@ const {
     editPostValidation,
     deleteCommentValidation,
 } = require('./postValidation');
+const _ = require("lodash"); // for modifing the array contents
 
 const { ReplyModel, CommentsModel } = require("../../models/Comments");/*
 const OtherUser = require('../../models/Otheruser');
@@ -21,7 +22,6 @@ const fs = require('fs');
 const _ = require('lodash');
 const auth = require('../auth/index');
 */
-
 
 
 
@@ -45,6 +45,8 @@ exports.createPost = async (req, res, next) => {
             {
                 title: req.body.title,
                 content:req.body.content,
+                description:req.body.description,
+                isPrivate:req.body.isPrivate,
                 owner: [
                     {
                         _id: user._id,
@@ -466,7 +468,7 @@ exports.editPost = async (req, res, next) => {
 };
 
 
-/*
+
 exports.likeComment = async (req, res, next) => {
     const validatedData = postCommentLikeValidation(req.body);
     
@@ -478,9 +480,10 @@ exports.likeComment = async (req, res, next) => {
 
     console.log(req.body);
     try {
-        const user = req.loggedUser;
+        const userid = req.loggedUser._id;
         const commentId = req.body.commentId;
         const postId = req.body.postId;
+        var flag = false;
         
         
         const post =  await Post.findById(
@@ -490,40 +493,62 @@ exports.likeComment = async (req, res, next) => {
         );
 
         var updateIndex = post.comments.map(function(item) { return item._id; }).indexOf(commentId);
+        const test = post.comments[updateIndex];
+        console.log(userid);
+        console.log(test.likedby[0]);
 
-        let likeduser = {
-            _id: user._id,
-            username: user.name,
-            profileurl: user.profileurl
-        };
-
-        post.comments[updateIndex].likes = post.comments[updateIndex].likes + 1;
+        var removeIndex = test.likedby.map(function(item) { return item._id; }).indexOf(userid);
 
         
-        var comment = Comment(
-            {
-                _id:post.comments[updateIndex]._id,
-                likes:post.comments[updateIndex].likes,
-                likedby:post.comments[updateIndex].likedby.push(likeduser),
-                owner:post.comments[updateIndex].owner,
-                message:post.comments[updateIndex].message,
-                replies:post.comments[updateIndex].replies,
-                date:post.comments[updateIndex].date,                
-            }
-        );
-        
-       
 
-        try {
-            const savedpost = await post.save();
-            console.log(savedpost);
-            res.json(savedpost);
-                     
-        } catch (err) {
-            res.status(500).json({ message: err });
+
+        if(removeIndex == -1)
+        {
+            const user = req.loggedUser;
+            let likeduser = {
+                _id: user._id,
+                username: user.name,
+                profileurl: user.profileurl
+            };
+//            console.log(post.comments[updateIndex]);
+    
+            const com =  post.comments[updateIndex];
+    
+            
+    
+            com.likes = com.likes + 1;
+//            console.log(com.likedby);
+            com.likedby.push(likeduser);
+//            console.log(com.likedby);
+            
+            var comment = new CommentsModel(
+                {
+                    _id:com._id,
+                    likes:com.likes,
+                    likedby:com.likedby,
+                    owner:com.owner,
+                    message:com.message,
+                    replies:com.replies,
+                    date:com.date,                
+                }
+            );
+            console.log("New Comment comes here ::::");
+            console.log(comment);
+            post.comments.splice(updateIndex,1);
+            post.comments.push(comment);
+            
+           
+    
+            
+                const savedpost = await post.save();
+    //            console.log(savedpost);
+                
+            return res.json(savedpost);
         }
-
-        return res.json({ message: "Comment liked successfully" });
+        else
+        {
+            return res.status(500).json({ message: "You've already liked !!" });
+        }
     } catch (error) {
         return res.status(500).json({ message: "Post not found !!" });
     } 
@@ -553,50 +578,49 @@ exports.unlikeComment = async (req, res, next) => {
                 _id: postId
             }
         );
-        console.log("______________________________________________________");
-
-        console.log(post.comments);
-        console.log("______________________________________________________");
-
         var updateIndex = post.comments.map(function(item) { return item._id; }).indexOf(commentId);
-        console.log(updateIndex);
 
-        const comment = post.comments[updateIndex];
-        console.log("______________________________________________________");
+        const com = post.comments[updateIndex];
+
+
+        var removeIndex = com.likedby.map(function(item) { return item._id; }).indexOf(userid);
+
+
+        com.likedby.splice(removeIndex,1);
+
+        com.likes = com.likes - 1;
+
+        var comment = new CommentsModel(
+            {
+                _id:com._id,
+                likes:com.likes,
+                likedby:com.likedby,
+                owner:com.owner,
+                message:com.message,
+                replies:com.replies,
+                date:com.date,                
+            }
+        );
+
+        
+
+
         console.log(comment);
-        console.log("______________________________________________________");
-        
-        console.log(comment.likes);
-        console.log(comment.likedby);
+        post.comments.splice(updateIndex,1);
+        post.comments.push(comment);
 
-        
-
-        var removeIndex = comment.likedby.map(function(item) { return item._id; }).indexOf(userid);
-
-        comment.likedby.splice(removeIndex,1);
-        console.log("______________________________________________________");
-
-        console.log(comment.likes);
-        comment.likes = comment.likes - 1;
-        console.log("-----");
-        console.log(comment.likes);
-        console.log("______________________________________________________");
-
-        post.comments[updateIndex] = comment;
-
-        try {
+       
             const savedpost = await post.save();
             console.log(savedpost);
-        } catch (err) {
-            res.status(500).json({ message: err });
-        }
+        
 
-        return res.json({ message: "Comment unliked successfully" });
+        return res.json(savedpost);
     } catch (error) {
         return res.status(500).json({ message: "Post not found !!" });
     } 
 
 };
+/*
 */
 /*
 exports.replyComment = (req, res) => {

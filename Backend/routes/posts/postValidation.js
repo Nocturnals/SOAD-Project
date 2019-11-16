@@ -8,7 +8,11 @@ const createPostValidation = data => {
       .required(),
     content: Joi.string()
       .min(4)
-      .max(25555)
+      .required(),
+    description: Joi.string()
+      .min(4)
+      .required(),
+    isPrivate: Joi.boolean()
       .required(),
   };
 
