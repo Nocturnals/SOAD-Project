@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const otheruserschema = require("./Otheruser");
-const {commentsmodel, commentschema} = require("./Comments");
+const { commentsmodel, commentschema } = require("./Comments");
 
 const FaqSchema = new mongoose.Schema({
     question: {
@@ -35,26 +35,29 @@ const ResultSchema = new mongoose.Schema({
 });
 
 const CompetitionsSchema = new mongoose.Schema({
-
-    title:{
-        type : String,
-        required: true,
+    title: {
+        type: String,
+        required: true
     },
 
-    shortdescription:{
-        type :String,
-        required :true,
+    shortdescription: {
+        type: String,
+        required: true
     },
 
-    fulldescription:{
-        type :String,
-        required :true,
+    fulldescription: {
+        type: String,
+        required: true
     },
 
+    category: {
+        type: String,
+        required: true
+    },
 
-    prize :{
-        type :String,
-        required :true,
+    prize: {
+        type: String,
+        required: true
     },
 
     hosts: {
@@ -82,9 +85,9 @@ const CompetitionsSchema = new mongoose.Schema({
         type: [otheruserschema]
     },
 
-    rules :{
-        type : String,
-        required :true
+    rules: {
+        type: String,
+        required: true
     },
 
     faqs: {
@@ -97,7 +100,13 @@ const CompetitionsSchema = new mongoose.Schema({
 
     top10: {
         type: [ResultSchema]
+    },
+
+    results: {
+        type: [ResultSchema]
     }
 });
 
 module.exports = mongoose.model("Competitions", CompetitionsSchema);
+module.exports.faqModel = mongoose.model("FaqModel", FaqSchema);
+module.exports.resultsModel = mongoose.model("ResultsModel", ResultSchema);
