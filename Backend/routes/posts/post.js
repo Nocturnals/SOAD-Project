@@ -5,6 +5,8 @@ const {
     unlike,
     commentPost,
     deletePost,
+    deleteAllComments,
+    deleteComment,    
 } = require('./postControls');
 
 const{
@@ -36,6 +38,11 @@ router.get("/allposts", (req, res) => {
 router.post("/createpost", verifyToken, verifyUserWithToken, createPost);
 
 router.delete("/deletepost", verifyToken, verifyUserWithToken, deletePost);
+
+router.patch("/deletecomment", verifyToken, verifyUserWithToken, deleteComment);
+
+
+router.patch("/deleteallcomments", verifyToken, verifyUserWithToken, deleteAllComments);
 
 
 // like unlike

@@ -7,10 +7,12 @@ const {
     postCommentLikeValidation,
     postCommentUnlikeValidation,
     deletePostValidation,
+    deleteAllCommentsValidation,
+    editPostValidation,
+    deleteCommentValidation,
 } = require('./postValidation');
 
-const Comment = require("../../models/Comments");
-/*
+const { ReplyModel, CommentsModel } = require("../../models/Comments");/*
 const OtherUser = require('../../models/Otheruser');
 const User = require('../../models/user');
 const Comment = require('../../models/Comments')
@@ -215,7 +217,7 @@ exports.commentPost = async (req, res, next) => {
     
     console.log(req.body)
 
-        const comment = new Comment(
+        const comment = new CommentsModel(
             {
                 message: req.body.comment,
                 owner: [
@@ -255,6 +257,65 @@ exports.commentPost = async (req, res, next) => {
         
 
         
+    } catch (error) {
+        return res.status(500).json({ message: "Post not found !!" });
+    }
+
+};
+
+
+
+exports.deleteComment = async (req, res, next) => {
+    const validatedData = deleteCommentValidation(req.body);
+    
+    if (validatedData.error)
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
+    
+    console.log(req.body)
+
+        
+        
+        
+        
+
+    try {
+        const post =  await Post.findById(
+            {
+                _id: req.body.postId
+            }
+        )
+        const commentId = req.body.commentId;
+
+        const uid = req.loggedUser._id;
+        var removeIndex = post.comments.map(function(item) { return item._id; }).indexOf(commentId);
+        const owner = post.comments[removeIndex].owner[0]._id;
+        const postowner = post.owner[0]._id;
+
+        var flag = false;
+            if((JSON.stringify(owner) == JSON.stringify(uid)) || (JSON.stringify(postowner) == JSON.stringify(uid)))
+            {
+                flag = true;
+            } else {
+                return res
+                    .status(401)
+                    .json({ message: "You cannot delete the comments" });
+            }
+
+console.log(flag);
+        
+
+        
+            if (flag) {
+                post.comments.splice(removeIndex,1);
+            } else {
+                return res
+                    .status(401)
+                    .json({ message: "You cannot delete the comment" });
+            }
+            await post.save();
+            return res.json(post);
     } catch (error) {
         return res.status(500).json({ message: "Post not found !!" });
     }
@@ -311,6 +372,104 @@ exports.deletePost = async (req, res, next) => {
 
 };
 
+
+
+
+exports.deleteAllComments = async (req, res, next) => {
+    const validatedData = deleteAllCommentsValidation(req.body);
+    
+    if (validatedData.error)
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
+    
+    console.log(req.body)
+        try {
+            
+            const post =  await Post.findById(
+                {
+                    _id: req.body.postId
+                }
+            );
+            const uid = req.loggedUser._id;
+            const owner = post.owner[0]._id;
+
+            var flag = false;
+            if(JSON.stringify(owner) == JSON.stringify(uid))
+            {
+                flag = true;
+            } else {
+                return res
+                    .status(401)
+                    .json({ message: "You cannot delete the comments" });
+            }
+
+
+            
+
+            if (flag) {
+                post.comments = post.comments.splice(0,post.comments.length);
+            } else {
+                return res
+                    .status(401)
+                    .json({ message: "You cannot delete the comment" });
+            }
+            await post.save();
+            return res.json(post);
+        } catch (error) {
+            console.log(error);
+            return res.json({ message: " Failed  to update Post" });
+        }
+};
+
+
+exports.editPost = async (req, res, next) => {
+    const validatedData = editPostValidation(req.body);
+    
+    if (validatedData.error)
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
+    
+    console.log(req.body)
+        try {
+            
+            const post =  await Post.findById(
+                {
+                    _id: req.body.postId
+                }
+            );
+            const uid = req.loggedUser._id;
+            const owner = post.owner[0]._id;
+
+            var flag = false;
+            if(JSON.stringify(owner) == JSON.stringify(uid))
+            {
+                flag = true;
+            } else {
+                return res
+                    .status(401)
+                    .json({ message: "You cannot edit the post" });
+            }
+
+
+            
+
+            if (flag) {
+                post.title = req.body.title;
+                post.content = req.body.content;
+            } else {
+                return res
+                    .status(401)
+                    .json({ message: "You cannot edit the post" });
+            }
+            await post.save();
+            return res.json(post);
+        } catch (error) {
+            console.log(error);
+            return res.json({ message: " Failed  to update Post" });
+        }
+};
 
 
 /*

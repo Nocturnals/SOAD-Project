@@ -15,6 +15,21 @@ const createPostValidation = data => {
   return Joi.validate(data, schema);
 };
 
+const editPostValidation = data => {
+  const schema = {
+    title: Joi.string()
+      .min(4)
+      .max(255)
+      .required(),
+    content: Joi.string()
+      .min(4)
+      .max(25555)
+      .required(),
+  };
+
+  return Joi.validate(data, schema);
+};
+
 const postLikeValidation = data => {
     const schema = {
       postId: Joi.string()
@@ -45,6 +60,19 @@ const createCommentValidation = data => {
       comment: Joi.string()
         .min(4)
         .max(25555)
+        .required(),
+    };
+  
+    return Joi.validate(data, schema);
+  };
+
+  const deleteCommentValidation = data => {
+    const schema = {
+      postId: Joi.string()
+        .min(4)
+        .required(),
+        commentId: Joi.string()
+        .min(4)
         .required(),
     };
   
@@ -88,6 +116,16 @@ const postCommentUnlikeValidation = data => {
     return Joi.validate(data, schema);
   };
 
+  const deleteAllCommentsValidation = data => {
+    const schema = {
+      postId: Joi.string()
+        .min(4)
+        .required()
+    };
+  
+    return Joi.validate(data, schema);
+  };
+  
 
 module.exports = {
     createPostValidation,
@@ -97,4 +135,7 @@ module.exports = {
     postCommentLikeValidation,
     postCommentUnlikeValidation,
     deletePostValidation,
+    deleteAllCommentsValidation,
+    editPostValidation,
+    deleteCommentValidation,
 };
