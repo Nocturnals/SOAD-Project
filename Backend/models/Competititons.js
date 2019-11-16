@@ -30,7 +30,8 @@ const ResultSchema = new mongoose.Schema({
     },
 
     time: {
-        type: Date
+        type: Date,
+        default: Date.now()
     }
 });
 
