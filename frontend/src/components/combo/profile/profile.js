@@ -42,6 +42,7 @@ class ProfilePage extends Component {
 
     render() {
         const postUserImage = require("../../media/images/categories/photographer.png");
+        const coverimage = require("../../media/images/profile/cover.jpg");
 
         // Defining Elements
         const posts = [
@@ -54,7 +55,10 @@ class ProfilePage extends Component {
         return (
             <div className="profile row">
                 <div className="col">
-                    <div className="coverImage row"></div>
+                    <div
+                        className="coverImage row"
+                        style={{ backgroundImage: `url(${coverimage})` }}
+                    ></div>
                     <div className="profile-content row">
                         <div className="col-3">
                             <LeftContent email="mail.mail.com" />
