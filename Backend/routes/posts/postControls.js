@@ -340,8 +340,7 @@ exports.deletePost = async (req, res, next) => {
             {
                 _id: req.body.postId
             }
-        )
-
+        );
         const uid = req.loggedUser._id;
         const owner = post.owner[0]._id;
         console.log(uid);
@@ -349,13 +348,9 @@ exports.deletePost = async (req, res, next) => {
 
         if(uid.equals(owner) == true)
         {
-            try {
-                const removedpost = await post.remove();
-                res.json(removedpost);
-            } catch (err) {
-                res.status(500).json({ message: err });
-            }
-            return res.json({ message: "Post deleted successfully" });
+            await post.remove();
+            return res.json(post);
+            
         }
         else {
             return res.json({ message: "Access Denied" });
@@ -391,6 +386,7 @@ exports.deleteAllComments = async (req, res, next) => {
                     _id: req.body.postId
                 }
             );
+            console.log(post.comments);
             const uid = req.loggedUser._id;
             const owner = post.owner[0]._id;
 
@@ -403,12 +399,10 @@ exports.deleteAllComments = async (req, res, next) => {
                     .status(401)
                     .json({ message: "You cannot delete the comments" });
             }
-
-
             
 
             if (flag) {
-                post.comments = post.comments.splice(0,post.comments.length);
+                post.comments.splice(0,post.comments.length);
             } else {
                 return res
                     .status(401)
