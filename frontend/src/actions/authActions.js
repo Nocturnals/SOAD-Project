@@ -17,9 +17,7 @@ export function login(email, password) {
         axios
             .post("http://localhost:4000/api/auth/login", user)
             .then(res => {
-                console.log(res.data);
                 const { authorization } = res.headers;
-                console.log(authorization);
 
                 localStorage.setItem("userToken", authorization);
                 setAuthTokenHeader(authorization);
@@ -49,6 +47,30 @@ export function register(email, username, dateofbirth, password) {
         dispatch({
             type: userAuthConst.REGISTER_REQUEST
         });
+
+        // try to register the new user
+        axios
+            .post("http://localhost:4000/api/auth/register", {
+                email,
+                name: username,
+                dateofbirth,
+                password
+            })
+            .then(res => {
+                const { authorization } = res.headers;
+
+                localStorage.setItem("userToken", authorization);
+                setAuthTokenHeader(authorization);
+
+                dispatch({
+                    type: userAuthConst.REGISTER_SUCCESS,
+                    user: res.data
+                });
+            })
+            .catch(err => {
+                dispatch({ type: userAuthConst.REGISTER_FAILURE });
+                dispatch(alertActions.error(err.response.data));
+            });
     };
 }
 
