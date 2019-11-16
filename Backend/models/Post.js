@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const otheruserschema = require("./Otheruser");
-const { CommentsSchema } = require("./Comments");
+const { commentsmodel, commentschema } = require("./Comments");
+
 const imageschema = require("./Image");
 
 const PostSchema = new mongoose.Schema({
@@ -45,7 +46,7 @@ const PostSchema = new mongoose.Schema({
     },
 
     comments: {
-        type: [CommentsSchema]
+        type: [commentsmodel]
     },
 
     imageurls: {
