@@ -1,0 +1,150 @@
+.home-content .left-content {
+  margin-right: 5px;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+.home-content .left-content .row {
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.2);
+}
+.home-content .left-content .row:last-child {
+  border-bottom: none;
+}
+
+.home-content .left-content .userImage {
+  height: 80px;
+  /* background-color: rgba(103, 37, 158, 0.8); */
+  background-image: linear-gradient(135deg, #5a1d7e, #7f2bb8);
+}
+.home-content .left-content .userImage .image-div {
+  width: 110px;
+  height: 110px;
+  margin: auto;
+}
+.home-content .left-content .userImage .user-image {
+  position: absolute;
+  bottom: 50px;
+  width: 110px;
+  height: 110px;
+  border: 4px solid rgb(240, 240, 240);
+  border-radius: 50%;
+}
+.home-content .left-content .userImage .user-image {
+  background-color: rgba(0, 0, 0, 0.2);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.home-content .left-content .userDetails {
+  padding: 15px 0 20px 0;
+}
+.home-content .left-content .userDetails h4 {
+  font-family: "Antaro";
+  font-weight: bold;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+}
+.home-content .left-content .userDetails h6 {
+  color: rgba(0, 0, 0, 0.6);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 0.8rem;
+}
+
+.home-content .left-content .following,
+.home-content .left-content .followers {
+  padding: 0;
+}
+.home-content .left-content .following .title,
+.home-content .left-content .followers .title {
+  color: rgba(0, 0, 0, 0.45);
+  font-family: "ChiselMark";
+  letter-spacing: 1px;
+}
+.home-content .left-content .following .title h6,
+.home-content .left-content .followers .title h6 {
+  color: rgba(0, 0, 0, 0.8);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.2rem;
+}
+.home-content .left-content .visit-profile .link {
+  color: rgba(109, 34, 170, 0.8);
+  font-weight: 500;
+}
+.home-content .left-content .visit-profile .link:hover {
+  color: rgba(109, 34, 170, 1);
+}
+.home-content .left-content .following .title,
+.home-content .left-content .followers .title {
+  margin: auto;
+  margin-top: 15px;
+  margin-bottom: 8px;
+}
+.home-content .left-content .visit-profile .link {
+  margin: auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.footer {
+  margin-top: 40px;
+  padding: 20px;
+  word-spacing: -2px;
+}
+.footer button {
+  margin: 2px 10px;
+  padding: 0;
+  outline: none;
+  background: none;
+  border: none;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0);
+  transition: all 0.2s linear;
+}
+.footer button:last-child {
+  border-right: none;
+}
+.footer .serviceLink {
+  color: rgba(0, 0, 0, 0.6);
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-size: 0.8rem;
+  transition: all 0.3s linear;
+}
+.footer button:hover > .serviceLink {
+  color: rgba(109, 34, 170, 1);
+}
+
+.footer .copyrights {
+  padding: 10px 0 0 0;
+  border-top: 0.5px solid rgba(0, 0, 0, 0.2);
+}
+.footer .copyrights .col {
+  padding: 0;
+  text-align: left;
+}
+.footer .copyrights .copyright {
+  padding-left: 15px;
+}
+.footer .copyrights .col,
+.footer .copyrights h6 {
+  font-size: 0.8rem;
+  margin-top: 10px;
+}
+.footer .copyrights .appName {
+  font-size: 1.2rem;
+  font-family: "LALORG";
+}
+.footer .copyrights .appName .fname,
+.footer .copyrights .appName .lname {
+  transition: all 0.2s linear;
+}
+.footer .copyrights .appName .fname {
+  color: #7449c5;
+}
+.footer .copyrights .appName .lname {
+  color: #a35cd3;
+}
+.footer .copyrights .appName:hover > .fname {
+  color: #a35cd3;
+}
+.footer .copyrights .appName:hover > .lname {
+  color: #7449c5;
+}
