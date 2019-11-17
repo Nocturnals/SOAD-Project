@@ -100,9 +100,9 @@ class PostComp extends Component {
 
     // Rendering...
     render() {
-        const img = require("../../../media/images/v10-header4.svg");
-        const userImg = require("../../../media/images/categories/photographer.png");
-        const cmnt_img = require("../../../media/images/categories/animator.png");
+        const img = require("../../media/images/v10-header4.svg");
+        const userImg = require("../../media/images/categories/photographer.png");
+        const cmnt_img = require("../../media/images/categories/animator.png");
 
         const comments = [
             new Comment("'handleResponse' is defined but never used", cmnt_img),

@@ -3,8 +3,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import PostComp from "./post/post";
+import PostComp from "../post/post";
 import LeftContent from "./leftContent/leftContent";
+import RightContent from "./rightContent/rightContent";
 
 import "./home.css";
 
@@ -23,8 +24,11 @@ class Post {
 class HomePage extends Component {
     constructor(props) {
         super(props);
+    }
 
-        console.log(this.props.auth);
+    // After Mounring the Component...
+    componentDidMount() {
+        document.body.scrollTo(0, 0);
     }
 
     // Generates Cards of Posts...
@@ -84,7 +88,9 @@ class HomePage extends Component {
                     </div>
                     {this.postCards(posts)}
                 </div>
-                <div className="suggestions col-3"></div>
+                <div className="rightContent col-3">
+                    <RightContent />
+                </div>
             </div>
         );
     }

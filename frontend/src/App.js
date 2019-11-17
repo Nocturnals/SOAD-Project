@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import {
-    BrowserRouter as Router,
-    Route,
-    Redirect,
-    Switch
-} from "react-router-dom";
 import { Provider } from "react-redux";
+import { Redirect } from "react-router-dom";
+
 import store from "./store";
 import jwt_decode from "jwt-decode";
 
@@ -13,9 +9,7 @@ import "./App.css";
 
 import { logout, getUserWithToken } from "./actions/authActions";
 
-import LandingPage from "./components/landing page/landing_page";
-import AuthenticationPage from "./components/authentication/authentication";
-import Combo from "./components/combo/combo";
+import MainAppComponents from "./AppComponents";
 
 class App extends Component {
     // to verify user already logged in
@@ -38,17 +32,7 @@ class App extends Component {
     render() {
         return (
             <Provider store={store}>
-                <Router>
-                    <Switch>
-                        <Route exact path="/" component={LandingPage} />
-                        <Route exact path="/user/:type" component={Combo} />
-                        <Route
-                            exact
-                            path="/auth/:type"
-                            component={AuthenticationPage}
-                        />
-                    </Switch>
-                </Router>
+                <MainAppComponents />
             </Provider>
         );
     }
