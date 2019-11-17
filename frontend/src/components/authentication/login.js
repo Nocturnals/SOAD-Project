@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { login, logout } from "../../actions";
+import { login } from "../../actions";
 import isValidEmail from "../../validation/emailValidation";
 
 class LoginComp extends Component {
@@ -114,10 +114,9 @@ class LoginComp extends Component {
 
 // specifiying the class to have these objects using propTypes
 LoginComp.propTypes = {
-  login: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
-  alert: PropTypes.object.isRequired
+    login: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    alert: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -125,4 +124,4 @@ const mapStateToProps = state => ({
   alert: state.alert
 });
 
-export default connect(mapStateToProps, { login, logout })(LoginComp);
+export default connect(mapStateToProps, { login })(LoginComp);

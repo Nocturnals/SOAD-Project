@@ -19,7 +19,7 @@ function verifyToken(req, res, next) {
         // run the next function
         next();
     } else {
-        res.status(401).json({ message: "Access Denied" });
+        return res.status(401).json({ message: "Access Denied" });
     }
 }
 

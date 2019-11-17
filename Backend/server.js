@@ -66,13 +66,26 @@ app.use("/api/auth", require("./routes/auth"));
 //Route for Competitions
 app.use("/api/competition", require("./routes/competitions/utils"));
 
-if (process.env.Node_Env === "production") {
-  // for loading the static frontend app
-  app.use(express.static("../frontend/build"));
+//Route for Posts
+app.use("/api/posts", require("./routes/posts/post"));
 
-  app.get("*", (req, res, next) => {
-    res.sendFile(path.resolve(__dirname, "../frontend", "build", "index.html"));
-  });
+// Route for Subscriptions
+app.use("/api/subscriptions", require("./routes/subscription_1/service"));
+
+// route for colabaration
+app.use("/api/colab", require("./routes/colab"));
+
+// app.use("api/subscription", require("./routes/subscription/stripefunctions"));
+
+if (process.env.Node_Env === "production") {
+    // for loading the static frontend app
+    app.use(express.static("../frontend/build"));
+
+    app.get("*", (req, res, next) => {
+        res.sendFile(
+            path.resolve(__dirname, "../frontend", "build", "index.html")
+        );
+    });
 }
 
 const port = process.env.PORT || 3000;

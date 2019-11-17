@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Link, Redirect, Route } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import HomePage from "./home/home";
 import Profile from "./profile/profile";
+import SearchComp from "./search/search";
 
 import "./combo.css";
 
@@ -22,7 +23,37 @@ class Navigator {
 class Combo extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            dropNavigator: true
+        };
+
+        this.toggleNavigator = this.toggleNavigator.bind(this);
+        this.bodyScrollEventListener = this.bodyScrollEventListener.bind(this);
+
+        this.bodyScrollEventListener();
     }
+
+    // After Mounring the Component...
+    componentDidMount() {
+        document.body.scrollTo(0, 0);
+    }
+
+    // Window Scroll Event Listener...
+    bodyScrollEventListener = () => {
+        document.body.addEventListener("scroll", () => {
+            var scrollHeight = document.body.scrollTop;
+            console.log(scrollHeight);
+
+            if (scrollHeight == 0) {
+                this.setState({
+                    dropNavigator: true
+                });
+            }
+            if (scrollHeight > 10) {
+            }
+        });
+    };
 
     // Generates Navigation Blocks...
     navigators = navBlocks => {
@@ -51,6 +82,13 @@ class Combo extends Component {
         return navigators;
     };
 
+    // Drop Navigator Bar...
+    toggleNavigator = () => {
+        this.setState({
+            dropNavigator: !this.state.dropNavigator
+        });
+    };
+
     // Rendering Combo Cmponent...
     render() {
         // Defining Navigation Elements
@@ -58,17 +96,41 @@ class Combo extends Component {
             new Navigator("/user/home", "fa fa-home", "HOME"),
             new Navigator("/user/home", "fa fa-home", "ORGANISATIONS"),
             new Navigator("/user/home", "fa fa-home", "FRIENDS"),
-            new Navigator("/user/home", "fa fa-home", "NOTIFICATIONS"),
+            new Navigator("/user/search", "fa fa-search", "SEARCH"),
             new Navigator("/user/profile", "fa fa-user", "PROFILE")
         ];
 
         return (
             <div className="combo container-fluid">
-                <div className="navigators row">
+                <div
+                    className={
+                        "navigators row " +
+                        (!this.state.dropNavigator ? "dropNavigator" : "")
+                    }
+                >
+                    <div
+                        className={
+                            "nav-toggler " +
+                            (!this.state.dropNavigator ? "navBtnDwn" : "")
+                        }
+                        id="nav-toggler"
+                    >
+                        <button onClick={this.toggleNavigator}>
+                            <i
+                                class={
+                                    this.state.dropNavigator
+                                        ? "fa fa-chevron-down"
+                                        : "fa fa-chevron-up"
+                                }
+                                aria-hidden="true"
+                            ></i>
+                        </button>
+                    </div>
                     {this.navigators(navigators)}
                 </div>
                 <Route exact path="/user/home" component={HomePage} />
                 <Route exact path="/user/organisations" component={HomePage} />
+                <Route exact path="/user/search" component={SearchComp} />
                 <Route exact path="/user/profile" component={Profile} />
             </div>
         );

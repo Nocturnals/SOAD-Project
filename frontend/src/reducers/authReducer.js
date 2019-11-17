@@ -1,7 +1,5 @@
 import { userAuthConst } from "../constants";
 
-let userToken = localStorage.getItem("userToken");
-
 const initialState = {
     user: {
         name: null,
@@ -12,21 +10,23 @@ const initialState = {
     isLoading: false
 };
 
-export default function authentication(state = initialState, action) {
+export default function(state = initialState, action) {
     switch (action.type) {
-        case "SET_CURRENT_USER":
+        case userAuthConst.LOAD_USER:
             return {
                 ...state,
                 user: action.user,
-                isAuthed: true
+                isAuthed: action.user === undefined ? false : true
             };
         case userAuthConst.LOGIN_REQUEST:
+        case userAuthConst.REGISTER_REQUEST:
             return {
-                user: action.user,
+                user: null,
                 isAuthed: false,
                 isLoading: true
             };
         case userAuthConst.LOGIN_SUCCESS:
+        case userAuthConst.REGISTER_SUCCESS:
             return {
                 ...state,
                 user: action.user,
@@ -34,7 +34,9 @@ export default function authentication(state = initialState, action) {
                 isLoading: false
             };
         case userAuthConst.LOGIN_FAILURE:
+        case userAuthConst.REGISTER_FAILURE:
         case userAuthConst.LOGOUT:
+            localStorage.removeItem("userToken");
             return initialState;
 
         default:

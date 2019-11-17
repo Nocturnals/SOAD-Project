@@ -6,6 +6,11 @@ import LoginComp from "./login";
 import RegisterComp from "./register";
 
 class AuthenticationPage extends Component {
+    // After Mounring the Component...
+    componentDidMount() {
+        document.body.scrollTo(0, 0);
+    }
+
     render() {
         return (
             <div className="auth_page">

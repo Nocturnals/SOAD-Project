@@ -1,3 +1,2 @@
-export * from "./user.auth.constants";
-export * from "./alert.constants";
-export * from "./docMatchConstants";
+export * from "./authConstants";
+export * from "./alertConstants";

@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
-const otheruserschema = require("./otheruser");
-const { CommentsSchema } = require("./Commments");
+const otheruserschema = require("./Otheruser");
+const { CommentsSchema } = require("./Comments");
 const imageschema = require("./Image");
 
 const PostSchema = new mongoose.Schema({
     title: {
+        type: String,
+        required: true
+    },
+    description: {
         type: String,
         required: true
     },
@@ -16,6 +20,11 @@ const PostSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+
+    likedBy: {
+        type: [otheruserschema]
+    },
+
     likes: {
         type: Number,
         default: 0
@@ -45,6 +54,10 @@ const PostSchema = new mongoose.Schema({
 
     imageurls: {
         type: [imageschema]
+    },
+    isprivate: {
+        type: Boolean,
+        required: true
     }
 });
 

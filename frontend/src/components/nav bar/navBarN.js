@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import "./navBarN.css";
 import "./animationsN";
 import { toggleNavBar } from "./animationsN";
+import { logout } from "../../actions/authActions";
 
 class LinkClass {
     constructor(toLink, name) {
@@ -15,6 +16,16 @@ class LinkClass {
 }
 
 class NavBar extends Component {
+    constructor(props) {
+        super(props);
+        this.logoutUser = this.logoutUser.bind(this);
+    }
+
+    // logout function
+    logoutUser() {
+        this.props.onLogout();
+    }
+
     linkComp = links => {
         let linkComps = [];
         for (let index = 0; index < links.length; index++) {
@@ -100,19 +111,26 @@ class NavBar extends Component {
                                         {!isAuthed ? "Login" : "Profile"}
                                     </button>
                                 </Link>
-                                <Link
-                                    to={
-                                        !isAuthed ? "/auth/register" : "/logout"
-                                    }
-                                    style={{
-                                        textDecoration: "none",
-                                        textTransform: "uppercase"
-                                    }}
-                                >
-                                    <button className="dropdown-item">
+                                {!isAuthed ? (
+                                    <Link
+                                        to="/auth/register"
+                                        style={{
+                                            textDecoration: "none",
+                                            textTransform: "uppercase"
+                                        }}
+                                    >
+                                        <button className="dropdown-item">
+                                            {!isAuthed ? "Register" : "Logout"}
+                                        </button>
+                                    </Link>
+                                ) : (
+                                    <button
+                                        className="dropdown-item"
+                                        onClick={this.logoutUser}
+                                    >
                                         {!isAuthed ? "Register" : "Logout"}
                                     </button>
-                                </Link>
+                                )}
                             </div>
                         </li>
                     </ul>
@@ -132,4 +150,4 @@ const mapStateToProps = state => ({
     alert: state.alert
 });
 
-export default connect(mapStateToProps)(NavBar);
+export default connect(mapStateToProps, { onLogout: logout })(NavBar);

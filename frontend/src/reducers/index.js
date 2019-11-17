@@ -1,11 +1,9 @@
 import { combineReducers } from "redux";
 
-import authentication from "./auth.reducer";
-import alert from "./alert.reducer";
-import docMatching from "./docMatchReducer";
+import authentication from "./authReducer";
+import alert from "./alertReducer";
 
 export default combineReducers({
   auth: authentication,
-  alert: alert,
-  docMatch: docMatching
+  alert: alert
 });
