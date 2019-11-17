@@ -8,6 +8,10 @@ const PostSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    description: {
+        type: String,
+        required: true
+    },
     content: {
         type: String,
         required: true
@@ -50,6 +54,10 @@ const PostSchema = new mongoose.Schema({
 
     imageurls: {
         type: [imageschema]
+    },
+    isprivate: {
+        type: Boolean,
+        required: true
     }
 });
 

@@ -8,6 +8,9 @@ const {
     createCustomerAndSubscription
 } = require("./utils");
 
+SubscriptionModel = require("./../../models/Subcriptions");
+OtheruserModel = require("./../../models/Otheruser");
+
 const { subscribeValidation } = require("./subscriptionValidation");
 
 router.post(
@@ -16,7 +19,8 @@ router.post(
     verifyUserWithToken,
     async (req, res, next) => {
         try {
-            return res.send(getAllProductsAndPlans);
+            const products = await getAllProductsAndPlans();
+            return res.send(products);
         } catch (error) {
             return res
                 .status(500)
@@ -37,7 +41,18 @@ router.post(
                 return res
                     .status(400)
                     .json({ message: validatedData.error.details[0].message });
-            return res.send(createCustomerAndSubscription(req.body));
+
+            const customer = new OtheruserModel({
+                _id: req.loggedUser._id,
+                username: req.loggedUser.name,
+                profileurl: req.loggedUser.profileurl
+            });
+            try {
+                await createCustomerAndSubscription(req.body, customer);
+                return res.json({ message: "Successfully Subscribed" });
+            } catch (error) {
+                return res.json({ message: "Failed to subscribe" });
+            }
         } catch (error) {
             return res
                 .status(500)
