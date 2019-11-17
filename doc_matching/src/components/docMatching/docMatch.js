@@ -43,20 +43,23 @@ class docMatch extends React.Component {
     if (this.props.docMatch.isLoading === false) {
       if (plager) {
         data = this.props.docMatch.vPlag.valueTwo;
-        marks.push(
-          <h3>
-            verbatimPlagiarism (
-            {this.props.docMatch.vPlag.valueOne.toFixed(4) * 100}%)
-          </h3>
-        );
+        if (this.props.docMatch.vPlag.valueOne < 1) {
+          marks.push(
+            <h3>
+              verbatimPlagiarism ({this.props.docMatch.vPlag.valueOne * 100}%)
+            </h3>
+          );
+        } else {
+          marks.push(<h3>verbatimPlagiarism ({100}%)</h3>);
+        }
       } else {
         // console.log(this.props.docMatch.pPlag.valueTwo);
         data = this.props.docMatch.pPlag.valueTwo;
-        if (data > 1) {
+        if (this.props.docMatch.pPlag.valueOne < 1) {
           marks.push(
             <h3>
-              paraphrasingPlagiarism (
-              {this.props.docMatch.pPlag.valueOne.toFixed(4) * 100}%)
+              paraphrasingPlagiarism ({this.props.docMatch.pPlag.valueOne * 100}
+              %)
             </h3>
           );
         } else {

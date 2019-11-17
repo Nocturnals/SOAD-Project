@@ -4,61 +4,61 @@ const { CommentsSchema } = require("./Comments");
 const imageschema = require("./Image");
 
 const PostSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-        required: true
-    },
-    content: {
-        type: String,
-        required: true
-    },
-    date: {
-        type: Date,
-        default: Date.now
-    },
+  title: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  content: {
+    type: String,
+    required: true
+  },
+  date: {
+    type: Date,
+    default: Date.now
+  },
 
-    likedBy: {
-        type: [otheruserschema]
-    },
+  likedBy: {
+    type: [otheruserschema]
+  },
 
-    likes: {
-        type: Number,
-        default: 0
-    },
+  likes: {
+    type: Number,
+    default: 0
+  },
 
-    owner: {
-        type: [otheruserschema],
-        required: true
-    },
+  owner: {
+    type: [otheruserschema],
+    required: true
+  },
 
-    category: {
-        enum: ["cat1", "cat2"],
-        type: String
-    },
+  category: {
+    enum: ["cat1", "cat2"],
+    type: String
+  },
 
-    sharedby: {
-        type: [otheruserschema]
-    },
+  sharedby: {
+    type: [otheruserschema]
+  },
 
-    sharedcount: {
-        type: Number
-    },
+  sharedcount: {
+    type: Number
+  },
 
-    comments: {
-        type: [CommentsSchema]
-    },
+  comments: {
+    type: [CommentsSchema]
+  },
 
-    imageurls: {
-        type: [imageschema]
-    },
-    isprivate: {
-        type: Boolean,
-        required: true
-    }
+  imageurls: {
+    type: [imageschema]
+  },
+  isprivate: {
+    type: Boolean,
+    required: true
+  }
 });
 
 module.exports = mongoose.model("Posts", PostSchema);

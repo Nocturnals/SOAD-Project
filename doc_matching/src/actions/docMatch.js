@@ -12,7 +12,7 @@ export function matching(text1, text2) {
     };
     // var output = new Array(1, 2, 3);
     axios
-      .post("http://localhost:4000/postdatatoFlask", data)
+      .post("http://localhost:4000/api/docMatch/postdatatoFlask", data)
       .then(res => {
         const { vPlagarism, pPlagarism } = res.data;
         console.log("Vplag: " + vPlagarism);
