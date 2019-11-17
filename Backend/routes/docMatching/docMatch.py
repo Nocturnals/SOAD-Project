@@ -1,9 +1,10 @@
+import os
 import re
 import copy
 from nltk.corpus import wordnet
 
 
-with open("/root/Desktop/SOAD-Project/Backend/routes/docMatching/listWords.txt", 'r', encoding='utf-8') as file:
+with open(os.path.abspath(__file__), 'r', encoding='utf-8') as file:
     commanwords = file.read()
     commanwords = commanwords.split()
 

@@ -188,6 +188,7 @@ router.get("/getJobOffers/:type/:area", getArtistType, async (req, res) => {
 // route for appling for a job offer
 router.post("/applyJob", verifyToken, verifyUserWithToken, async (req, res) => {
     const validatedData = applyJobValidation(res.body);
+    console.log(validatedData);
 
     if (validatedData.error) {
         return res
@@ -195,7 +196,41 @@ router.post("/applyJob", verifyToken, verifyUserWithToken, async (req, res) => {
             .json({ message: validatedData.error.details[0].message });
     }
 
-    // apply for job
+    try {
+        // apply for job
+        const jobOfferDoc = await artistWantedModel.findById(
+            req.body.jobOfferId
+        );
+        if (jobOfferDoc) {
+            // check if already applied
+            jobOfferDoc.applied.forEach(participatent => {
+                if (
+                    JSON.stringify(participatent._id) ==
+                    JSON.stringify(req.loggedUser._id)
+                ) {
+                    return res
+                        .status(400)
+                        .json({ message: "already registered for the job" });
+                }
+            });
+
+            // apply for that job
+            const newOtheruser = new OtheruserModel({
+                _id: req.loggedUser._id,
+                username: req.loggedUser.name,
+                profileurl: req.loggedUser.profileurl
+            });
+
+            jobOfferDoc.applied.push(newOtheruser);
+            const UpdatedOfferdoc = await jobOfferDoc.save();
+            return res.status(200).json(UpdatedOfferdoc);
+        } else {
+            return res.status(400).json({ message: "Invalid jobOffer id" });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
 });
 
 module.exports = router;
