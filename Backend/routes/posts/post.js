@@ -9,6 +9,7 @@ const {
     deleteComment,   
     likeComment,
     unlikeComment,
+    editPost,
 } = require('./postControls');
 
 const{
@@ -33,6 +34,8 @@ router.post("/createpost", verifyToken, verifyUserWithToken, createPost);
 router.delete("/deletepost", verifyToken, verifyUserWithToken, deletePost);
 
 router.patch("/deletecomment", verifyToken, verifyUserWithToken, deleteComment);
+
+router.patch("/editpost", verifyToken, verifyUserWithToken, editPost);
 
 
 router.patch("/deleteallcomments", verifyToken, verifyUserWithToken, deleteAllComments);

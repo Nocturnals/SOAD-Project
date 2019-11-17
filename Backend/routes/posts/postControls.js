@@ -14,7 +14,7 @@ const {
 const _ = require("lodash"); // for modifing the array contents
 
 const { ReplyModel, CommentsModel } = require("../../models/Comments");
-const artistType = require("../../models/artistTypes");
+const artist = require("../../models/artistTypes");
 const { OtheruserModel } = require("../../models/Otheruser");
 /*
 const OtherUser = require('../../models/Otheruser');
@@ -39,16 +39,16 @@ exports.createPost = async (req, res, next) => {
             .status(400)
             .json({ message: validatedData.error.details[0].message });
     
-    const artist = new artistType();
+    
+    
 
     var exist = artist.map(function(item) { return item; }).indexOf(req.body.Category);
     if (exist == -1)
         return res
             .status(400)
             .json({ message: validatedData.error.details[0].message });
+    /**/
     const user = req.loggedUser;
-    console.log(user)
-    console.log(req.body)
         
     
         const post = new Post(
@@ -173,7 +173,6 @@ exports.unlike = async (req, res, next) => {
             .json({ message: validatedData.error.details[0].message });
     
     const user = req.loggedUser;
-    console.log(user)
     console.log(req.body)
 
     try {
@@ -194,14 +193,12 @@ exports.unlike = async (req, res, next) => {
             post.likedBy.splice(removeIndex,1);
             post.likes = post.likes - 1;
             
-            try {
-                const savedpost = await post.save();
-                res.json(savedpost);
-            } catch (err) {
-                res.status(500).json({ message: err });
-            }
             
-            return res.json({ message: "Unliked successfully" });
+                const savedpost = await post.save();
+                
+            
+            
+            return res.json(savedpost);
         }
         else 
         {
@@ -258,13 +255,10 @@ exports.commentPost = async (req, res, next) => {
         
             post.comments.push(comment);
         
-            try {
+            
                 const savedpost = await post.save();
-                res.json(savedpost);
-            } catch (err) {
-                res.status(500).json({ message: err });
-            }
-            return res.json({ message: "Commented successfully" });
+            
+            return res.json(savedpost);
         
 
         
@@ -301,7 +295,7 @@ exports.deleteComment = async (req, res, next) => {
 
         const uid = req.loggedUser._id;
         var removeIndex = post.comments.map(function(item) { return item._id; }).indexOf(commentId);
-        const owner = post.comments[removeIndex].owner[0]._id;
+        const owner = post.comments[removeIndex].owner._id;
         const postowner = post.owner[0]._id;
 
         var flag = false;
@@ -354,8 +348,8 @@ exports.deletePost = async (req, res, next) => {
         );
         const uid = req.loggedUser._id;
         const owner = post.owner[0]._id;
-        console.log(uid);
-        console.log(owner);
+//        console.log(uid);
+//        console.log(owner);
 
         if(uid.equals(owner) == true)
         {
@@ -397,7 +391,7 @@ exports.deleteAllComments = async (req, res, next) => {
                     _id: req.body.postId
                 }
             );
-            console.log(post.comments);
+//            console.log(post.comments);
             const uid = req.loggedUser._id;
             const owner = post.owner[0]._id;
 
@@ -461,8 +455,7 @@ exports.editPost = async (req, res, next) => {
             
 
             if (flag) {
-                post.title = req.body.title;
-                post.content = req.body.content;
+                post.isprivate = req.body.isPrivate;
             } else {
                 return res
                     .status(401)
@@ -503,12 +496,12 @@ exports.likeComment = async (req, res, next) => {
 
         var updateIndex = post.comments.map(function(item) { return item._id; }).indexOf(commentId);
         const test = post.comments[updateIndex];
-        console.log(userid);
-        console.log(test.likedby[0]);
+//        console.log(userid);
+//        console.log(test.likedby[0]);
 
         var removeIndex = test.likedby.map(function(item) { return item._id; }).indexOf(userid);
-        console.log("Remove Index comes here ::::::");
-        console.log(removeIndex);
+//        console.log("Remove Index comes here ::::::");
+//        console.log(removeIndex);
 
         
 
@@ -543,8 +536,8 @@ exports.likeComment = async (req, res, next) => {
                     date:com.date,                
                 }
             );
-            console.log("New Comment comes here ::::");
-            console.log(comment);
+//            console.log("New Comment comes here ::::");
+//            console.log(comment);
             post.comments.splice(updateIndex,1);
             post.comments.push(comment);
             
@@ -616,13 +609,13 @@ exports.unlikeComment = async (req, res, next) => {
         
 
 
-        console.log(comment);
+//        console.log(comment);
         post.comments.splice(updateIndex,1);
         post.comments.push(comment);
 
        
             const savedpost = await post.save();
-            console.log(savedpost);
+//            console.log(savedpost);
         
 
         return res.json(savedpost);
