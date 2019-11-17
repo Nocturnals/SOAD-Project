@@ -6,8 +6,7 @@ postModel = require("./../../models/Post");
 planpostModel = require("./../../models/Subcriptions");
 const UserModel = require("./../../models/user");
 const { OtheruserModel } = require("./../../models/Otheruser");
-const {addtoplanValidation} = require("./serviceValidation")
-
+const { addtoplanValidation } = require("./serviceValidation");
 
 router.post(
     "/showallplans",
@@ -86,7 +85,6 @@ router.post(
     verifyToken,
     verifyUserWithToken,
     async (req, res, next) => {
-
         const validatedData = addtoplanValidation(req.body);
         if (validatedData.error)
             return res
@@ -102,7 +100,9 @@ router.post(
             const plan = await planModel.findById(req.params.id);
             console.log(plan.contentCreators.length);
             plan.contentCreators.forEach(i => {
-                if (i._id == req.loggedUser._id) {
+                if (
+                    JSON.stringify(i._id) == JSON.stringify(req.loggedUser._id)
+                ) {
                     planflag = true;
                 }
             });
@@ -174,15 +174,13 @@ router.post(
             const plan = await planModel.findById(req.params.id);
 
             if (plan) {
-            
-                var posts = []
-                plan.posts.forEach(i => {
-                    const post = await postModel.findById(i._id)
-                    if(post.category == req.params.category){
-                    posts.push(post);
-                 }
-                })
-
+                var posts = [];
+                plan.posts.forEach(async i => {
+                    const post = await postModel.findById(i._id);
+                    if (post.category == req.params.category) {
+                        posts.push(post);
+                    }
+                });
 
                 return res.send(posts);
             } else {
