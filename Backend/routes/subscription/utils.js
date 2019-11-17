@@ -2,6 +2,7 @@
 require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_API_KEY);
 const UTILS = require("./format-numbers");
+SubscriptionModel = require("./../../models/Subcriptions");
 
 function getAllProductsAndPlans() {
     return Promise.all([stripe.products.list({}), stripe.plans.list({})]).then(
@@ -36,40 +37,42 @@ function getAllProductsAndPlans() {
     );
 }
 
-function createProduct(requestBody) {
-    return stripe.products.create({
-        name: requestBody.productName,
-        type: "service"
-    });
-}
-
-function createPlan(requestBody) {
-    return stripe.plans.create({
-        nickname: requestBody.planName,
-        amount: UTILS.formatStripeAmount(requestBody.planAmount),
-        interval: requestBody.planInterval,
-        interval_count: parseInt(requestBody.planIntervalNumber),
-        product: requestBody.productId,
-        currency: "inr"
-    });
-}
-
-function createCustomerAndSubscription(requestBody) {
-    return stripe.customers
+async function createCustomerAndSubscription(requestBody, user) {
+    try{
+     return stripe.customers
         .create({
             source: requestBody.stripeToken,
             email: requestBody.customerEmail
         })
         .then(customer => {
-            stripe.subscriptions.create({
-                customer: customer.id,
-                items: [
-                    {
-                        plan: requestBody.planId
-                    }
-                ]
-            });
+            const customerID = customer.id;
+            stripe.subscriptions.create(
+                {
+                    customer: customer.id,
+                    items: [
+                        {
+                            plan: requestBody.planId
+                        }
+                    ]
+                }.then(subscription => {
+                    const subscriptionID = subscription.id;
+                    const subscription = new SubscriptionModel({
+                        customerId: customerID,
+                        subscriptionId: subscriptionID,
+                        planId: requestBody.planId,
+                        customer: user,
+                        plan: requestBody.plan
+                    });
+                    await subscription.save()
+                })
+            );
         });
+
+       
+}
+catch (error){
+    console.log(error);
+}
 }
 
 module.exports = {
