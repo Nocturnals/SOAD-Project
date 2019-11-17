@@ -5,8 +5,9 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import HomePage from "./home/home";
-import Profile from "./profile/profile";
+import Competition from "./competitions/competitions";
 import SearchComp from "./search/search";
+import Profile from "./profile/profile";
 
 import "./combo.css";
 
@@ -95,7 +96,7 @@ class Combo extends Component {
         const navigators = [
             new Navigator("/user/home", "fa fa-home", "HOME"),
             new Navigator("/user/home", "fa fa-home", "ORGANISATIONS"),
-            new Navigator("/user/home", "fa fa-home", "FRIENDS"),
+            new Navigator("/user/competitions", "fa fa-trophy", "COMPETITIONS"),
             new Navigator("/user/search", "fa fa-search", "SEARCH"),
             new Navigator("/user/profile", "fa fa-user", "PROFILE")
         ];
@@ -117,7 +118,7 @@ class Combo extends Component {
                     >
                         <button onClick={this.toggleNavigator}>
                             <i
-                                class={
+                                className={
                                     this.state.dropNavigator
                                         ? "fa fa-chevron-down"
                                         : "fa fa-chevron-up"
@@ -130,6 +131,11 @@ class Combo extends Component {
                 </div>
                 <Route exact path="/user/home" component={HomePage} />
                 <Route exact path="/user/organisations" component={HomePage} />
+                <Route
+                    exact
+                    path="/user/competitions"
+                    component={Competition}
+                />
                 <Route exact path="/user/search" component={SearchComp} />
                 <Route exact path="/user/profile" component={Profile} />
             </div>

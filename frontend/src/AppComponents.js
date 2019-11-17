@@ -10,11 +10,12 @@ import PasswordResetComp from "./components/authentication/passwordReset/passwor
 
 class MainAppComponents extends Component {
     render() {
+        console.log(this.props.alert.message);
+
         return (
             <Router>
                 <Switch>
                     <div>
-                        {/* <p>{this.props.alert.message}</p> */}
                         <Route exact path="/" component={LandingPage} />
                         <Route exact path="/user/:type" component={Combo} />
                         <Route

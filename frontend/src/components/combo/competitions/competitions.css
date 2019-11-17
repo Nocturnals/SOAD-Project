@@ -1,0 +1,63 @@
+.combo .competition {
+    width: 1100px;
+    margin: auto;
+    padding: 50px 0;
+}
+.combo .competition .competition-descr {
+    padding: 30px;
+    background-color: white;
+}
+.combo .competition .competition-descr .competition-image {
+    width: 100px;
+}
+.combo .competition .competitionImage {
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.combo .competition .competition-descr .competition-details .row {
+    padding: 0;
+    text-align: left;
+}
+.combo .competition .competition-descr .competition-details .title h4 {
+    font-size: 1.5rem;
+    font-family: 'Antaro';
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    word-spacing: 3px;
+}
+.combo .competition .competition-descr .competition-details .timeUploaded {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.4);
+}
+.combo .competition .competition-descr .competition-details .description {
+    padding: 30px 0;
+    margin-right: 30px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgba(0, 0, 0, 0.7);
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+
+
+
+
+.combo .competition .competition-descr .competition-details .competition-comments {
+    padding: 30px 0;
+    margin-right: 30px;
+}
+.combo .competition .competition-descr .competition-details .competition-comments .header {
+    padding: 10px 0;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.4);
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
