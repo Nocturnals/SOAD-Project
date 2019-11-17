@@ -15,6 +15,7 @@ const _ = require("lodash"); // for modifing the array contents
 
 const { ReplyModel, CommentsModel } = require("../../models/Comments");
 const artistType = require("../../models/artistTypes");
+const { OtheruserModel } = require("../../models/Otheruser");
 /*
 const OtherUser = require('../../models/Otheruser');
 const User = require('../../models/user');
@@ -228,21 +229,19 @@ exports.commentPost = async (req, res, next) => {
             .json({ message: validatedData.error.details[0].message });
     
     console.log(req.body)
+        const otheruser = new OtheruserModel({
+            _id: req.loggedUser._id,
+            username: req.loggedUser.name,
+            profileurl: req.loggedUser.profileurl
+        });
 
         const comment = new CommentsModel(
             {
+                owner: otheruser,
                 message: req.body.comment,
-                owner: [
-                    {
-                        _id: req.loggedUser._id,
-                        username: req.loggedUser.name,
-                        profileurl: req.loggedUser.profileurl || "random string"
-                    }
-                ],
             }
         );
         
-        console.log(comment);
         
 
     try {
@@ -508,6 +507,8 @@ exports.likeComment = async (req, res, next) => {
         console.log(test.likedby[0]);
 
         var removeIndex = test.likedby.map(function(item) { return item._id; }).indexOf(userid);
+        console.log("Remove Index comes here ::::::");
+        console.log(removeIndex);
 
         
 
