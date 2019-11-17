@@ -25,6 +25,8 @@ export function login(email, password) {
             })
             .catch(err => {
                 dispatch(failureAction(err));
+                console.log(err);
+
                 dispatch(alertActions.error(err.response.data));
             });
     };

@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 
 import HomePage from "./home/home";
 import Profile from "./profile/profile";
+import SearchComp from "./search/search";
 
 import "./combo.css";
 
@@ -95,7 +96,7 @@ class Combo extends Component {
             new Navigator("/user/home", "fa fa-home", "HOME"),
             new Navigator("/user/home", "fa fa-home", "ORGANISATIONS"),
             new Navigator("/user/home", "fa fa-home", "FRIENDS"),
-            new Navigator("/user/home", "fa fa-home", "NOTIFICATIONS"),
+            new Navigator("/user/search", "fa fa-search", "SEARCH"),
             new Navigator("/user/profile", "fa fa-user", "PROFILE")
         ];
 
@@ -129,6 +130,7 @@ class Combo extends Component {
                 </div>
                 <Route exact path="/user/home" component={HomePage} />
                 <Route exact path="/user/organisations" component={HomePage} />
+                <Route exact path="/user/search" component={SearchComp} />
                 <Route exact path="/user/profile" component={Profile} />
             </div>
         );
