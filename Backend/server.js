@@ -63,11 +63,15 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/competition", require("./routes/competitions/utils"));
 
 //Route for Posts
-app.use("api/posts", require("./routes/posts/post"));
+app.use("/api/posts", require("./routes/posts/post"));
 
 // Route for Subscriptions
+app.use("/api/subscriptions", require("./routes/subscription_1/service"));
 
-app.use("api/subscription", require("./routes/subscription/stripefunctions"));
+// route for colabaration
+app.use("/api/colab", require("./routes/colab"));
+
+// app.use("api/subscription", require("./routes/subscription/stripefunctions"));
 
 if (process.env.Node_Env === "production") {
     // for loading the static frontend app

@@ -6,10 +6,12 @@ const OtherUserSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
+
     username: {
         type: String,
         required: true
     },
+
     profileurl: {
         type: String,
         required: true
