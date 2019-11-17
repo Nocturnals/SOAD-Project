@@ -16,8 +16,17 @@ class MainAppComponents extends Component {
             <Router>
                 <Switch>
                     <div>
+                        {this.props.alert.message ? (
+                            <div class="alert alert-danger" role="alert">
+                                {this.props.alert.message}
+                            </div>
+                        ) : null}
                         <Route exact path="/" component={LandingPage} />
-                        <Route exact path="/user/:type" component={Combo} />
+                        <Route
+                            exact
+                            path="/user/:type/:catType"
+                            component={Combo}
+                        />
                         <Route
                             exact
                             path="/auth/:type"

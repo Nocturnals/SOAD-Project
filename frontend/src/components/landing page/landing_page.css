@@ -278,6 +278,24 @@ img {
 
 
 
+
+
+
+.footer {
+    padding: 10px;
+    background-color: black;
+    z-index: -1;
+    bottom: 0;
+}
+.footer .col-9 {
+    margin: auto;
+}
+
+
+
+
+
+
 .page-overlay {
     position: absolute; margin: 0;
     width: 100%; height: 100%;
@@ -322,6 +340,8 @@ img {
         padding: 70px 10px 0px 30px;
     }
 }
+
+
 
 
 

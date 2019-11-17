@@ -4,6 +4,7 @@ import NavBar from "../nav bar/navBarN";
 import FirstSection from "./first_section";
 import SecondSection from "./second_section";
 import ThirdSection from "./third_section";
+import Footer from "./footer";
 
 import "./landing_page.css";
 
@@ -22,6 +23,7 @@ class LandingPage extends React.Component {
                     <FirstSection />
                     <SecondSection />
                     <ThirdSection />
+                    <Footer />
                 </div>
             </div>
         );

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 import "./rightContent.css";
 
@@ -15,10 +16,23 @@ class RightContent extends Component {
         for (let index = 0; index < competitions.length; index++) {
             const competition = competitions[index];
             competitionBlocks.push(
-                <div className="competition row" id={"competition" + index}>
+                <div
+                    className="competitionBlock row"
+                    id={"competition" + index}
+                >
                     <div className="col">
                         <div className="row">
-                            <span className="col-8">{competition.title}</span>
+                            <span className="col-8">
+                                <Link
+                                    to={
+                                        "/user/competitions/" +
+                                        competition.title
+                                    }
+                                    style={{ textDecoration: "none" }}
+                                >
+                                    {competition.title}
+                                </Link>
+                            </span>
                             <span className="col-4">21:10:50</span>
                         </div>
                         <div className="descr row">

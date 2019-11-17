@@ -27,42 +27,42 @@
 }
 
 
-.competitions .competition {
+.competitions .competitionBlock {
     margin-top: 10px;
     border-bottom: 0.5px solid rgba(0, 0, 0, 0.2);
 }
-.competitions .competition .col-8, .competitions .competition .col-4 {
+.competitions .competitionBlock .col-8, .competitions .competitionBlock .col-4 {
     font-size: 0.85rem;
     font-weight: bold;
     margin: 0;
     padding: 0;
 }
-.competitions .competition .col-8 {
+.competitions .competitionBlock .col-8 {
     text-align: left;
 }
-.competitions .competition .col-4 {
+.competitions .competitionBlock .col-4 {
     font-size: 0.7rem;
     margin: auto;
     border-left: 2px solid steelblue;
 }
-/* .competitions .competition .col-4::before {
+/* .competitions .competitionBlock .col-4::before {
     content: "";
     position: relative;
     border: 1px solid steelblue;
 } */
-.competitions .competition .col {
+.competitions .competitionBlock .col {
     padding: 0;
 }
-.competitions .competition .col .row {
+.competitions .competitionBlock .col .row {
     margin: auto;
     padding: 0;
 }
-.competitions .competition .descr {
+.competitions .competitionBlock .descr {
     text-align: left;
     color: rgba(0, 0, 0, 0.5);
     font-size: 0.8rem;
     font-weight: 600;
 }
-.competitions .competition .descr .col {
+.competitions .competitionBlock .descr .col {
     padding: 10px 0;
 }

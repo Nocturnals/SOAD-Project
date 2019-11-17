@@ -19,6 +19,10 @@ class Competition extends Component {
     //     super(props);
     // }
 
+    componentDidMount() {
+        document.body.scrollTo(0, 0);
+    }
+
     // Component of all Competitions...
     commentsComp = comments => {
         let commentsComps = [];
@@ -71,6 +75,9 @@ class Competition extends Component {
             )
         ];
 
+        const { type } = this.props.match.params;
+        console.log(this.props.match.params);
+
         return (
             <div className="competition row">
                 <div className="competition-descr col-8">
@@ -86,7 +93,7 @@ class Competition extends Component {
                         <div className="competition-details col-10">
                             <div className="title row">
                                 <div className="col">
-                                    <h4>Cook Off</h4>
+                                    <h4>{type}</h4>
                                 </div>
                             </div>
                             <div className="timeUploaded row">

@@ -51,8 +51,6 @@ class Combo extends Component {
                     dropNavigator: true
                 });
             }
-            if (scrollHeight > 10) {
-            }
         });
     };
 
@@ -94,11 +92,23 @@ class Combo extends Component {
     render() {
         // Defining Navigation Elements
         const navigators = [
-            new Navigator("/user/home", "fa fa-home", "HOME"),
-            new Navigator("/user/home", "fa fa-home", "ORGANISATIONS"),
-            new Navigator("/user/competitions", "fa fa-trophy", "COMPETITIONS"),
-            new Navigator("/user/search", "fa fa-search", "SEARCH"),
-            new Navigator("/user/profile", "fa fa-user", "PROFILE")
+            new Navigator(
+                this.props.auth.isAuthed ? "/user/home/feed" : "/",
+                "fa fa-home",
+                "HOME"
+            ),
+            new Navigator("/user/home/feed", "fa fa-home", "ORGANISATIONS"),
+            new Navigator(
+                "/user/competitions/all",
+                "fa fa-trophy",
+                "COMPETITIONS"
+            ),
+            new Navigator("/user/search/all", "fa fa-search", "SEARCH"),
+            new Navigator(
+                "/user/profile/" + this.props.auth.user.name,
+                "fa fa-user",
+                "PROFILE"
+            )
         ];
 
         return (
@@ -129,15 +139,19 @@ class Combo extends Component {
                     </div>
                     {this.navigators(navigators)}
                 </div>
-                <Route exact path="/user/home" component={HomePage} />
-                <Route exact path="/user/organisations" component={HomePage} />
+                <Route exact path="/user/home/feed" component={HomePage} />
                 <Route
                     exact
-                    path="/user/competitions"
+                    path="/user/organisations/all"
+                    component={HomePage}
+                />
+                <Route
+                    exact
+                    path="/user/competitions/:type"
                     component={Competition}
                 />
-                <Route exact path="/user/search" component={SearchComp} />
-                <Route exact path="/user/profile" component={Profile} />
+                <Route exact path="/user/search/all" component={SearchComp} />
+                <Route exact path="/user/profile/:type" component={Profile} />
             </div>
         );
     }

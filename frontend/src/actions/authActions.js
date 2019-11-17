@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import { history } from "../helpers";
+
 import { userAuthConst } from "../constants";
 import setAuthTokenHeader from "../setAuthTokenHeader";
 import alertActions from "./alertActions";
@@ -22,12 +24,13 @@ export function login(email, password) {
                 localStorage.setItem("userToken", authorization);
                 setAuthTokenHeader(authorization);
                 dispatch(successAction(res.data));
+
+                history.goBack();
             })
             .catch(err => {
-                dispatch(failureAction(err));
-                console.log(err);
-
-                dispatch(alertActions.error(err.response.data));
+                const err_msg = err.response.data.message;
+                dispatch(failureAction());
+                dispatch(alertActions.error(err_msg));
             });
     };
 
