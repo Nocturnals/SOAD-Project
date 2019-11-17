@@ -4,15 +4,15 @@ var request = require("request-promise");
 
 const router = express.Router();
 
-router.get("/postdatatoFlask", async function(req, res) {
-  var data = {
-    // this variable contains the data you want to send
-    data1:
-      "Once upon a time, there was a little girl who lived in a village near the forest.",
-    data2:
-      "Whenever she went out, the little girl wore a red riding cloak, so everyone in the village called her Little Red Riding Hood."
-  };
-
+router.post("/postdatatoFlask", async function(req, res) {
+  var data = req.body;
+  // var data = {
+  //   dataOne:
+  //     "If you like GeeksforGeeks and would like to contribute, you can also write an article using contribute.geeksforgeeks.org or mail your article to contribute@geeksforgeeks.org. See your article appearing on the GeeksforGeeks main page and help other Geeks.",
+  //   dataTwo:
+  //     "If you like GeeksforGeeks and would like to contribute, you can also write an article using contribute.geeksforgeeks.org or mail your article to contribute@geeksforgeeks.org. See your article appearing on the GeeksforGeeks main page and help other Geeks."
+  // };
+  console.log(data);
   var options = {
     method: "POST",
     uri: "http://localhost:5000/postdata",
@@ -30,8 +30,18 @@ router.get("/postdatatoFlask", async function(req, res) {
       console.log(err);
     });
 
-  res.send(returndata);
+  // res.send(returndata);
+  // console.log(returndata);
+  if (returndata) {
+    return res.status(200).json(returndata);
+  } else {
+    return res.status(400).json({ message: "Backend not working" });
+  }
 });
+
+// router.post("/postdatatoFlask", (req, res) => {
+//   console.log(req.body);
+// });
 
 module.exports = router;
 

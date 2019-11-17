@@ -17,9 +17,9 @@ def postdata():
     print(data)
     pencentange = 0
     # do something with this data variable that contains the data from the node server
-    pencentange = plagiarism(data['data1'], data['data2'])
+    pencentange = plagiarism(data['dataOne'], data['dataTwo'])
     # print(pencentange)
-    return json.dumps({"newdata": pencentange})
+    return json.dumps({"vPlagarism": pencentange[0], "pPlagarism": pencentange[1]})
 
 
 if __name__ == "__main__":
