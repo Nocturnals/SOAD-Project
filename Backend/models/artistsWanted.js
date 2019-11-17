@@ -15,6 +15,11 @@ const artistWantedSchema = new mongoose.Schema({
         required: true
     },
 
+    workAt: {
+        type: String,
+        required: true
+    },
+
     workDuration: {
         type: String,
         required: true
@@ -28,6 +33,11 @@ const artistWantedSchema = new mongoose.Schema({
     descriptionOfJob: {
         type: String,
         required: true
+    },
+
+    applied: {
+        type: [otherUserSchema],
+        default: []
     }
 });
 
