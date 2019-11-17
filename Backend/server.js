@@ -66,8 +66,10 @@ app.use("/api/competition", require("./routes/competitions/utils"));
 app.use("/api/posts", require("./routes/posts/post"));
 
 // Route for Subscriptions
-
 app.use("/api/subscriptions", require("./routes/subscription_1/service"));
+
+// route for colabaration
+app.use("/api/colab", require("./routes/colab"));
 
 // app.use("api/subscription", require("./routes/subscription/stripefunctions"));
 

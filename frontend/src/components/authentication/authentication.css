@@ -40,7 +40,7 @@
     font-family: 'LALORG'
 }
 
-h2 {
+.auth_page h2 {
     margin-bottom: 25px;
     color: rgb(119, 107, 223);
     text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);

@@ -1,0 +1,68 @@
+
+/* COMPETITIONS */
+.competitionsSection {
+    margin: auto; margin-left: 5px;
+    background-color: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+.competitionsSection .header {
+    padding: 15px 0 10px 0;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.5);
+    background-image: linear-gradient(135deg, #5a1d7e, #7f2bb8);
+}
+.competitionsSection .header h6 {
+    color: seashell;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+}
+.competitionsSection .header button {
+    color: seashell;
+    outline: none;
+    border: none;
+    background: none;
+}
+
+.competitionsSection .competitions {
+    padding: 5px 20px 0 20px;
+}
+
+
+.competitions .competition {
+    margin-top: 10px;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.2);
+}
+.competitions .competition .col-8, .competitions .competition .col-4 {
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+.competitions .competition .col-8 {
+    text-align: left;
+}
+.competitions .competition .col-4 {
+    font-size: 0.7rem;
+    margin: auto;
+    border-left: 2px solid steelblue;
+}
+/* .competitions .competition .col-4::before {
+    content: "";
+    position: relative;
+    border: 1px solid steelblue;
+} */
+.competitions .competition .col {
+    padding: 0;
+}
+.competitions .competition .col .row {
+    margin: auto;
+    padding: 0;
+}
+.competitions .competition .descr {
+    text-align: left;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.competitions .competition .descr .col {
+    padding: 10px 0;
+}
