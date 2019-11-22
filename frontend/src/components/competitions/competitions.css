@@ -242,14 +242,15 @@
 }
 .competition .competition-involved .competitionStatus {
     margin: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     background-image: linear-gradient(275deg, #5a1d7e, #7f2bb8);
 }
 .competition .competition-involved .competitionStatus:hover {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
     animation: none;
 }
 .competition .competition-involved .competition-status {
     padding: 0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 .competition .competition-involved .competition-status .header {
     padding: 10px 0;
@@ -282,6 +283,7 @@
 .competition .participants {
     margin: 0;
     margin-top: 20px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
     background-color: white;
 }
 .competition .competition-involved .participants .header button {
@@ -303,6 +305,7 @@
 }
 .competition .participants .participantsBlocks .count {
     padding: 10px 0;
+    border-top: 0.5px solid rgba(0, 0, 0, 0.5);
 }
 .competition .participants .participantsBlocks .count button {
     color: rgba(111, 53, 167, 0.8);
@@ -314,11 +317,11 @@
 .competition .participants .participantsBlocks .count button:hover {
     color: rgba(111, 53, 167, 1);
 }
-.competition .participants .participant {
-    margin-top: 10px;
-    margin-bottom: 20px;
+.competitionPage .participant {
+    padding: 10px 0;
+    background-color: white;
 }
-.competition .participants .prImage {
+.competitionPage .participant .prImage {
     margin: auto;
     width: 40px;
     height: 40px;
@@ -327,17 +330,21 @@
     background-repeat: no-repeat;
     background-size: contain;
 }
-.competition .participants .participant .prName {
+.competitionPage .participant .prName {
+    color: rgba(0, 0, 0, 0.7);
     font-size: 1rem;
     font-weight: 700;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
-.competition .participants .participant .prJob {
+.competitionPage .participant .prName:hover {
+    color: rgb(84, 42, 153);
+}
+.competitionPage .participant .prJob {
     color: rgba(0, 0, 0, 0.5);
     font-size: 0.8rem;
     font-weight: 500;
 }
-.competition .participants .participant .submission-doc button {
+.competitionPage .participant .submission-doc button {
     margin: auto;
     height: 40px;
     width: 40px;
@@ -349,7 +356,7 @@
     background: rgba(0, 0, 0, 0.1);
     transition: all 0.2s linear;
 }
-.competition .participants .participant .submission-doc button:hover {
+.competitionPage .participant .submission-doc button:hover {
     border: 1px solid rgba(0, 0, 0, 0.1);
     background-color: rgb(230, 78, 59);
     color: white;
@@ -375,7 +382,7 @@
     ***
     ***
 */
-.viewAllParticipants {
+.competitionPage .viewAllParticipants {
     position: absolute;
     top: 0;
     width: 100%;
@@ -393,14 +400,51 @@
     );
     display: none;
 }
-.viewAllParticipants .header h3 {
+.competitionPage .viewAllParticipants .header h3 {
     color: seashell;
     letter-spacing: 1px;
     word-spacing: 3px;
     font-weight: bold;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
-.viewAllParticipants .show {
+.competitionPage .viewAllParticipants .closeButton i {
+    color: rgb(255, 245, 238, 0.8);
+    font-size: 2rem;
+    transition: all 0.2s linear;
+}
+.competitionPage .viewAllParticipants .closeButton i:hover {
+    cursor: pointer;
+    color: white;
+    text-shadow: 0 0 5px rgba(250, 246, 246, 0.5);
+}
+.competitionPage .viewAllParticipants {
+    overflow-y: auto;
+}
+.competitionPage .viewAllParticipants .search {
+    padding: 40px 0;
+}
+.competitionPage .viewAllParticipants .search input {
+    width: 100%;
+    padding: 10px 40px;
+    color: rgb(78, 34, 119);
+    letter-spacing: 0.5px;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 50px;
+    outline: none;
+    border: none;
+}
+.competitionPage .viewAllParticipants .search input::placeholder {
+    color: rgba(78, 34, 119, 0.6);
+}
+.competitionPage .viewAllParticipants .participants-row {
+    padding: 10px;
+}
+.competitionPage .viewAllParticipants .participants-row .participant {
+    margin: 8px;
+}
+.competitionPage .show {
     display: block;
 }
 

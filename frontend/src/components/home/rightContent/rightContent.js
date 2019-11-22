@@ -19,6 +19,7 @@ class RightContent extends Component {
                 <div
                     className="competitionBlock row"
                     id={"competition" + index}
+                    key={index}
                 >
                     <div className="col">
                         <div className="row">

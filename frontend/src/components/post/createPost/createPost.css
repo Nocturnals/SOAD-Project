@@ -1,0 +1,64 @@
+.createPost {
+    background-color: white;
+}
+.createPost .header {
+    padding: 20px 0;
+    background-color: #5a1d7e;
+}
+.createPost .header h6 {
+    margin: auto;
+    color: seashell;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    word-spacing: 3px;
+}
+
+.createPost .bodyRow {
+    margin: 20px 0;
+}
+.createPost .body input {
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.createPost .body input {
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.2s linear;
+}
+.createPost .body input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.createPost .body .category select {
+    width: 100%;
+    border-radius: 0;
+    padding: 0 20px;
+}
+.createPost .body .category select:focus {
+    border: none;
+    outline: none;
+}
+.createPost .body .category select .noSelection {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.createPost .body textarea {
+    width: 100%; min-height: 100px;
+    padding: 10px 20px;
+}
+
+.createPost .body input,
+.createPost .body .category select,
+.createPost .body textarea {
+    border: none;
+    outline: none;
+    box-shadow: 0 0 2px inset rgba(0, 0, 0, 0.4);
+}
+.createPost .body input:focus,
+.createPost .body select:focus,
+.createPost .body textarea:focus {
+    transform: scale(1.01);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+}

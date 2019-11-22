@@ -1,43 +1,111 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Route,
+    Switch,
+    Redirect
+} from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
+// import { ProtectedRoute } from "./helpers";
+
 import LandingPage from "./components/landing page/landing_page";
 import AuthenticationPage from "./components/authentication/authentication";
-import Combo from "./components/combo/combo";
 import PasswordResetComp from "./components/authentication/passwordReset/passwordReset";
+import Competition from "./components/competitions/competition";
+import HomePage from "./components/home/home";
+import SearchComp from "./components/search/search";
+import ProfilePage from "./components/profile/profile";
 
 class MainAppComponents extends Component {
     render() {
-        console.log(this.props.alert.message);
+        const AuthenticatedRoute = ({ component: Component, ...rest }) => (
+            <Route
+                exact
+                {...rest}
+                render={props =>
+                    localStorage.getItem("userToken") ? (
+                        <Component {...props} />
+                    ) : (
+                        <Redirect
+                            to={{
+                                pathname: "/auth/login",
+                                state: { from: props.location }
+                            }}
+                        />
+                    )
+                }
+            />
+        );
+        const NotAuthenticatedRoute = ({ component: Component, ...rest }) => (
+            <Route
+                exact
+                {...rest}
+                render={props =>
+                    !localStorage.getItem("userToken") ? (
+                        <Component {...props} />
+                    ) : (
+                        <Redirect
+                            to={{
+                                pathname: "/feed",
+                                state: { from: props.location }
+                            }}
+                        />
+                    )
+                }
+            />
+        );
 
         return (
             <Router>
                 <Switch>
-                    <div>
+                    <React.Fragment>
+                        {/* Displaying Error Messages */}
                         {this.props.alert.message ? (
                             <div class="alert alert-danger" role="alert">
                                 {this.props.alert.message}
                             </div>
                         ) : null}
-                        <Route exact path="/" component={LandingPage} />
-                        <Route
-                            exact
-                            path="/user/:type/:catType"
-                            component={Combo}
+
+                        {/* Landing Page */}
+                        <NotAuthenticatedRoute
+                            path="/"
+                            component={LandingPage}
                         />
-                        <Route
-                            exact
+
+                        {/* Login and Register Pages */}
+                        <NotAuthenticatedRoute
                             path="/auth/:type"
                             component={AuthenticationPage}
                         />
+
+                        {/* Home Page (After Login) */}
+                        <AuthenticatedRoute path="/feed" component={HomePage} />
+
+                        {/* Profile Page */}
                         <Route
                             exact
+                            path="/artist/:username"
+                            component={ProfilePage}
+                        />
+
+                        {/* Specific Competition Page */}
+                        <Route
+                            exact
+                            path="/competitions/:type"
+                            component={Competition}
+                        />
+
+                        {/* Search Page */}
+                        <Route exact path="/search" component={SearchComp} />
+
+                        {/* Password Reset Page */}
+                        <AuthenticatedRoute
                             path="/password-reset/:passwordResetToken"
                             component={PasswordResetComp}
                         />
-                    </div>
+                    </React.Fragment>
                 </Switch>
             </Router>
         );

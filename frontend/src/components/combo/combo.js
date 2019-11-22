@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Link, Route } from "react-router-dom";
+import { Link, Route, Redirect } from "react-router-dom";
 
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
+import NavBar from "../nav bar/navBar";
 import HomePage from "./home/home";
-import Competition from "./competitions/competitions";
 import SearchComp from "./search/search";
 import Profile from "./profile/profile";
 
@@ -112,8 +112,10 @@ class Combo extends Component {
         ];
 
         return (
-            <div className="combo container-fluid">
-                <div
+            <div>
+                <NavBar />
+                <div className="combo container-fluid">
+                    {/* <div
                     className={
                         "navigators row " +
                         (!this.state.dropNavigator ? "dropNavigator" : "")
@@ -138,20 +140,24 @@ class Combo extends Component {
                         </button>
                     </div>
                     {this.navigators(navigators)}
+                </div> */}
+                    <Route exact path="/user/home/feed" component={HomePage} />
+                    <Route
+                        exact
+                        path="/user/organisations/all"
+                        component={HomePage}
+                    />
+                    <Route
+                        exact
+                        path="/user/search/all"
+                        component={SearchComp}
+                    />
+                    <Route
+                        exact
+                        path="/user/profile/:type"
+                        component={Profile}
+                    />
                 </div>
-                <Route exact path="/user/home/feed" component={HomePage} />
-                <Route
-                    exact
-                    path="/user/organisations/all"
-                    component={HomePage}
-                />
-                <Route
-                    exact
-                    path="/user/competitions/:type"
-                    component={Competition}
-                />
-                <Route exact path="/user/search/all" component={SearchComp} />
-                <Route exact path="/user/profile/:type" component={Profile} />
             </div>
         );
     }

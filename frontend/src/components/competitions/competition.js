@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 import CommentComp from "../helperCards/comments/comments";
 import { Comment, Participant } from "./objectClasses";
@@ -9,16 +10,96 @@ class Competition extends Component {
     constructor(props) {
         super(props);
 
+        this.competitionImage = require("../media/images/categories/photographer.png");
+        this.participants = [
+            new Participant(
+                "Vishwanth",
+                "Red Hat Hacker",
+                this.competitionImage
+            ),
+            new Participant(
+                "Vishwanth",
+                "Red Hat Hacker",
+                this.competitionImage
+            ),
+            new Participant(
+                "Vishwanth",
+                "Red Hat Hacker",
+                this.competitionImage
+            ),
+            new Participant(
+                "Vishwanth",
+                "Red Hat Hacker",
+                this.competitionImage
+            ),
+            new Participant(
+                "Vishwanth",
+                "Red Hat Hacker",
+                this.competitionImage
+            ),
+            new Participant(
+                "Vishwanth",
+                "Red Hat Hacker",
+                this.competitionImage
+            )
+        ];
+
         this.state = {
-            showParticipants: false
+            showParticipants: false,
+            viewAllParticipants: false,
+            searchParticipants: "",
+            participantSearchList: this.participants
         };
 
         this.toggleParticipants = this.toggleParticipants.bind(this);
+        this.toggleViewAllParticipants = this.toggleViewAllParticipants.bind(
+            this
+        );
+        this.displaySearchedParicipants = this.displaySearchedParicipants.bind(
+            this
+        );
     }
 
     componentDidMount() {
         document.body.scrollTo(0, 0);
     }
+
+    // Display Searched Participants...
+    displaySearchedParicipants = e => {
+        const { name, value } = e.target;
+        this.setState({ [name]: value });
+
+        let searchedParticipants = [];
+
+        for (let index = 0; index < this.participants.length; index++) {
+            const participant = this.participants[index];
+
+            if (
+                participant.name
+                    .replace(/\s/g, "")
+                    .toLowerCase()
+                    .includes(value.replace(/\s/g, "").toLowerCase()) ||
+                participant.job
+                    .replace(/\s/g, "")
+                    .toLowerCase()
+                    .includes(value.replace(/\s/g, "").toLowerCase())
+            ) {
+                searchedParticipants.push(participant);
+            }
+        }
+        this.setState({
+            participantSearchList: searchedParticipants
+        });
+    };
+
+    // Toggle displaying all participants...
+    toggleViewAllParticipants = () => {
+        this.setState({
+            searchParticipants: "",
+            participantSearchList: this.participants,
+            viewAllParticipants: !this.state.viewAllParticipants
+        });
+    };
 
     // Toggle display of Participants...
     toggleParticipants = () => {
@@ -56,7 +137,15 @@ class Competition extends Component {
                         ></div>
                     </div>
                     <div className="col-6">
-                        <div className="prName row">{participant.name}</div>
+                        <div className="row">
+                            <Link
+                                className="prName"
+                                to={"/artist/" + participant.name}
+                                style={{ textDecoration: "none" }}
+                            >
+                                {participant.name}
+                            </Link>
+                        </div>
                         <div className="prJob row">{participant.job}</div>
                     </div>
                     <div className="submission-doc col-3">
@@ -69,6 +158,24 @@ class Competition extends Component {
         }
 
         return prComps;
+    };
+
+    // View all participants...
+    viewAllParticipantsComp = participants => {
+        let comps = [];
+        for (let index = 0; index < 10; index++) {
+            for (let index = 0; index < participants.length; index++) {
+                const participant = participants[index];
+
+                comps.push(
+                    <div className="block col-3">
+                        {this.participantsComp([participant])}
+                    </div>
+                );
+            }
+        }
+
+        return comps;
     };
 
     // Displaying Category name on side...
@@ -86,25 +193,9 @@ class Competition extends Component {
         return catComps;
     };
 
-    // View all participants...
-    viewAllParticipantsComp = participants => {
-        let comps = [];
-        for (let index = 0; index < participants.length; index++) {
-            const participant = participants[index];
-
-            comps.push(
-                <div className="col-3">
-                    {this.participantsComp(participant)}
-                </div>
-            );
-        }
-
-        return comps;
-    };
-
     // Rednering...
     render() {
-        const competitionImage = require("../../media/images/categories/photographer.png");
+        const competitionImage = require("../media/images/categories/photographer.png");
 
         const comments = [
             new Comment(
@@ -142,21 +233,14 @@ class Competition extends Component {
             )
         ];
 
-        const participants = [
-            new Participant("Vishwanth", "Red Hat Hacker", competitionImage),
-            new Participant("Vishwanth", "Red Hat Hacker", competitionImage),
-            new Participant("Vishwanth", "Red Hat Hacker", competitionImage),
-            new Participant("Vishwanth", "Red Hat Hacker", competitionImage),
-            new Participant("Vishwanth", "Red Hat Hacker", competitionImage),
-            new Participant("Vishwanth", "Red Hat Hacker", competitionImage)
-        ];
+        const participants = this.participants;
 
         const competitions = ["Cook Off"];
 
         const { type } = this.props.match.params;
 
         return competitions.includes(type) ? (
-            <div>
+            <div className="competitionPage">
                 <div className="container">
                     <div className="competition row">
                         <div className="competition-descr col-8">
@@ -336,12 +420,20 @@ class Competition extends Component {
                                         }
                                     >
                                         <div className="col">
+                                            {this.participantsComp(
+                                                participants.slice(0, 5)
+                                            )}
                                             <div className="count row">
                                                 <div className="col">
                                                     <h6>
                                                         {participants.length >
                                                         5 ? (
-                                                            <button>
+                                                            <button
+                                                                onClick={
+                                                                    this
+                                                                        .toggleViewAllParticipants
+                                                                }
+                                                            >
                                                                 View all
                                                             </button>
                                                         ) : null}
@@ -351,9 +443,6 @@ class Competition extends Component {
                                                     </h6>
                                                 </div>
                                             </div>
-                                            {this.participantsComp(
-                                                participants.slice(0, 5)
-                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -361,15 +450,42 @@ class Competition extends Component {
                         </div>
                     </div>
                 </div>
+
                 {/* View All Participants */}
-                <div className="container-fluid viewAllParticipants">
-                    <div className="header row">
-                        <div className="col">
+                <div
+                    className={
+                        "container-fluid viewAllParticipants " +
+                        (this.state.viewAllParticipants ? "show" : "")
+                    }
+                >
+                    <div className="header row justify-content-end">
+                        <div className="col-6">
                             <h3>All Participants</h3>
+                        </div>
+                        <div className="closeButton col-3">
+                            <i
+                                class="fa fa-times"
+                                aria-hidden="true"
+                                onClick={this.toggleViewAllParticipants}
+                            ></i>
+                        </div>
+                    </div>
+                    <div className="row search justify-content-center">
+                        <div className="col-6">
+                            <input
+                                type="text"
+                                name="searchParticipants"
+                                value={this.state.searchParticipants}
+                                onChange={this.displaySearchedParicipants}
+                                className="searchInput"
+                                placeholder="Search"
+                            />
                         </div>
                     </div>
                     <div className="participants-row row">
-                        {this.viewAllParticipantsComp(participants)}
+                        {this.viewAllParticipantsComp(
+                            this.state.participantSearchList
+                        )}
                     </div>
                 </div>
             </div>
