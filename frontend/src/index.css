@@ -4,17 +4,23 @@ html, body {
   overflow-x: hidden;
 }
 body {
-  background-color: rgb(240, 240, 240);
+  background-color: rgb(230, 230, 230);
 }
 
-body::-webkit-scrollbar {
+body::-webkit-scrollbar,
+.competitionPage .viewAllParticipants::-webkit-scrollbar,
+.uploadPostPopUP::-webkit-scrollbar {
   width: 7px;
   background: rgb(251, 250, 250);
 }
-body::-webkit-scrollbar-track {
+body::-webkit-scrollbar-track,
+.uploadPostPopUP::-webkit-scrollbar-track,
+.competitionPage .viewAllParticipants::-webkit-scrollbar-track {
   box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
 }
-body::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb,
+.uploadPostPopUP::-webkit-scrollbar-thumb,
+.competitionPage .viewAllParticipants::-webkit-scrollbar-thumb {
   background: rgb(117, 58, 245);
   border-radius: 60px;
   outline: 1px solid slategrey;

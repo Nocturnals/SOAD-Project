@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const _ = require("lodash"); // for modifing the array contents
 
 const UserModel = require("../../models/user");
-const { MailingService } = require("../../services/mailer");
+// const { MailingService } = require("../../services/mailer");
 const { verifyToken, verifyUserWithToken } = require("./helper");
 const {
     RegistrerValidation,
@@ -131,11 +131,11 @@ router.post(
 
         try {
             // send the mail
-            const sentStatus = MailingService.Sendmail(
-                `To Verify your account click the link <br> ${verification_link} <br> The above link expires in one day`,
-                req.loggedUser.email,
-                "Email confirmation"
-            );
+            // const sentStatus = MailingService.Sendmail(
+            //     `To Verify your account click the link <br> ${verification_link} <br> The above link expires in one day`,
+            //     req.loggedUser.email,
+            //     "Email confirmation"
+            // );
 
             return res.status(200).json({
                 message: "Mail with verification link Sent to your mail"
@@ -209,11 +209,11 @@ router.post("/forgotPassword", async (req, res, next) => {
 
         try {
             // send the mail
-            const sentStatus = MailingService.Sendmail(
-                `To reset password your account click the link <br> ${resetPasswordLink} <br> The above link expires in two hours`,
-                req.body.email,
-                "Password Reset"
-            );
+            // const sentStatus = MailingService.Sendmail(
+            //     `To reset password your account click the link <br> ${resetPasswordLink} <br> The above link expires in two hours`,
+            //     req.body.email,
+            //     "Password Reset"
+            // );
 
             return res.status(200).json({
                 message: `reset password link is mailed to ${req.body.email}`

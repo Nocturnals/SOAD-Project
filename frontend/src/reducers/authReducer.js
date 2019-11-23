@@ -16,7 +16,7 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 user: action.user,
-                isAuthed: action.user === undefined ? false : true
+                isAuthed: true
             };
         case userAuthConst.LOGIN_REQUEST:
         case userAuthConst.REGISTER_REQUEST:

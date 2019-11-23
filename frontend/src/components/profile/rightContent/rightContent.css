@@ -1,0 +1,120 @@
+.profile .right-content {
+    margin-left: 5px;
+    padding: 0;
+}
+.profile .right-content .uploadPostBtn {
+    padding: 40px;
+}
+.profile .right-content .uploadPostBtn button {
+    width: 100%;
+    height: 100%;
+    padding: 10px 0;
+    border: 0.5px solid rgba(0, 0, 0, 0);
+    color: seashell;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    word-spacing: 3px;
+    background: rgb(110, 57, 207);
+    border: 0.5px solid rgba(110, 57, 207, 0);
+    outline: none;
+    transition: all 0.2s linear;
+}
+.profile .right-content .uploadPostBtn button:hover {
+    color: rgb(110, 57, 207);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    background: none;
+    border: 0.5px solid rgba(110, 57, 207, 0.6);
+}
+
+
+
+
+
+
+
+
+.profile .right-content .friend-suggestions {
+    padding: 0;
+    margin: auto;
+}
+.profile .right-content .suggestions-header {
+    margin: auto;
+    margin-top: 30px;
+    padding: 15px 0;
+}
+.profile .right-content .suggestions-header h6 {
+    font-size: 1.2rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: bold;
+    margin: auto;
+}
+.profile .right-content .friend-suggestions .suggestion {
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+.profile .right-content .friend-suggestions .suggestion .user-image {
+    background-image: linear-gradient(135deg, #5a1d7e, #7f2bb8);
+}
+.profile .right-content .friend-suggestions .suggestion .image-div {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+}
+.profile .right-content .friend-suggestions .suggestion .userImage {
+    position: absolute;
+    top: 30px;
+    width: 70px;
+    height: 70px;
+    border: 4px solid rgb(255, 255, 255);
+    border-radius: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.profile .right-content .friend-suggestions .suggestion .userDetails {
+    padding: 35px 0 15px 0;
+}
+.profile .right-content .friend-suggestions .suggestion .userDetails h5 {
+    font-size: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bolder;
+}
+.profile .right-content .friend-suggestions .suggestion .userDetails h6 {
+    font-size: 0.8rem;
+    font-weight: bold;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: rgba(0, 0, 0, 0.5);
+}
+.profile .right-content .friend-suggestions .suggestion .userDetails h6 i {
+    color: rgb(90, 29, 126);
+}
+
+
+
+
+.profile .right-content .friend-suggestions .suggestion .folIgn .col-6 {
+    padding: 0;
+}
+.profile .right-content .friend-suggestions .suggestion .folIgn button {
+    width: 100%;
+    height: 100%;
+    padding: 7px 0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.8);
+    background: none;
+    border: none;
+    outline: none;
+}
+.profile .right-content .friend-suggestions .suggestion .follow button {
+    border-right: 0.5px solid rgba(0, 0, 0, 0.3);
+}
+.profile .right-content .friend-suggestions .suggestion .follow button:hover {
+    color: rgb(131, 49, 185);
+}
+.profile .right-content .friend-suggestions .suggestion .ignore button:hover {
+    color: rgb(228, 70, 70);
+}

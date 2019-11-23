@@ -20,3 +20,20 @@
 .App-link {
   color: #09d3ac;
 }
+
+
+.alert {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  z-index: 200;
+}
+
+
+
+.display-block {
+  display: block;
+}
+.display-none {
+  display: none;
+}

@@ -1,6 +1,8 @@
 import axios from "axios";
 
-import { userAuthConst } from "../constants";
+import { history } from "../helpers";
+
+import { userAuthConst, alertConstants } from "../constants";
 import setAuthTokenHeader from "../setAuthTokenHeader";
 import alertActions from "./alertActions";
 
@@ -22,12 +24,13 @@ export function login(email, password) {
                 localStorage.setItem("userToken", authorization);
                 setAuthTokenHeader(authorization);
                 dispatch(successAction(res.data));
+
+                history.goBack();
             })
             .catch(err => {
-                dispatch(failureAction(err));
-                console.log(err);
-
-                dispatch(alertActions.error(err.response.data));
+                const err_msg = err.response.data.message;
+                dispatch(failureAction());
+                dispatch(alertActions.error(err_msg));
             });
     };
 
@@ -82,13 +85,21 @@ export function getUserWithToken(token) {
         setAuthTokenHeader(token);
 
         // request to get user data from backend
-        axios.get("http://localhost:4000/api/auth/user").then(res => {
-            // res.data.user
-            dispatch({
-                type: userAuthConst.LOAD_USER,
-                user: res.data.user
+        axios
+            .get("http://localhost:4000/api/auth/user")
+            .then(res => {
+                // res.data.user
+                dispatch({
+                    type: userAuthConst.LOAD_USER,
+                    user: res.data.user
+                });
+            })
+            .catch(err => {
+                dispatch({
+                    type: userAuthConst.LOGIN_FAILURE
+                });
+                dispatch(alertActions.error(err.response.data));
             });
-        });
     };
 }
 
