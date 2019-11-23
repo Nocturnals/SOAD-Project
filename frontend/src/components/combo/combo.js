@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import { Link, Route } from "react-router-dom";
+import { Link, Route, Redirect } from "react-router-dom";
 
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
+import NavBar from "../nav bar/navBar";
 import HomePage from "./home/home";
-import Profile from "./profile/profile";
 import SearchComp from "./search/search";
+import Profile from "./profile/profile";
 
 import "./combo.css";
 
@@ -50,8 +51,6 @@ class Combo extends Component {
                     dropNavigator: true
                 });
             }
-            if (scrollHeight > 10) {
-            }
         });
     };
 
@@ -93,16 +92,30 @@ class Combo extends Component {
     render() {
         // Defining Navigation Elements
         const navigators = [
-            new Navigator("/user/home", "fa fa-home", "HOME"),
-            new Navigator("/user/home", "fa fa-home", "ORGANISATIONS"),
-            new Navigator("/user/home", "fa fa-home", "FRIENDS"),
-            new Navigator("/user/search", "fa fa-search", "SEARCH"),
-            new Navigator("/user/profile", "fa fa-user", "PROFILE")
+            new Navigator(
+                this.props.auth.isAuthed ? "/user/home/feed" : "/",
+                "fa fa-home",
+                "HOME"
+            ),
+            new Navigator("/user/home/feed", "fa fa-home", "ORGANISATIONS"),
+            new Navigator(
+                "/user/competitions/all",
+                "fa fa-trophy",
+                "COMPETITIONS"
+            ),
+            new Navigator("/user/search/all", "fa fa-search", "SEARCH"),
+            new Navigator(
+                "/user/profile/" + this.props.auth.user.name,
+                "fa fa-user",
+                "PROFILE"
+            )
         ];
 
         return (
-            <div className="combo container-fluid">
-                <div
+            <div>
+                <NavBar />
+                <div className="combo container-fluid">
+                    {/* <div
                     className={
                         "navigators row " +
                         (!this.state.dropNavigator ? "dropNavigator" : "")
@@ -117,7 +130,7 @@ class Combo extends Component {
                     >
                         <button onClick={this.toggleNavigator}>
                             <i
-                                class={
+                                className={
                                     this.state.dropNavigator
                                         ? "fa fa-chevron-down"
                                         : "fa fa-chevron-up"
@@ -127,11 +140,24 @@ class Combo extends Component {
                         </button>
                     </div>
                     {this.navigators(navigators)}
+                </div> */}
+                    <Route exact path="/user/home/feed" component={HomePage} />
+                    <Route
+                        exact
+                        path="/user/organisations/all"
+                        component={HomePage}
+                    />
+                    <Route
+                        exact
+                        path="/user/search/all"
+                        component={SearchComp}
+                    />
+                    <Route
+                        exact
+                        path="/user/profile/:type"
+                        component={Profile}
+                    />
                 </div>
-                <Route exact path="/user/home" component={HomePage} />
-                <Route exact path="/user/organisations" component={HomePage} />
-                <Route exact path="/user/search" component={SearchComp} />
-                <Route exact path="/user/profile" component={Profile} />
             </div>
         );
     }

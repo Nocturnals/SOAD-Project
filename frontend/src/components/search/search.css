@@ -1,0 +1,119 @@
+.search .searchInputDiv {
+    padding: 50px 0 30px 0;
+    background-image: linear-gradient(
+        to right bottom,
+        #4a0c6d,
+        #4a0c6d,
+        #4a0c6d,
+        #6f21a3,
+        #6f21a3,
+        #6f21a3
+    );
+}
+.search .col {
+    width: 1100px;
+    margin: auto;
+}
+.search .header,
+.search .inputs {
+    margin: auto;
+    text-align: center;
+}
+.search .header h3 {
+    color: rgb(250, 232, 204);
+    font-size: 1.7rem;
+    word-spacing: 4px;
+    font-family: "maagkramp";
+}
+.search .inputsRow {
+    padding: 30px 0;
+    margin: auto;
+}
+.search .inputs {
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+}
+.search .inputs .searchType,
+.search .inputs .searchInput,
+.search .inputs .searchButton {
+    padding: 0;
+}
+.search .inputs .searchType select {
+    width: 100%;
+    height: 100%;
+    appearance: none;
+    padding-left: 25px;
+    color: whitesmoke;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-image: linear-gradient(to left top, #4a0c6d, #6f21a3);
+    border: none;
+    border-right: 0.5px solid rgba(0, 0, 0, 0.4);
+    outline: none;
+}
+.search .inputs .searchType select:hover {
+    cursor: pointer;
+}
+.search .inputs .searchType select .option {
+    border: none;
+    padding: 10px;
+}
+.search .inputs .searchInput input {
+    width: 100%;
+    height: 100%;
+    padding: 10px 30px;
+    margin: 0;
+    color: rgba(0, 0, 0, 0.8);
+    letter-spacing: 0.5px;
+    font-size: 1.1rem;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+    font-weight: bold;
+    background: none;
+    border: none;
+    outline: none;
+}
+.search .inputs .searchInput input::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+.search .inputs .searchInput input:placeholder-shown {
+    color: rgba(0, 0, 0, 0.7);
+}
+.search .inputs .searchButton button {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    color: #8831c2;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+    font-weight: bold;
+    background: none;
+    border: none;
+    border-left: 0.5px solid rgba(0, 0, 0, 0.4);
+    outline: none;
+    overflow: hidden;
+}
+.search .inputs .searchButton button:hover {
+    color: #6f21a3;
+}
+
+.search .results {
+    width: 1250px;
+    margin: auto;
+}
+.search .results .header {
+    margin: 20px;
+    padding: 8px 50px 3px 50px;
+    background-color: white;
+    text-align: left;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+}
+.search .results .header h4 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    color: rgba(0, 0, 0, 0.8);
+}

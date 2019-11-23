@@ -87,14 +87,14 @@ class SearchComp extends Component {
                                 </div>
                             </div>
                             <div className="row">
-                                {/* <h5>
+                                <h5>
                                     {this.state.searchText
                                         ? 'No search results found for "' +
                                           this.state.searchText +
                                           '" in ' +
                                           this.state.searchType
                                         : null}
-                                </h5> */}
+                                </h5>
                             </div>
                         </div>
                     </div>
