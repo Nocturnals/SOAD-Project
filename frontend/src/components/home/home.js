@@ -26,12 +26,25 @@ class Post {
 class HomePage extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            showUploadPostPopUP: false
+        };
+
+        this.toggleUploadPostPopUp = this.toggleUploadPostPopUp.bind(this);
     }
 
     // After Mounring the Component...
     componentDidMount() {
         document.body.scrollTo(0, 0);
     }
+
+    // Toggling Upload Post PopUp
+    toggleUploadPostPopUp = () => {
+        this.setState({
+            showUploadPostPopUP: !this.state.showUploadPostPopUP
+        });
+    };
 
     // Generates Cards of Posts...
     postCards = postDetails => {
@@ -64,7 +77,7 @@ class HomePage extends Component {
         ];
 
         return (
-            <div className="home">
+            <React.Fragment>
                 <NavBar />
                 <div className="home-content row">
                     <div className="personal-content col-3">
@@ -84,7 +97,13 @@ class HomePage extends Component {
                                     </div>
                                     <div className="col-4 align-self-center">
                                         <div className="post-button">
-                                            <button>Post Update</button>
+                                            <button
+                                                onClick={
+                                                    this.toggleUploadPostPopUp
+                                                }
+                                            >
+                                                Post Update
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -96,10 +115,11 @@ class HomePage extends Component {
                         <RightContent />
                     </div>
                 </div>
-                <div className="container-fluid uploadPostPopUP">
-                    <CreatePostComp />
-                </div>
-            </div>
+                <CreatePostComp
+                    togglePopUp={this.toggleUploadPostPopUp.bind(this)}
+                    showPopUp={this.state.showUploadPostPopUP}
+                />
+            </React.Fragment>
         );
     }
 }

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 import "./post.css";
 
@@ -60,8 +61,6 @@ class PostComp extends Component {
     // DoropDown Event Listener...
     dropDownEventListener = e => {
         document.addEventListener("click", event => {
-            console.log(event.target);
-
             if (
                 !event.target.matches("#post-more-" + this.index) &&
                 !event.target.matches("#post-more-button-" + this.index)
@@ -136,7 +135,16 @@ class PostComp extends Component {
                                             : " ft-s-1")
                                     }
                                 >
-                                    {this.state.name}
+                                    <Link
+                                        to={
+                                            "/artist/" +
+                                            this.state.name.replace(/\s/g, "")
+                                        }
+                                        className="userLink"
+                                        style={{ textDecoration: "none" }}
+                                    >
+                                        {this.state.name}
+                                    </Link>
                                 </div>
                                 <div className="time">
                                     <i

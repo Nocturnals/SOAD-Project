@@ -116,6 +116,7 @@ class NavBar extends Component {
                                 >
                                     <div className="dropdown-item view-all-notifications d-flex justify-content-between">
                                         <Link
+                                            to="/"
                                             style={{ textDecoration: "none" }}
                                         >
                                             <button>View All</button>

@@ -74,7 +74,9 @@ class RightContent extends Component {
             <div className="right-content row">
                 <div className="col">
                     <div className="uploadPostBtn row">
-                        <button>Post Update</button>
+                        <button onClick={this.props.togglePopUp}>
+                            Post Update
+                        </button>
                     </div>
                     <div className="friend-suggestions-cards row">
                         <div className="col">

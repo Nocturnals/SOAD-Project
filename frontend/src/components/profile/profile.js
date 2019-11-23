@@ -4,6 +4,7 @@ import PostComp from "../post/post";
 import LeftContent from "./leftContent/leftContent";
 import RightContent from "./rightContent/rightContent";
 import NavBar from "../nav bar/navBar";
+import CreatePostComp from "../post/createPost/createPost";
 
 import "./profile.css";
 
@@ -19,9 +20,25 @@ class Post {
 }
 
 class ProfilePage extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            showUploadPostPopUP: false
+        };
+
+        this.toggleUploadPostPopUp = this.toggleUploadPostPopUp.bind(this);
+    }
+
     componentDidMount() {
         document.body.scrollTo(0, 0);
     }
+
+    toggleUploadPostPopUp = () => {
+        this.setState({
+            showUploadPostPopUP: !this.state.showUploadPostPopUP
+        });
+    };
 
     // Generates Cards of Posts...
     postCards = postDetails => {
@@ -134,11 +151,19 @@ class ProfilePage extends Component {
                                 {this.postCards(posts)}
                             </div>
                             <div className="col-3">
-                                <RightContent />
+                                <RightContent
+                                    togglePopUp={this.toggleUploadPostPopUp.bind(
+                                        this
+                                    )}
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
+                <CreatePostComp
+                    togglePopUp={this.toggleUploadPostPopUp.bind(this)}
+                    showPopUp={this.state.showUploadPostPopUP}
+                />
             </React.Fragment>
         );
     }
