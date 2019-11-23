@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { Route, Link } from "react-router-dom";
+import { Route, Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+
+import PropTypes from "prop-types";
 
 import "./authentication.css";
 import LoginComp from "./login";
@@ -30,4 +33,12 @@ class AuthenticationPage extends Component {
     }
 }
 
-export default AuthenticationPage;
+AuthenticationPage.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(AuthenticationPage);
