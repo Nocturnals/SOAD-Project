@@ -2,11 +2,6 @@ const Joi = require("@hapi/joi");
 
 const interestedInWorkValidation = data => {
     const schema = {
-        artistType: Joi.string()
-            .min(4)
-            .max(255)
-            .required(),
-
         availableAt: Joi.string().required(),
 
         freeTimeFrom: Joi.number()
@@ -25,15 +20,11 @@ const interestedInWorkValidation = data => {
 
 const artistWantedValidation = data => {
     const schema = {
-        artistType: Joi.string().required(),
-
-        availableAt: Joi.string().required(),
-
         workDuration: Joi.string().required(),
 
-        salary: Joi.string()
-            .integer()
-            .required(),
+        salary: Joi.string().required(),
+
+        workAt: Joi.string().required(),
 
         descriptionOfJob: Joi.string()
     };
@@ -41,4 +32,16 @@ const artistWantedValidation = data => {
     return Joi.validate(data, schema);
 };
 
-module.exports = { interestedInWorkValidation, artistWantedValidation };
+const applyJobValidation = data => {
+    const schema = {
+        jobOfferId: Joi.string().required()
+    };
+
+    return Joi.validate(data, schema);
+};
+
+module.exports = {
+    interestedInWorkValidation,
+    artistWantedValidation,
+    applyJobValidation
+};
