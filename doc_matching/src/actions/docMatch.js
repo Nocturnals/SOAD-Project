@@ -23,6 +23,7 @@ export function matching(text1, text2) {
                 dispatch(failDocMatch(err));
             });
     };
+
     function requestDocMatch() {
         return { type: docMatchConst.DOCMATCH_REQUEST };
     }

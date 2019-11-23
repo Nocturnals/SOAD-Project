@@ -38,7 +38,7 @@ router.get("/allcompetitions", async (req, res) => {
             "title , shortdescription"
         );
         console.log(titles);
-        return res.status(200).json({ titles });
+        return res.status(200).json(titles);
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "internal server error" });
@@ -170,6 +170,7 @@ router.patch(
             // const comp = await CompetitionsModel.findById(req.body._id);
             const comp = req.comp;
             comp.title = req.body.title;
+            comp.category = "Comedian";
             await comp.save();
             return res.json(comp);
         } catch (error) {
