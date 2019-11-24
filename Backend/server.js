@@ -6,7 +6,7 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const authRouter = require("./routes/auth");
-//const docMatch = require("./routes/docMatching");
+const docMatch = require("./routes/docMatching/documentMatching");
 
 // load the local environment varaibles
 dotenv.config();
@@ -60,7 +60,7 @@ if (process.env.Node_Env === "development") {
 
 // Route for login
 app.use("/api/user", authRouter);
-//app.use("/", docMatch);
+app.use("/api/docMatch", docMatch);
 app.use("/api/auth", require("./routes/auth"));
 
 //Route for Competitions
@@ -78,14 +78,12 @@ app.use("/api/colab", require("./routes/colab"));
 // app.use("api/subscription", require("./routes/subscription/stripefunctions"));
 
 if (process.env.Node_Env === "production") {
-    // for loading the static frontend app
-    app.use(express.static("../frontend/build"));
+  // for loading the static frontend app
+  app.use(express.static("../frontend/build"));
 
-    app.get("*", (req, res, next) => {
-        res.sendFile(
-            path.resolve(__dirname, "../frontend", "build", "index.html")
-        );
-    });
+  app.get("*", (req, res, next) => {
+    res.sendFile(path.resolve(__dirname, "../frontend", "build", "index.html"));
+  });
 }
 
 const port = process.env.PORT || 3000;

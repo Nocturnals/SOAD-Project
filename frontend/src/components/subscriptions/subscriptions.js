@@ -19,3 +19,5 @@ class Subscriptions extends Component {
         );
     }
 }
+
+export default Subscriptions;

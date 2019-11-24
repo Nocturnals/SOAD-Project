@@ -7,11 +7,12 @@ import { connect } from "react-redux";
 import { register } from "../../actions";
 
 class RegInputFieldProps {
-    constructor(type, class_name, name, placeholder = "") {
+    constructor(type, class_name, name, placeholder = "", pattern = "") {
         this.type = type;
         this.class_name = class_name;
         this.name = name;
         this.placeholder = placeholder;
+        this.pattern = pattern;
     }
 }
 
@@ -49,8 +50,14 @@ class RegisterComp extends Component {
         e.preventDefault();
 
         this.setState({ submitted: true });
-        const { email, password, username, dateOfBirth } = this.state;
-        if (email && password && username && dateOfBirth) {
+        const {
+            email,
+            password,
+            re_password,
+            username,
+            dateOfBirth
+        } = this.state;
+        if (email && password && re_password && username && dateOfBirth) {
             this.props.register(email, username, dateOfBirth, password);
         }
     }
@@ -62,15 +69,33 @@ class RegisterComp extends Component {
             let iF = inputFieldProps[index];
 
             inputFields.push(
-                <input
-                    type={iF.type}
-                    className={iF.class_name}
-                    name={iF.name}
-                    value={values[index]}
-                    placeholder={iF.placeholder}
-                    onChange={this.handleChange}
-                    autoComplete="off"
-                />
+                iF.pattern ? (
+                    <input
+                        type={iF.type}
+                        className={
+                            iF.class_name +
+                            (this.state.submitted && !values[index]
+                                ? " has-error"
+                                : " no-error")
+                        }
+                        name={iF.name}
+                        value={values[index]}
+                        placeholder={iF.placeholder}
+                        onChange={this.handleChange}
+                        pattern={iF.pattern}
+                        autoComplete="off"
+                    />
+                ) : (
+                    <input
+                        type={iF.type}
+                        className={iF.class_name}
+                        name={iF.name}
+                        value={values[index]}
+                        placeholder={iF.placeholder}
+                        onChange={this.handleChange}
+                        autoComplete="off"
+                    />
+                )
             );
         }
 
@@ -83,7 +108,8 @@ class RegisterComp extends Component {
             username,
             dateOfBirth,
             password,
-            re_password
+            re_password,
+            submitted
         } = this.state;
         const inputValues = [
             email,
@@ -109,7 +135,13 @@ class RegisterComp extends Component {
             ),
             // new RegInputFieldProps('text', 'name first', 'firstName', 'First Name...'),
             // new RegInputFieldProps('text', 'name last', 'lastName', 'Last Name...'),
-            new RegInputFieldProps("text", "date", "dateOfBirth", "dd/mm/yyyy"),
+            new RegInputFieldProps(
+                "text",
+                "date",
+                "dateOfBirth",
+                "dd/mm/yyyy",
+                "d{1,2}/d{1,2}/d{4}"
+            ),
             new RegInputFieldProps(
                 "password",
                 "reg_password",
@@ -136,17 +168,62 @@ class RegisterComp extends Component {
                     <h2>REGISTER</h2>
                     <div className="reg_inputs container">
                         <div className="row">
-                            <div className="col-12">{inputs[0]}</div>
+                            <div
+                                className={
+                                    "col-12" +
+                                    (submitted && !email
+                                        ? " has-error"
+                                        : " no-error")
+                                }
+                            >
+                                {inputs[0]}
+                            </div>
                         </div>
                         <div className="row">
-                            <div className="col-7">{inputs[1]}</div>
-                            <div className="col-5">{inputs[2]}</div>
+                            <div
+                                className={
+                                    "col-7" +
+                                    (submitted && !username
+                                        ? " has-error"
+                                        : " no-error")
+                                }
+                            >
+                                {inputs[1]}
+                            </div>
+                            <div
+                                className={
+                                    "col-5" +
+                                    (submitted && !dateOfBirth
+                                        ? " has-error"
+                                        : " no-error")
+                                }
+                            >
+                                {inputs[2]}
+                            </div>
                         </div>
                         <div className="row">
-                            <div className="col-12">{inputs[3]}</div>
+                            <div
+                                className={
+                                    "col-12" +
+                                    (submitted && !password
+                                        ? " has-error"
+                                        : " no-error")
+                                }
+                            >
+                                {inputs[3]}
+                            </div>
                         </div>
                         <div className="row">
-                            <div className="col-12">{inputs[4]}</div>
+                            <div
+                                className={
+                                    "col-12" +
+                                    (submitted && !re_password
+                                        ? " has-error"
+                                        : " no-error")
+                                }
+                            >
+                                {inputs[4]}
+                            </div>
                         </div>
                     </div>
                     <div className="reg_btns">
