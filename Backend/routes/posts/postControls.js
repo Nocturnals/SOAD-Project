@@ -45,8 +45,8 @@ exports.createPost = async (req, res, next) => {
     var exist = artist.map(function(item) { return item; }).indexOf(req.body.Category);
     if (exist == -1)
         return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
+            .status(500)
+            .json({ message: "Category Invalid !!" });
     /**/
     const user = req.loggedUser;
         

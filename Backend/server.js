@@ -6,7 +6,7 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const authRouter = require("./routes/auth");
-const docMatch = require("./routes/docMatching/documentMatching");
+//const docMatch = require("./routes/docMatching");
 
 // load the local environment varaibles
 dotenv.config();
@@ -60,7 +60,7 @@ if (process.env.Node_Env === "development") {
 
 // Route for login
 app.use("/api/user", authRouter);
-app.use("/", docMatch);
+//app.use("/", docMatch);
 app.use("/api/auth", require("./routes/auth"));
 
 //Route for Competitions
