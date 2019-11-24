@@ -37,7 +37,7 @@ const PostSchema = new mongoose.Schema({
   },
 
   category: {
-    enum: ["cat1", "cat2"],
+    enum: ["Painter","VFX Artist","Story Writer","Singer","Photographer","Dancer","Comedian"],
     type: String
   },
 
