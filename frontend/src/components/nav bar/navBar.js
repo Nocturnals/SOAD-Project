@@ -123,7 +123,9 @@ class NavBar extends Component {
                                 >
                                     <i className="fa fa-bell"></i> Notifcations{" "}
                                     {this.state.newNotifications ? (
-                                        <span class="badge badge-info">10</span>
+                                        <span className="badge badge-info">
+                                            10
+                                        </span>
                                     ) : null}
                                 </button>
                                 <div

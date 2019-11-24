@@ -292,6 +292,7 @@ class CreatePostComp extends Component {
         );
     };
 
+    // Rednering
     render() {
         return (
             <div

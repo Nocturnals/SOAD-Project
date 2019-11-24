@@ -140,7 +140,7 @@ class PostComp extends Component {
     };
 
     // DoropDown Event Listener...
-    dropDownEventListener = e => {
+    dropDownEventListener = () => {
         document.addEventListener("click", event => {
             if (
                 !event.target.matches("#post-more-" + this.index) &&

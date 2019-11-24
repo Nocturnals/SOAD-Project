@@ -8,8 +8,6 @@ import {
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-// import { ProtectedRoute } from "./helpers";
-
 import LandingPage from "./components/landing page/landing_page";
 import AuthenticationPage from "./components/authentication/authentication";
 import PasswordResetComp from "./components/authentication/passwordReset/passwordReset";
@@ -18,6 +16,7 @@ import HomePage from "./components/home/home";
 import SearchComp from "./components/search/search";
 import ProfilePage from "./components/profile/profile";
 import AccountSettingsComp from "./components/profile/accountSettings/accountSettings";
+import Jobs from "./components/jobs/jobs";
 
 class MainAppComponents extends Component {
     render() {
@@ -90,9 +89,16 @@ class MainAppComponents extends Component {
                             path="/artist/:username"
                             component={ProfilePage}
                         />
+                        {/* Account Settings */}
                         <AuthenticatedRoute
                             path="/user-account-settings/:settingsType"
                             component={AccountSettingsComp}
+                        />
+
+                        {/* Jobs */}
+                        <AuthenticatedRoute
+                            path="/jobs/:jobType"
+                            component={Jobs}
                         />
 
                         {/* Specific Competition Page */}
