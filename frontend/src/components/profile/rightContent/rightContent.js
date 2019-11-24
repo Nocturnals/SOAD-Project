@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
+import Competition from "../../competitions/competitionClass";
+
+import CompetitionsList from "../../competitions/competitions";
+
 import "./rightContent.css";
 
 class FriendSuggestion {
@@ -12,14 +16,44 @@ class FriendSuggestion {
 }
 
 class RightContent extends Component {
+    constructor(props) {
+        super(props);
+
+        this.image = require("../../media/images/categories/photographer.png");
+        this.friendSuggestions = [
+            new FriendSuggestion(this.image, "Hrithik", "Git Forker"),
+            new FriendSuggestion(this.image, "Nikihil", "Data Scientist"),
+            new FriendSuggestion(this.image, "Hemanth", "Game Development"),
+            new FriendSuggestion(this.image, "Vishwanth", "Red Hat Hacker")
+        ];
+
+        this.state = {
+            friendSuggestions: this.friendSuggestions
+        };
+
+        this.ignoreSuggestion = this.ignoreSuggestion.bind(this);
+    }
+
+    // Ignore Suggestion...
+    ignoreSuggestion = () => {
+        this.setState({
+            friendSuggestions: this.friendSuggestions.pop()
+        });
+    };
+
+    // Friend Suggestions Component...
     friendSuggestionsComp = suggestions => {
         let fSComps = [];
         for (let index = 0; index < suggestions.length; index++) {
             const fSComp = suggestions[index];
             fSComps.push(
                 <div
-                    className="suggestion col-11"
+                    className={
+                        "suggestion col" +
+                        (index === suggestions.length - 1 ? " show" : "")
+                    }
                     id={"friendSuggestion" + index}
+                    key={index}
                 >
                     <div className="user-image row justify-content-center">
                         <div className="col">
@@ -38,7 +72,7 @@ class RightContent extends Component {
                             <h5>{fSComp.username}</h5>
                             <h6>
                                 <i
-                                    class="fa fa-bookmark"
+                                    className="fa fa-bookmark"
                                     aria-hidden="true"
                                 ></i>
                                 &nbsp;&nbsp;{fSComp.job}
@@ -50,7 +84,9 @@ class RightContent extends Component {
                             <button>Follow</button>
                         </div>
                         <div className="ignore col-6">
-                            <button>Ignore</button>
+                            <button onClick={this.ignoreSuggestion}>
+                                Ignore
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -63,31 +99,52 @@ class RightContent extends Component {
     render() {
         const image = require("../../media/images/categories/photographer.png");
 
-        const friendSuggestions = [
-            new FriendSuggestion(image, "Hrithik", "Assam"),
-            new FriendSuggestion(image, "Nikihil", "Data Scientist"),
-            new FriendSuggestion(image, "Hemanth", "Game Development"),
-            new FriendSuggestion(image, "Vishwanth", "Red Hat Hacker")
+        const competitions = [
+            new Competition(
+                "Cook Off",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
+            ),
+            new Competition(
+                "Cook Off",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
+            ),
+            new Competition(
+                "Cook Off",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
+            ),
+            new Competition(
+                "Cook Off",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
+            ),
+            new Competition(
+                "Cook Off",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
+            )
         ];
 
         return (
-            <div className="right-content row">
-                <div className="col">
+            <div className="row right-content">
+                <div className="col rightContentCol">
                     <div className="uploadPostBtn row">
                         <button onClick={this.props.togglePopUp}>
                             Post Update
                         </button>
                     </div>
-                    <div className="friend-suggestions-cards row">
-                        <div className="col">
-                            <div className="suggestions-header row">
-                                <h6>Suggestions</h6>
-                            </div>
-                            <div className="friend-suggestions row">
-                                {this.friendSuggestionsComp(friendSuggestions)}
+                    {this.friendSuggestions.length ? (
+                        <div className="friend-suggestions-cards row">
+                            <div className="col">
+                                <div className="suggestions-header row">
+                                    <h6>Suggestions</h6>
+                                </div>
+                                <div className="friend-suggestions row">
+                                    {this.friendSuggestionsComp(
+                                        this.friendSuggestions
+                                    )}
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    ) : null}
+                    <CompetitionsList competitions={competitions} />
                 </div>
             </div>
         );

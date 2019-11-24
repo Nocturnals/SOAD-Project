@@ -40,10 +40,6 @@ class LoginComp extends Component {
         const { isLoading } = this.props.auth;
         const { email, password, submitted } = this.state;
 
-        if (this.props.auth.isAuthed) {
-            return <Redirect to="/user/home" />;
-        }
-
         return (
             <div className="login_main">
                 <form

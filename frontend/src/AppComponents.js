@@ -17,6 +17,7 @@ import Competition from "./components/competitions/competition";
 import HomePage from "./components/home/home";
 import SearchComp from "./components/search/search";
 import ProfilePage from "./components/profile/profile";
+import AccountSettingsComp from "./components/profile/accountSettings/accountSettings";
 
 class MainAppComponents extends Component {
     render() {
@@ -88,6 +89,10 @@ class MainAppComponents extends Component {
                             exact
                             path="/artist/:username"
                             component={ProfilePage}
+                        />
+                        <AuthenticatedRoute
+                            path="/user-account-settings/:settingsType"
+                            component={AccountSettingsComp}
                         />
 
                         {/* Specific Competition Page */}

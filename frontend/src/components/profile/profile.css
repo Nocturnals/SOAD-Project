@@ -5,8 +5,44 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
+.profile .coverImage .overLay {
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0);
+    transition: all 0.2s linear;
+}
+.profile .coverImage .account-settings {
+    position: absolute;
+    top: 25px; right: 10px;
+    transition: all 0.2s linear;
+}
+.profile .coverImage .account-settings .accountSettingsButton {
+    padding: 0 10px;
+    border-radius: 50%;
+    font-size: 2rem;
+    color: white;
+    border: none;
+    background: none;
+    outline: none;
+    transition: all 0.2s linear;
+}
+.profile .coverImage .account-settings .accountSettingsButton i {
+    margin: auto;
+    text-shadow:  0 0 5px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s linear;
+}
+.profile .coverImage .account-settings .accountSettingsButton:hover {
+    transform: scale(1.5);
+}
+.profile .coverImage .account-settings .accountSettingsButton:hover > i {
+    color: rgb(136, 47, 209);
+    transform: rotate(90deg);
+}
+.profile .coverImage:hover > .overLay {
+    background-color: rgba(0, 0, 0, 0.3);
+}
 
 .profile .profile-content {
+    padding: 0;
     width: 1100px;
     margin: auto;
 }
@@ -68,10 +104,15 @@
 }
 .profile .profile-content .userContent .nav button i {
     color: rgba(0, 0, 0, 0.8);
+    transition: all 0.2s linear;
 }
 .profile .profile-content .userContent .nav button h6 {
     transition: all 0.2s linear;
 }
 .profile .profile-content .userContent .nav button:hover > h6 {
-    color: rgb(123, 28, 179);
+    color: rgb(79, 19, 114);
+}
+
+.profile .profile-content .userContent .nav .active {
+    color: rgb(79, 19, 114);
 }
