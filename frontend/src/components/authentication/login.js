@@ -8,37 +8,37 @@ import isValidEmail from "../../validation/emailValidation";
 import { ClipLoader } from "react-spinners";
 
 class LoginComp extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            email: "",
-            password: "",
-            submitted: false
-        };
+    this.state = {
+      email: "",
+      password: "",
+      submitted: false
+    };
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(e) {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+
+    this.setState({ submitted: true });
+    const { email, password } = this.state;
+    if (email && isValidEmail(email) && password) {
+      this.props.login(email, password);
     }
+  }
 
-    handleChange(e) {
-        const { name, value } = e.target;
-        this.setState({ [name]: value });
-    }
-
-    handleSubmit(e) {
-        e.preventDefault();
-
-        this.setState({ submitted: true });
-        const { email, password } = this.state;
-        if (email && isValidEmail(email) && password) {
-            this.props.login(email, password);
-        }
-    }
-
-    render() {
-        const { isLoading } = this.props.auth;
-        const { email, password, submitted } = this.state;
+  render() {
+    const { isLoading } = this.props.auth;
+    const { email, password, submitted } = this.state;
 
         return (
             <div className="login_main">
@@ -115,7 +115,7 @@ class LoginComp extends Component {
                 <div className="image comp"></div>
             </div>
         );
-    }
+  }
 }
 
 // specifiying the class to have these objects using propTypes
@@ -126,8 +126,8 @@ LoginComp.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth,
-    alert: state.alert
+  auth: state.auth,
+  alert: state.alert
 });
 
 export default connect(mapStateToProps, { login })(LoginComp);
