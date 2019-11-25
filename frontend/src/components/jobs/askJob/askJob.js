@@ -5,6 +5,7 @@ import { Document, Page } from "react-pdf";
 
 import { LocationSearchInput } from "../../googleMaps/googleMaps";
 
+import isValidEmail from "../../../validation/emailValidation";
 import "./askJob.css";
 
 class AskJob extends Component {
@@ -29,7 +30,7 @@ class AskJob extends Component {
             "Comedian"
         ];
 
-        this.state = {
+        this.inputs = {
             legalName: "",
             address: "",
             email: "venkatvishwanth.s17@iiits.in",
@@ -41,15 +42,22 @@ class AskJob extends Component {
             website: "",
             prevJobDescription: "",
             prevJobTitle: "",
-            startDate: null,
-            endDate: null,
+            startDate: "",
+            endDate: "",
             workedAddress: "",
-            resume: null,
+            resume: ""
+        };
+
+        this.state = {
+            inputs: this.inputs,
             resumeName: null,
-            showResume: false
+            showResume: false,
+            submitted: false,
+            noOfEmptyFields: 15
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.getLocationInput = this.getLocationInput.bind(this);
         this.getSelectedFile = this.getSelectedFile.bind(this);
         this.showResume = this.showResume.bind(this);
@@ -60,10 +68,34 @@ class AskJob extends Component {
         this.resumeDisplayEventListener();
     }
 
+    // Counting Empty Input Fields...
+    countEmptyFields = () => {
+        let count = 0;
+        for (const input of Object.values(this.state.inputs)) {
+            if (!input) {
+                count += 1;
+            }
+        }
+
+        return count;
+    };
+
     // Handling Input change of all inputs...
     handleInputChange = e => {
         const { name, value } = e.target;
-        this.setState({ [name]: value });
+        this.inputs = { ...this.inputs, [name]: value };
+        this.setState({ inputs: this.inputs });
+    };
+
+    // Handling Default Submission...
+    handleSubmit = e => {
+        e.preventDefault();
+
+        this.setState({
+            submitted: true,
+            noOfEmptyFields: this.countEmptyFields()
+        });
+        document.body.scrollTo(0, 0);
     };
 
     // getting Location Input...
@@ -80,8 +112,12 @@ class AskJob extends Component {
             oFReader.readAsDataURL(acceptedFiles[0]);
 
             oFReader.onload = oFREvent => {
+                this.inputs = {
+                    ...this.inputs,
+                    resume: oFREvent.target.result
+                };
                 this.setState({
-                    resume: oFREvent.target.result,
+                    inputs: this.inputs,
                     resumeName: acceptedFiles[0].name,
                     showResume: true
                 });
@@ -127,298 +163,389 @@ class AskJob extends Component {
     };
 
     render() {
+        const {
+            legalName,
+            address,
+            email,
+            artistType,
+            description,
+            location,
+            fromTime,
+            toTime,
+            website,
+            prevJobTitle,
+            prevJobDescription,
+            startDate,
+            endDate,
+            workedAddress,
+            resume
+        } = this.state.inputs;
+
+        const {
+            resumeName,
+            showResume,
+            submitted,
+            noOfEmptyFields
+        } = this.state;
+
         return (
             <React.Fragment>
-                <div className="container askJob">
-                    <div className="row header">
-                        <div className="col">
-                            <h4 className="text">Ask for a Job</h4>
+                <form onSubmit={this.handleSubmit}>
+                    <div className="container askJob">
+                        <div className="row header">
+                            <div className="col">
+                                <h4 className="text">Ask for a Job</h4>
+                            </div>
                         </div>
-                    </div>
-                    <div className="row body">
-                        <div className="col-6 column inputs">
-                            {/*
-                             *
-                             ******** Contact Details
-                             *
-                             */}
-                            <div className="row section">
-                                <h6>Contact Details:</h6>
-                            </div>
-                            <div className="row input legalName">
-                                <div className="col">
-                                    <input
-                                        type="text"
-                                        name="legalName"
-                                        placeholder="Legal Name*"
-                                        onChange={this.handleInputChange}
-                                        value={this.state.legalName}
-                                    />
+                        <div className="row body">
+                            <div className="col-6 column inputs">
+                                {submitted && noOfEmptyFields ? (
+                                    <h6 className="mainErrorMsg">
+                                        Missing responses for {noOfEmptyFields}{" "}
+                                        fields
+                                    </h6>
+                                ) : null}
+                                {/*
+                                 *
+                                 ******** Contact Details
+                                 *
+                                 */}
+                                <div className="row section">
+                                    <h6>Contact Details:</h6>
                                 </div>
-                            </div>
-                            <div className="row input email">
-                                <div className="col">
-                                    <input
-                                        type="email"
-                                        className="email"
-                                        placeholder="Email*"
-                                        name="email"
-                                        onChange={this.handleInputChange}
-                                        value={this.state.email}
-                                    />
+                                <div className="row input legalName">
+                                    <div className="col">
+                                        <input
+                                            type="text"
+                                            className={
+                                                submitted && !legalName
+                                                    ? " errorInput"
+                                                    : ""
+                                            }
+                                            name="legalName"
+                                            placeholder="Legal Name*"
+                                            // required
+                                            onChange={this.handleInputChange}
+                                            value={legalName}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="row input address">
-                                <div className="col">
-                                    <textarea
-                                        wrap="off"
-                                        className="address"
-                                        placeholder="Your Address goes here*"
-                                        name="address"
-                                        onChange={this.handleInputChange}
-                                        value={this.state.address}
-                                    />
+                                <div className="row input email">
+                                    <div className="col">
+                                        <input
+                                            type="email"
+                                            className={
+                                                submitted &&
+                                                (!email || !isValidEmail(email))
+                                                    ? " errorInput"
+                                                    : ""
+                                            }
+                                            placeholder="Email*"
+                                            // required
+                                            name="email"
+                                            onChange={this.handleInputChange}
+                                            value={email}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            {/*
-                             *
-                             ******** Job Details
-                             *
-                             */}
-                            <div className="row section">
-                                <h6>Job Details:</h6>
-                            </div>
-                            <div className="row input selectArtistType">
-                                <div className="col">
-                                    <select
-                                        className="custom-select"
-                                        name="artistType"
-                                        onChange={this.handleInputChange}
-                                        value={this.state.artistType}
-                                    >
-                                        <option disabled="disabled">
-                                            --Select Artist Type--
-                                        </option>
-                                        {this.artistTypeOptions()}
-                                    </select>
+                                <div className="row input address">
+                                    <div className="col">
+                                        <textarea
+                                            wrap="off"
+                                            className={
+                                                submitted && !address
+                                                    ? " errorInput"
+                                                    : ""
+                                            }
+                                            placeholder="Your Address goes here*"
+                                            // required
+                                            name="address"
+                                            onChange={this.handleInputChange}
+                                            value={address}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="row input jobDescription">
-                                <div className="col">
-                                    <textarea
-                                        wrap="on"
-                                        className="description"
-                                        placeholder="Description*"
-                                        name="description"
-                                        onChange={this.handleInputChange}
-                                        value={this.state.description}
-                                    />
+                                {/*
+                                 *
+                                 ******** Job Details
+                                 *
+                                 */}
+                                <div className="row section">
+                                    <h6>Job Details:</h6>
                                 </div>
-                            </div>
-                            <div className="row input availableArea">
-                                <div className="col locationSearch">
-                                    {this.state.location ? (
-                                        <div className="row">
-                                            <div className="col locationSelected">
-                                                <i className="fa fa-map-marker"></i>{" "}
-                                                <span>
-                                                    &nbsp;{this.state.location}
-                                                </span>
+                                <div className="row input selectArtistType">
+                                    <div className="col">
+                                        <select
+                                            className="custom-select"
+                                            // required
+                                            name="artistType"
+                                            onChange={this.handleInputChange}
+                                            value={artistType}
+                                        >
+                                            <option disabled="disabled">
+                                                --Select Artist Type--
+                                            </option>
+                                            {this.artistTypeOptions()}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="row input jobDescription">
+                                    <div className="col">
+                                        <textarea
+                                            wrap="on"
+                                            className={
+                                                submitted && !description
+                                                    ? " errorInput"
+                                                    : ""
+                                            }
+                                            placeholder="Description*"
+                                            // required
+                                            name="description"
+                                            onChange={this.handleInputChange}
+                                            value={description}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="row input availableArea">
+                                    <div className="col locationSearch">
+                                        {this.state.location ? (
+                                            <div className="row">
+                                                <div className="col locationSelected">
+                                                    <i className="fa fa-map-marker"></i>{" "}
+                                                    <span>
+                                                        &nbsp;
+                                                        {location}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ) : null}
-                                    <LocationSearchInput
-                                        getLocationInput={this.getLocationInput.bind(
-                                            this
-                                        )}
-                                    />
+                                        ) : null}
+                                        <LocationSearchInput
+                                            getLocationInput={this.getLocationInput.bind(
+                                                this
+                                            )}
+                                            submitted={submitted}
+                                            location={location}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="row input availableTime">
-                                <div className="col from">
-                                    <input
-                                        type="text"
-                                        className="from"
-                                        placeholder="Available From*"
-                                        name="fromTime"
-                                        onChange={this.handleInputChange}
-                                        value={this.state.fromTime}
-                                    />
+                                <div className="row input availableTime">
+                                    <div className="col from">
+                                        <input
+                                            type="text"
+                                            className={
+                                                submitted && !fromTime
+                                                    ? " errorInput"
+                                                    : ""
+                                            }
+                                            placeholder="Available From*"
+                                            // required
+                                            name="fromTime"
+                                            onChange={this.handleInputChange}
+                                            value={fromTime}
+                                        />
+                                    </div>
+                                    <div className="col to">
+                                        <input
+                                            type="text"
+                                            className={
+                                                submitted && !toTime
+                                                    ? " errorInput"
+                                                    : ""
+                                            }
+                                            placeholder="Available Till*"
+                                            // required
+                                            name="toTime"
+                                            onChange={this.handleInputChange}
+                                            value={toTime}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="col to">
-                                    <input
-                                        type="text"
-                                        className="to"
-                                        placeholder="Available Till*"
-                                        name="toTime"
-                                        onChange={this.handleInputChange}
-                                        value={this.state.toTime}
-                                    />
-                                </div>
-                            </div>
-                            <div className="row input website">
-                                <div className="col">
-                                    <input
-                                        type="text"
-                                        placeholder="Website"
-                                        name="website"
-                                        onChange={this.handleInputChange}
-                                        value={this.state.website}
-                                    />
+                                <div className="row input website">
                                     <div className="col">
-                                        <h6 className="subscript">
-                                            *Websites showing your skills
-                                            related to the job.
-                                        </h6>
+                                        <input
+                                            type="text"
+                                            placeholder="Website"
+                                            // required
+                                            name="website"
+                                            onChange={this.handleInputChange}
+                                            value={website}
+                                        />
+                                        <div className="col">
+                                            <h6 className="subscript">
+                                                *Websites showing your skills
+                                                related to the job.
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                {/*
+                                 *
+                                 ******** Work Experience
+                                 *
+                                 */}
+                                <div className="row section">
+                                    <h6>Work Experience:</h6>
+                                </div>
+                                <div className="row input jobTitle">
+                                    <div className="col">
+                                        <input
+                                            type="text"
+                                            className={
+                                                submitted && !prevJobTitle
+                                                    ? " errorInput"
+                                                    : ""
+                                            }
+                                            placeholder="Job Title*"
+                                            // required
+                                            name="prevJobTitle"
+                                            onChange={this.handleInputChange}
+                                            value={prevJobTitle}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="row input prevJobDescription">
+                                    <div className="col">
+                                        <textarea
+                                            wrap="on"
+                                            className={
+                                                submitted && !prevJobDescription
+                                                    ? " errorInput"
+                                                    : ""
+                                            }
+                                            placeholder="Description*"
+                                            // required
+                                            name="prevJobDescription"
+                                            onChange={this.handleInputChange}
+                                            value={prevJobDescription}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="row input workedTime">
+                                    <div className="col">
+                                        <div className="row dateHead">
+                                            <h6>Started Date*:</h6>
+                                        </div>
+                                        <input
+                                            type="date"
+                                            className={
+                                                submitted && !startDate
+                                                    ? " errorInput"
+                                                    : ""
+                                            }
+                                            placeholder="Started*"
+                                            // required
+                                            name="startDate"
+                                            onChange={this.handleInputChange}
+                                            value={startDate}
+                                        />
+                                    </div>
+                                    <div className="col">
+                                        <div className="row dateHead">
+                                            <h6>Ended Date:</h6>
+                                        </div>
+                                        <input
+                                            type="date"
+                                            placeholder="End Date"
+                                            name="endDate"
+                                            onChange={this.handleInputChange}
+                                            value={endDate}
+                                        />
+                                    </div>
+                                    <div className="row">
+                                        <div className="col">
+                                            <h6 className="subscript">
+                                                *If you don't give any end date,
+                                                it'll be considered as you are
+                                                still working.
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="row input workedAddress">
+                                    <div className="col">
+                                        <textarea
+                                            wrap="off"
+                                            className={
+                                                submitted && !workedAddress
+                                                    ? " errorInput"
+                                                    : ""
+                                            }
+                                            placeholder="Your Worked Address goes here*"
+                                            // required
+                                            name="workedAddress"
+                                            onChange={this.handleInputChange}
+                                            value={workedAddress}
+                                        />
                                     </div>
                                 </div>
                             </div>
                             {/*
                              *
-                             ******** Work Experience
+                             ******** Resume
                              *
                              */}
-                            <div className="row section">
-                                <h6>Work Experience:</h6>
-                            </div>
-                            <div className="row input jobTitle">
-                                <div className="col">
-                                    <input
-                                        type="text"
-                                        placeholder="Job Title*"
-                                        name="prevJobTitle"
-                                        onChange={this.handleInputChange}
-                                        value={this.state.prevJobTitle}
-                                    />
+                            <div className="col-6 column inputs resume">
+                                <div className="row section">
+                                    <h6>Resume*</h6>
                                 </div>
-                            </div>
-                            <div className="row input prevJobDescription">
-                                <div className="col">
-                                    <textarea
-                                        wrap="on"
-                                        placeholder="Description*"
-                                        name="prevJobDescription"
-                                        onChange={this.handleInputChange}
-                                        value={this.state.prevJobDescription}
-                                    />
-                                </div>
-                            </div>
-                            <div className="row input workedTime">
-                                <div className="col">
-                                    <div className="row dateHead">
-                                        <h6>Started Date*:</h6>
-                                    </div>
-                                    <input
-                                        type="date"
-                                        className="started"
-                                        placeholder="Started*"
-                                        name="startDate"
-                                        onChange={this.handleInputChange}
-                                        value={this.state.startDate}
-                                    />
-                                </div>
-                                <div className="col">
-                                    <div className="row dateHead">
-                                        <h6>Ended Date:</h6>
-                                    </div>
-                                    <input
-                                        type="date"
-                                        className="ended"
-                                        placeholder="End Date"
-                                        name="endDate"
-                                        onChange={this.handleInputChange}
-                                        value={this.state.endDate}
-                                    />
-                                </div>
-                                <div className="row">
-                                    <div className="col">
-                                        <h6 className="subscript">
-                                            *If you don't give any end date,
-                                            it'll be considered as you are still
-                                            working.
-                                        </h6>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row input workedAddress">
-                                <div className="col">
-                                    <textarea
-                                        wrap="off"
-                                        className="workedAddress"
-                                        placeholder="Your Worked Address goes here*"
-                                        name="workedAddress"
-                                        onChange={this.handleInputChange}
-                                        value={this.state.workedAddress}
-                                    />
-                                </div>
+                                <h6
+                                    className="resumeName"
+                                    id="resumeName"
+                                    onClick={this.showResume}
+                                >
+                                    {resumeName
+                                        ? "Selected - " + resumeName
+                                        : null}
+                                </h6>
+                                <Dropzone
+                                    onDrop={acceptedFiles =>
+                                        this.getSelectedFile(acceptedFiles)
+                                    }
+                                >
+                                    {({ getRootProps, getInputProps }) => (
+                                        <section>
+                                            <div {...getRootProps()}>
+                                                <input
+                                                    {...getInputProps()}
+                                                    accept="application/pdf"
+                                                    // required
+                                                />
+                                                <p className="dropzone">
+                                                    <span className="text">
+                                                        <i
+                                                            className="fa fa-upload"
+                                                            aria-hidden="true"
+                                                        ></i>
+                                                        <br></br>
+                                                        {this.state.resume
+                                                            ? "Click to change the Resume"
+                                                            : "Drop Resume Here"}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </section>
+                                    )}
+                                </Dropzone>
                             </div>
                         </div>
-                        {/*
-                         *
-                         ******** Resume
-                         *
-                         */}
-                        <div className="col-6 column inputs resume">
-                            <div className="row section">
-                                <h6>Resume*</h6>
+                        {/* Submission Buttons */}
+                        <div className="row submissionButtons justify-content-center">
+                            <div className="col-3">
+                                <button type="submit" className="submit">
+                                    Submit
+                                </button>
                             </div>
-                            <h6
-                                className="resumeName"
-                                id="resumeName"
-                                onClick={this.showResume}
-                            >
-                                {this.state.resumeName
-                                    ? "Selected - " + this.state.resumeName
-                                    : null}
-                            </h6>
-                            <Dropzone
-                                onDrop={acceptedFiles =>
-                                    this.getSelectedFile(acceptedFiles)
-                                }
-                            >
-                                {({ getRootProps, getInputProps }) => (
-                                    <section>
-                                        <div {...getRootProps()}>
-                                            <input
-                                                accept="application/pdf"
-                                                {...getInputProps()}
-                                            />
-                                            <p className="dropzone">
-                                                <h6 className="text">
-                                                    <i
-                                                        className="fa fa-upload"
-                                                        aria-hidden="true"
-                                                    ></i>
-                                                    <br></br>
-                                                    {this.state.resume
-                                                        ? "Click to change the Resume"
-                                                        : "Drop Resume Here"}
-                                                </h6>
-                                            </p>
-                                        </div>
-                                    </section>
-                                )}
-                            </Dropzone>
+                            {/* <div className="col-2">
+                                <button className="cancel">Cancel</button>
+                            </div> */}
                         </div>
                     </div>
-                    {/* Submission Buttons */}
-                    <div className="row submissionButtons justify-content-center">
-                        <div className="col-2">
-                            <button className="submit">Submit</button>
-                        </div>
-                        <div className="col-2">
-                            <button className="cancel">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-                {this.state.showResume ? (
+                </form>
+                {showResume ? (
                     <div className="container-fluid resumeDisplay">
                         <div className="row">
                             <div className="col-6 resumeDoc">
-                                <Document
-                                    file={this.state.resume}
-                                    id="resumeDoc"
-                                >
+                                <Document file={resume} id="resumeDoc">
                                     <Page wrap pageNumber={1} />
                                 </Document>
                             </div>

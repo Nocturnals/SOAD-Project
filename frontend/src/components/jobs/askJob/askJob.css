@@ -112,7 +112,7 @@
     color: rgb(105, 44, 185);
     transform: scale(1);
 }
-.askJob .body .inputs .dropzone:hover > h6 i {
+.askJob .body .inputs .dropzone:hover > span i {
     animation: dropzoneAnimation 0.4s;
 }
 .askJob .body .inputs .resumeName {
@@ -168,7 +168,12 @@
 .askJob .body .inputs textarea::placeholder,
 .askJob .body .inputs .input input::placeholder {
     font-weight: 500;
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.4);
+    transition: all 0.2s linear;
+}
+.askJob .body .inputs textarea:focus::placeholder,
+.askJob .body .inputs .input input:focus::placeholder {
+    font-size: 0.8rem;
 }
 
 
@@ -236,6 +241,25 @@
     margin: auto;
 }
 
+
+
+
+
+
+/* Error Message Displays */
+.askJob .body .inputs .mainErrorMsg {
+    color: rgb(241, 48, 48);
+}
+.askJob .body .inputs .input .errorInput {
+    border-bottom: 0.5px solid rgb(241, 48, 48);
+}
+.askJob .body .inputs .input .errorInput::placeholder {
+    color: rgba(243, 45, 45, 0.9);
+    transition: all 0.2s linear;
+}
+.askJob .body .inputs .input .errorInput:focus::placeholder {
+    color: rgba(243, 45, 45, 0.6);
+}
 
 
 

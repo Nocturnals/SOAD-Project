@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import GoogleMapReact from "google-map-react";
 import PlacesAutocomplete from "react-places-autocomplete";
 import {
@@ -9,6 +8,12 @@ import {
 } from "react-places-autocomplete";
 
 import "./googleMaps.css";
+
+// DOTENV
+const dotenv = require("dotenv");
+// load the local environment varaibles
+dotenv.config();
+const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY || "";
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
@@ -27,7 +32,7 @@ export class GoogleMap extends Component {
             // Important! Always set the container height explicitly
             <GoogleMapReact
                 bootstrapURLKeys={{
-                    key: "YOUR_API_KEY"
+                    key: { googleMapsApiKey }
                 }}
                 defaultCenter={this.props.center}
                 defaultZoom={this.props.zoom}
@@ -77,10 +82,16 @@ export class LocationSearchInput extends Component {
                     <div>
                         <input
                             {...getInputProps({
-                                placeholder: "Search Places*",
-                                className: "location-search-input",
+                                placeholder: "Available Location*",
+                                className:
+                                    "location-search-input" +
+                                    (this.props.submitted &&
+                                    !this.props.location
+                                        ? " errorInput"
+                                        : ""),
                                 id: "locationInput"
                             })}
+                            // required
                         />
                         <div className="autocomplete-dropdown-container">
                             {loading && <div>Loading...</div>}
