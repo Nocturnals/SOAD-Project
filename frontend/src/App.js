@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-import {
-    BrowserRouter as Router,
-    Route,
-    Redirect,
-    Switch
-} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import store from "./store";

@@ -25,7 +25,6 @@ class SearchComp extends Component {
     profileCardsComp = cards => {
         let pCards = [];
         for (let index = 0; index < cards.length; index++) {
-            const pCard = cards[index];
             pCards.push(<ProfileCard userDetails="" />);
         }
     };

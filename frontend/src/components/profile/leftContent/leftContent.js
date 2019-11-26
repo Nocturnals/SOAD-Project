@@ -12,10 +12,6 @@ class Organisation {
 }
 
 class OrganisationsLink extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <Link

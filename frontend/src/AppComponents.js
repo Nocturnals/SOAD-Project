@@ -1,3 +1,5 @@
+import path from "path";
+
 import React, { Component } from "react";
 import {
     BrowserRouter as Router,
@@ -19,10 +21,9 @@ import AccountSettingsComp from "./components/profile/accountSettings/accountSet
 import Jobs from "./components/jobs/jobs";
 import Organisations from "./components/organisations/organisations";
 
-let dotenv = require("dotenv");
-dotenv.config();
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 const googleApiKey = `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&libraries=places`;
-// console.log(process.env);
+console.log(process.env.GOOGLE_MAPS_API_KEY);
 
 class MainAppComponents extends Component {
     render() {
@@ -69,7 +70,7 @@ class MainAppComponents extends Component {
                     <React.Fragment>
                         {/* Displaying Error Messages */}
                         {this.props.alert.message ? (
-                            <div class="alert alert-danger" role="alert">
+                            <div className="alert alert-danger" role="alert">
                                 {this.props.alert.message}
                             </div>
                         ) : null}

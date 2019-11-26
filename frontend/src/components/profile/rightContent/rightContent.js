@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 
 import Competition from "../../competitions/competitionClass";
 
@@ -97,8 +96,6 @@ class RightContent extends Component {
     };
 
     render() {
-        const image = require("../../media/images/categories/photographer.png");
-
         const competitions = [
             new Competition(
                 "Cook Off",
