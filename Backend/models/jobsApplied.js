@@ -35,9 +35,15 @@ const JobsAppliedSchema = new mongoose.Schema({
     portpolioSite: {
         type: String,
         default: ""
+    },
+
+    cvLocation: {
+        type: String,
+        required: true
     }
 });
 
 const JobsAppliedModel = mongoose.model("JobsApplied", JobsAppliedSchema);
 
 module.exports = JobsAppliedModel;
+module.exports.JobsAppliedSchema = JobsAppliedSchema;

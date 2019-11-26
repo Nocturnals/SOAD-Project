@@ -12,7 +12,9 @@ const interestedInWorkValidation = data => {
             .integer()
             .required(),
 
-        portpolioSite: Joi.string()
+        portpolioSite: Joi.string(),
+
+        cvLocation: Joi.string().required()
     };
 
     return Joi.validate(data, schema);
