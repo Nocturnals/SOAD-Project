@@ -18,8 +18,20 @@ class LinkClass {
 class NavBar extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            newNotifications: 10
+        };
+
         this.logoutUser = this.logoutUser.bind(this);
     }
+
+    // Clear Notifications badge...
+    clearNotificationsBadge = () => {
+        this.setState({
+            newNotifications: 0
+        });
+    };
 
     // logout function
     logoutUser() {
@@ -55,7 +67,8 @@ class NavBar extends Component {
         const links = this.props.auth.isAuthed
             ? [
                   new LinkClass("/feed", "Home"),
-                  new LinkClass("/search", "Search", "_blank")
+                  new LinkClass("/search", "Search", "_blank"),
+                  new LinkClass("/artists/organisation-1/feed", "Organisations")
               ]
             : [
                   new LinkClass("/", "Home"),
@@ -68,9 +81,17 @@ class NavBar extends Component {
                     "navbar sticky-top navbar-expand-lg" +
                     (this.props.auth.isAuthed
                         ? " bg-theme"
+                        : this.props.contract
+                        ? " bg-theme"
                         : " bg-black-06 nav-min-height")
                 }
-                id={!this.props.auth.isAuthed ? "nav-bar" : ""}
+                id={
+                    this.props.auth.isAuthed
+                        ? ""
+                        : this.props.contract
+                        ? ""
+                        : "nav-bar"
+                }
             >
                 <Link to="/">
                     <button className="navbar-brand navTitle">
@@ -87,7 +108,7 @@ class NavBar extends Component {
                     aria-expanded="false"
                     aria-label="Toggle navigation"
                 >
-                    <span className="navbar-toggler-icon">
+                    <span className="navBarToggler navbar-toggler-icon">
                         <i className="fa fa-bars" aria-hidden="true"></i>
                     </span>
                 </button>
@@ -107,8 +128,14 @@ class NavBar extends Component {
                                     data-toggle="dropdown"
                                     aria-haspopup="true"
                                     aria-expanded="false"
+                                    onClick={this.clearNotificationsBadge}
                                 >
-                                    <i className="fa fa-bell"></i> Notifcations
+                                    <i className="fa fa-bell"></i> Notifcations{" "}
+                                    {this.state.newNotifications ? (
+                                        <span className="badge badge-info">
+                                            10
+                                        </span>
+                                    ) : null}
                                 </button>
                                 <div
                                     className="dropdown-menu dropdown-menu-right dropdown-default"

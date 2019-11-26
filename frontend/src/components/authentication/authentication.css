@@ -1,15 +1,16 @@
-@import '../fonts/fonts.css';
+@import "../fonts/fonts.css";
 
 .background {
     position: fixed;
-    top: 0; bottom: 0;
+    top: 0;
+    bottom: 0;
     margin: 0;
     width: 100%;
     height: 100%;
 }
 .background {
     background-color: rgb(66, 19, 88);
-    background-image: url('../media/images/authentication/login_back.png');
+    background-image: url("../media/images/authentication/login_back.png");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: bottom;
@@ -31,13 +32,14 @@
     letter-spacing: 1px;
     color: aliceblue;
     caret-color: rgb(253, 224, 185);
-    font-size: 1.0rem;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 1rem;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+        "Lucida Sans", Arial, sans-serif;
 }
 .auth_page input::placeholder {
     color: rgb(192, 220, 245, 0.6);
     font-size: 1.1rem;
-    font-family: 'LALORG'
+    font-family: "LALORG";
 }
 
 .auth_page h2 {
@@ -45,7 +47,6 @@
     color: rgb(119, 107, 223);
     text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
-
 
 .homeLink {
     position: sticky;
@@ -59,26 +60,15 @@
 .homeLink button {
     background: none;
     border: none;
-    outline: none
+    outline: none;
 }
 .homeLink button:hover {
     cursor: pointer;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 /* LOGIN */
-.login_main, .register_main {
+.login_main,
+.register_main {
     position: relative;
     width: 100%;
 }
@@ -87,19 +77,23 @@
     width: 49.9%;
     text-align: center;
 }
-.image {
+.login_main .image,
+.register_main .image {
     position: relative;
     width: 49.9%;
     height: 500px;
 }
-.image {
-    background-image: url('../media/images/authentication/login_sideback.png');
+.login_main .image,
+.register_main .image {
+    background-image: url("../media/images/authentication/login_sideback.png");
     background-position: left;
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: contain;
 }
-.comp {display: inline-block;}
+.comp {
+    display: inline-block;
+}
 
 .login_main input {
     width: 350px;
@@ -121,7 +115,7 @@
     box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.5);
     font-size: 0.95rem;
     letter-spacing: 1.5px;
-    font-family: 'Optien';
+    font-family: "Optien";
     transition: 0.1s linear all;
 }
 .form_group button:hover {
@@ -131,28 +125,19 @@
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
-
-.reg_btn, .login_btn {
+.reg_btn,
+.login_btn {
     margin-top: 35px;
     color: rgb(217, 198, 252);
 }
-.reg_link, .login_link {
+.reg_link,
+.login_link {
     color: rgb(157, 158, 255);
 }
-.reg_link:hover, .login_link:hover {
+.reg_link:hover,
+.login_link:hover {
     color: aliceblue;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 /* REGISTER */
 .register_main .container {
@@ -178,7 +163,7 @@
     padding: 10px 20px;
     border-radius: 50px;
     font-size: 0.95rem;
-    font-family: 'Optien';
+    font-family: "Optien";
     letter-spacing: 1.5px;
     transition: 0.1s linear all;
 }
@@ -189,14 +174,10 @@
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
-
-
-
-
-
 /* Responsive css */
 @media only screen and (max-width: 1074px) {
-    .image {
+    .login_main .image,
+    .register_main .image {
         display: none;
     }
     .form {

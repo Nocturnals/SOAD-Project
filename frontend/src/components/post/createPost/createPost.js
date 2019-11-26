@@ -1,10 +1,17 @@
 import React, { Component } from "react";
-import { Document, Page } from "react-pdf";
+
 import Img from "react-image";
+import { Document, Page } from "react-pdf";
+import ReactAudioPlayer from "react-audio-player";
+import { Player } from "video-react";
+
 import { ClipLoader } from "react-spinners";
+
+import categoryProperties from "./categoryProps";
 
 import "./createPost.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
+import "video-react/dist/video-react.css";
 
 class CreatePostComp extends Component {
     constructor(props) {
@@ -23,22 +30,25 @@ class CreatePostComp extends Component {
         this.initialState = {
             title: "",
             category: this.categories[0],
-            categoryReset: false,
             categoryInput: "",
             categoryInputFiles: [],
+            wrongCategoryInput: false,
             description: ""
         };
 
         this.state = this.initialState;
 
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.categoryInputs = this.categoryInputs.bind(this);
         this.clearAndToggle = this.clearAndToggle.bind(this);
-        this.previewImage = this.previewImage.bind(this);
+        this.previewFiles = this.previewFiles.bind(this);
         this.cancelSelection = this.cancelSelection.bind(this);
     }
 
     handleInputChange = e => {
         const { name, value } = e.target;
+        this.setState({ [name]: value });
+
         switch (name) {
             case "category":
                 this.setState({
@@ -47,11 +57,10 @@ class CreatePostComp extends Component {
                 });
                 break;
             case "categoryInput":
-                this.previewImage();
+                this.previewFiles();
             default:
                 break;
         }
-        this.setState({ [name]: value });
     };
 
     /**
@@ -60,19 +69,36 @@ class CreatePostComp extends Component {
      *
      */
     /** Preview Image */
-    previewImage = () => {
+    previewFiles = () => {
         const inputFiles = document.getElementById("categoryInput").files;
         let inputFilesList = [];
         for (let index = 0; index < inputFiles.length; index++) {
-            var oFReader = new FileReader();
-            oFReader.readAsDataURL(inputFiles[index]);
+            if (
+                inputFiles[index].type.split("/")[0] ===
+                categoryProperties(this.state.category).fileType
+            ) {
+                var oFReader = new FileReader();
+                oFReader.readAsDataURL(inputFiles[index]);
 
-            oFReader.onload = oFREvent => {
-                inputFilesList.push(oFREvent.target.result);
+                oFReader.onload = oFREvent => {
+                    inputFilesList.push(oFREvent.target.result);
+                    this.setState({
+                        categoryInputFiles: inputFilesList
+                    });
+                    this.setState({
+                        wrongCategoryInput: false
+                    });
+                };
+            } else {
                 this.setState({
-                    categoryInputFiles: inputFilesList
+                    wrongCategoryInput: true
                 });
-            };
+                setTimeout(() => {
+                    this.setState({
+                        wrongCategoryInput: false
+                    });
+                }, 5000);
+            }
         }
     };
     cancelSelection = index => {
@@ -83,14 +109,17 @@ class CreatePostComp extends Component {
                 modifiedFiles.push(selectedFiles[i]);
             }
         }
+        if (modifiedFiles.length === 0) {
+            this.setState({
+                categoryInput: ""
+            });
+        }
         this.setState({
             categoryInputFiles: modifiedFiles
         });
     };
 
     /**
-     *
-     *
      *
      *
      */
@@ -119,14 +148,10 @@ class CreatePostComp extends Component {
 
     // Creating Inputs for selected Category...
     categoryInputs = () => {
-        let fileType = null;
-        let fileName = null;
         let filePreview = [];
         switch (this.state.category.replace(/\s/g, "").toLowerCase()) {
             case "photographer":
             case "painter":
-                fileType = "image/*";
-                fileName = "Images";
                 for (
                     let index = 0;
                     index < this.state.categoryInputFiles.length;
@@ -139,7 +164,7 @@ class CreatePostComp extends Component {
                                 loader={
                                     <ClipLoader
                                         sizeUnit={"px"}
-                                        size={150}
+                                        size={80}
                                         color={"#123abc"}
                                         loading={this.state.loading}
                                     />
@@ -163,20 +188,42 @@ class CreatePostComp extends Component {
                 break;
 
             case "singer":
-                fileType = "audio/*";
-                fileName = "Audios";
+                for (
+                    let index = 0;
+                    index < this.state.categoryInputFiles.length;
+                    index++
+                ) {
+                    filePreview.push(
+                        <ReactAudioPlayer
+                            src={this.state.categoryInputFiles[index]}
+                            controls
+                            className="audio"
+                        />
+                    );
+                }
                 break;
 
             case "vfxartist":
             case "dancer":
             case "comedian":
-                fileType = "video/*";
-                fileName = "Videos";
+                for (
+                    let index = 0;
+                    index < this.state.categoryInputFiles.length;
+                    index++
+                ) {
+                    filePreview.push(
+                        <div className="col-6">
+                            <Player playsInline controls className="video">
+                                <source
+                                    src={this.state.categoryInputFiles[index]}
+                                ></source>
+                            </Player>
+                        </div>
+                    );
+                }
                 break;
 
             case "storywriter":
-                fileType = ".pdf, .doc, .docx";
-                fileName = "Documents(" + fileType + ")";
                 const pageNumber = 1;
                 for (
                     let index = 0;
@@ -192,6 +239,7 @@ class CreatePostComp extends Component {
                                 className="document"
                             >
                                 <Page
+                                    wrap
                                     pageNumber={pageNumber}
                                     size="B1"
                                     className="document-page"
@@ -205,12 +253,17 @@ class CreatePostComp extends Component {
             default:
                 break;
         }
+
+        const categoryProps = categoryProperties(this.state.category);
+
         return (
             <React.Fragment>
                 <input
                     type="file"
                     id="categoryInput"
-                    accept={fileType}
+                    accept={
+                        categoryProps.fileType + "/" + categoryProps.fileTypeExt
+                    }
                     name="categoryInput"
                     value={this.state.categoryInput}
                     onChange={this.handleInputChange}
@@ -220,16 +273,26 @@ class CreatePostComp extends Component {
                 <label htmlFor="categoryInput" className="categoryInputLabel">
                     <i className="fa fa-upload" aria-hidden="true"></i>{" "}
                     {this.state.categoryInputFiles.length !== 0
-                        ? " (Click to change the " + fileName + ")"
-                        : " Upload " + fileName}
+                        ? " (Click to change the " +
+                          categoryProps.fileName +
+                          ")"
+                        : " Upload " + categoryProps.fileName}
                 </label>
-                <div className="inputFiles row justify-content-center">
-                    {filePreview}
-                </div>
+                {this.state.wrongCategoryInput ? (
+                    <h6 className="fileInputError">
+                        Tried to choose wrong type of file
+                    </h6>
+                ) : null}
+                {this.state.categoryInputFiles.length ? (
+                    <div className="inputFiles row justify-content-center">
+                        {filePreview}
+                    </div>
+                ) : null}
             </React.Fragment>
         );
     };
 
+    // Rednering
     render() {
         return (
             <div
@@ -239,7 +302,7 @@ class CreatePostComp extends Component {
                 }
             >
                 <div className="row createPostRow justify-content-center">
-                    <div className="col createPost">
+                    <div className="col-6 createPost">
                         <div className="row header justify-content-end">
                             <div className="col">
                                 <h6>Post An Update</h6>

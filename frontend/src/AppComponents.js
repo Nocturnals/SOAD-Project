@@ -8,8 +8,6 @@ import {
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-// import { ProtectedRoute } from "./helpers";
-
 import LandingPage from "./components/landing page/landing_page";
 import AuthenticationPage from "./components/authentication/authentication";
 import PasswordResetComp from "./components/authentication/passwordReset/passwordReset";
@@ -17,6 +15,14 @@ import Competition from "./components/competitions/competition";
 import HomePage from "./components/home/home";
 import SearchComp from "./components/search/search";
 import ProfilePage from "./components/profile/profile";
+import AccountSettingsComp from "./components/profile/accountSettings/accountSettings";
+import Jobs from "./components/jobs/jobs";
+import Organisations from "./components/organisations/organisations";
+
+let dotenv = require("dotenv");
+dotenv.config();
+const googleApiKey = `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&libraries=places`;
+// console.log(process.env);
 
 class MainAppComponents extends Component {
     render() {
@@ -89,12 +95,30 @@ class MainAppComponents extends Component {
                             path="/artist/:username"
                             component={ProfilePage}
                         />
+                        {/* Account Settings */}
+                        <AuthenticatedRoute
+                            path="/user-account-settings/:settingsType"
+                            component={AccountSettingsComp}
+                        />
+
+                        {/* Jobs */}
+                        <AuthenticatedRoute
+                            path="/jobs/:jobType"
+                            component={Jobs}
+                        />
 
                         {/* Specific Competition Page */}
                         <Route
                             exact
                             path="/competitions/:type"
                             component={Competition}
+                        />
+
+                        {/* Organisations Page */}
+                        <Route
+                            exact
+                            path="/artists/:organisationName/:content"
+                            component={Organisations}
                         />
 
                         {/* Search Page */}
@@ -105,6 +129,8 @@ class MainAppComponents extends Component {
                             path="/password-reset/:passwordResetToken"
                             component={PasswordResetComp}
                         />
+
+                        <script src={googleApiKey}></script>
                     </React.Fragment>
                 </Switch>
             </Router>

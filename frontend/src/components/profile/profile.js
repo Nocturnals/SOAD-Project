@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import PostComp from "../post/post";
 import LeftContent from "./leftContent/leftContent";
@@ -24,9 +27,11 @@ class ProfilePage extends Component {
         super(props);
 
         this.state = {
+            nav: "nav1",
             showUploadPostPopUP: false
         };
 
+        this.handleNavigation = this.handleNavigation.bind(this);
         this.toggleUploadPostPopUp = this.toggleUploadPostPopUp.bind(this);
     }
 
@@ -34,6 +39,12 @@ class ProfilePage extends Component {
         document.body.scrollTo(0, 0);
     }
 
+    // Sub Navigator...
+    handleNavigation = nav => {
+        this.setState({ nav: nav });
+    };
+
+    // Toggle Create Post PopUp
     toggleUploadPostPopUp = () => {
         this.setState({
             showUploadPostPopUP: !this.state.showUploadPostPopUP
@@ -52,7 +63,9 @@ class ProfilePage extends Component {
                 liked: post.liked,
                 location: post.location
             };
-            postCards.push(<PostComp post_details={post_details} index={i} />);
+            postCards.push(
+                <PostComp post_details={post_details} index={i} key={i} />
+            );
         }
 
         return postCards;
@@ -73,13 +86,32 @@ class ProfilePage extends Component {
 
         return (
             <React.Fragment>
-                <NavBar />
+                <NavBar contract={true} />
                 <div className="profile row">
                     <div className="col">
                         <div
-                            className="coverImage row"
+                            className="coverImage row justify-content-end"
                             style={{ backgroundImage: `url(${coverimage})` }}
-                        ></div>
+                        >
+                            {this.props.auth.isAuthed ? (
+                                <React.Fragment>
+                                    <div className="overLay"></div>
+                                    <div className="col-1 account-settings">
+                                        <Link
+                                            to="/user-account-settings/general"
+                                            style={{ textDecoration: "none" }}
+                                        >
+                                            <button className="accountSettingsButton">
+                                                <i
+                                                    className="fa fa-cog"
+                                                    aria-hidden="true"
+                                                ></i>
+                                            </button>
+                                        </Link>
+                                    </div>
+                                </React.Fragment>
+                            ) : null}
+                        </div>
                         <div className="profile-content row">
                             <div className="col-3">
                                 <LeftContent email="mail.mail.com" />
@@ -94,7 +126,7 @@ class ProfilePage extends Component {
                                             <div className="userMail col align-self-center">
                                                 <h6>
                                                     <i
-                                                        class="fa fa-envelope"
+                                                        className="fa fa-envelope"
                                                         aria-hidden="true"
                                                     ></i>
                                                     &nbsp;&nbsp;&nbsp;venkatvishwanth.s17@iiits.in
@@ -110,7 +142,7 @@ class ProfilePage extends Component {
                                             <div className="userLocation col">
                                                 <h4>
                                                     <i
-                                                        class="fa fa-map-marker"
+                                                        className="fa fa-map-marker"
                                                         aria-hidden="true"
                                                     ></i>
                                                     &nbsp;&nbsp;India
@@ -119,30 +151,59 @@ class ProfilePage extends Component {
                                         </div>
                                         <div className="nav row">
                                             <div className="col-2">
-                                                <button>
+                                                <button
+                                                    name="nav1"
+                                                    onClick={() => {
+                                                        this.handleNavigation(
+                                                            "nav1"
+                                                        );
+                                                    }}
+                                                    className={
+                                                        this.state.nav ===
+                                                        "nav1"
+                                                            ? "active"
+                                                            : ""
+                                                    }
+                                                >
                                                     <i
-                                                        className="fa fa-newspaper-o"
+                                                        className={
+                                                            "fa fa-newspaper-o" +
+                                                            (this.state.nav ===
+                                                            "nav1"
+                                                                ? " active"
+                                                                : "")
+                                                        }
                                                         aria-hidden="true"
                                                     ></i>
                                                     <h6>Feed</h6>
                                                 </button>
                                             </div>
                                             <div className="col-2">
-                                                <button>
+                                                <button
+                                                    name="nav2"
+                                                    onClick={() => {
+                                                        this.handleNavigation(
+                                                            "nav2"
+                                                        );
+                                                    }}
+                                                    className={
+                                                        this.state.nav ===
+                                                        "nav2"
+                                                            ? "active"
+                                                            : ""
+                                                    }
+                                                >
                                                     <i
-                                                        className="fa fa-info"
+                                                        className={
+                                                            "fa fa-info" +
+                                                            (this.state.nav ===
+                                                            "nav2"
+                                                                ? " active"
+                                                                : "")
+                                                        }
                                                         aria-hidden="true"
                                                     ></i>
                                                     <h6>Info</h6>
-                                                </button>
-                                            </div>
-                                            <div className="col-2">
-                                                <button>
-                                                    <i
-                                                        className="fa fa-newspaper-o"
-                                                        aria-hidden="true"
-                                                    ></i>
-                                                    <h6>Work</h6>
                                                 </button>
                                             </div>
                                         </div>
@@ -169,4 +230,12 @@ class ProfilePage extends Component {
     }
 }
 
-export default ProfilePage;
+ProfilePage.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(ProfilePage);

@@ -1,0 +1,143 @@
+.generalSettings .column-1 {
+    margin: auto;
+    width: 750px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.generalSettings .column-1 .rows {
+    margin: 0;
+}
+.generalSettings .column-1 .filesInput {
+    display: none;
+}
+
+/* Cover Image */
+.generalSettings .column-1 .coverImage {
+    height: 250px;
+    padding: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.generalSettings .column-1 .coverImage .editCoverImage {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition: all 0.2s linear;
+}
+.generalSettings .column-1 .coverImage .editCoverImage .coverImageInputLabel {
+    margin: auto;
+    margin-top: 100px;
+    color: seashell;
+    font-size: 1.8rem;
+    transition: all 0.2s linear;
+}
+.generalSettings
+    .column-1
+    .coverImage
+    .editCoverImage
+    .coverImageInputLabel:hover {
+    cursor: pointer;
+}
+.generalSettings .column-1 .coverImage:hover > .editCoverImage .coverImageInputLabel {
+    font-size: 2rem;
+}
+
+/* Profile Image */
+.generalSettings .column-1 .profileImage .imageDiv {
+    margin-top: -50px;
+}
+.generalSettings .column-1 .profileImage .imageDiv .image,
+.generalSettings .column-1 .profileImage .editProfileImage {
+    margin: auto;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    border: 5px solid white;
+}
+.generalSettings .column-1 .profileImage .editProfileImage {
+    position: absolute; top: -50px; left: 30px;
+    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition: all 0.2s linear;
+}
+.generalSettings .column-1 .profileImage .editProfileImage .profileImageInputLabel {
+    margin: auto; margin-top: 40px;
+    color: seashell;
+    font-size: 1.2rem;
+    transition: all 0.2s linear;
+}
+.generalSettings .column-1 .profileImage .editProfileImage .profileImageInputLabel:hover {
+    cursor: pointer;
+}
+.generalSettings .column-1 .profileImage:hover > .editProfileImage .profileImageInputLabel {
+    font-size: 1.8rem;
+}
+
+
+/* Common */
+.generalSettings .column-1 .coverImage:hover > .editCoverImage,
+.generalSettings .column-1 .profileImage:hover > .editProfileImage {
+    opacity: 1;
+}
+
+
+/* User Details */
+.generalSettings .column-1 .userDetails {
+    padding: 25px 30px;
+}
+.generalSettings .column-1 .userDetails .detail {
+    margin-bottom: 25px;
+}
+.generalSettings .column-1 .userDetails .detail:last-child {
+    margin-bottom: 0;
+}
+.generalSettings .column-1 .userDetails .detail .header {
+    margin: auto 0; margin-bottom: 0;
+    text-align: left;
+}
+.generalSettings .column-1 .userDetails .detail input {
+    padding: 10px 10px 5px 10px;
+    width: 100%;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.7);
+    border: none;
+    outline: none;
+    border-bottom: 2px solid rgba(82, 19, 141, 0);
+    box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s linear;
+}
+.generalSettings .column-1 .userDetails .detail input:focus {
+    transform: scaleX(1.1);
+    box-shadow: none;
+    border-bottom: 2px solid rgba(82, 19, 141, 0.6);
+}
+
+
+/* Save and Cancel Buttons */
+.generalSettings .column-2 {
+    padding: 30px;
+}
+.generalSettings .column-2 button {
+    width: 100%;
+    padding: 10px 0;
+    color: seashell;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    border-radius: 50px;
+    background-color: rgba(82, 19, 141, 1);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 1);
+    transition: all 0.2s linear;
+}
+.generalSettings .column-2 .button:hover {
+    transform: scale(1.05);
+    background: none;
+    color: rgba(82, 19, 141, 1);
+}
+.generalSettings .column-2 .disabled:hover {
+    cursor: default;
+    color: rgba(82, 19, 141, 1);
+}

@@ -1,6 +1,8 @@
 .profile .right-content {
-    margin-left: 5px;
     padding: 0;
+}
+.profile .right-content .rightContentCol {
+    margin: 0;
 }
 .profile .right-content .uploadPostBtn {
     padding: 40px;
@@ -35,9 +37,11 @@
 
 
 
-.profile .right-content .friend-suggestions {
+.profile .right-content .friend-suggestions-cards {
     padding: 0;
-    margin: auto;
+}
+.profile .right-content .friend-suggestions {
+    margin: 0;
 }
 .profile .right-content .suggestions-header {
     margin: auto;
@@ -51,9 +55,10 @@
     margin: auto;
 }
 .profile .right-content .friend-suggestions .suggestion {
-    position: absolute;
+    position: relative;
     background-color: white;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    display: none;
 }
 .profile .right-content .friend-suggestions .suggestion .user-image {
     background-image: linear-gradient(135deg, #5a1d7e, #7f2bb8);
@@ -117,4 +122,23 @@
 }
 .profile .right-content .friend-suggestions .suggestion .ignore button:hover {
     color: rgb(228, 70, 70);
+}
+
+
+
+
+/* 
+    Competitions Section
+*/
+.profile .right-content .competitionsSection {
+    margin: 0;
+    margin-top: 30px;
+}
+
+
+
+
+
+.profile .right-content .friend-suggestions .show {
+    display: block;
 }

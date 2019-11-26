@@ -1,7 +1,7 @@
 .home-content .left-content {
   margin-right: 5px;
   background-color: white;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }
 .home-content .left-content .row {
   border-bottom: 0.5px solid rgba(0, 0, 0, 0.2);
@@ -12,7 +12,6 @@
 
 .home-content .left-content .userImage {
   height: 80px;
-  /* background-color: rgba(103, 37, 158, 0.8); */
   background-image: linear-gradient(135deg, #5a1d7e, #7f2bb8);
 }
 .home-content .left-content .userImage .image-div {

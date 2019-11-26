@@ -1,11 +1,12 @@
 .uploadPostPopUP {
     position: fixed; top: 0;
-    padding: 100px 350px 0 350px;
+    padding: 100px 0;
     width: 100%;
     height: 100%;
     z-index: 2000;
     background-color: rgba(0, 0, 0, 0.7);
-    overflow-y: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
     display: none;
 }
 .showUploadPostPopUP {
@@ -59,8 +60,8 @@
     border: none;
     outline: none;
 }
-.createPost .body .category select .noSelection {
-    color: rgba(0, 0, 0, 0.4);
+.createPost .body .category select {
+    overflow: scroll;
 }
 
 .createPost .body textarea {
@@ -102,16 +103,23 @@
 }
 
 
+.createPost .body .category-inputs .fileInputError {
+    color: rgb(221, 87, 87);
+}
 .createPost .body .category-inputs .inputFiles {
-    padding: 0 15px;
+    padding: 10px 15px;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.4);
+}
+.createPost .body .category-inputs .inputFiles .col {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
 }
 
 .createPost .body .category-inputs .imageSelected {
+    min-width: 150px;
     margin: 10px;
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.4);
+    transition: all 0.2s linear;
     overflow: hidden;
-}
-.createPost .body .category-inputs .imageSelected {
-    border: 1px solid black;
 }
 .createPost .body .category-inputs .imageSelected .cancelSelection {
     position: absolute; top: 0; left: 0;
@@ -123,8 +131,31 @@
     outline: none;
     transition: all 0.2s linear;
 }
+.createPost .body .category-inputs .imageSelected .cancelSelection i {
+    font-size: 2rem;
+}
+.createPost .body .category-inputs .imageSelected:nth-child(n):hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+}
 .createPost .body .category-inputs .imageSelected:nth-child(n):hover > .cancelSelection {
     opacity: 1;
+}
+
+/* 
+    Audio Files Selected
+*/
+.createPost .body .category-inputs .audio {
+    margin: 10px 0;
+    height: 40px; width: 100%;
+    outline: none;
+}
+/* 
+    Video Files Selected
+*/
+.createPost .body .category-inputs .video {
+    margin: 10px 0;
+    height: 40px; width: 100%;
+    outline: none;
 }
 
 

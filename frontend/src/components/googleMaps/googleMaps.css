@@ -1,0 +1,24 @@
+.location-search-input {
+    padding: 10px 30px;
+    width: 100%;
+    border: none;
+    outline: none;
+}
+.location-search-input::placeholder {
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.5);
+}
+.autocomplete-dropdown-container .suggestion-item {
+    background-color: rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 5px 0;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.3);
+}
+.autocomplete-dropdown-container .suggestion-item--active {
+    cursor: pointer;
+    padding: 5px 0;
+    font-size: 0.9rem;
+    color: seashell;
+    background-color: rgba(0, 0, 0, 0.3);
+}

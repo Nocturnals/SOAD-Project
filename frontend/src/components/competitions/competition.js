@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import CommentComp from "../helperCards/comments/comments";
 import { Comment, Participant } from "./objectClasses";
 
-import "./competitions.css";
+import "./competition.css";
 
 class Competition extends Component {
     constructor(props) {

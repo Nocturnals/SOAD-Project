@@ -42,7 +42,7 @@ class LeftContent extends Component {
         for (let index = 0; index < organisations.length; index++) {
             const org = organisations[index];
             orgs.push(
-                <div className="organisation row">
+                <div className="organisation row" key={index}>
                     <div className="col-3">
                         <div
                             className="orgImage"
