@@ -3,7 +3,7 @@ import GoogleMapReact from "google-map-react";
 import PlacesAutocomplete from "react-places-autocomplete";
 import {
     geocodeByAddress,
-    geocodeByPlaceId,
+    // geocodeByPlaceId,
     getLatLng
 } from "react-places-autocomplete";
 

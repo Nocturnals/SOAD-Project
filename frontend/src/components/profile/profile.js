@@ -72,7 +72,7 @@ class ProfilePage extends Component {
     };
 
     render() {
-        const postUserImage = require("../media/images/categories/photographer.png");
+        // const postUserImage = require("../media/images/categories/photographer.png");
         const coverimage = require("../media/images/profile/cover.jpg");
 
         const username = this.props.match.params.username;

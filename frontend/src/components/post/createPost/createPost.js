@@ -58,6 +58,7 @@ class CreatePostComp extends Component {
                 break;
             case "categoryInput":
                 this.previewFiles();
+                break;
             default:
                 break;
         }

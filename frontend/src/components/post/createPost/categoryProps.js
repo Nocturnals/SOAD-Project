@@ -7,7 +7,6 @@ export default function categoryProperties(category) {
                 fileTypeExt: "*",
                 fileName: "Images"
             };
-            break;
 
         case "singer":
             return {

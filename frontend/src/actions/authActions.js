@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { history } from "../helpers";
 
-import { userAuthConst, alertConstants } from "../constants";
+import { userAuthConst } from "../constants";
 import setAuthTokenHeader from "../setAuthTokenHeader";
 import alertActions from "./alertActions";
 
@@ -28,9 +28,16 @@ export function login(email, password) {
                 history.goBack();
             })
             .catch(err => {
-                const err_msg = err.response.data.message;
-                dispatch(failureAction());
-                dispatch(alertActions.error(err_msg));
+                try {
+                    const err_msg = err.response.data.message;
+                    dispatch(failureAction());
+                    dispatch(alertActions.error(err_msg));
+                } catch (error) {
+                    console.log(error);
+                    dispatch(
+                        alertActions.error("BackEnd sever didn't respond")
+                    );
+                }
             });
     };
 
@@ -73,8 +80,15 @@ export function register(email, username, dateofbirth, password) {
                 });
             })
             .catch(err => {
-                dispatch({ type: userAuthConst.REGISTER_FAILURE });
-                dispatch(alertActions.error(err.response.data));
+                try {
+                    dispatch({ type: userAuthConst.REGISTER_FAILURE });
+                    dispatch(alertActions.error(err.response.data));
+                } catch (error) {
+                    console.log(error);
+                    dispatch(
+                        alertActions.error("Backend Server didn't respond")
+                    );
+                }
             });
     };
 }
