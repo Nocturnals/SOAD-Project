@@ -19,6 +19,11 @@ import AccountSettingsComp from "./components/profile/accountSettings/accountSet
 import Jobs from "./components/jobs/jobs";
 import Organisations from "./components/organisations/organisations";
 
+let dotenv = require("dotenv");
+dotenv.config();
+const googleApiKey = `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&libraries=places`;
+// console.log(process.env);
+
 class MainAppComponents extends Component {
     render() {
         const AuthenticatedRoute = ({ component: Component, ...rest }) => (
@@ -124,6 +129,8 @@ class MainAppComponents extends Component {
                             path="/password-reset/:passwordResetToken"
                             component={PasswordResetComp}
                         />
+
+                        <script src={googleApiKey}></script>
                     </React.Fragment>
                 </Switch>
             </Router>
