@@ -26,6 +26,7 @@ class ProfilePage extends Component {
     constructor(props) {
         super(props);
 
+        this.authedUser = false;
         this.state = {
             nav: "nav1",
             showUploadPostPopUP: false
@@ -84,6 +85,11 @@ class ProfilePage extends Component {
             new Post(username, "59 min", "Epic Coder", "India", true)
         ];
 
+        this.authedUser =
+            this.props.auth.user.name === this.props.match.params.username
+                ? true
+                : false;
+
         return (
             <React.Fragment>
                 <NavBar contract={true} />
@@ -94,22 +100,27 @@ class ProfilePage extends Component {
                             style={{ backgroundImage: `url(${coverimage})` }}
                         >
                             {this.props.auth.isAuthed ? (
-                                <React.Fragment>
-                                    <div className="overLay"></div>
-                                    <div className="col-1 account-settings">
-                                        <Link
-                                            to="/user-account-settings/general"
-                                            style={{ textDecoration: "none" }}
-                                        >
-                                            <button className="accountSettingsButton">
-                                                <i
-                                                    className="fa fa-cog"
-                                                    aria-hidden="true"
-                                                ></i>
-                                            </button>
-                                        </Link>
-                                    </div>
-                                </React.Fragment>
+                                this.props.auth.user.name ===
+                                this.props.match.params.username ? (
+                                    <React.Fragment>
+                                        <div className="overLay"></div>
+                                        <div className="col-1 account-settings">
+                                            <Link
+                                                to="/user-account-settings/general"
+                                                style={{
+                                                    textDecoration: "none"
+                                                }}
+                                            >
+                                                <button className="accountSettingsButton">
+                                                    <i
+                                                        className="fa fa-cog"
+                                                        aria-hidden="true"
+                                                    ></i>
+                                                </button>
+                                            </Link>
+                                        </div>
+                                    </React.Fragment>
+                                ) : null
                             ) : null}
                         </div>
                         <div className="profile-content row">
@@ -216,6 +227,7 @@ class ProfilePage extends Component {
                                     togglePopUp={this.toggleUploadPostPopUp.bind(
                                         this
                                     )}
+                                    authedUser={this.authedUser}
                                 />
                             </div>
                         </div>

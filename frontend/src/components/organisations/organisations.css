@@ -4,35 +4,47 @@
 }
 /* User Organisations */
 .organisations .userOrganisations {
-    text-align: center;
+    /* text-align: center; */
     margin: 5px;
     background-color: white;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
     overflow: auto;
     white-space: nowrap;
 }
+.organisations .userOrganisations input {
+    height: 100%;
+    padding: 15px 20px 10px 20px;
+    vertical-align: bottom;
+    border: none;
+    border-bottom: 1px solid black;
+}
 .organisations .userOrganisations .organisation {
-    margin: 5px;
+    margin: 5px 10px;
     padding: 0;
-    /* width: 80px; */
-    text-align: center;
+    /* text-align: center; */
+    color: seashell;
+    background-color: rgb(83, 29, 119);
+    border-radius: 50px;
     display: inline-block;
+    transition: all 0.5s linear;
 }
 .organisations .userOrganisations .organisation .image {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     margin: 0;
     border-radius: 50%;
 }
 .organisations .userOrganisations .organisation .name {
-    display: inline-block;
+    margin: 0;
     font-size: 0rem;
     transition: all 0.2s linear;
+    display: inline-block;
 }
 .organisations .userOrganisations .organisation:nth-child(n):hover {
     cursor: pointer;
 }
 .organisations .userOrganisations .organisation:nth-child(n):hover > .name {
+    margin: 0 15px;
     font-size: 1rem;
 }
 

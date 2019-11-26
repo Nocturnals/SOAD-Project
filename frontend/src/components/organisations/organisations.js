@@ -32,10 +32,8 @@ class Organisations extends Component {
             const comp = this.organisations[index];
             comps.push(
                 <div className="organisation">
-                    <div>
-                        <Img src={comp.image} className="image" />
-                        <h6 className="name">{comp.name}</h6>
-                    </div>
+                    <Img src={comp.image} className="image" />
+                    <h6 className="name">{comp.name}</h6>
                 </div>
             );
         }
@@ -49,6 +47,7 @@ class Organisations extends Component {
                 <NavBar contract={true} />
                 <div className="container-fluid organisations">
                     <div className="userOrganisations">
+                        <input type="text" placeholder="Organisation..." />
                         {this.userOrganisationsComp()}
                     </div>
                     <div className="row">

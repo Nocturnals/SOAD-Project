@@ -125,12 +125,14 @@ class RightContent extends Component {
         return (
             <div className="row right-content">
                 <div className="col rightContentCol">
-                    <div className="uploadPostBtn row">
-                        <button onClick={this.props.togglePopUp}>
-                            Post Update
-                        </button>
-                    </div>
-                    {this.friendSuggestions.length ? (
+                    {this.props.authedUser ? (
+                        <div className="uploadPostBtn row">
+                            <button onClick={this.props.togglePopUp}>
+                                Post Update
+                            </button>
+                        </div>
+                    ) : null}
+                    {this.props.authedUser && this.friendSuggestions.length ? (
                         <div className="friend-suggestions-cards row">
                             <div className="col">
                                 <div className="suggestions-header row">
