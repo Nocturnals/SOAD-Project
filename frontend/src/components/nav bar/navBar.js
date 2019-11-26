@@ -67,7 +67,8 @@ class NavBar extends Component {
         const links = this.props.auth.isAuthed
             ? [
                   new LinkClass("/feed", "Home"),
-                  new LinkClass("/search", "Search", "_blank")
+                  new LinkClass("/search", "Search", "_blank"),
+                  new LinkClass("/artists/organisation-1/feed", "Organisations")
               ]
             : [
                   new LinkClass("/", "Home"),
@@ -80,9 +81,17 @@ class NavBar extends Component {
                     "navbar sticky-top navbar-expand-lg" +
                     (this.props.auth.isAuthed
                         ? " bg-theme"
+                        : this.props.contract
+                        ? " bg-theme"
                         : " bg-black-06 nav-min-height")
                 }
-                id={!this.props.auth.isAuthed ? "nav-bar" : ""}
+                id={
+                    this.props.auth.isAuthed
+                        ? ""
+                        : this.props.contract
+                        ? ""
+                        : "nav-bar"
+                }
             >
                 <Link to="/">
                     <button className="navbar-brand navTitle">

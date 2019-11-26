@@ -17,6 +17,7 @@ import SearchComp from "./components/search/search";
 import ProfilePage from "./components/profile/profile";
 import AccountSettingsComp from "./components/profile/accountSettings/accountSettings";
 import Jobs from "./components/jobs/jobs";
+import Organisations from "./components/organisations/organisations";
 
 class MainAppComponents extends Component {
     render() {
@@ -106,6 +107,13 @@ class MainAppComponents extends Component {
                             exact
                             path="/competitions/:type"
                             component={Competition}
+                        />
+
+                        {/* Organisations Page */}
+                        <Route
+                            exact
+                            path="/artists/:organisationName/:content"
+                            component={Organisations}
                         />
 
                         {/* Search Page */}

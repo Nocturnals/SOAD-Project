@@ -86,7 +86,7 @@ class ProfilePage extends Component {
 
         return (
             <React.Fragment>
-                <NavBar />
+                <NavBar contract={true} />
                 <div className="profile row">
                     <div className="col">
                         <div
