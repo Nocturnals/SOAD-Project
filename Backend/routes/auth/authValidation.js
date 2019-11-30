@@ -14,7 +14,8 @@ const RegistrerValidation = data => {
         password: Joi.string()
             .min(8)
             .max(1024)
-            .required()
+            .required(),
+        dateofbirth: Joi.date().required()
     };
 
     return Joi.validate(data, schema);

@@ -2,41 +2,43 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { login, logout } from "../../actions";
+import { login } from "../../actions";
 import isValidEmail from "../../validation/emailValidation";
 
+import { ClipLoader } from "react-spinners";
+
 class LoginComp extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            email: "",
-            password: "",
-            submitted: false
-        };
+    this.state = {
+      email: "",
+      password: "",
+      submitted: false
+    };
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(e) {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+
+    this.setState({ submitted: true });
+    const { email, password } = this.state;
+    if (email && isValidEmail(email) && password) {
+      this.props.login(email, password);
     }
+  }
 
-    handleChange(e) {
-        const { name, value } = e.target;
-        this.setState({ [name]: value });
-    }
-
-    handleSubmit(e) {
-        e.preventDefault();
-
-        this.setState({ submitted: true });
-        const { email, password } = this.state;
-        if (email && isValidEmail(email) && password) {
-            this.props.login(email, password);
-        }
-    }
-
-    render() {
-        const { isLoading } = this.props.auth;
-        const { email, password, submitted } = this.state;
+  render() {
+    const { isLoading } = this.props.auth;
+    const { email, password, submitted } = this.state;
 
         if (this.props.auth.isAuthed) {
             return <Redirect to="/user/home" />;
@@ -98,12 +100,12 @@ class LoginComp extends Component {
                         <button className="login_btn" disabled={isLoading}>
                             LOG IN
                         </button>
-                        {isLoading && (
-                            <img
-                                alt="loading"
-                                src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
-                            />
-                        )}
+                        <ClipLoader
+                            sizeUnit={"px"}
+                            size={150}
+                            color={"#123abc"}
+                            loading={isLoading}
+                        />
                     </div>
                     <div className="reg_btn">
                         Don't have an account?&nbsp;
@@ -117,23 +119,19 @@ class LoginComp extends Component {
                 <div className="image comp"></div>
             </div>
         );
-    }
+  }
 }
 
 // specifiying the class to have these objects using propTypes
 LoginComp.propTypes = {
     login: PropTypes.func.isRequired,
-    logout: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     alert: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth,
-    alert: state.alert
+  auth: state.auth,
+  alert: state.alert
 });
 
-export default connect(
-    mapStateToProps,
-    { login, logout }
-)(LoginComp);
+export default connect(mapStateToProps, { login })(LoginComp);

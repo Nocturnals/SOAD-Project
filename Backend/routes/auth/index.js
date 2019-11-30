@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const _ = require("lodash"); // for modifing the array contents
 
 const UserModel = require("../../models/user");
-const { MailingService } = require("../../services/mailer");
+// const { MailingService } = require("../../services/mailer");
 const { verifyToken, verifyUserWithToken } = require("./helper");
 const {
     RegistrerValidation,
@@ -30,11 +30,11 @@ router.post("/register", async (req, res) => {
     // check user if already exists and give error
     try {
         const emailExists = await UserModel.findOne({ email: req.body.email });
+        if (emailExists)
+            return res.status(400).json({ message: "Email already exists!" });
     } catch (error) {
         return res.status(500).json({ message: "Database didn't respond" });
     }
-    if (emailExists)
-        return res.status(400).json({ message: "Email already exists!" });
 
     // hash the passwords
     const salt = await bcrypt.genSalt(10);
@@ -50,7 +50,16 @@ router.post("/register", async (req, res) => {
     // save the user to cloud or database
     try {
         var savedUser = await user.save();
-        res.send(_.pick(savedUser, ["_id", "name", "email"]));
+
+        // Assign a json web token
+        const tokenSecret = process.env.Token_Secret;
+        const jToken = jwt.sign({ _id: user._id }, tokenSecret, {
+            expiresIn: "1d"
+        });
+
+        res.status(200)
+            .header("authorization", jToken)
+            .json(_.pick(savedUser, ["_id", "name", "email"]));
     } catch (err) {
         res.status(400).json({ message: err });
     }
@@ -66,29 +75,34 @@ router.post("/login", async (req, res) => {
             .status(400)
             .json({ message: validatedData.error.details[0].message });
 
-    // Check email exists or not
-    const user = await UserModel.findOne({ email: req.body.email });
-    if (!user)
-        return res.status(400).json({ message: "Email Doesn't exists!" });
+    try {
+        // Check email exists or not
+        const user = await UserModel.findOne({ email: req.body.email });
+        if (!user)
+            return res.status(400).json({ message: "Email Doesn't exists!" });
 
-    // Check user password
-    const validPassword = await bcrypt.compare(
-        req.body.password,
-        user.password
-    );
+        // Check user password
+        const validPassword = await bcrypt.compare(
+            req.body.password,
+            user.password
+        );
 
-    if (!validPassword)
-        return res.status(400).json({ message: "Password is invalid" });
+        if (!validPassword)
+            return res.status(400).json({ message: "Password is invalid" });
 
-    // Assign a json web token
-    const tokenSecret = process.env.Token_Secret;
-    const jToken = jwt.sign({ _id: user._id }, tokenSecret, {
-        expiresIn: "1d"
-    });
+        // Assign a json web token
+        const tokenSecret = process.env.Token_Secret;
+        const jToken = jwt.sign({ _id: user._id }, tokenSecret, {
+            expiresIn: "1d"
+        });
 
-    res.status(200)
-        .header("authorization", jToken)
-        .json(_.pick(user, ["_id", "name", "email"]));
+        res.status(200)
+            .header("authorization", jToken)
+            .json(_.pick(user, ["_id", "name", "email"]));
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
 });
 
 // route to load get a userby id
@@ -117,11 +131,11 @@ router.post(
 
         try {
             // send the mail
-            const sentStatus = MailingService.Sendmail(
-                `To Verify your account click the link <br> ${verification_link} <br> The above link expires in one day`,
-                req.loggedUser.email,
-                "Email confirmation"
-            );
+            // const sentStatus = MailingService.Sendmail(
+            //     `To Verify your account click the link <br> ${verification_link} <br> The above link expires in one day`,
+            //     req.loggedUser.email,
+            //     "Email confirmation"
+            // );
 
             return res.status(200).json({
                 message: "Mail with verification link Sent to your mail"
@@ -195,11 +209,11 @@ router.post("/forgotPassword", async (req, res, next) => {
 
         try {
             // send the mail
-            const sentStatus = MailingService.Sendmail(
-                `To reset password your account click the link <br> ${resetPasswordLink} <br> The above link expires in two hours`,
-                req.body.email,
-                "Password Reset"
-            );
+            // const sentStatus = MailingService.Sendmail(
+            //     `To reset password your account click the link <br> ${resetPasswordLink} <br> The above link expires in two hours`,
+            //     req.body.email,
+            //     "Password Reset"
+            // );
 
             return res.status(200).json({
                 message: `reset password link is mailed to ${req.body.email}`
@@ -281,8 +295,14 @@ router.post(
         // find the logged user and edit the user details
         try {
             const userDoc = await UserModel.findById(req.loggedUser._id);
+
+            // update the editable varaibles
             userDoc.dateofbirth = req.body.dateofbirth;
+
+            // save the new data to the mongoose database
             const newdoc = await userDoc.save();
+
+            // return updated user data
             return res.status(200).json(newdoc);
         } catch (error) {
             return res.status(400).json({ message: "failed" });
@@ -292,17 +312,6 @@ router.post(
 
 // testing routes
 router.get("/test", verifyToken, verifyUserWithToken, (req, res) => {
-    let user = req.loggedUser;
-    const someobject = {
-        email: "hello",
-        message: "nice to meet u"
-    };
-    const newuser = _.pick(someobject, ["email"]);
-    user = {
-        ...user,
-        ...newuser
-    };
-    console.log(user);
     return res.json({ message: "working perfectly" });
 });
 

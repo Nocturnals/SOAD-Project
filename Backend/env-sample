@@ -1,1 +1,24 @@
-DB_Connect = 
+# port value for the express to run on
+PORT = <port number>
+
+# database api connection key
+DB_Connect = <api key for mongoose daabase>
+
+# frontend hostname
+FRONTEND_HOSTNAME = <domain hostname of frontend url>
+
+# token for the password encryption
+Token_Secret = <secret key for password encryption>
+
+# secret key for mail links tokens
+MAIL_SECRET = <secret key for mail token generation>
+
+# specifying the evironment in which the app is running [ 'development', 'production' ]
+Node_Env = value
+
+# configuration for express 
+NODE_TLS_REJECT_UNAUTHORIZED = 0
+
+# credentials for the gmail account
+MAIL_ID = <email id>
+MAIL_PASSWORD = <email password>

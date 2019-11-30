@@ -66,10 +66,6 @@ exports.createPost = async (req, res, next) => {
 
     };
 
-
-
-
-
 /*
 
 router.post("/delete", (req, res, next) => {
@@ -553,7 +549,13 @@ exports.likeComment = async (req, res, next) => {
         return res.status(500).json({ message: "Post not found !!" });
     } 
 
+    var updateIndex = apps
+        .map(function(item) {
+            return item.id;
+        })
+        .indexOf(commentId);
 
+    post.comments[updateIndex] = comment;
 };
 
 
@@ -672,13 +674,15 @@ exports.replyComment = (req, res) => {
                 res.json(result);
             }
         }
-    );
+    });
 
-    var updateIndex = apps.map(function(item) { return item.id; }).indexOf(commentId);
+    var updateIndex = apps
+        .map(function(item) {
+            return item.id;
+        })
+        .indexOf(commentId);
 
-    post.comments[updateIndex] = comment; 
-
-
+    post.comments[updateIndex] = comment;
 };
 
 
@@ -728,11 +732,13 @@ exports.replyCommentLike = (req, res) => {
         }
     );
 
-    var updateIndex = apps.map(function(item) { return item.id; }).indexOf(commentId);
+    var updateIndex = apps
+        .map(function(item) {
+            return item.id;
+        })
+        .indexOf(commentId);
 
-    post.comments[updateIndex] = comment; 
-
-
+    post.comments[updateIndex] = comment;
 };
 */
 

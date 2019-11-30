@@ -1,0 +1,59 @@
+.comment {
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.5);
+}
+.comment .commentUser {
+    margin-top: 30px;
+}
+.comment .user {
+    margin-top: 10px;
+    border-left: 3px solid #7728a5;
+}
+.comment .user .name {
+    margin-left: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+.comment .user .time {
+    margin: auto;
+    margin-left: 20px;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+.comment .commentText {
+    margin-top: 10px; margin-bottom: 10px;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+.comment .likes-replies button {
+    padding: 5px 10px;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+.comment .likes-replies button:last-child {
+    margin-left: 20px;
+}
+
+
+
+
+.comment .comment-replies {
+    display: none;
+}
+.comment .comment-replies .reply {
+    margin: 2px;
+    margin-left: 25px;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+.comment .reply .cmntReply {
+    margin-top: 0;
+    font-size: 0.8rem;
+}
+
+.comment .showReplies {
+    display: block;
+}

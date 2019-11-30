@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import "./landing_page.css";
-
 class CompetitionCard {
     constructor(title, toLink, descr) {
         this.title = title;
@@ -77,7 +75,10 @@ class ThirdSection extends React.Component {
                     <div className="container competition">
                         {this.cardComps(competitionCards)}
                     </div>
-                    <Link to="/login" style={{ float: "right" }}>
+                    <Link
+                        to="/user/competitions/all"
+                        style={{ float: "right" }}
+                    >
                         More Competitions -->{" "}
                     </Link>
                 </div>

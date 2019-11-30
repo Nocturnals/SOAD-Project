@@ -1,11 +1,19 @@
 import React, { Component } from "react";
-import { Route, Link } from "react-router-dom";
+import { Route, Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+
+import PropTypes from "prop-types";
 
 import "./authentication.css";
 import LoginComp from "./login";
 import RegisterComp from "./register";
 
 class AuthenticationPage extends Component {
+    // After Mounring the Component...
+    componentDidMount() {
+        document.body.scrollTo(0, 0);
+    }
+
     render() {
         return (
             <div className="auth_page">
@@ -25,4 +33,12 @@ class AuthenticationPage extends Component {
     }
 }
 
-export default AuthenticationPage;
+AuthenticationPage.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(AuthenticationPage);

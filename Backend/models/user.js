@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+
+const { JobsAppliedSchema } = require("./jobsApplied");
 const otheruserschema = require("./Otheruser");
 const othercompetititonschema = require("./Othercompetitions");
 
@@ -77,6 +79,11 @@ const userSchema = new mongoose.Schema({
     emailVerified: {
         type: Boolean,
         default: false
+    },
+
+    jobsApplied: {
+        type: [JobsAppliedSchema],
+        default: []
     }
 });
 

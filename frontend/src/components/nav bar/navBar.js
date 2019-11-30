@@ -1,153 +1,193 @@
 import React, { Component } from "react";
-import {
-    BrowserRouter as Router,
-    Route,
-    Link,
-    Redirect,
-    withRouter
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import "./navBar.css";
 import "./animations";
-import ToggleNavBar from "./animations";
+import { logout } from "../../actions/authActions";
 
-// Constructor Classes
-class NavBtnNames {
-    constructor(
-        fname = "",
-        lname = "",
-        link = "/",
-        class_name = "navBtn",
-        iconClass = ""
-    ) {
-        this.fname = fname;
-        this.lname = lname;
-        this.class_name = class_name;
-        this.iconClass = iconClass;
-        this.link = link;
-    }
-}
-class NavComponents {
-    constructor(compClass, buttons) {
-        this.compClass = compClass;
-        this.buttons = buttons;
+class LinkClass {
+    constructor(toLink, name, target = "") {
+        this.toLink = toLink;
+        this.name = name;
+        this.target = target;
     }
 }
 
-// Component Class
 class NavBar extends Component {
     constructor(props) {
         super(props);
+        this.logoutUser = this.logoutUser.bind(this);
     }
 
-    // Creating Buttons...
-    navBtn = buttons => {
-        let nav_buttons = [];
+    // logout function
+    logoutUser() {
+        this.props.onLogout();
+    }
 
-        for (let index = 0; index < buttons.length; index++) {
-            let button = buttons[index];
-            nav_buttons.push(
-                button.link ? (
-                    <Link to={button.link}>
-                        <button className={button.class_name}>
-                            <span className="fname">{button.fname}</span>
-                            <span className="lname">{button.lname}</span>
-                        </button>
-                    </Link>
-                ) : (
-                    <button
-                        className={button.class_name}
-                        onClick={ToggleNavBar()}
+    linkComp = links => {
+        let linkComps = [];
+        for (let index = 0; index < links.length; index++) {
+            const link = links[index];
+            linkComps.push(
+                <li className="nav-item" key={index}>
+                    <Link
+                        to={link.toLink}
+                        style={{
+                            textDecoration: "none",
+                            textTransform: "uppercase"
+                        }}
+                        target={link.target}
                     >
-                        <i className={button.iconClass} aria-hidden="true"></i>
-                    </button>
-                )
-            );
-        }
-
-        return nav_buttons;
-    };
-
-    navBarComponents = comps => {
-        let nav_components = [];
-
-        for (let index = 0; index < comps.length; index++) {
-            let comp = comps[index];
-            nav_components.push(
-                <span className={comp.compClass}>{comp.buttons}</span>
-            );
-        }
-
-        return nav_components;
-    };
-
-    expandNavBarBtns = buttons => {
-        let buttonBlocks = [];
-
-        for (let index = 0; index < buttons.length; index++) {
-            let button = buttons[index];
-            buttonBlocks.push(
-                <div>
-                    <Link to={button.link}>
-                        <button className={button.class_name}>{button.fname}</button>
+                        <button className="nav-link">{link.name}</button>
                     </Link>
-                </div>
+                </li>
             );
         }
-
-        return buttonBlocks;
+        return linkComps;
     };
 
+    // Rednering...
     render() {
         const { isAuthed } = this.props.auth;
 
-        const leftNavBtns = [
-            new NavBtnNames("Artist", " Colab", "/", "navTitle")
-        ];
-
-        const rightNavBtns = [
-            new NavBtnNames("Home", "", "/"),
-            new NavBtnNames("Features"),
-            new NavBtnNames("Services"),
-            new NavBtnNames("About Us"),
-            !isAuthed
-                ? new NavBtnNames("Log In", "", "/login")
-                : new NavBtnNames("Profile", "", "/")
-        ];
-        rightNavBtns.push(
-            new NavBtnNames("", "", "", "navMenuIcon", "fa fa-bars")
-        );
-
-        const expandNavBtns = !isAuthed
+        const links = this.props.auth.isAuthed
             ? [
-                  new NavBtnNames("Home", "", "/", "expNavBtn"),
-                  new NavBtnNames("Features", "", "", "expNavBtn"),
-                  new NavBtnNames("Services", "", "", "expNavBtn"),
-                  new NavBtnNames("About Us", "", "", "expNavBtn"),
-                  new NavBtnNames("LOG IN", "", "/login", "expNavBtn")
+                  new LinkClass("/feed", "Home"),
+                  new LinkClass("/search", "Search", "_blank")
               ]
             : [
-                  new NavBtnNames("Home", "", "/", "expNavBtn"),
-                  new NavBtnNames("Features", "", "", "expNavBtn"),
-                  new NavBtnNames("Services", "", "", "expNavBtn"),
-                  new NavBtnNames("About Us", "", "", "expNavBtn"),
-                  new NavBtnNames("Profile", "", "/login", "expNavBtn")
+                  new LinkClass("/", "Home"),
+                  new LinkClass("/search", "Search", "_blank")
               ];
 
-        const components = [
-            new NavComponents("leftNav", this.navBtn(leftNavBtns)),
-            new NavComponents("rightNav", this.navBtn(rightNavBtns))
-        ];
-
         return (
-            <div className="nav-bar" id="nav-bar">
-                {this.navBarComponents(components)}
-                <div id="expandedNav" className="expandedNav">
-                    {this.expandNavBarBtns(expandNavBtns)}
+            <nav
+                className={
+                    "navbar sticky-top navbar-expand-lg" +
+                    (this.props.auth.isAuthed
+                        ? " bg-theme"
+                        : " bg-black-06 nav-min-height")
+                }
+                id={!this.props.auth.isAuthed ? "nav-bar" : ""}
+            >
+                <Link to="/">
+                    <button className="navbar-brand navTitle">
+                        <span className="fname">Artist </span>
+                        <span className="lname">Colab</span>
+                    </button>
+                </Link>
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarSupportedContent-333"
+                    aria-controls="navbarSupportedContent-333"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span className="navbar-toggler-icon">
+                        <i className="fa fa-bars" aria-hidden="true"></i>
+                    </span>
+                </button>
+                <div
+                    className="collapse navbar-collapse"
+                    id="navbarSupportedContent-333"
+                >
+                    <ul className="navbar-nav ml-auto nav-flex-icons">
+                        {this.linkComp(links)}
+
+                        {/* Notiifcations */}
+                        {this.props.auth.isAuthed ? (
+                            <li className="nav-item dropdown notifications">
+                                <button
+                                    className="nav-link dropdown-toggle"
+                                    id="navbarDropdownMenuLink-333"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                >
+                                    <i className="fa fa-bell"></i> Notifcations
+                                </button>
+                                <div
+                                    className="dropdown-menu dropdown-menu-right dropdown-default"
+                                    aria-labelledby="navbarDropdownMenuLink-333"
+                                >
+                                    <div className="dropdown-item view-all-notifications d-flex justify-content-between">
+                                        <Link
+                                            to="/"
+                                            style={{ textDecoration: "none" }}
+                                        >
+                                            <button>View All</button>
+                                        </Link>
+                                    </div>
+                                    <div className="dropdown-item notification">
+                                        <div className="">Vishwanth</div>
+                                    </div>
+                                </div>
+                            </li>
+                        ) : null}
+
+                        {/* User Profile and Logout */}
+                        <li className="nav-item dropdown user">
+                            <button
+                                className="nav-link dropdown-toggle"
+                                id="navbarDropdownMenuLink-333"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
+                                <i className="fa fa-user"></i>{" "}
+                                {this.props.auth.isAuthed
+                                    ? " " + this.props.auth.user.name
+                                    : null}
+                            </button>
+                            <div
+                                className="dropdown-menu dropdown-menu-right dropdown-default"
+                                aria-labelledby="navbarDropdownMenuLink-333"
+                            >
+                                <Link
+                                    to={
+                                        !isAuthed
+                                            ? "/auth/login"
+                                            : "/artist/" +
+                                              this.props.auth.user.name
+                                    }
+                                    style={{
+                                        textDecoration: "none",
+                                        textTransform: "uppercase"
+                                    }}
+                                >
+                                    <button className="dropdown-item">
+                                        {!isAuthed ? "Login" : "Profile"}
+                                    </button>
+                                </Link>
+                                {!isAuthed ? (
+                                    <Link
+                                        to="/auth/register"
+                                        style={{
+                                            textDecoration: "none",
+                                            textTransform: "uppercase"
+                                        }}
+                                    >
+                                        <button className="dropdown-item">
+                                            {!isAuthed ? "Register" : "Logout"}
+                                        </button>
+                                    </Link>
+                                ) : (
+                                    <button
+                                        className="dropdown-item"
+                                        onClick={this.logoutUser}
+                                    >
+                                        {!isAuthed ? "Register" : "Logout"}
+                                    </button>
+                                )}
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-            </div>
+            </nav>
         );
     }
 }
@@ -162,4 +202,4 @@ const mapStateToProps = state => ({
     alert: state.alert
 });
 
-export default connect(mapStateToProps)(NavBar);
+export default connect(mapStateToProps, { onLogout: logout })(NavBar);
