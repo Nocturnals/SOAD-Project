@@ -1,0 +1,63 @@
+svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.loadLayer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(
+        to right,
+        rgba(106, 28, 129, 1) 49%,
+        rgba(195, 119, 224, 1) 49%
+    );
+    z-index: 10000;
+}
+.loadLayer path,
+.loadLayer ellipse {
+    stroke-width: 0.23px;
+    fill: transparent;
+}
+.loading-path {
+    stroke-dasharray: 70;
+    stroke-dashoffset: 0;
+    animation: animate-loading-path 50s linear infinite;
+}
+.loading-path-rev {
+    stroke-dasharray: 70;
+    stroke-dashoffset: 1000;
+    animation: animate-loading-path-rev 40s linear infinite;
+}
+
+.loa {
+    stroke: #c377e0;
+}
+.ding {
+    stroke: #6a1c81;
+}
+
+/* 
+    A.N.I.M.A.T.I.O.N.S...
+*/
+
+/*
+    Loading Path animation
+*/
+@keyframes animate-loading-path {
+    to {
+        stroke-dashoffset: 1000;
+    }
+}
+@keyframes animate-loading-path-rev {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes animate-eye-loader {
+    to {
+        top: 50%;
+        stroke: black;
+    }
+}

@@ -24,8 +24,21 @@ class Organisations extends Component {
             new Organisation("Nocturnals", this.orgImage),
             new Organisation("Nocturnals", this.orgImage)
         ];
+
+        this.state = {
+            search: ""
+        };
+
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
+    // Handling input Change
+    handleInputChange = e => {
+        const { name, value } = e.target;
+        this.setState({ [name]: value });
+    };
+
+    // Displaying User organisations Component
     userOrganisationsComp = () => {
         let comps = [];
         for (let index = 0; index < this.organisations.length; index++) {
@@ -47,7 +60,14 @@ class Organisations extends Component {
                 <NavBar contract={true} />
                 <div className="container-fluid organisations">
                     <div className="userOrganisations">
-                        <input type="text" placeholder="Organisation..." />
+                        <input
+                            type="text"
+                            name="search"
+                            onChange={this.handleInputChange}
+                            value={this.state.search}
+                            className="search"
+                            placeholder="Your Organisations..."
+                        />
                         {this.userOrganisationsComp()}
                     </div>
                     <div className="row">

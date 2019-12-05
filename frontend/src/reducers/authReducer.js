@@ -37,7 +37,10 @@ export default function(state = initialState, action) {
         case userAuthConst.REGISTER_FAILURE:
         case userAuthConst.LOGOUT:
             localStorage.removeItem("userToken");
-            return initialState;
+            return {
+                ...initialState,
+                user: action.email
+            };
 
         default:
             return state;

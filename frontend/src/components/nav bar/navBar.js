@@ -68,7 +68,11 @@ class NavBar extends Component {
             ? [
                   new LinkClass("/feed", "Home"),
                   new LinkClass("/search", "Search", "_blank"),
-                  new LinkClass("/artists/organisation-1/feed", "Organisations")
+                  new LinkClass(
+                      "/artists/organisation-1/feed",
+                      "Organisations"
+                  ),
+                  new LinkClass("/messages", "Messages")
               ]
             : [
                   new LinkClass("/", "Home"),
@@ -83,7 +87,8 @@ class NavBar extends Component {
                         ? " bg-theme"
                         : this.props.contract
                         ? " bg-theme"
-                        : " bg-black-06 nav-min-height")
+                        : " bg-black-06 nav-min-height") +
+                    (this.props.blur ? " blur" : "")
                 }
                 id={
                     this.props.auth.isAuthed

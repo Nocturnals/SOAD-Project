@@ -14,6 +14,7 @@ import LandingPage from "./components/landing page/landing_page";
 import AuthenticationPage from "./components/authentication/authentication";
 import PasswordResetComp from "./components/authentication/passwordReset/passwordReset";
 import Competition from "./components/competitions/competition";
+import CreateCompetition from "./components/competitions/createCompetition/createCompetition";
 import HomePage from "./components/home/home";
 import SearchComp from "./components/search/search";
 import ProfilePage from "./components/profile/profile";
@@ -23,7 +24,6 @@ import Organisations from "./components/organisations/organisations";
 
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 const googleApiKey = `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&libraries=places`;
-console.log(process.env.GOOGLE_MAPS_API_KEY);
 
 class MainAppComponents extends Component {
     render() {
@@ -111,8 +111,12 @@ class MainAppComponents extends Component {
                         {/* Specific Competition Page */}
                         <Route
                             exact
-                            path="/competitions/:type"
+                            path="/competitions/:competitionName"
                             component={Competition}
+                        />
+                        <AuthenticatedRoute
+                            path="/create-competition"
+                            component={CreateCompetition}
                         />
 
                         {/* Organisations Page */}

@@ -1,0 +1,203 @@
+/* Create Competition Component */
+.createCompetition {
+    width: 1200px;
+    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 0;
+    background-color: white;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+/* Main Header */
+.createCompetition .mainHeader {
+    padding: 20px 0;
+    margin: auto;
+    color: seashell;
+    word-spacing: 3px;
+    background-image: linear-gradient(
+        135deg,
+        #5a1d7e,
+        #5a1d7e,
+        #7f2bb8,
+        #7f2bb8,
+        #5a1d7e,
+        #5a1d7e
+    );
+}
+/* Inputs */
+.createCompetition .row-2 {
+    padding: 20px 0;
+}
+.createCompetition .inputs {
+    padding: 30px 50px;
+    border-left: 0.5px solid rgba(0, 0, 0, 0.5);
+}
+.createCompetition .inputs .input {
+    margin-bottom: 25px;
+}
+.createCompetition .inputs .input:last-child {
+    margin-bottom: 0;
+}
+
+/* Select Tag */
+.createCompetition .inputs .category select {
+    width: 100%;
+    transition: all 0.2s linear;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding-left: 30px;
+    border-radius: 0;
+    border: none;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.6);
+    box-shadow: none;
+    outline: none;
+}
+.createCompetition .inputs .category select:hover {
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+}
+.createCompetition .inputs .category select:focus {
+    transform: scale(1.05);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+}
+
+/* Time Inputs */
+.createCompetition .inputs .startTime .header,
+.createCompetition .inputs .endTime .header {
+    margin-top: 15px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+/* Large TextArea Fiedls (Detailed Description) */
+.createCompetition .largeTextArea {
+    width: 80%;
+    margin: 20px 0;
+}
+.createCompetition .largeTextArea:focus {
+    height: 200px;
+}
+
+/* Submission Buttons */
+.createCompetition .submissionButton {
+    padding: 20px 0;
+}
+.createCompetition .submissionButton button {
+    padding: 10px 40px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 0.5px solid rgba(0, 0, 0, 0);
+    border-radius: 50px;
+    background-color: #7f2bb8;
+    outline: none;
+    color: seashell;
+    letter-spacing: 1px;
+    word-spacing: 3px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+    transition: all 0.2s linear;
+}
+.createCompetition .submissionButton button:hover {
+    color: #7f2bb8;
+    background: none;
+    border: 0.5px solid #7f2bb8;
+    transform: scale(1.05);
+}
+.createCompetition .submissionButton button:active {
+    background-color: #7f2bb8;
+}
+
+/* Preview the Competition */
+.previewCompetitionForm {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding: 30px 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    overflow: auto;
+    z-index: 2000;
+}
+.previewCompetitionForm .form {
+    width: 800px;
+    margin: auto;
+    padding: 0;
+    background-color: white;
+}
+.previewCompetitionForm .title {
+    padding: 5px 0;
+    margin: 0;
+    font-size: 2rem;
+    color: seashell;
+    word-spacing: 3px;
+    background-image: linear-gradient(
+        135deg,
+        #5a1d7e,
+        #5a1d7e,
+        #7f2bb8,
+        #7f2bb8,
+        #5a1d7e,
+        #5a1d7e
+    );
+}
+.previewCompetitionForm .bDescription {
+    margin: auto;
+    padding: 10px 0;
+}
+.previewCompetitionForm .poster {
+    padding: 10px 0;
+    height: 250px;
+    width: auto;
+}
+.previewCompetitionForm .timeBound {
+    padding: 100px 0;
+}
+.previewCompetitionForm .timeBound .time h6 {
+    text-align: left;
+    font-size: 1.1rem;
+}
+.previewCompetitionForm .header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: left;
+    padding: 0 80px;
+    /* text-decoration: underline; */
+}
+.previewCompetitionForm .dDescription,
+.previewCompetitionForm .rules,
+.previewCompetitionForm .awards {
+    text-align: left;
+    padding: 5px 100px 20px 100px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.previewCompetitionForm .awards .prizeType,
+.previewCompetitionForm .awards .prize {
+    text-align: left;
+}
+
+.previewCompetitionForm .confirmation {
+    padding: 30px 0;
+}
+.previewCompetitionForm .confirmation button {
+    margin: 0 10px;
+    padding: 5px 20px;
+    font-weight: 500;
+    border: none;
+    background: none;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s linear;
+}
+.previewCompetitionForm .confirmation .ok {
+    color: #7f2bb8;
+}
+.previewCompetitionForm .confirmation .no {
+    color: #df4040;
+}
+.previewCompetitionForm .confirmation button:hover {
+    transform: scale(1.05);
+}
+
+.hidePreview {
+    display: none;
+}

@@ -12,7 +12,7 @@ class LoginComp extends Component {
         super(props);
 
         this.state = {
-            email: "",
+            email: this.props.auth.user ? this.props.auth.user.email : "",
             password: "",
             submitted: false
         };
@@ -94,14 +94,17 @@ class LoginComp extends Component {
                     </div>
                     <div className="form_group">
                         <button className="login_btn" disabled={isLoading}>
-                            LOG IN
+                            {!isLoading ? (
+                                "LOG IN"
+                            ) : (
+                                <ClipLoader
+                                    sizeUnit={"rem"}
+                                    size={1}
+                                    color={"#123abc"}
+                                    loading={isLoading}
+                                />
+                            )}
                         </button>
-                        <ClipLoader
-                            sizeUnit={"px"}
-                            size={150}
-                            color={"#123abc"}
-                            loading={isLoading}
-                        />
                     </div>
                     <div className="reg_btn">
                         Don't have an account?&nbsp;

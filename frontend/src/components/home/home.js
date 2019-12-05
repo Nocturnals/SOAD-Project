@@ -8,6 +8,7 @@ import PostComp from "../post/post";
 import LeftContent from "./leftContent/leftContent";
 import RightContent from "./rightContent/rightContent";
 import CreatePostComp from "../post/createPost/createPost";
+import MainLoader from "../helpers/mainLoader/mainLoader";
 
 import "./home.css";
 
@@ -28,15 +29,22 @@ class HomePage extends Component {
         super(props);
 
         this.state = {
-            showUploadPostPopUP: false
+            showUploadPostPopUP: false,
+            isLoading: true
         };
 
         this.toggleUploadPostPopUp = this.toggleUploadPostPopUp.bind(this);
     }
 
-    // After Mounring the Component...
+    // After Mounting the Component...
     componentDidMount() {
         document.body.scrollTo(0, 0);
+
+        setTimeout(() => {
+            this.setState({
+                isLoading: false
+            });
+        }, 1000);
     }
 
     // Toggling Upload Post PopUp
@@ -77,9 +85,15 @@ class HomePage extends Component {
         ];
 
         return (
-            <React.Fragment>
-                <NavBar />
-                <div className="home-content row">
+            <React.Fragment className="home">
+                {this.state.isLoading ? <MainLoader /> : null}
+                <NavBar blur={this.state.showUploadPostPopUP ? true : false} />
+                <div
+                    className={
+                        "home-content row" +
+                        (this.state.showUploadPostPopUP ? " blur" : "")
+                    }
+                >
                     <div className="personal-content col-3">
                         <LeftContent email={this.props.auth.email} />
                     </div>

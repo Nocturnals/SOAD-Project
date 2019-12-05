@@ -4,24 +4,40 @@
 }
 /* User Organisations */
 .organisations .userOrganisations {
-    /* text-align: center; */
     margin: 5px;
     background-color: white;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
     overflow: auto;
     white-space: nowrap;
 }
-.organisations .userOrganisations input {
-    height: 100%;
-    padding: 15px 20px 10px 20px;
+/* Organisations Search */
+.organisations .userOrganisations .search {
+    height: 100%; width: 300px;
+    margin-right: 20px;
+    padding: 20px 30px 15px 30px;
     vertical-align: bottom;
     border: none;
-    border-bottom: 1px solid black;
+    outline: none;
+    border-bottom: 3px solid rgba(0, 0, 0, 0);
+    border-right: 1px solid rgb(135, 71, 179);
+    font-weight: 500;
+    transition: all 0.2s linear;
 }
+.organisations .userOrganisations .search::placeholder {
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.4);
+}
+.organisations .userOrganisations .search:focus 
+{
+    width: 400px;
+    border-right: 1px solid rgba(135, 71, 179, 0);
+    border-bottom: 3px solid rgb(135, 71, 179);
+}
+/* Organisations */
 .organisations .userOrganisations .organisation {
     margin: 5px 10px;
     padding: 0;
-    /* text-align: center; */
+    text-align: center;
     color: seashell;
     background-color: rgb(83, 29, 119);
     border-radius: 50px;
