@@ -72,7 +72,7 @@ class NavBar extends Component {
                       "/artists/organisation-1/feed",
                       "Organisations"
                   ),
-                  new LinkClass("/messages", "Messages")
+                  new LinkClass("/colab/messages", "Messages")
               ]
             : [
                   new LinkClass("/", "Home"),

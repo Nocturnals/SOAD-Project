@@ -104,7 +104,7 @@ class MainAppComponents extends Component {
                         />
                         {/* Chat Page */}
                         <AuthenticatedRoute
-                            path="/messages"
+                            path="/colab/messages"
                             component={ChatPage}
                         />
 

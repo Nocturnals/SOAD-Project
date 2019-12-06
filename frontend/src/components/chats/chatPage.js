@@ -79,11 +79,32 @@ class ChatPage extends Component {
         ];
 
         this.state = {
-            currentChat: this.chats[0]
+            currentChat: this.chats[0],
+            searchInput: "",
+            messageInput: ""
         };
 
         this.changeCurrChat = this.changeCurrChat.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleInputSubmit = this.handleInputSubmit.bind(this);
     }
+
+    componentDidMount() {
+        document
+            .getElementById("chat")
+            .scrollTo(0, document.getElementById("chat").scrollHeight);
+    }
+
+    // Handling Input Change...
+    handleInputChange = e => {
+        const { name, value } = e.target;
+        this.setState({ [name]: value });
+    };
+
+    // Handling Input submission...
+    handleInputSubmit = e => {
+        e.preventDefault();
+    };
 
     // Chats Tiles...
     chatTiles = () => {
@@ -124,6 +145,8 @@ class ChatPage extends Component {
     };
 
     render() {
+        const { searchInput } = this.state;
+
         return (
             <React.Fragment>
                 <NavBar />
@@ -148,7 +171,12 @@ class ChatPage extends Component {
                                             <input
                                                 type="text"
                                                 className="searchInput"
-                                                placeholder="Messages Search"
+                                                placeholder="Search for a chat"
+                                                name="searchInput"
+                                                onChange={
+                                                    this.handleInputChange
+                                                }
+                                                value={searchInput}
                                             />
                                         </div>
                                     </div>
@@ -161,7 +189,12 @@ class ChatPage extends Component {
                             </div>
                         </div>
                         <div className="col-9 chatBox">
-                            <Chat user={this.state.currentChat} />
+                            <Chat
+                                user={this.state.currentChat}
+                                handleInputChange={this.handleInputChange}
+                                handleInputSubmit={this.handleInputSubmit}
+                                messageInput={this.state.messageInput}
+                            />
                         </div>
                     </div>
                 </div>
