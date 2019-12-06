@@ -19,6 +19,7 @@ import HomePage from "./components/home/home";
 import SearchComp from "./components/search/search";
 import ProfilePage from "./components/profile/profile";
 import AccountSettingsComp from "./components/profile/accountSettings/accountSettings";
+import ChatPage from "./components/chats/chatPage";
 import Jobs from "./components/jobs/jobs";
 import Organisations from "./components/organisations/organisations";
 
@@ -100,6 +101,11 @@ class MainAppComponents extends Component {
                         <AuthenticatedRoute
                             path="/user-account-settings/:settingsType"
                             component={AccountSettingsComp}
+                        />
+                        {/* Chat Page */}
+                        <AuthenticatedRoute
+                            path="/messages"
+                            component={ChatPage}
                         />
 
                         {/* Jobs */}

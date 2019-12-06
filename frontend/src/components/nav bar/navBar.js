@@ -135,7 +135,7 @@ class NavBar extends Component {
                                     aria-expanded="false"
                                     onClick={this.clearNotificationsBadge}
                                 >
-                                    <i className="fa fa-bell"></i> Notifcations{" "}
+                                    Notifcations{" "}
                                     {this.state.newNotifications ? (
                                         <span className="badge badge-info">
                                             10
