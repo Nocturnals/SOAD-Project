@@ -39,6 +39,9 @@ class ProfilePage extends Component {
     componentDidMount() {
         document.body.scrollTo(0, 0);
     }
+    componentDidUpdate() {
+        document.body.scrollTo(0, 0);
+    }
 
     // Sub Navigator...
     handleNavigation = nav => {

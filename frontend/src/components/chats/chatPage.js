@@ -81,12 +81,14 @@ class ChatPage extends Component {
         this.state = {
             currentChat: this.chats[0],
             searchInput: "",
+            chatSearchList: this.chats,
             messageInput: ""
         };
 
         this.changeCurrChat = this.changeCurrChat.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleInputSubmit = this.handleInputSubmit.bind(this);
+        this.updateSearchList = this.updateSearchList.bind(this);
     }
 
     componentDidMount() {
@@ -99,6 +101,9 @@ class ChatPage extends Component {
     handleInputChange = e => {
         const { name, value } = e.target;
         this.setState({ [name]: value });
+        if (name === "searchInput") {
+            this.updateSearchList(value);
+        }
     };
 
     // Handling Input submission...
@@ -106,11 +111,32 @@ class ChatPage extends Component {
         e.preventDefault();
     };
 
+    // Search Resluts...
+    updateSearchList = value => {
+        let updatedSearchList = [];
+
+        for (let index = 0; index < this.chats.length; index++) {
+            const chat = this.chats[index];
+            if (
+                chat.name
+                    .toLowerCase()
+                    .replace(/\s/g, "")
+                    .includes(value.toLowerCase().replace(/\s/g, ""))
+            ) {
+                updatedSearchList.push(chat);
+            }
+        }
+
+        this.setState({
+            chatSearchList: updatedSearchList
+        });
+    };
+
     // Chats Tiles...
     chatTiles = () => {
         let chatTiles = [];
-        for (let index = 0; index < this.chats.length; index++) {
-            const chat = this.chats[index];
+        for (let index = 0; index < this.state.chatSearchList.length; index++) {
+            const chat = this.state.chatSearchList[index];
             chatTiles.push(
                 <button
                     className={

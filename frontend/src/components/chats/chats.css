@@ -5,7 +5,7 @@
     border-radius: 2px;
     background-color: white;
     overflow: hidden;
-    box-shadow: 0 0 1.5px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }
 .chatPage button {
     margin: 0; padding: 0;
@@ -131,6 +131,9 @@
 }
 /* Chat Box */
 /* Header */
+.chatPage .chatBox {
+    border-left: 0.5px solid rgba(0, 0, 0, 0.5);
+}
 .chatPage .chatBox .header {
     height: 10%;
     padding: 8px 20px;
@@ -247,12 +250,16 @@
     padding: 10px 15px;
 }
 .chatPage .chatBox .body .chat .chatDetails .datetime {
+    margin: auto;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     font-weight: 500;
     color: rgba(0, 0, 0, 0.3);
     letter-spacing: 0.5px;
     word-spacing: 2px;
+}
+.chatPage .chatBox .body .chat .myMessage .chatDetails .datetime {
+    margin-right: 0;
 }
 .chatPage .chatBox .body .chat .chatDetails .user {
     padding: 0 10px;
@@ -261,6 +268,9 @@
     font-weight: bold;
     color: rgba(0, 0, 0, 0.7);
     transform: scale(1.2);
+}
+.chatPage .chatBox .body .chat .otherMessage .chatDetails .datetime {
+    margin-left: 0;
 }
 .chatPage .chatBox .body .message {
     margin-top: 5px;
@@ -292,7 +302,7 @@
 .chatPage .chatBox .body .chat::-webkit-scrollbar {
     width: 4px;
     height: 7px;
-    background: rgb(251, 250, 250);
+    background: transparent;
 }
 .chatPage .leftContent .chatTiles::-webkit-scrollbar-thumb {
     background: rgb(96, 37, 163);

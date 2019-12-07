@@ -13,7 +13,9 @@ export class Chat extends Component {
                                 <span className="datetime">
                                     12:00PM, 11-10-2019&nbsp;&nbsp;
                                 </span>
-                                <span className="user">You</span>
+                                <Link to="/artist/" className="user">
+                                    You
+                                </Link>
                             </div>
                             <div className="row justify-content-end">
                                 <div className="message">
@@ -26,13 +28,12 @@ export class Chat extends Component {
                     <div className="row otherMessage">
                         <div className="col">
                             <div className="row chatDetails">
-                                <span className="user">
+                                <Link className="user">
                                     {this.props.user.name}
-                                    &nbsp;&nbsp;
-                                </span>
-                                <span className="datetime">
-                                    12:00PM, 11-10-2019
-                                </span>
+                                </Link>
+                                <h6 className="datetime">
+                                    &nbsp;&nbsp;&nbsp;12:00PM, 11-10-2019
+                                </h6>
                             </div>
                             <div className="row">
                                 <div className="message">
