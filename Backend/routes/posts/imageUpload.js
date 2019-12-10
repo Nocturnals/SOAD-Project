@@ -26,7 +26,7 @@ const bucket = storage.bucket(BUCKET);
 exports.upload = async (req, res,next) => {
     console.log('Upload Image');
     console.log(req.body);
-    switch(req.body.Category) {
+    switch(req.body.category) {
       case "Story Writer":
           next();
           break;

@@ -14,7 +14,7 @@ const createPostValidation = data => {
       .required(),
     isPrivate: Joi.boolean()
       .required(),
-    Category: Joi.string()
+    category: Joi.string()
       .required(),
   };
 

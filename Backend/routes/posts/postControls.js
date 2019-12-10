@@ -30,11 +30,11 @@ exports.createPost = async (req, res, next) => {
     
     
 
-    var exist = artist.map(function(item) { return item; }).indexOf(req.body.Category);
+    var exist = artist.map(function(item) { return item; }).indexOf(req.body.category);
     if (exist == -1)
         return res
             .status(500)
-            .json({ message: "Category Invalid !!" });
+            .json({ message: "category Invalid !!" });
     /**/
     
     const user = req.loggedUser;
@@ -47,7 +47,7 @@ exports.createPost = async (req, res, next) => {
                 content:req.body.content,
                 description:req.body.description,
                 isprivate:req.body.isPrivate,
-                category:req.body.Category,
+                category:req.body.category,
                 owner: [
                     {
                         _id: user._id,
@@ -57,7 +57,7 @@ exports.createPost = async (req, res, next) => {
                 ],
             }
         );
-        if(req.body.Category != "Story Writer")
+        if(req.body.category != "Story Writer")
         {
             const images = req.imageurls;    
             console.log(images);
