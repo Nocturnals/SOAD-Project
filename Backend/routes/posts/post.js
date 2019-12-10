@@ -10,6 +10,7 @@ const {
     likeComment,
     unlikeComment,
     editPost,
+    getAllPosts
 } = require('./postControls');
 
 const {upload} = require('./imageUpload');
@@ -39,7 +40,7 @@ const multer = Multer({
 const router = express.Router();
 
 // get posts
-//router.get("/getposts", verifyToken, verifyUserWithToken, getRandomPosts);
+router.get("/posts", getAllPosts);
 
 //test
 //router.post("/image", uploadFile);

@@ -12,15 +12,7 @@ const artist = require("../../models/artistTypes");
 const { OtheruserModel } = require("../../models/Otheruser");
 const Image = require("../../models/Image");
 const {upload} = require("./imageUpload");
-/*
-const OtherUser = require('../../models/Otheruser');
-const User = require('../../models/user');
-const Comment = require('../../models/Comments')
-const formidable = require('formidable');
-const fs = require('fs');
-const _ = require('lodash');
-const auth = require('../auth/index');
-*/
+
 
 
 
@@ -94,28 +86,6 @@ exports.createPost = async (req, res, next) => {
 
     };
 
-
-
-
-
-/*
-
-router.post("/delete", (req, res, next) => {
-    const rid = req.body.id;
-
-    Post.findById(rid)
-        .exec()
-        .then(docs => {
-            docs.remove();
-            res.status(200).json({
-                deleted:true
-            });
-        })
-        .catch(err => {
-            console.log(err)
-        });
-});
-*/
 
 
 
@@ -569,6 +539,44 @@ exports.unlikeComment = async (req, res, next) => {
     } 
 
 };
+
+
+
+exports.getAllPosts = async (req,res,next) => {
+    
+    try {
+        const fields = {
+            "title" : true,
+            "content": true,
+            "date" : true,
+            "likes" : true,
+            "owner" : true,
+            "category": true,
+            "imageurls": true,
+            "comments" : true,
+        };
+        const posts = await Post.find().select(fields).sort({datefield: -1});
+        console.log(posts);
+        return res.status(200).json(posts);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "internal server error" });
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 */
 /*
