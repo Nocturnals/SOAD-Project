@@ -5,8 +5,21 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const bodyParser = require('body-parser');
+
+
+
 const authRouter = require("./routes/auth");
 const docMatch = require("./routes/docMatching/documentMatching");
+const ChatController = require("./routes/chat/chatapp");
+
+const chatrouter = express.Router()
+
+chatrouter.get('/chat',ChatController.getConversations);
+chatrouter.get(':conversationId',ChatController.getConversation);
+chatrouter.post(':conversationId',ChatController.sendReply);
+chatrouter.post('/new/:recipient',ChatController.newConversation);
+
 
 // load the local environment varaibles
 dotenv.config();
@@ -44,6 +57,8 @@ var allowCrossDomain = function(req, res, next) {
 // Middleware
 // for converting the json part of the request body
 app.use(express.json());
+app.use(bodyParser.json());
+
 
 // for allowing requests from the frontend or other domains
 app.use(allowCrossDomain);
@@ -62,7 +77,7 @@ if (process.env.Node_Env === "development") {
 app.use("/api/user", authRouter);
 app.use("/api/docMatch", docMatch);
 app.use("/api/auth", require("./routes/auth"));
-
+app.use("/api/chat",ChatController)
 //Route for Competitions
 app.use("/api/competition", require("./routes/competitions/utils"));
 
@@ -87,6 +102,9 @@ if (process.env.Node_Env === "production") {
 }
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+let server = app.listen(port, () => {
     console.log(`Server is up and running on port: ${port}!!`);
 });
+module.exports = {server:server} 
+
+
