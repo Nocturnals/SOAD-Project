@@ -29,9 +29,11 @@ const Multer = require('multer');
 const multer = Multer({
     storage: Multer.memoryStorage(),
     limits: {
-      fileSize: 5 * 1024 * 1024 // no larger than 5mb, you can change as needed.
+      fileSize: 50 * 1024 * 1024 // no larger than 50mb, you can change as needed.
     }
   });
+
+  // multer({ storage : storage }).array('userPhoto',2);
   
 
 const router = express.Router();
@@ -42,10 +44,10 @@ const router = express.Router();
 //test
 //router.post("/image", uploadFile);
 router.post('/uploadimage', multer.single('file'), upload);
-
+//router.post('/uploadmulti', uploadMultiple)
 
 // post routes
-router.post("/createpost", verifyToken, verifyUserWithToken, createPost);
+router.post("/createpost", verifyToken, verifyUserWithToken, multer.single('file'), upload, createPost);
 
 router.delete("/deletepost/:postid", verifyToken, verifyUserWithToken, deletePost);
 

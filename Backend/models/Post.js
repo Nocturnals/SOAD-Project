@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const otheruserschema = require("./Otheruser");
 const { commentsmodel, commentschema } = require("./Comments");
 
-const imageschema = require("./Image");
+const {imageschema} = require("./Image");
 
 const PostSchema = new mongoose.Schema({
     title: {
@@ -33,7 +33,7 @@ const PostSchema = new mongoose.Schema({
     },
 
     category: {
-        enum: ["cat1", "cat2"],
+        enum: ["Painter","VFX Artist","Story Writer","Singer","Photographer","Dancer","Comedian"],
         type: String
     },
 
@@ -53,7 +53,7 @@ const PostSchema = new mongoose.Schema({
         type: [imageschema]
     },
 
-    isPrivate: {
+    isprivate: {
         type: Boolean,
         required: true
     },

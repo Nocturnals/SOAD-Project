@@ -1,21 +1,17 @@
 const Post = require('../../models/Post');
 const {
     createPostValidation,
-    postLikeValidation,
-    postUnlikeValidation,
     createCommentValidation,
-    postCommentLikeValidation,
-    postCommentUnlikeValidation,
     deletePostValidation,
-    deleteAllCommentsValidation,
     editPostValidation,
-    deleteCommentValidation,
 } = require('./postValidation');
 const _ = require("lodash"); // for modifing the array contents
 
 const { ReplyModel, CommentsModel } = require("../../models/Comments");
 const artist = require("../../models/artistTypes");
 const { OtheruserModel } = require("../../models/Otheruser");
+const Image = require("../../models/Image");
+const {upload} = require("./imageUpload");
 /*
 const OtherUser = require('../../models/Otheruser');
 const User = require('../../models/user');
@@ -48,8 +44,11 @@ exports.createPost = async (req, res, next) => {
             .status(500)
             .json({ message: "Category Invalid !!" });
     /**/
+    
     const user = req.loggedUser;
-        
+    const images = req.imageurls;    
+    const len = images.length;
+    
     
         const post = new Post(
             {
@@ -67,6 +66,19 @@ exports.createPost = async (req, res, next) => {
                 ],
             }
         );
+        for(var i=0;i<len;i++)
+            {
+                const image = new Image(
+                    {
+                        url : images[i].url,
+                        name : images[i].name
+                    }
+                );
+                const simage = await image.save();
+                post.imageurls[i] = simage;
+                
+            }
+
 
         try {
             const savedpost = await post.save();
@@ -103,14 +115,6 @@ router.post("/delete", (req, res, next) => {
 
 
 exports.like = async (req, res) => {
-
-    const validatedData = postLikeValidation(req.body);
-    
-    if (validatedData.error)
-        return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
-    
     
     console.log(req.body)
 
@@ -165,13 +169,6 @@ exports.like = async (req, res) => {
 
 
 exports.unlike = async (req, res, next) => {
-    const validatedData = postUnlikeValidation(req.body);
-    
-    if (validatedData.error)
-        return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
-    
     const user = req.loggedUser;
     console.log(req.body)
 
@@ -271,19 +268,6 @@ exports.commentPost = async (req, res, next) => {
 
 
 exports.deleteComment = async (req, res, next) => {
-    const validatedData = deleteCommentValidation(req.body);
-    
-    if (validatedData.error)
-        return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
-    
-    console.log(req.body)
-
-        
-        
-        
-        
 
     try {
         const post =  await Post.findById(
@@ -310,8 +294,6 @@ exports.deleteComment = async (req, res, next) => {
 
 console.log(flag);
         
-
-        
             if (flag) {
                 post.comments.splice(removeIndex,1);
             } else {
@@ -329,17 +311,6 @@ console.log(flag);
 
 
 exports.deletePost = async (req, res, next) => {
-    const validatedData = deletePostValidation(req.body);
-    
-    if (validatedData.error)
-        return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
-    
-    console.log(req.body)
-
-    
-
     try {
         const post =  await Post.findById(
             {
@@ -361,11 +332,6 @@ exports.deletePost = async (req, res, next) => {
             return res.json({ message: "Access Denied" });
         }
 
-            
-            
-        
-
-        
     } catch (error) {
         return res.status(500).json({ message: "Post not found !!" });
     }
@@ -376,14 +342,6 @@ exports.deletePost = async (req, res, next) => {
 
 
 exports.deleteAllComments = async (req, res, next) => {
-    const validatedData = deleteAllCommentsValidation(req.body);
-    
-    if (validatedData.error)
-        return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
-    
-    console.log(req.body)
         try {
             
             const post =  await Post.findById(
@@ -472,15 +430,6 @@ exports.editPost = async (req, res, next) => {
 
 
 exports.likeComment = async (req, res, next) => {
-    const validatedData = postCommentLikeValidation(req.body);
-    
-    if (validatedData.error)
-        return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
-
-
-    console.log(req.body);
     try {
         const userid = req.loggedUser._id;
         const commentId = req.params.commentid;
@@ -562,15 +511,6 @@ exports.likeComment = async (req, res, next) => {
 
 
 exports.unlikeComment = async (req, res, next) => {
-    const validatedData = postCommentUnlikeValidation(req.body);
-    
-    if (validatedData.error)
-        return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
-
-
-    console.log(req.body);
     try {
         const userid = req.loggedUser._id;
         const commentId = req.params.commentid;

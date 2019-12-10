@@ -25,9 +25,6 @@ const editPostValidation = data => {
     const schema = {
       isPrivate: Joi.boolean()
         .required(),
-      postId: Joi.string()
-        .min(4)
-        .required()
     };
   
     return Joi.validate(data, schema);
@@ -35,9 +32,6 @@ const editPostValidation = data => {
 
 const postLikeValidation = data => {
     const schema = {
-      postId: Joi.string()
-        .min(4)
-        .required()
     };
   
     return Joi.validate(data, schema);
@@ -57,9 +51,6 @@ const postUnlikeValidation = data => {
 
 const createCommentValidation = data => {
     const schema = {
-      postId: Joi.string()
-        .min(4)
-        .required(),
       comment: Joi.string()
         .min(4)
         .max(25555)
