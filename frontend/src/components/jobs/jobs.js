@@ -12,7 +12,7 @@ class Jobs extends Component {
             <React.Fragment>
                 <NavBar />
                 <div className="container-fluid jobs">
-                    <Route exact path="/jobs/ask" component={AskJob} />
+                    <Route exact path="/job/ask" component={AskJob} />
                 </div>
             </React.Fragment>
         );

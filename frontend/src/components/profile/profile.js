@@ -116,7 +116,7 @@ class ProfilePage extends Component {
                                             >
                                                 <button className="accountSettingsButton">
                                                     <i
-                                                        className="fa fa-cog"
+                                                        className="fa fa-cog fa-spin"
                                                         aria-hidden="true"
                                                     ></i>
                                                 </button>

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import NavBar from "../nav bar/navBar";
-import PostComp from "../post/post";
+import PostComp, { Post } from "../post/post";
 import LeftContent from "./leftContent/leftContent";
 import RightContent from "./rightContent/rightContent";
 import CreatePostComp from "../post/createPost/createPost";
@@ -12,21 +12,19 @@ import MainLoader from "../helpers/mainLoader/mainLoader";
 
 import "./home.css";
 
-// Post Element Class...
-class Post {
-    constructor(name, time, job, location, liked) {
-        this.name = name;
-        this.time = time;
-        this.job = job;
-        this.location = location;
-        this.liked = liked;
-    }
-}
-
 // Home Page Component...
 class HomePage extends Component {
     constructor(props) {
         super(props);
+
+        // Defining Elements
+        this.postUserImage = require("../media/images/categories/photographer.png");
+        this.posts = [
+            new Post("Shiva Ram Dubey", "3 min", "Epic Coder", "India", false),
+            new Post("Hemanth", "10 min", "Epic Coder", "India", true),
+            new Post("Vishwanth", "20 min", "Epic Coder", "India", false),
+            new Post("Nikhil", "59 min", "Epic Coder", "India", true)
+        ];
 
         this.state = {
             showUploadPostPopUP: false,
@@ -55,10 +53,10 @@ class HomePage extends Component {
     };
 
     // Generates Cards of Posts...
-    postCards = postDetails => {
+    postCards = () => {
         let postCards = [];
-        for (let i = 0; i < postDetails.length; i++) {
-            const post = postDetails[i];
+        for (let i = 0; i < this.posts.length; i++) {
+            const post = this.posts[i];
             const post_details = {
                 name: post.name,
                 time: post.time,
@@ -75,14 +73,6 @@ class HomePage extends Component {
     // Rendering...
     render() {
         const postUserImage = require("../media/images/categories/photographer.png");
-
-        // Defining Elements
-        const posts = [
-            new Post("Shiva Ram Dubey", "3 min", "Epic Coder", "India", false),
-            new Post("Hemanth", "10 min", "Epic Coder", "India", true),
-            new Post("Vishwanth", "20 min", "Epic Coder", "India", false),
-            new Post("Nikhil", "59 min", "Epic Coder", "India", true)
-        ];
 
         return (
             <React.Fragment className="home">
@@ -123,7 +113,7 @@ class HomePage extends Component {
                                 </div>
                             </div>
                         </div>
-                        {this.postCards(posts)}
+                        {this.postCards()}
                     </div>
                     <div className="rightContent col-3">
                         <RightContent />

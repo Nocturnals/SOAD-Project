@@ -10,6 +10,16 @@ import PostComments from "../helperCards/comments/postComments/comments";
 
 import "./post.css";
 
+export class Post {
+    constructor(name, time, job, location, liked) {
+        this.name = name;
+        this.time = time;
+        this.job = job;
+        this.location = location;
+        this.liked = liked;
+    }
+}
+
 class Comment {
     constructor(commentedUser, comment, image) {
         this.commentedUser = commentedUser;
@@ -166,7 +176,7 @@ class PostComp extends Component {
                 id={"post-" + this.index}
                 key={this.index}
             >
-                <div className="post-header row">
+                <div className="row post-header">
                     <div className="col-3">
                         <div
                             className="user-photo"
@@ -203,7 +213,7 @@ class PostComp extends Component {
                                     &nbsp;{this.state.time} ago
                                 </div>
                             </div>
-                            <div className="user-about col-5 column-2">
+                            <div className="col-5 user-about column-2">
                                 <div className="user-job">
                                     <i
                                         className="fa fa-bookmark"
@@ -219,7 +229,7 @@ class PostComp extends Component {
                                     &nbsp;&nbsp;{this.state.location}
                                 </div>
                             </div>
-                            <div className="more-options col-2 column-3">
+                            <div className="col-2 more-options column-3">
                                 <button
                                     onClick={this.toggleDropDown}
                                     id={"post-more-button-" + this.index}
@@ -255,9 +265,9 @@ class PostComp extends Component {
                 </div>
 
                 {/* Post Content */}
-                <div className="post-content row">
+                <div className="row post-content">
                     <div className="col">
-                        <div className="post-descr row">
+                        <div className="row post-descr">
                             <div className="col-12">
                                 <p>
                                     'handleResponse' is defined but never used
@@ -265,7 +275,7 @@ class PostComp extends Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="post-image col">
+                            <div className="col post-image">
                                 <Img
                                     src={img}
                                     loader={
@@ -284,7 +294,7 @@ class PostComp extends Component {
                 </div>
 
                 {/* Likes and Comments */}
-                <div className="post-impressions row">
+                <div className="row post-impressions">
                     <div className="col">
                         <span
                             className={
@@ -298,7 +308,11 @@ class PostComp extends Component {
                                         : "fa fa-heart-o"
                                 }
                                 aria-hidden="true"
-                                onClick={this.alterLike}
+                                onClick={
+                                    this.props.auth.isAuthed
+                                        ? this.alterLike
+                                        : null
+                                }
                             ></i>
                             <button>{this.state.likes}</button>
                         </span>
