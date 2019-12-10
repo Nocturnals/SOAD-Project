@@ -23,6 +23,7 @@ import ChatPage from "./components/chats/chatPage";
 import Jobs from "./components/jobs/jobs";
 import SearchJobs from "./components/jobs/searchJobs/searchJobs";
 import Organisations from "./components/organisations/organisations";
+import CreateOrganisation from "./components/organisations/createOrganisation/createOrganisation";
 import MainLoader from "./components/helpers/mainLoader/mainLoader";
 
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
@@ -157,6 +158,11 @@ class MainAppComponents extends Component {
                             exact
                             path="/artists/:organisationName/:content"
                             component={Organisations}
+                        />
+                        <AuthenticatedRoute
+                            exact
+                            path="/artists/:action"
+                            component={CreateOrganisation}
                         />
 
                         {/* Search Page */}
