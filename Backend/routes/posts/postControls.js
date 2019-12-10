@@ -117,7 +117,7 @@ exports.like = async (req, res) => {
     try{
         const post = await Post.findById(
             {
-                _id: req.body.postId
+                _id: req.params.postid
             }
         )
         
@@ -178,7 +178,7 @@ exports.unlike = async (req, res, next) => {
     try {
         const post = await Post.findById(
             {
-                _id: req.body.postId
+                _id: req.params.postid
             }
         )
         
@@ -244,7 +244,7 @@ exports.commentPost = async (req, res, next) => {
     try {
         const post =  await Post.findById(
             {
-                _id: req.body.postId
+                _id: req.params.postid
             }
         )
 
@@ -288,10 +288,10 @@ exports.deleteComment = async (req, res, next) => {
     try {
         const post =  await Post.findById(
             {
-                _id: req.body.postId
+                _id: req.params.postid
             }
         )
-        const commentId = req.body.commentId;
+        const commentId = req.params.commentid;
 
         const uid = req.loggedUser._id;
         var removeIndex = post.comments.map(function(item) { return item._id; }).indexOf(commentId);
@@ -343,7 +343,7 @@ exports.deletePost = async (req, res, next) => {
     try {
         const post =  await Post.findById(
             {
-                _id: req.body.postId
+                _id: req.params.postid
             }
         );
         const uid = req.loggedUser._id;
@@ -388,7 +388,7 @@ exports.deleteAllComments = async (req, res, next) => {
             
             const post =  await Post.findById(
                 {
-                    _id: req.body.postId
+                    _id: req.params.postid
                 }
             );
 //            console.log(post.comments);
@@ -435,7 +435,7 @@ exports.editPost = async (req, res, next) => {
             
             const post =  await Post.findById(
                 {
-                    _id: req.body.postId
+                    _id: req.params.postid
                 }
             );
             const uid = req.loggedUser._id;
@@ -483,8 +483,8 @@ exports.likeComment = async (req, res, next) => {
     console.log(req.body);
     try {
         const userid = req.loggedUser._id;
-        const commentId = req.body.commentId;
-        const postId = req.body.postId;
+        const commentId = req.params.commentid;
+        const postId = req.params.postid;
         var flag = false;
         
         
@@ -573,8 +573,8 @@ exports.unlikeComment = async (req, res, next) => {
     console.log(req.body);
     try {
         const userid = req.loggedUser._id;
-        const commentId = req.body.commentId;
-        const postId = req.body.postId;
+        const commentId = req.params.commentid;
+        const postId = req.params.postid;
 
 
         const post = await Post.findById(

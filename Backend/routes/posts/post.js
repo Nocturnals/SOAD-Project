@@ -47,27 +47,27 @@ router.post('/uploadimage', multer.single('file'), upload);
 // post routes
 router.post("/createpost", verifyToken, verifyUserWithToken, createPost);
 
-router.delete("/deletepost", verifyToken, verifyUserWithToken, deletePost);
+router.delete("/deletepost/:postid", verifyToken, verifyUserWithToken, deletePost);
 
-router.patch("/deletecomment", verifyToken, verifyUserWithToken, deleteComment);
+router.patch("/deletecomment/:postid/:commentid", verifyToken, verifyUserWithToken, deleteComment);
 
-router.patch("/editpost", verifyToken, verifyUserWithToken, editPost);
+router.patch("/editpost/:postid", verifyToken, verifyUserWithToken, editPost);
 
 
-router.patch("/deleteallcomments", verifyToken, verifyUserWithToken, deleteAllComments);
+router.patch("/deleteallcomments/:postid", verifyToken, verifyUserWithToken, deleteAllComments);
 
 
 // like unlike
-router.put('/like', verifyToken, verifyUserWithToken, like);
+router.put('/like/:postid', verifyToken, verifyUserWithToken, like);
 
-router.put('/unlike', verifyToken, verifyUserWithToken, unlike);
+router.put('/unlike/:postid', verifyToken, verifyUserWithToken, unlike);
 
 // comments
-router.post('/comment',  verifyToken, verifyUserWithToken, commentPost);
+router.post('/comment/:postid',  verifyToken, verifyUserWithToken, commentPost);
 
-router.put('/comment/like',  verifyToken, verifyUserWithToken, likeComment);
+router.put('/comment/:postid/like/:commentid',  verifyToken, verifyUserWithToken, likeComment);
 
-router.put('/comment/unlike',  verifyToken, verifyUserWithToken, unlikeComment);
+router.put('/comment/:postid/unlike/:commentid',  verifyToken, verifyUserWithToken, unlikeComment);
 /*
 */
 /*
