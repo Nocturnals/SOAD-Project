@@ -1,25 +1,135 @@
+const Joi = require("@hapi/joi");
 
-exports.createPostValidator = (req, res, next) => {
-    
-    req.check('title', 'Write a title').notEmpty();
-    req.check('title', 'Title must be between 4 to 150 characters').isLength({
-        min: 4,
-        max: 150
-    });
-    
-    req.check('body', 'Write a body').notEmpty();
-    req.check('body', 'Body must be between 4 to 2000 characters').isLength({
-        min: 4,
-        max: 2000
-    });
-    
-    const errors = req.validationErrors();
-    
-    if (errors) {
-        const firstError = errors.map(error => error.msg)[0];
-        return res.status(400).json({ error: firstError });
-    }
-    
-    next();
+const createPostValidation = data => {
+  const schema = {
+    title: Joi.string()
+      .min(4)
+      .max(255)
+      .required(),
+    content: Joi.string()
+      .min(4)
+      .required(),
+    description: Joi.string()
+      .min(4)
+      .required(),
+    isPrivate: Joi.boolean()
+      .required(),
+    Category: Joi.string()
+      .required(),
+  };
+
+  return Joi.validate(data, schema);
 };
 
+const editPostValidation = data => {
+    const schema = {
+      isPrivate: Joi.boolean()
+        .required(),
+    };
+  
+    return Joi.validate(data, schema);
+  };
+
+const postLikeValidation = data => {
+    const schema = {
+    };
+  
+    return Joi.validate(data, schema);
+  };
+  
+
+const postUnlikeValidation = data => {
+    const schema = {
+      postId: Joi.string()
+        .min(4)
+        .required()
+    };
+  
+    return Joi.validate(data, schema);
+  };
+
+
+const createCommentValidation = data => {
+    const schema = {
+      comment: Joi.string()
+        .min(4)
+        .max(25555)
+        .required(),
+    };
+  
+    return Joi.validate(data, schema);
+  };
+
+  const deleteCommentValidation = data => {
+    const schema = {
+      postId: Joi.string()
+        .min(4)
+        .required(),
+        commentId: Joi.string()
+        .min(4)
+        .required(),
+    };
+  
+    return Joi.validate(data, schema);
+  };
+
+const postCommentLikeValidation = data => {
+    const schema = {
+      postId: Joi.string()
+        .min(4)
+        .required(),
+      commentId: Joi.string()
+        .min(4)
+        .required()
+    };
+  
+    return Joi.validate(data, schema);
+  };
+  
+
+const postCommentUnlikeValidation = data => {
+    const schema = {
+      postId: Joi.string()
+        .min(4)
+        .required(),
+      commentId: Joi.string()
+        .min(4)
+        .required()
+    };
+  
+    return Joi.validate(data, schema);
+  };
+
+  const deletePostValidation = data => {
+    const schema = {
+      postId: Joi.string()
+        .min(4)
+        .required(),
+    };
+  
+    return Joi.validate(data, schema);
+  };
+
+  const deleteAllCommentsValidation = data => {
+    const schema = {
+      postId: Joi.string()
+        .min(4)
+        .required()
+    };
+  
+    return Joi.validate(data, schema);
+  };
+  
+
+module.exports = {
+    createPostValidation,
+    postLikeValidation,
+    postUnlikeValidation,
+    createCommentValidation,
+    postCommentLikeValidation,
+    postCommentUnlikeValidation,
+    deletePostValidation,
+    deleteAllCommentsValidation,
+    editPostValidation,
+    deleteCommentValidation,
+};

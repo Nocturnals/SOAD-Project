@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const otheruserschema = require("./Otheruser");
 const { CommentsSchema } = require("./Comments");
-const imageschema = require("./Image");
+const {imageschema} = require("./Image");
+const artistType = require("./artistTypes");
 
 const PostSchema = new mongoose.Schema({
   title: {
@@ -36,7 +37,7 @@ const PostSchema = new mongoose.Schema({
   },
 
   category: {
-    enum: ["cat1", "cat2"],
+    enum: ["Painter","VFX Artist","Story Writer","Singer","Photographer","Dancer","Comedian"],
     type: String
   },
 
