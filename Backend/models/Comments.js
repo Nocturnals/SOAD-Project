@@ -30,7 +30,7 @@ const ReplySchema = new mongoose.Schema({
 
 const CommentSchema = new mongoose.Schema({
     owner: {
-        type: [otheruserschema],
+        type: otheruserschema,
         required: true
     },
 
