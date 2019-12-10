@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const { JobsAppliedSchema } = require("./jobsApplied");
 const otheruserschema = require("./Otheruser");
 const othercompetititonschema = require("./Othercompetitions");
+const { NotificationSchema } = require("./Notifications");
 const { OrganizationSchema } = require("./Organizations");
 
 const userSchema = new mongoose.Schema({
@@ -84,6 +85,10 @@ const userSchema = new mongoose.Schema({
 
   jobsApplied: {
     type: [JobsAppliedSchema],
+    default: []
+  },
+  notifications: {
+    type: [NotificationSchema],
     default: []
   },
   organizations: {

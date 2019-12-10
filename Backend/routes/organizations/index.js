@@ -1,6 +1,7 @@
 const express = require("express");
 
 const { OrganizationSchema } = require("../../models/Organizations");
+const { NotificationSchema } = require("../../models/Notifications");
 const { OtheruserModel } = require("../../models/Otheruser");
 const post = require("../../models/Post");
 const UserModel = require("../../models/user");
@@ -20,6 +21,10 @@ router.post(
   verifyToken,
   verifyUserWithToken,
   async (req, res) => {
+    // format:
+    // name:
+    // description:
+
     // apply as avaliable to work
     const validatedData = organizationValidation(req.body);
 
@@ -35,10 +40,13 @@ router.post(
       profileurl: req.loggedUser.profileurl
     });
     const createOrganization = new OrganizationSchema({
+      _id: mongoose.Types.ObjectId(),
       name: req.body.name,
       description: req.body.description,
       adminUsers: adminUser
     });
+
+    await createOrganization.save();
 
     // save the new doc to database
     try {
@@ -80,6 +88,16 @@ router.post(
       currentorganization.PendingUsers.push(findUser);
 
       //TODO send request to User
+      const createNotifiaction = new NotificationSchema({
+        message:
+          "new Organizatoion wants to add you " + currentorganization.name
+      });
+      await createNotifiaction.save();
+
+      const requestUser = await UserModel.findById(req.body.userId);
+      requestUser.notifications.push(createNotifiaction);
+
+      const doc = await requestUser.save();
 
       return res.status(200).json({
         message: "Successfully send notification to User",
@@ -98,12 +116,28 @@ router.post(
   verifyToken,
   verifyUserWithToken,
   async (req, res) => {
+    // format
+    // userId:
+    // orgName:
+
     try {
+      var removeElement = null;
       const currentUser = await UserModel.findById(req.loggedUser._id);
-      const currentorganization = await currentUser.findById(
-        (organizations = req.body.organizationId)
+      allOrganization = currentUser.organizations;
+      for (i = 0; i < allOrganization.length(); i++) {
+        if (allOrganization[i].name == req.body.orgName) {
+          removeElement = i;
+        }
+      }
+
+      currentUser.organizations.slice(i, i + 1);
+      await currentUser.save();
+
+      const currentorganization = await OrganizationSchema.find(
+        (name = req.body.orgName)
       );
-      currentorganization.findByIdAndDelete(currentorganization._id);
+      await currentorganization.remove();
+      // currentorganization.(currentorganization._id);
       return res.status(200).json({
         message: "Successfully delected Organization",
         doc: doc
