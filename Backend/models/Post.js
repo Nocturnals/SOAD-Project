@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const otheruserschema = require("./Otheruser");
 const { CommentsSchema } = require("./Comments");
-const imageschema = require("./Image");
+const {imageschema} = require("./Image");
 const artistType = require("./artistTypes");
 
 const PostSchema = new mongoose.Schema({

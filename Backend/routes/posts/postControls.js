@@ -1,30 +1,18 @@
 const Post = require('../../models/Post');
 const {
     createPostValidation,
-    postLikeValidation,
-    postUnlikeValidation,
     createCommentValidation,
-    postCommentLikeValidation,
-    postCommentUnlikeValidation,
     deletePostValidation,
-    deleteAllCommentsValidation,
     editPostValidation,
-    deleteCommentValidation,
 } = require('./postValidation');
 const _ = require("lodash"); // for modifing the array contents
 
 const { ReplyModel, CommentsModel } = require("../../models/Comments");
 const artist = require("../../models/artistTypes");
 const { OtheruserModel } = require("../../models/Otheruser");
-/*
-const OtherUser = require('../../models/Otheruser');
-const User = require('../../models/user');
-const Comment = require('../../models/Comments')
-const formidable = require('formidable');
-const fs = require('fs');
-const _ = require('lodash');
-const auth = require('../auth/index');
-*/
+const Image = require("../../models/Image");
+const {upload} = require("./imageUpload");
+
 
 
 
@@ -48,8 +36,10 @@ exports.createPost = async (req, res, next) => {
             .status(500)
             .json({ message: "Category Invalid !!" });
     /**/
+    
     const user = req.loggedUser;
-        
+    
+    
     
         const post = new Post(
             {
@@ -67,6 +57,26 @@ exports.createPost = async (req, res, next) => {
                 ],
             }
         );
+        if(req.body.Category != "Story Writer")
+        {
+            const images = req.imageurls;    
+            console.log(images);
+            const len = images.length;
+            for(var i=0;i<len;i++)
+                {
+                    const image = new Image(
+                        {
+                            url : images[i].url,
+                            name : images[i].name
+                        }
+                    );
+                    const simage = await image.save();
+                    post.imageurls[i] = simage;
+                    
+                }
+        }
+
+
 
         try {
             const savedpost = await post.save();
@@ -80,44 +90,14 @@ exports.createPost = async (req, res, next) => {
 
 
 
-
-/*
-
-router.post("/delete", (req, res, next) => {
-    const rid = req.body.id;
-
-    Post.findById(rid)
-        .exec()
-        .then(docs => {
-            docs.remove();
-            res.status(200).json({
-                deleted:true
-            });
-        })
-        .catch(err => {
-            console.log(err)
-        });
-});
-*/
-
-
-
 exports.like = async (req, res) => {
-
-    const validatedData = postLikeValidation(req.body);
-    
-    if (validatedData.error)
-        return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
-    
     
     console.log(req.body)
 
     try{
         const post = await Post.findById(
             {
-                _id: req.body.postId
+                _id: req.params.postid
             }
         )
         
@@ -165,20 +145,13 @@ exports.like = async (req, res) => {
 
 
 exports.unlike = async (req, res, next) => {
-    const validatedData = postUnlikeValidation(req.body);
-    
-    if (validatedData.error)
-        return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
-    
     const user = req.loggedUser;
     console.log(req.body)
 
     try {
         const post = await Post.findById(
             {
-                _id: req.body.postId
+                _id: req.params.postid
             }
         )
         
@@ -244,7 +217,7 @@ exports.commentPost = async (req, res, next) => {
     try {
         const post =  await Post.findById(
             {
-                _id: req.body.postId
+                _id: req.params.postid
             }
         )
 
@@ -271,27 +244,14 @@ exports.commentPost = async (req, res, next) => {
 
 
 exports.deleteComment = async (req, res, next) => {
-    const validatedData = deleteCommentValidation(req.body);
-    
-    if (validatedData.error)
-        return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
-    
-    console.log(req.body)
-
-        
-        
-        
-        
 
     try {
         const post =  await Post.findById(
             {
-                _id: req.body.postId
+                _id: req.params.postid
             }
         )
-        const commentId = req.body.commentId;
+        const commentId = req.params.commentid;
 
         const uid = req.loggedUser._id;
         var removeIndex = post.comments.map(function(item) { return item._id; }).indexOf(commentId);
@@ -310,8 +270,6 @@ exports.deleteComment = async (req, res, next) => {
 
 console.log(flag);
         
-
-        
             if (flag) {
                 post.comments.splice(removeIndex,1);
             } else {
@@ -329,21 +287,10 @@ console.log(flag);
 
 
 exports.deletePost = async (req, res, next) => {
-    const validatedData = deletePostValidation(req.body);
-    
-    if (validatedData.error)
-        return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
-    
-    console.log(req.body)
-
-    
-
     try {
         const post =  await Post.findById(
             {
-                _id: req.body.postId
+                _id: req.params.postid
             }
         );
         const uid = req.loggedUser._id;
@@ -361,11 +308,6 @@ exports.deletePost = async (req, res, next) => {
             return res.json({ message: "Access Denied" });
         }
 
-            
-            
-        
-
-        
     } catch (error) {
         return res.status(500).json({ message: "Post not found !!" });
     }
@@ -376,19 +318,11 @@ exports.deletePost = async (req, res, next) => {
 
 
 exports.deleteAllComments = async (req, res, next) => {
-    const validatedData = deleteAllCommentsValidation(req.body);
-    
-    if (validatedData.error)
-        return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
-    
-    console.log(req.body)
         try {
             
             const post =  await Post.findById(
                 {
-                    _id: req.body.postId
+                    _id: req.params.postid
                 }
             );
 //            console.log(post.comments);
@@ -435,7 +369,7 @@ exports.editPost = async (req, res, next) => {
             
             const post =  await Post.findById(
                 {
-                    _id: req.body.postId
+                    _id: req.params.postid
                 }
             );
             const uid = req.loggedUser._id;
@@ -472,19 +406,10 @@ exports.editPost = async (req, res, next) => {
 
 
 exports.likeComment = async (req, res, next) => {
-    const validatedData = postCommentLikeValidation(req.body);
-    
-    if (validatedData.error)
-        return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
-
-
-    console.log(req.body);
     try {
         const userid = req.loggedUser._id;
-        const commentId = req.body.commentId;
-        const postId = req.body.postId;
+        const commentId = req.params.commentid;
+        const postId = req.params.postid;
         var flag = false;
         
         
@@ -562,19 +487,10 @@ exports.likeComment = async (req, res, next) => {
 
 
 exports.unlikeComment = async (req, res, next) => {
-    const validatedData = postCommentUnlikeValidation(req.body);
-    
-    if (validatedData.error)
-        return res
-            .status(400)
-            .json({ message: validatedData.error.details[0].message });
-
-
-    console.log(req.body);
     try {
         const userid = req.loggedUser._id;
-        const commentId = req.body.commentId;
-        const postId = req.body.postId;
+        const commentId = req.params.commentid;
+        const postId = req.params.postid;
 
 
         const post = await Post.findById(
@@ -624,6 +540,44 @@ exports.unlikeComment = async (req, res, next) => {
     } 
 
 };
+
+
+
+exports.getAllPosts = async (req,res,next) => {
+    
+    try {
+        const fields = {
+            "title" : true,
+            "content": true,
+            "date" : true,
+            "likes" : true,
+            "owner" : true,
+            "category": true,
+            "imageurls": true,
+            "comments" : true,
+        };
+        const posts = await Post.find().select(fields).sort({datefield: -1});
+        console.log(posts);
+        return res.status(200).json(posts);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "internal server error" });
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 */
 /*
