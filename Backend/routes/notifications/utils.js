@@ -52,6 +52,7 @@ router.post(
                 .json({ message: validatedData.error.details[0].message });
 
         const notif = new NotificationsModel({
+            userid: req.body.userid,
             message: req.body.message,
             url: req.body.url,
             isread: false
