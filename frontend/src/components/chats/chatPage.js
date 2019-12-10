@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import NavBar from "../nav bar/navBar";
 import { ChatClass, ChatTile } from "./helpers/chatTile";
@@ -217,6 +219,7 @@ class ChatPage extends Component {
                         <div className="col-9 chatBox">
                             <Chat
                                 user={this.state.currentChat}
+                                auth={this.props.auth}
                                 handleInputChange={this.handleInputChange}
                                 handleInputSubmit={this.handleInputSubmit}
                                 messageInput={this.state.messageInput}
@@ -229,4 +232,12 @@ class ChatPage extends Component {
     }
 }
 
-export default ChatPage;
+ChatPage.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(ChatPage);
