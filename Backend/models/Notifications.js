@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 
 const NotificationSchema = new mongoose.Schema({
-    userid: {
-        type: String,
-        required: true
-    },
     message: {
         type: String,
         required: true
@@ -19,4 +15,7 @@ const NotificationSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model("Notifications", NotificationSchema);
+const NotificationsModel = mongoose.model("Notifications", NotificationSchema);
+
+module.exports = NotificationsModel;
+module.exports.NotificationSchema = NotificationSchema;
