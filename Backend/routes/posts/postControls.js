@@ -80,7 +80,7 @@ exports.createPost = async (req, res, next) => {
 
         try {
             const savedpost = await post.save();
-            res.json(savedpost);
+            res.json({ message: "Uploaded Successfully" });
         } catch (err) {
             res.status(500).json({ message: err });
         }
