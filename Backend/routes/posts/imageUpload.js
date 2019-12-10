@@ -33,7 +33,8 @@ exports.upload = async (req, res,next) => {
       default :
           if (!req.file) {
             
-            return res.status(400).send('No file uploaded.');
+            next();
+
           }
           const newFileName = `${Date.now()}-${req.file.originalname}`;
           

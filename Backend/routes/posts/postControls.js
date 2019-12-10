@@ -57,7 +57,7 @@ exports.createPost = async (req, res, next) => {
                 ],
             }
         );
-        if(req.body.category != "Story Writer")
+        if(req.body.category != "Story Writer" && req.imageurls)
         {
             const images = req.imageurls;    
             console.log(images);
