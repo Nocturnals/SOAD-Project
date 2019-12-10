@@ -55,7 +55,7 @@ class PostComments extends Component {
                         <div className="row">
                             <h6>
                                 <Link
-                                    to={"artist/" + comment.commentedUser}
+                                    to={"/artist/" + comment.commentedUser}
                                     className="commentedUser"
                                     style={{ textDecoration: "none" }}
                                 >
@@ -121,15 +121,19 @@ class PostComments extends Component {
                         <div className="col-2">
                             <button
                                 type="submit"
-                                onClick={() => {
-                                    this.props.addComment(
-                                        new Comment(
-                                            this.props.auth.user.name,
-                                            this.props.newComment,
-                                            cmnt_img
-                                        )
-                                    );
-                                }}
+                                onClick={
+                                    this.props.auth.isAuthed
+                                        ? () => {
+                                              this.props.addComment(
+                                                  new Comment(
+                                                      this.props.auth.user.name,
+                                                      this.props.newComment,
+                                                      cmnt_img
+                                                  )
+                                              );
+                                          }
+                                        : null
+                                }
                             >
                                 <i
                                     className="fa fa-paper-plane"

@@ -21,12 +21,33 @@ import ProfilePage from "./components/profile/profile";
 import AccountSettingsComp from "./components/profile/accountSettings/accountSettings";
 import ChatPage from "./components/chats/chatPage";
 import Jobs from "./components/jobs/jobs";
+import SearchJobs from "./components/jobs/searchJobs/searchJobs";
 import Organisations from "./components/organisations/organisations";
+import MainLoader from "./components/helpers/mainLoader/mainLoader";
 
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 const googleApiKey = `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&libraries=places`;
 
 class MainAppComponents extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isLoading: true
+        };
+    }
+
+    // After Mounting the Component...
+    componentDidMount() {
+        document.body.scrollTo(0, 0);
+
+        setTimeout(() => {
+            this.setState({
+                isLoading: false
+            });
+        }, 1000);
+    }
+
     render() {
         const AuthenticatedRoute = ({ component: Component, ...rest }) => (
             <Route
@@ -69,6 +90,7 @@ class MainAppComponents extends Component {
             <Router>
                 <Switch>
                     <React.Fragment>
+                        {this.state.isLoading ? <MainLoader /> : null}
                         {/* Displaying Error Messages */}
                         {this.props.alert.message ? (
                             <div className="alert alert-danger" role="alert">
@@ -109,8 +131,13 @@ class MainAppComponents extends Component {
                         />
 
                         {/* Jobs */}
+                        <Route
+                            exact
+                            path="/jobs/:job_id?/results/:filters?"
+                            component={SearchJobs}
+                        />
                         <AuthenticatedRoute
-                            path="/jobs/:jobType"
+                            path="/job/:jobType"
                             component={Jobs}
                         />
 

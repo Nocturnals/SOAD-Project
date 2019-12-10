@@ -85,8 +85,8 @@ const userSchema = new mongoose.Schema({
     jobsApplied: {
         type: [JobsAppliedSchema],
         default: []
-    }
- notifications: {
+    },
+    notifications: {
         type: [NotificationSchema],
         default: []
     }
