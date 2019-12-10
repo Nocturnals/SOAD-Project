@@ -9,6 +9,9 @@ const NotificationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    url: {
+        type: String
+    },
     isread: {
         type: Boolean,
         required: true,
