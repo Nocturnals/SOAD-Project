@@ -115,17 +115,17 @@ class JobsFilters extends Component {
                                         <div className="col type">
                                             <input
                                                 type="checkbox"
-                                                value="TEMPORAY"
-                                                id="TEMPORAY"
+                                                value="TEMPORARY"
+                                                id="TEMPORARY"
                                                 name="jobType"
                                                 onChange={
                                                     this.handleInputChange
                                                 }
                                                 checked={
-                                                    jobTypesChecked.TEMPORAY
+                                                    jobTypesChecked.TEMPORARY
                                                 }
                                             ></input>
-                                            <label htmlFor="TEMPORAY">
+                                            <label htmlFor="TEMPORARY">
                                                 Temporary
                                             </label>
                                         </div>

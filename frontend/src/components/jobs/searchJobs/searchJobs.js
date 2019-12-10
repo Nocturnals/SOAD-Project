@@ -196,9 +196,10 @@ class SearchJobs extends Component {
             jobType: this.jobTypes,
             jobTypesChecked: this.initJobTypesChecked
         });
-        console.log(document.getElementsByTagName("form"));
 
-        // document.getElementsByTagName("form")[0].submit();
+        setTimeout(() => {
+            document.getElementsByTagName("form")[0].submit();
+        }, 500);
     };
     handleFiltersSubmit = e => {
         e.preventDefault();
