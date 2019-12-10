@@ -1,6 +1,7 @@
 const express = require("express");
 
 const { OrganizationSchema } = require("../../models/Organizations");
+const { NotificationSchema } = require("../../models/Notifications");
 const { OtheruserModel } = require("../../models/Otheruser");
 const post = require("../../models/Post");
 const UserModel = require("../../models/user");
@@ -45,6 +46,8 @@ router.post(
       adminUsers: adminUser
     });
 
+    await createOrganization.save();
+
     // save the new doc to database
     try {
       // saving to database
@@ -85,7 +88,16 @@ router.post(
       currentorganization.PendingUsers.push(findUser);
 
       //TODO send request to User
-      const requestUser = await UserModel.fin;
+      const createNotifiaction = new NotificationSchema({
+        message:
+          "new Organizatoion wants to add you " + currentorganization.name
+      });
+      await createNotifiaction.save();
+
+      const requestUser = await UserModel.findById(req.body.userId);
+      requestUser.notifications.push(createNotifiaction);
+
+      const doc = await requestUser.save();
 
       return res.status(200).json({
         message: "Successfully send notification to User",
@@ -109,12 +121,22 @@ router.post(
     // orgName:
 
     try {
+      var removeElement = null;
       const currentUser = await UserModel.findById(req.loggedUser._id);
-      currentUser.organizations;
+      allOrganization = currentUser.organizations;
+      for (i = 0; i < allOrganization.length(); i++) {
+        if (allOrganization[i].name == req.body.orgName) {
+          removeElement = i;
+        }
+      }
 
-      const currentorganization = await currentUser.findById(
-        (organizations = req.body.organizationId)
+      currentUser.organizations.slice(i, i + 1);
+      await currentUser.save();
+
+      const currentorganization = await OrganizationSchema.find(
+        (name = req.body.orgName)
       );
+      await currentorganization.remove();
       // currentorganization.(currentorganization._id);
       return res.status(200).json({
         message: "Successfully delected Organization",
