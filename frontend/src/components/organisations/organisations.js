@@ -44,7 +44,7 @@ class Organisations extends Component {
         for (let index = 0; index < this.organisations.length; index++) {
             const comp = this.organisations[index];
             comps.push(
-                <div className="organisation">
+                <div className="organisation" key={index}>
                     <Img src={comp.image} className="image" />
                     <h6 className="name">{comp.name}</h6>
                 </div>

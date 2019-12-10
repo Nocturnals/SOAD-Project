@@ -97,6 +97,9 @@ export function register(email, username, dateofbirth, password) {
 
 export function getUserWithToken(token) {
     return dispatch => {
+        // Request User
+        dispatch({ type: userAuthConst.LOAD_USER_REQUEST });
+
         // set the token to headers
         setAuthTokenHeader(token);
 

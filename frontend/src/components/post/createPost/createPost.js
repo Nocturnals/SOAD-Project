@@ -311,6 +311,18 @@ class CreatePostComp extends Component {
                         </div>
                         <div className="row body">
                             <div className="col">
+                                <div className="row isPrivate">
+                                    <div className="col">
+                                        <label htmlFor="isPrivate">
+                                            <h6>Private</h6>
+                                        </label>
+                                        <input
+                                            className="isPrivateCheck"
+                                            type="checkbox"
+                                            id="isPrivate"
+                                        ></input>
+                                    </div>
+                                </div>
                                 <div className="row title bodyRow">
                                     <div className="col">
                                         <input

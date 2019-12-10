@@ -6,6 +6,8 @@ import NavBar from "../nav bar/navBar";
 import { ChatClass, ChatTile } from "./helpers/chatTile";
 import { Chat } from "./chat";
 
+import { getLastMessages } from "../../actions/messages/messagingActions";
+
 import "./chats.css";
 
 class ChatPage extends Component {
@@ -13,6 +15,10 @@ class ChatPage extends Component {
         super(props);
 
         this.profileImage = require("../media/images/categories/photographer.png");
+
+        if (this.props.auth.isAuthed) {
+            this.props.getLastMessages();
+        }
 
         this.chats = [
             new ChatClass(
@@ -174,6 +180,7 @@ class ChatPage extends Component {
 
     render() {
         const { searchInput } = this.state;
+        const { auth } = this.props;
 
         return (
             <React.Fragment>
@@ -219,7 +226,7 @@ class ChatPage extends Component {
                         <div className="col-9 chatBox">
                             <Chat
                                 user={this.state.currentChat}
-                                auth={this.props.auth}
+                                auth={auth}
                                 handleInputChange={this.handleInputChange}
                                 handleInputSubmit={this.handleInputSubmit}
                                 messageInput={this.state.messageInput}
@@ -233,11 +240,13 @@ class ChatPage extends Component {
 }
 
 ChatPage.propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    getLastMessages: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    messaging: state.messaging
 });
 
-export default connect(mapStateToProps)(ChatPage);
+export default connect(mapStateToProps, { getLastMessages })(ChatPage);

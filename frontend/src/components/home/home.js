@@ -74,9 +74,10 @@ class HomePage extends Component {
     render() {
         const postUserImage = require("../media/images/categories/photographer.png");
 
+        const { auth } = this.props;
+
         return (
-            <React.Fragment className="home">
-                {this.state.isLoading ? <MainLoader /> : null}
+            <React.Fragment>
                 <NavBar blur={this.state.showUploadPostPopUP ? true : false} />
                 <div
                     className={
@@ -85,7 +86,7 @@ class HomePage extends Component {
                     }
                 >
                     <div className="personal-content col-3">
-                        <LeftContent email={this.props.auth.email} />
+                        <LeftContent />
                     </div>
                     <div className="posts col-6">
                         <div className="uploadPost row">

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import "./leftContent.css";
 
@@ -26,12 +28,6 @@ class OrganisationsLink extends Component {
 }
 
 class LeftContent extends Component {
-    constructor(props) {
-        super(props);
-
-        this.email = this.props.email;
-    }
-
     // Organisations Components...
     organisationComp = organisations => {
         let orgs = [];
@@ -96,8 +92,10 @@ class LeftContent extends Component {
             )
         ];
 
-        return (
-            <div>
+        const { auth } = this.props;
+
+        return !this.props.auth.isLoading ? (
+            <React.Fragment>
                 <div className="left-content row">
                     <div className="col user">
                         <div className="userImage row justify-content-center">
@@ -115,11 +113,19 @@ class LeftContent extends Component {
                         <div className="following row">
                             <div className="title col-6">
                                 <h4>Following</h4>
-                                <h6>200</h6>
+                                <h6>
+                                    {auth.user &&
+                                        auth.user.following &&
+                                        auth.user.following.length}
+                                </h6>
                             </div>
                             <div className="title col-6">
                                 <h4>Followers</h4>
-                                <h6>200</h6>
+                                <h6>
+                                    {auth.user &&
+                                        auth.user.following &&
+                                        auth.user.followers.length}
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -142,9 +148,17 @@ class LeftContent extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
-        );
+            </React.Fragment>
+        ) : null;
     }
 }
 
-export default LeftContent;
+LeftContent.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(LeftContent);

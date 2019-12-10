@@ -35,7 +35,7 @@
 .createPost .bodyRow {
     margin: 20px 0;
 }
-.createPost .body input {
+.createPost .body .bodyRow input {
     width: 100%;
     padding: 10px 20px;
 }
