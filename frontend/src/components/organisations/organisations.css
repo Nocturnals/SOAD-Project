@@ -42,7 +42,7 @@
     background-color: rgb(83, 29, 119);
     border-radius: 50px;
     display: inline-block;
-    transition: all 0.5s linear;
+    transition: all 0.3s linear;
 }
 .organisations .userOrganisations .organisation .image {
     width: 50px;
@@ -51,17 +51,15 @@
     border-radius: 50%;
 }
 .organisations .userOrganisations .organisation .name {
-    margin: 0;
-    font-size: 0rem;
+    margin: auto 20px auto 10px;
+    font-size: 1rem;
     transition: all 0.2s linear;
     display: inline-block;
 }
 .organisations .userOrganisations .organisation:nth-child(n):hover {
+    color: rgb(83, 29, 119);
+    background: transparent;
     cursor: pointer;
-}
-.organisations .userOrganisations .organisation:nth-child(n):hover > .name {
-    margin: 0 15px;
-    font-size: 1rem;
 }
 
 
