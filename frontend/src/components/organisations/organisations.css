@@ -1,0 +1,83 @@
+.organisations {
+    padding: 0;
+    margin: 0;
+}
+/* User Organisations */
+.organisations .userOrganisations {
+    margin: 5px;
+    background-color: white;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    overflow: auto;
+    white-space: nowrap;
+}
+/* Organisations Search */
+.organisations .userOrganisations .search {
+    height: 100%; width: 300px;
+    margin-right: 20px;
+    padding: 20px 30px 15px 30px;
+    vertical-align: bottom;
+    border: none;
+    outline: none;
+    border-bottom: 3px solid rgba(0, 0, 0, 0);
+    border-right: 1px solid rgb(135, 71, 179);
+    font-weight: 500;
+    transition: all 0.2s linear;
+}
+.organisations .userOrganisations .search::placeholder {
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.4);
+}
+.organisations .userOrganisations .search:focus 
+{
+    width: 400px;
+    border-right: 1px solid rgba(135, 71, 179, 0);
+    border-bottom: 3px solid rgb(135, 71, 179);
+}
+/* Organisations */
+.organisations .userOrganisations .organisation {
+    margin: 5px 10px;
+    padding: 0;
+    text-align: center;
+    color: seashell;
+    background-color: rgb(83, 29, 119);
+    border-radius: 50px;
+    display: inline-block;
+    transition: all 0.3s linear;
+}
+.organisations .userOrganisations .organisation .image {
+    width: 50px;
+    height: 50px;
+    margin: 0;
+    border-radius: 50%;
+}
+.organisations .userOrganisations .organisation .name {
+    margin: auto 20px auto 10px;
+    font-size: 1rem;
+    transition: all 0.2s linear;
+    display: inline-block;
+}
+.organisations .userOrganisations .organisation:nth-child(n):hover {
+    color: rgb(83, 29, 119);
+    background: transparent;
+    cursor: pointer;
+}
+
+
+
+
+
+
+/* ScrollBar Styling */
+.organisations .userOrganisations::-webkit-scrollbar {
+    width: 7px;
+    height: 5px;
+    background: rgb(251, 250, 250);
+}
+.organisations .userOrganisations::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.organisations .userOrganisations::-webkit-scrollbar-thumb {
+    background: rgb(117, 58, 245);
+    border-radius: 60px;
+    outline: 1px solid slategrey;
+}

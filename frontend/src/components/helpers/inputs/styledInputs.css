@@ -1,0 +1,59 @@
+/* Common Input with styling */
+.styledInput {
+    padding: 10px 0 8px 30px;
+}
+
+/* Common TextArea Styles */
+.styledTextArea {
+    height: 55px;
+    padding: 15px 30px;
+}
+.styledTextArea:focus {
+    height: 150px;
+}
+
+/* Common */
+.styledInput,
+.styledTextArea {
+    width: 100%;
+    border: none;
+    outline: none;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.6);
+    font-weight: 500;
+    font-size: 0.95;
+    color: rgba(0, 0, 0, 0.9);
+    letter-spacing: 0.8px;
+    transition: all 0.2s linear;
+}
+.styledInput:hover,
+.styledTextArea:hover {
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+}
+.styledInput:focus,
+.styledTextArea:focus {
+    transform: scale(1.05);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+.styledInput::placeholder,
+.styledTextArea::placeholder {
+    font-weight: 500;
+    transition: all 0.2s linear;
+}
+.styledInput:focus::placeholder,
+.styledTextArea:focus::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 0.8rem;
+}
+
+
+/* Error Styles */
+.errorInput {
+    border-bottom: 0.5px solid rgb(241, 48, 48);
+}
+.errorInput::placeholder {
+    color: rgba(243, 45, 45, 0.9);
+    transition: all 0.2s linear;
+}
+.errorInput:focus::placeholder {
+    color: rgba(243, 45, 45, 0.6);
+}

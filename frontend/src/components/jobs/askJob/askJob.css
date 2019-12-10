@@ -1,0 +1,244 @@
+.askJob {
+    margin: 30px auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    background-color: white;
+}
+
+/* Header */
+.askJob .header {
+    padding: 20px 0;
+    background-image: linear-gradient(
+        135deg,
+        #5a1d7e,
+        #5a1d7e,
+        #7f2bb8,
+        #7f2bb8,
+        #5a1d7e,
+        #5a1d7e
+    );
+}
+.askJob .header .text {
+    margin: auto;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: seashell;
+    word-spacing: 3px;
+}
+
+/* Body */
+.askJob .body .column {
+    padding: 50px;
+}
+
+/* Inputs */
+.askJob .body .inputs:first-child::after {
+    content: "";
+    position: absolute;
+    top: 40px;
+    bottom: 40px;
+    right: 0;
+    border: 0.5px solid rgba(0, 0, 0, 0.1);
+}
+.askJob .body .inputs .section {
+    margin-top: 40px; margin-bottom: 5px;
+}
+.askJob .body .inputs .section:first-child {
+    margin-top: 0;
+}
+.askJob .body .inputs .tag {
+    text-align: left;
+}
+.askJob .body .inputs .input {
+    margin-bottom: 20px;
+}
+.askJob .body .inputs .input:last-child {
+    margin-bottom: 0;
+}
+/* Select tag for artist type */
+.askJob .body .inputs .selectArtistType select {
+    padding-left: 30px;
+    font-weight: 500;
+    border-radius: 0;
+}
+/* TextArea for Description and Address */
+/* Google Maps from Available Area */
+.askJob .body .inputs .availableArea .locationSelected {
+    padding: 10px 10px 10px 20px;
+    text-align: left;
+}
+.askJob .body .inputs .availableArea .locationSelected i {
+    color: #7f2bb8;
+}
+.askJob .body .inputs .availableArea .locationSelected span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    background-color: rgba(84, 28, 116, 0.2);
+}
+/* Input Fields for available time */
+.askJob .body .inputs .availableTime label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.8);
+}
+.askJob .body .inputs .availableTime .from,
+.askJob .body .inputs .availableTime .to {
+    text-align: left;
+}
+/* Input Field for Website */
+.askJob .body .inputs .subscript {
+    margin-bottom: 10px;
+    text-align: left;
+    font-size: 0.9rem;
+    color: rgb(86, 23, 138);
+}
+/* Date Fields for Worked Date inputs */
+.askJob .body .inputs .workedTime .dateHead {
+    padding-left: 20px; padding-top: 10px;
+}
+.askJob .body .inputs .workedTime .dateHead h6 {
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.8);
+}
+/* React DropZone Component for filefrops */
+.askJob .body .inputs .dropzone {
+    padding: 150px 0;
+    text-align: center;
+    border: 2px dotted rgba(0, 0, 0, 1);
+}
+.askJob .body .inputs .dropzone:hover {
+    cursor: pointer;
+}
+.askJob .body .inputs .dropzone i {
+    font-size: 6rem;
+    color: rgb(105, 44, 185);
+    transform: scale(1);
+}
+.askJob .body .inputs .dropzone:hover > span i {
+    animation: dropzoneAnimation 0.4s;
+}
+.askJob .body .inputs .resumeName {
+    color: rgb(114, 48, 175);
+    font-size: 1.1rem;
+}
+.askJob .body .inputs .resumeName:hover {
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+/* Select Tag Styles */
+.askJob .body .inputs .selectArtistType select {
+    width: 100%;
+    transition: all 0.2s linear;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: none;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.6);
+    outline: none;
+}
+.askJob .body .inputs .selectArtistType select:hover {
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+}
+.askJob .body .inputs .selectArtistType select:focus {
+    transform: scale(1.05);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+}
+
+
+
+
+
+
+/* Submission Buttons */
+.askJob .submissionButtons {
+    padding: 20px;
+}
+.askJob .submissionButtons button {
+    width: 100%;
+    padding: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: seashell;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    border: 0.5px solid rgba(0, 0, 0, 0);
+    border-radius: 50px;
+    background: none;
+    outline: none;
+    transition: all 0.2s linear;
+}
+.askJob .submissionButtons .submit:hover,
+.askJob .submissionButtons .cancel:hover {
+    transform: scale(1.05);
+    background: none;
+}
+.askJob .submissionButtons .submit {
+    background-color: #7f2bb8;
+}
+.askJob .submissionButtons .submit:hover {
+    color: #7f2bb8;
+    border: 0.5px solid #7f2bb8;
+}
+.askJob .submissionButtons .submit:active {
+    background-color: #7f2bb8;
+}
+.askJob .submissionButtons .cancel {
+    background-color: rgb(212, 49, 49);
+    border: 0.5px solid rgb(212, 49, 49);
+}
+.askJob .submissionButtons .cancel:hover {
+    color: rgb(212, 49, 49);
+}
+.askJob .submissionButtons .cancel:active {
+    background-color: rgb(212, 49, 49);
+}
+
+
+
+
+
+
+/* Dispaly Resmue Selected */
+.resumeDisplay {
+    position: absolute; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 3000;
+    overflow: auto;
+}
+.resumeDisplay .resumeDoc {
+    margin: auto;
+}
+
+
+
+
+
+
+/* Error Message Displays */
+.askJob .body .inputs .mainErrorMsg {
+    color: rgb(241, 48, 48);
+}
+
+
+
+
+
+/* Animations */
+@keyframes dropzoneAnimation {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.4);
+    }
+}
+@-webkit-keyframes dropzoneAnimation {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.4);
+    }
+}

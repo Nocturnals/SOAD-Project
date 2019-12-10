@@ -1,10 +1,28 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
+import Img from "react-image";
+import { ClipLoader } from "react-spinners";
+
+import PostComments from "../helperCards/comments/postComments/comments";
 
 import "./post.css";
 
+export class Post {
+    constructor(name, time, job, location, liked) {
+        this.name = name;
+        this.time = time;
+        this.job = job;
+        this.location = location;
+        this.liked = liked;
+    }
+}
+
 class Comment {
-    constructor(comment, image) {
+    constructor(commentedUser, comment, image) {
+        this.commentedUser = commentedUser;
         this.comment = comment;
         this.image = image;
     }
@@ -17,6 +35,36 @@ class PostComp extends Component {
         this.post_details = this.props.post_details;
         this.index = this.props.index;
 
+        const cmnt_img = require("../media/images/categories/animator.png");
+
+        this.comments = [
+            new Comment(
+                "Anonymous",
+                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
+                cmnt_img
+            ),
+            new Comment(
+                "Anonymous",
+                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
+                cmnt_img
+            ),
+            new Comment(
+                "Anonymous",
+                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
+                cmnt_img
+            ),
+            new Comment(
+                "Anonymous",
+                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
+                cmnt_img
+            ),
+            new Comment(
+                "hello1",
+                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
+                cmnt_img
+            )
+        ];
+
         this.state = {
             name: this.post_details.name,
             time: this.post_details.time,
@@ -25,16 +73,59 @@ class PostComp extends Component {
             liked: this.post_details.liked,
             likes: 7000,
             showCmnts: false,
-            moreOptionsDrop: false
+            moreOptionsDrop: false,
+            comments: this.comments,
+            newComment: "",
+            newCommentHighlight: false,
+            addCommentError: ""
         };
 
         this.alterLike = this.alterLike.bind(this);
         this.toggleCommentsSection = this.toggleCommentsSection.bind(this);
         this.toggleDropDown = this.toggleDropDown.bind(this);
         this.dropDownEventListener = this.dropDownEventListener.bind(this);
+        this.handleCommentInput = this.handleCommentInput.bind(this);
+        this.addComment = this.addComment.bind(this);
 
         this.dropDownEventListener();
     }
+
+    // Handling new comment input change...
+    handleCommentInput = e => {
+        const { name, value } = e.target;
+        this.setState({ [name]: value });
+    };
+
+    // Add a new comment...
+    addComment = comment => {
+        if (this.props.auth.isAuthed) {
+            if (comment.comment.length) {
+                this.comments.push(comment);
+                this.setState({
+                    newComment: "",
+                    comments: this.comments,
+                    addCommentError: "",
+                    showCmnts: true,
+                    newCommentHighlight: true
+                });
+            } else {
+                this.setState({
+                    addCommentError:
+                        "Please type something to add a new comment"
+                });
+            }
+        } else {
+            this.setState({
+                addCommentError: "Please login to add a new comment"
+            });
+        }
+        setTimeout(() => {
+            this.setState({
+                addCommentError: "",
+                newCommentHighlight: false
+            });
+        }, 5000);
+    };
 
     // Like Function...
     alterLike = () => {
@@ -59,7 +150,7 @@ class PostComp extends Component {
     };
 
     // DoropDown Event Listener...
-    dropDownEventListener = e => {
+    dropDownEventListener = () => {
         document.addEventListener("click", event => {
             if (
                 !event.target.matches("#post-more-" + this.index) &&
@@ -74,42 +165,10 @@ class PostComp extends Component {
         });
     };
 
-    // Comments Section Component...
-    commentsSection = comments => {
-        let comments_section = [];
-        for (let index = 0; index < comments.length; index++) {
-            const comment = comments[index];
-            comments_section.push(
-                <div className="row" key={index}>
-                    <div className="col-2">
-                        <div
-                            className="cmnt_img"
-                            style={{ backgroundImage: `url(${comment.image})` }}
-                        ></div>
-                    </div>
-                    <div className="col-9">
-                        <p>{comment.comment}</p>
-                    </div>
-                </div>
-            );
-        }
-
-        return comments_section;
-    };
-
     // Rendering...
     render() {
         const img = require("../media/images/v10-header4.svg");
         const userImg = require("../media/images/categories/photographer.png");
-        const cmnt_img = require("../media/images/categories/animator.png");
-
-        const comments = [
-            new Comment("'handleResponse' is defined but never used", cmnt_img),
-            new Comment("'handleResponse' is defined but never used", cmnt_img),
-            new Comment("'handleResponse' is defined but never used", cmnt_img),
-            new Comment("'handleResponse' is defined but never used", cmnt_img),
-            new Comment("'handleResponse' is defined but never used", cmnt_img)
-        ];
 
         return (
             <div
@@ -117,7 +176,7 @@ class PostComp extends Component {
                 id={"post-" + this.index}
                 key={this.index}
             >
-                <div className="post-header row">
+                <div className="row post-header">
                     <div className="col-3">
                         <div
                             className="user-photo"
@@ -154,7 +213,7 @@ class PostComp extends Component {
                                     &nbsp;{this.state.time} ago
                                 </div>
                             </div>
-                            <div className="user-about col-5 column-2">
+                            <div className="col-5 user-about column-2">
                                 <div className="user-job">
                                     <i
                                         className="fa fa-bookmark"
@@ -170,7 +229,7 @@ class PostComp extends Component {
                                     &nbsp;&nbsp;{this.state.location}
                                 </div>
                             </div>
-                            <div className="more-options col-2 column-3">
+                            <div className="col-2 more-options column-3">
                                 <button
                                     onClick={this.toggleDropDown}
                                     id={"post-more-button-" + this.index}
@@ -206,9 +265,9 @@ class PostComp extends Component {
                 </div>
 
                 {/* Post Content */}
-                <div className="post-content row">
+                <div className="row post-content">
                     <div className="col">
-                        <div className="post-descr row">
+                        <div className="row post-descr">
                             <div className="col-12">
                                 <p>
                                     'handleResponse' is defined but never used
@@ -216,18 +275,26 @@ class PostComp extends Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div
-                                className="post-image col"
-                                style={{
-                                    backgroundImage: `url(${img})`
-                                }}
-                            ></div>
+                            <div className="col post-image">
+                                <Img
+                                    src={img}
+                                    loader={
+                                        <ClipLoader
+                                            sizeUnit={"px"}
+                                            size={80}
+                                            color={"#123abc"}
+                                            loading={this.state.loading}
+                                            className="loader"
+                                        />
+                                    }
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Likes and Comments */}
-                <div className="post-impressions row">
+                <div className="row post-impressions">
                     <div className="col">
                         <span
                             className={
@@ -241,7 +308,11 @@ class PostComp extends Component {
                                         : "fa fa-heart-o"
                                 }
                                 aria-hidden="true"
-                                onClick={this.alterLike}
+                                onClick={
+                                    this.props.auth.isAuthed
+                                        ? this.alterLike
+                                        : null
+                                }
                             ></i>
                             <button>{this.state.likes}</button>
                         </span>
@@ -257,45 +328,28 @@ class PostComp extends Component {
                         </span>
                     </div>
                 </div>
-                <div
-                    className={
-                        "commentsSection row " +
-                        (this.state.showCmnts ? "show" : "")
-                    }
-                >
-                    <div className="col">
-                        {this.commentsSection(comments)}
-                        <div className="row addCmnt">
-                            <div className="col-2">
-                                <div
-                                    className="cmnt_img"
-                                    style={{
-                                        backgroundImage: `url(${cmnt_img})`
-                                    }}
-                                ></div>
-                            </div>
-                            <div className="col-7">
-                                <textarea
-                                    type="text"
-                                    className="inputCmnt"
-                                    rows="1"
-                                    placeholder="Add a comment here..."
-                                />
-                            </div>
-                            <div className="col-2">
-                                <button>
-                                    <i
-                                        className="fa fa-paper-plane"
-                                        aria-hidden="true"
-                                    ></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <PostComments
+                    auth={this.props.auth}
+                    showCmnts={this.state.showCmnts}
+                    comments={this.state.comments}
+                    newCommentHighlight={this.state.newCommentHighlight}
+                    addCommentError={this.state.addCommentError}
+                    handleCommentInput={this.handleCommentInput.bind(this)}
+                    newComment={this.state.newComment}
+                    addComment={this.addComment.bind(this)}
+                />
             </div>
         );
     }
 }
 
-export default PostComp;
+// specifiying the class to have these objects using propTypes
+PostComp.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(PostComp);
