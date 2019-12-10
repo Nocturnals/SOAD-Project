@@ -20,6 +20,10 @@ router.post(
   verifyToken,
   verifyUserWithToken,
   async (req, res) => {
+    // format:
+    // name:
+    // description:
+
     // apply as avaliable to work
     const validatedData = organizationValidation(req.body);
 
@@ -35,6 +39,7 @@ router.post(
       profileurl: req.loggedUser.profileurl
     });
     const createOrganization = new OrganizationSchema({
+      _id: mongoose.Types.ObjectId(),
       name: req.body.name,
       description: req.body.description,
       adminUsers: adminUser
@@ -80,6 +85,7 @@ router.post(
       currentorganization.PendingUsers.push(findUser);
 
       //TODO send request to User
+      const requestUser = await UserModel.fin;
 
       return res.status(200).json({
         message: "Successfully send notification to User",
@@ -98,12 +104,18 @@ router.post(
   verifyToken,
   verifyUserWithToken,
   async (req, res) => {
+    // format
+    // userId:
+    // orgName:
+
     try {
       const currentUser = await UserModel.findById(req.loggedUser._id);
+      currentUser.organizations;
+
       const currentorganization = await currentUser.findById(
         (organizations = req.body.organizationId)
       );
-      currentorganization.findByIdAndDelete(currentorganization._id);
+      // currentorganization.(currentorganization._id);
       return res.status(200).json({
         message: "Successfully delected Organization",
         doc: doc
