@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const otheruserschema = require("./Otheruser");
 const { commentsmodel, commentschema } = require("./Comments");
+const { imageschema } = require("./Image");
 
 const FaqSchema = new mongoose.Schema({
     question: {
@@ -105,6 +106,10 @@ const CompetitionsSchema = new mongoose.Schema({
 
     results: {
         type: [ResultSchema]
+    },
+
+    fileurls: {
+        type: [imageschema]
     }
 });
 
