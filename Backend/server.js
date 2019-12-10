@@ -70,17 +70,6 @@ app.use("/api/competition", require("./routes/competitions/utils"));
 //Route for Posts
 app.use("/api/post", require("./routes/posts/post"))
 
-if (process.env.Node_Env === "production") {
-    // for loading the static frontend app
-    app.use(express.static("../frontend/build"));
-
-    app.get("*", (req, res, next) => {
-        res.sendFile(
-            path.resolve(__dirname, "../frontend", "build", "index.html")
-        );
-    });
-}
-
 
 // Route for Subscriptions
 app.use("/api/subscriptions", require("./routes/subscription_1/service"));
