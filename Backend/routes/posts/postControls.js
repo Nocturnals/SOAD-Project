@@ -46,8 +46,7 @@ exports.createPost = async (req, res, next) => {
     /**/
     
     const user = req.loggedUser;
-    const images = req.imageurls;    
-    const len = images.length;
+    
     
     
         const post = new Post(
@@ -66,18 +65,24 @@ exports.createPost = async (req, res, next) => {
                 ],
             }
         );
-        for(var i=0;i<len;i++)
-            {
-                const image = new Image(
-                    {
-                        url : images[i].url,
-                        name : images[i].name
-                    }
-                );
-                const simage = await image.save();
-                post.imageurls[i] = simage;
-                
-            }
+        if(req.body.Category != "Story Writer")
+        {
+            const images = req.imageurls;    
+            const len = images.length;
+            for(var i=0;i<len;i++)
+                {
+                    const image = new Image(
+                        {
+                            url : images[i].url,
+                            name : images[i].name
+                        }
+                    );
+                    const simage = await image.save();
+                    post.imageurls[i] = simage;
+                    
+                }
+        }
+
 
 
         try {
