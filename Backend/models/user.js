@@ -1,83 +1,96 @@
 const mongoose = require("mongoose");
+
+const { JobsAppliedSchema } = require("./jobsApplied");
 const otheruserschema = require("./Otheruser");
 const othercompetititonschema = require("./Othercompetitions");
+const { NotificationSchema } = require("./Notifications");
 
 const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    min: 4,
-    max: 255,
-    trim: true
-  },
-  email: {
-    type: String,
-    required: true,
-    min: 5,
-    max: 255
-  },
-  password: {
-    type: String,
-    required: true,
-    min: 8,
-    max: 1024,
-    trim: true
-  },
-  dateJoined: {
-    type: Date,
-    default: Date.now
-  },
-  dateofbirth: {
-    type: Date
-  },
+    name: {
+        type: String,
+        required: true,
+        min: 4,
+        max: 255,
+        trim: true
+    },
+    email: {
+        type: String,
+        required: true,
+        min: 5,
+        max: 255
+    },
+    password: {
+        type: String,
+        required: true,
+        min: 8,
+        max: 1024,
+        trim: true
+    },
+    dateJoined: {
+        type: Date,
+        default: Date.now
+    },
+    dateofbirth: {
+        type: Date
+    },
 
-  primaryinterest: {
-    enum: ["cat1", "cat2"],
-    type: String
-  },
+    primaryinterest: {
+        enum: ["cat1", "cat2"],
+        type: String
+    },
 
-  otherinterest: {
-    enum: ["cat1", "cat2"],
-    type: String
-  },
+    otherinterest: {
+        enum: ["cat1", "cat2"],
+        type: String
+    },
 
-  lastactive: {
-    type: Date
-  },
+    lastactive: {
+        type: Date
+    },
 
-  profileurl: {
-    type: String,
-    default: "defalutPic"
-  },
+    profileurl: {
+        type: String,
+        default: "defalutPic"
+    },
 
-  coverphotourl: {
-    type: String
-  },
+    coverphotourl: {
+        type: String
+    },
 
-  profilephotourl: {
-    type: String
-  },
+    profilephotourl: {
+        type: String
+    },
 
-  competitionsparticipated: {
-    type: [othercompetititonschema]
-  },
+    competitionsparticipated: {
+        type: [othercompetititonschema]
+    },
 
-  competitionsparticipating: {
-    type: [othercompetititonschema]
-  },
+    competitionsparticipating: {
+        type: [othercompetititonschema]
+    },
 
-  followers: {
-    type: [otheruserschema]
-  },
+    followers: {
+        type: [otheruserschema]
+    },
 
-  following: {
-    type: [otheruserschema]
-  },
+    following: {
+        type: [otheruserschema]
+    },
 
-  emailVerified: {
-    type: Boolean,
-    default: false
-  }
+    emailVerified: {
+        type: Boolean,
+        default: false
+    },
+
+    jobsApplied: {
+        type: [JobsAppliedSchema],
+        default: []
+    },
+
+    notifications: {
+        type: [NotificationSchema],
+        default: []
+    }
 });
 
 const User = mongoose.model("User", userSchema);
