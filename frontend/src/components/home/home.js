@@ -8,7 +8,6 @@ import PostComp, { Post } from "../post/post";
 import LeftContent from "./leftContent/leftContent";
 import RightContent from "./rightContent/rightContent";
 import CreatePostComp from "../post/createPost/createPost";
-import MainLoader from "../helpers/mainLoader/mainLoader";
 
 import "./home.css";
 
@@ -27,8 +26,7 @@ class HomePage extends Component {
         ];
 
         this.state = {
-            showUploadPostPopUP: false,
-            isLoading: true
+            showUploadPostPopUP: false
         };
 
         this.toggleUploadPostPopUp = this.toggleUploadPostPopUp.bind(this);
@@ -37,12 +35,6 @@ class HomePage extends Component {
     // After Mounting the Component...
     componentDidMount() {
         document.body.scrollTo(0, 0);
-
-        setTimeout(() => {
-            this.setState({
-                isLoading: false
-            });
-        }, 1000);
     }
 
     // Toggling Upload Post PopUp

@@ -106,3 +106,6 @@ npm-debug.log
 
 # User specific bazel settings
 .bazelrc.user
+
+# firebase service api
+Backend/artist-colab-firebase.json

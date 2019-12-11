@@ -3,11 +3,6 @@ const otheruserschema = require("./Otheruser");
 const { PostSchema } = require("./Post");
 
 const OrganizationSchema = new mongoose.Schema({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Organization",
-        required: true
-    },
     name: {
         type: String,
         required: true
@@ -41,5 +36,9 @@ const OrganizationSchema = new mongoose.Schema({
         default: []
     }
 });
-module.exports = mongoose.model("organizations", OrganizationSchema);
-module.exports.OrganizationSchema = OrganizationSchema;
+
+module.exports = OrganizationSchema;
+module.exports.OrganizationModel = mongoose.model(
+    "organizations",
+    OrganizationSchema
+);

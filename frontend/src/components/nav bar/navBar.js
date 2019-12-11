@@ -62,14 +62,14 @@ class NavBar extends Component {
 
     // Rednering...
     render() {
-        const { isAuthed } = this.props.auth;
+        const { auth } = this.props;
 
-        const links = this.props.auth.isAuthed
+        const links = auth.isAuthed
             ? [
                   new LinkClass("/feed", "Home"),
                   new LinkClass("/search", "Search", "_blank"),
                   new LinkClass(
-                      "/artists/organisation-1/feed",
+                      "/artists/" + auth.user.organizations[0].name + "/feed",
                       "Organisations"
                   ),
                   new LinkClass("/jobs/results/", "Jobs"),
@@ -78,10 +78,7 @@ class NavBar extends Component {
             : [
                   new LinkClass("/", "Home"),
                   new LinkClass("/search", "Search", "_blank"),
-                  new LinkClass(
-                      "/artists/organisation-1/feed",
-                      "Organisations"
-                  ),
+                  new LinkClass("/artists/feed", "Organisations"),
                   new LinkClass("/jobs", "Jobs")
               ];
 
@@ -89,20 +86,14 @@ class NavBar extends Component {
             <nav
                 className={
                     "navbar sticky-top navbar-expand-lg" +
-                    (this.props.auth.isAuthed
+                    (auth.isAuthed
                         ? " bg-theme"
                         : this.props.contract
                         ? " bg-theme"
                         : " bg-black-06 nav-min-height") +
                     (this.props.blur ? " blur" : "")
                 }
-                id={
-                    this.props.auth.isAuthed
-                        ? ""
-                        : this.props.contract
-                        ? ""
-                        : "nav-bar"
-                }
+                id={auth.isAuthed ? "" : this.props.contract ? "" : "nav-bar"}
             >
                 <Link to="/">
                     <button className="navbar-brand navTitle">
@@ -131,7 +122,7 @@ class NavBar extends Component {
                         {this.linkComp(links)}
 
                         {/* Notiifcations */}
-                        {this.props.auth.isAuthed ? (
+                        {auth.isAuthed ? (
                             <React.Fragment>
                                 <li className="nav-item dropdown notifications">
                                     <button
@@ -184,7 +175,7 @@ class NavBar extends Component {
                                         aria-labelledby="navbarDropdownMenuLink-333"
                                     >
                                         <Link
-                                            to="/artists/create-organisation"
+                                            to="/create/artists"
                                             style={{
                                                 textDecoration: "none",
                                                 textTransform: "uppercase"
@@ -205,6 +196,17 @@ class NavBar extends Component {
                                                 Create Competition
                                             </button>
                                         </Link>
+                                        <Link
+                                            to="/job/ask"
+                                            style={{
+                                                textDecoration: "none",
+                                                textTransform: "uppercase"
+                                            }}
+                                        >
+                                            <button className="dropdown-item">
+                                                Ask for a Job
+                                            </button>
+                                        </Link>
                                     </div>
                                 </li>
                             </React.Fragment>
@@ -220,9 +222,7 @@ class NavBar extends Component {
                                 aria-expanded="false"
                             >
                                 <i className="fa fa-user"></i>{" "}
-                                {this.props.auth.isAuthed
-                                    ? " " + this.props.auth.user.name
-                                    : null}
+                                {auth.isAuthed ? " " + auth.user.name : null}
                             </button>
                             <div
                                 className="dropdown-menu dropdown-menu-right dropdown-default"
@@ -230,10 +230,9 @@ class NavBar extends Component {
                             >
                                 <Link
                                     to={
-                                        !isAuthed
+                                        !auth.isAuthed
                                             ? "/auth/login"
-                                            : "/artist/" +
-                                              this.props.auth.user.name
+                                            : "/artist/" + auth.user.name
                                     }
                                     style={{
                                         textDecoration: "none",
@@ -241,10 +240,10 @@ class NavBar extends Component {
                                     }}
                                 >
                                     <button className="dropdown-item">
-                                        {!isAuthed ? "Login" : "Profile"}
+                                        {!auth.isAuthed ? "Login" : "Profile"}
                                     </button>
                                 </Link>
-                                {!isAuthed ? (
+                                {!auth.isAuthed ? (
                                     <Link
                                         to="/auth/register"
                                         style={{
@@ -253,7 +252,9 @@ class NavBar extends Component {
                                         }}
                                     >
                                         <button className="dropdown-item">
-                                            {!isAuthed ? "Register" : "Logout"}
+                                            {!auth.isAuthed
+                                                ? "Register"
+                                                : "Logout"}
                                         </button>
                                     </Link>
                                 ) : (
@@ -261,7 +262,7 @@ class NavBar extends Component {
                                         className="dropdown-item"
                                         onClick={this.logoutUser}
                                     >
-                                        {!isAuthed ? "Register" : "Logout"}
+                                        {!auth.isAuthed ? "Register" : "Logout"}
                                     </button>
                                 )}
                             </div>

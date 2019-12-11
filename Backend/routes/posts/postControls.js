@@ -1,10 +1,10 @@
-const Post = require('../../models/Post');
+const Post = require("../../models/Post");
 const {
     createPostValidation,
     createCommentValidation,
     deletePostValidation,
-    editPostValidation,
-} = require('./postValidation');
+    editPostValidation
+} = require("./postValidation");
 const _ = require("lodash"); // for modifing the array contents
 
 const { ReplyModel, CommentsModel } = require("../../models/Comments");
@@ -12,101 +12,85 @@ const artist = require("../../models/artistTypes");
 const { OtheruserModel } = require("../../models/Otheruser");
 const Image = require("../../models/Image");
 const {upload} = require("./imageUpload");
-
+const {Notification} = require("../../models/Notifications");
+const User = require("../../models/user");
 
 
 
 
 
 exports.createPost = async (req, res, next) => {
-    
     const validatedData = createPostValidation(req.body);
-    
+
     if (validatedData.error)
         return res
             .status(400)
             .json({ message: validatedData.error.details[0].message });
-    
-    
-    
 
-    var exist = artist.map(function(item) { return item; }).indexOf(req.body.category);
+    var exist = artist
+        .map(function(item) {
+            return item;
+        })
+        .indexOf(req.body.category);
     if (exist == -1)
-        return res
-            .status(500)
-            .json({ message: "category Invalid !!" });
+        return res.status(500).json({ message: "category Invalid !!" });
     /**/
-    
+
     const user = req.loggedUser;
-    
-    
-    
-        const post = new Post(
+
+    const post = new Post({
+        title: req.body.title,
+        content: req.body.content,
+        description: req.body.description,
+        isprivate: req.body.isPrivate,
+        category: req.body.category,
+        owner: [
             {
-                title: req.body.title,
-                content:req.body.content,
-                description:req.body.description,
-                isprivate:req.body.isPrivate,
-                category:req.body.category,
-                owner: [
-                    {
-                        _id: user._id,
-                        username: user.name,
-                        profileurl: user.profileurl || "random string"
-                    }
-                ],
+                _id: user._id,
+                username: user.name,
+                profileurl: user.profileurl || "random string"
             }
-        );
-        if(req.body.category != "Story Writer" && req.imageurls)
-        {
-            const images = req.imageurls;    
-            console.log(images);
-            const len = images.length;
-            for(var i=0;i<len;i++)
-                {
-                    const image = new Image(
-                        {
-                            url : images[i].url,
-                            name : images[i].name
-                        }
-                    );
-                    const simage = await image.save();
-                    post.imageurls[i] = simage;
-                    
-                }
+        ]
+    });
+    if (req.body.category != "Story Writer" && req.imageurls) {
+        const images = req.imageurls;
+        console.log(images);
+        const len = images.length;
+        for (var i = 0; i < len; i++) {
+            const image = new Image({
+                url: images[i].url,
+                name: images[i].name
+            });
+            const simage = await image.save();
+            post.imageurls[i] = simage;
         }
+    }
 
-
-
-        try {
-            const savedpost = await post.save();
-            res.json({ message: "Uploaded Successfully" });
-        } catch (err) {
-            res.status(500).json({ message: err });
-        }
-
-    };
-
-
-
+    try {
+        const savedpost = await post.save();
+        res.json({ message: "Uploaded Successfully" });
+    } catch (err) {
+        res.status(500).json({ message: err });
+    }
+};
 
 exports.like = async (req, res) => {
-    
-    console.log(req.body)
+    console.log(req.body);
 
-    try{
-        const post = await Post.findById(
-            {
-                _id: req.params.postid
-            }
-        )
-        
+    try {
+        const post = await Post.findById({
+            _id: req.params.postid
+        });
+
         const userid = req.loggedUser._id;
 
-        var exist = post.likedBy.map(function(item) { return item._id; }).indexOf(userid);
+        var exist = post.likedBy
+            .map(function(item) {
+                return item._id;
+            })
+            .indexOf(userid);
 
-        if (exist == -1)
-        {
+        if (exist == -1) {
             const user = req.loggedUser;
             let likeduser = {
                 _id: user._id,
@@ -114,11 +98,31 @@ exports.like = async (req, res) => {
                 profileurl: user.profileurl
             };
 
-
             post.likedBy.push(likeduser);
-            
 
             post.likes = post.likes + 1;
+            const u = likeduser.username;
+            const msg = u + " liked your post";
+            const owner = post.owner[0]._id;
+
+            const notify = new Notification(
+                {
+                    userid : owner,
+                    message : msg,
+                    url: req.body.url,
+                }
+            );
+            const saved = await notify.save();
+
+            const notifyUser = await User.findById(
+                {
+                    _id: owner
+                }
+            );
+            notifyUser.notifications = notifyUser.notifications.push(saved);
+
+            await notifyUser.save;
+
 
             try {
                 const savedpost = await post.save();
@@ -126,284 +130,220 @@ exports.like = async (req, res) => {
             } catch (err) {
                 return res.status(500).json({ message: err });
             }
-        }
-        else
-        {
+        } else {
             return res.status(500).json({ message: "You've already liked !!" });
         }
-
-
-
-        
-
     } catch (error) {
         return res.status(500).json({ message: "Post not found !!" });
     }
-
-   
 };
-
 
 exports.unlike = async (req, res, next) => {
     const user = req.loggedUser;
-    console.log(req.body)
+    console.log(req.body);
 
     try {
-        const post = await Post.findById(
-            {
-                _id: req.params.postid
-            }
-        )
-        
+        const post = await Post.findById({
+            _id: req.params.postid
+        });
+
         const userid = req.loggedUser._id;
 
+        var removeIndex = post.likedBy
+            .map(function(item) {
+                return item._id;
+            })
+            .indexOf(userid);
 
-    
-        var removeIndex = post.likedBy.map(function(item) { return item._id; }).indexOf(userid);
-
-        if (removeIndex != -1)
-        {
-            post.likedBy.splice(removeIndex,1);
+        if (removeIndex != -1) {
+            post.likedBy.splice(removeIndex, 1);
             post.likes = post.likes - 1;
-            
-            
-                const savedpost = await post.save();
-                
-            
-            
+
+            const savedpost = await post.save();
+
             return res.json(savedpost);
-        }
-        else 
-        {
+        } else {
             return res.json({ message: "You've not liked yet !" });
         }
-    
-        
     } catch (error) {
         return res.status(500).json({ message: "Post not found !!" });
     }
-    
-
-
-    
-    
 };
-
 
 exports.commentPost = async (req, res, next) => {
     const validatedData = createCommentValidation(req.body);
-    
+
     if (validatedData.error)
         return res
             .status(400)
             .json({ message: validatedData.error.details[0].message });
-    
-    console.log(req.body)
-        const otheruser = new OtheruserModel({
-            _id: req.loggedUser._id,
-            username: req.loggedUser.name,
-            profileurl: req.loggedUser.profileurl
-        });
 
-        const comment = new CommentsModel(
-            {
-                owner: otheruser,
-                message: req.body.comment,
-            }
-        );
-        
-        
+    console.log(req.body);
+    const otheruser = new OtheruserModel({
+        _id: req.loggedUser._id,
+        username: req.loggedUser.name,
+        profileurl: req.loggedUser.profileurl
+    });
+
+    const comment = new CommentsModel({
+        owner: otheruser,
+        message: req.body.comment
+    });
 
     try {
-        const post =  await Post.findById(
-            {
-                _id: req.params.postid
-            }
-        )
+        const post = await Post.findById({
+            _id: req.params.postid
+        });
 
         const uid = req.loggedUser._id;
 
-        
+        post.comments.push(comment);
 
-        
-            post.comments.push(comment);
-        
-            
-                const savedpost = await post.save();
-            
-            return res.json(savedpost);
-        
+        const savedpost = await post.save();
 
-        
+        return res.json(savedpost);
     } catch (error) {
         return res.status(500).json({ message: "Post not found !!" });
     }
-
 };
 
-
-
 exports.deleteComment = async (req, res, next) => {
-
     try {
-        const post =  await Post.findById(
-            {
-                _id: req.params.postid
-            }
-        )
+        const post = await Post.findById({
+            _id: req.params.postid
+        });
         const commentId = req.params.commentid;
 
         const uid = req.loggedUser._id;
-        var removeIndex = post.comments.map(function(item) { return item._id; }).indexOf(commentId);
+        var removeIndex = post.comments
+            .map(function(item) {
+                return item._id;
+            })
+            .indexOf(commentId);
         const owner = post.comments[removeIndex].owner._id;
         const postowner = post.owner[0]._id;
 
         var flag = false;
-            if((JSON.stringify(owner) == JSON.stringify(uid)) || (JSON.stringify(postowner) == JSON.stringify(uid)))
-            {
-                flag = true;
-            } else {
-                return res
-                    .status(401)
-                    .json({ message: "You cannot delete the comments" });
-            }
+        if (
+            JSON.stringify(owner) == JSON.stringify(uid) ||
+            JSON.stringify(postowner) == JSON.stringify(uid)
+        ) {
+            flag = true;
+        } else {
+            return res
+                .status(401)
+                .json({ message: "You cannot delete the comments" });
+        }
 
-console.log(flag);
-        
-            if (flag) {
-                post.comments.splice(removeIndex,1);
-            } else {
-                return res
-                    .status(401)
-                    .json({ message: "You cannot delete the comment" });
-            }
-            await post.save();
-            return res.json(post);
+        console.log(flag);
+
+        if (flag) {
+            post.comments.splice(removeIndex, 1);
+        } else {
+            return res
+                .status(401)
+                .json({ message: "You cannot delete the comment" });
+        }
+        await post.save();
+        return res.json(post);
     } catch (error) {
         return res.status(500).json({ message: "Post not found !!" });
     }
-
 };
-
 
 exports.deletePost = async (req, res, next) => {
     try {
-        const post =  await Post.findById(
-            {
-                _id: req.params.postid
-            }
-        );
+        const post = await Post.findById({
+            _id: req.params.postid
+        });
         const uid = req.loggedUser._id;
         const owner = post.owner[0]._id;
-//        console.log(uid);
-//        console.log(owner);
+        //        console.log(uid);
+        //        console.log(owner);
 
-        if(uid.equals(owner) == true)
-        {
+        if (uid.equals(owner) == true) {
             await post.remove();
             return res.json(post);
-            
-        }
-        else {
+        } else {
             return res.json({ message: "Access Denied" });
         }
-
     } catch (error) {
         return res.status(500).json({ message: "Post not found !!" });
     }
-
 };
-
-
-
 
 exports.deleteAllComments = async (req, res, next) => {
-        try {
-            
-            const post =  await Post.findById(
-                {
-                    _id: req.params.postid
-                }
-            );
-//            console.log(post.comments);
-            const uid = req.loggedUser._id;
-            const owner = post.owner[0]._id;
+    try {
+        const post = await Post.findById({
+            _id: req.params.postid
+        });
+        //            console.log(post.comments);
+        const uid = req.loggedUser._id;
+        const owner = post.owner[0]._id;
 
-            var flag = false;
-            if(JSON.stringify(owner) == JSON.stringify(uid))
-            {
-                flag = true;
-            } else {
-                return res
-                    .status(401)
-                    .json({ message: "You cannot delete the comments" });
-            }
-            
-
-            if (flag) {
-                post.comments.splice(0,post.comments.length);
-            } else {
-                return res
-                    .status(401)
-                    .json({ message: "You cannot delete the comment" });
-            }
-            await post.save();
-            return res.json(post);
-        } catch (error) {
-            console.log(error);
-            return res.json({ message: " Failed  to update Post" });
+        var flag = false;
+        if (JSON.stringify(owner) == JSON.stringify(uid)) {
+            flag = true;
+        } else {
+            return res
+                .status(401)
+                .json({ message: "You cannot delete the comments" });
         }
-};
 
+        if (flag) {
+            post.comments.splice(0, post.comments.length);
+        } else {
+            return res
+                .status(401)
+                .json({ message: "You cannot delete the comment" });
+        }
+        await post.save();
+        return res.json(post);
+    } catch (error) {
+        console.log(error);
+        return res.json({ message: " Failed  to update Post" });
+    }
+};
 
 exports.editPost = async (req, res, next) => {
     const validatedData = editPostValidation(req.body);
-    
+
     if (validatedData.error)
         return res
             .status(400)
             .json({ message: validatedData.error.details[0].message });
-    
-    console.log(req.body)
-        try {
-            
-            const post =  await Post.findById(
-                {
-                    _id: req.params.postid
-                }
-            );
-            const uid = req.loggedUser._id;
-            const owner = post.owner[0]._id;
 
-            var flag = false;
-            if(JSON.stringify(owner) == JSON.stringify(uid))
-            {
-                flag = true;
-            } else {
-                return res
-                    .status(401)
-                    .json({ message: "You cannot edit the post" });
-            }
+    console.log(req.body);
+    try {
+        const post = await Post.findById({
+            _id: req.params.postid
+        });
+        const uid = req.loggedUser._id;
+        const owner = post.owner[0]._id;
 
-
-            
-
-            if (flag) {
-                post.isprivate = req.body.isPrivate;
-            } else {
-                return res
-                    .status(401)
-                    .json({ message: "You cannot edit the post" });
-            }
-            await post.save();
-            return res.json(post);
-        } catch (error) {
-            console.log(error);
-            return res.json({ message: " Failed  to update Post" });
+        var flag = false;
+        if (JSON.stringify(owner) == JSON.stringify(uid)) {
+            flag = true;
+        } else {
+            return res
+                .status(401)
+                .json({ message: "You cannot edit the post" });
         }
+
+        if (flag) {
+            post.isprivate = req.body.isPrivate;
+        } else {
+            return res
+                .status(401)
+                .json({ message: "You cannot edit the post" });
+        }
+        await post.save();
+        return res.json(post);
+    } catch (error) {
+        console.log(error);
+        return res.json({ message: " Failed  to update Post" });
+    }
 };
-
-
 
 exports.likeComment = async (req, res, next) => {
     try {
@@ -411,80 +351,69 @@ exports.likeComment = async (req, res, next) => {
         const commentId = req.params.commentid;
         const postId = req.params.postid;
         var flag = false;
-        
-        
-        const post =  await Post.findById(
-            {
-                _id: postId
-            }
-        );
 
-        var updateIndex = post.comments.map(function(item) { return item._id; }).indexOf(commentId);
+        const post = await Post.findById({
+            _id: postId
+        });
+
+        var updateIndex = post.comments
+            .map(function(item) {
+                return item._id;
+            })
+            .indexOf(commentId);
         const test = post.comments[updateIndex];
-//        console.log(userid);
-//        console.log(test.likedby[0]);
+        //        console.log(userid);
+        //        console.log(test.likedby[0]);
 
-        var removeIndex = test.likedby.map(function(item) { return item._id; }).indexOf(userid);
-//        console.log("Remove Index comes here ::::::");
-//        console.log(removeIndex);
+        var removeIndex = test.likedby
+            .map(function(item) {
+                return item._id;
+            })
+            .indexOf(userid);
+        //        console.log("Remove Index comes here ::::::");
+        //        console.log(removeIndex);
 
-        
-
-
-        if(removeIndex == -1)
-        {
+        if (removeIndex == -1) {
             const user = req.loggedUser;
             let likeduser = {
                 _id: user._id,
                 username: user.name,
                 profileurl: user.profileurl
             };
-//            console.log(post.comments[updateIndex]);
-    
-            const com =  post.comments[updateIndex];
-    
-            
-    
+            //            console.log(post.comments[updateIndex]);
+
+            const com = post.comments[updateIndex];
+
             com.likes = com.likes + 1;
-//            console.log(com.likedby);
+            //            console.log(com.likedby);
             com.likedby.push(likeduser);
-//            console.log(com.likedby);
-            
-            var comment = new CommentsModel(
-                {
-                    _id:com._id,
-                    likes:com.likes,
-                    likedby:com.likedby,
-                    owner:com.owner,
-                    message:com.message,
-                    replies:com.replies,
-                    date:com.date,                
-                }
-            );
-//            console.log("New Comment comes here ::::");
-//            console.log(comment);
-            post.comments.splice(updateIndex,1);
+            //            console.log(com.likedby);
+
+            var comment = new CommentsModel({
+                _id: com._id,
+                likes: com.likes,
+                likedby: com.likedby,
+                owner: com.owner,
+                message: com.message,
+                replies: com.replies,
+                date: com.date
+            });
+            //            console.log("New Comment comes here ::::");
+            //            console.log(comment);
+            post.comments.splice(updateIndex, 1);
             post.comments.push(comment);
-            
-           
-    
-            
-                const savedpost = await post.save();
-    //            console.log(savedpost);
-                
+
+            const savedpost = await post.save();
+            //            console.log(savedpost);
+
             return res.json(savedpost);
-        }
-        else
-        {
+        } else {
             return res.status(500).json({ message: "You've already liked !!" });
         }
     } catch (error) {
         return res.status(500).json({ message: "Post not found !!" });
-    } 
-
-
+    }
 };
-
 
 exports.unlikeComment = async (req, res, next) => {
     try {
@@ -492,71 +421,65 @@ exports.unlikeComment = async (req, res, next) => {
         const commentId = req.params.commentid;
         const postId = req.params.postid;
 
-
-        const post = await Post.findById(
-            {
-                _id: postId
-            }
-        );
-        var updateIndex = post.comments.map(function(item) { return item._id; }).indexOf(commentId);
+        const post = await Post.findById({
+            _id: postId
+        });
+        var updateIndex = post.comments
+            .map(function(item) {
+                return item._id;
+            })
+            .indexOf(commentId);
 
         const com = post.comments[updateIndex];
 
+        var removeIndex = com.likedby
+            .map(function(item) {
+                return item._id;
+            })
+            .indexOf(userid);
 
-        var removeIndex = com.likedby.map(function(item) { return item._id; }).indexOf(userid);
-
-
-        com.likedby.splice(removeIndex,1);
+        com.likedby.splice(removeIndex, 1);
 
         com.likes = com.likes - 1;
 
-        var comment = new CommentsModel(
-            {
-                _id:com._id,
-                likes:com.likes,
-                likedby:com.likedby,
-                owner:com.owner,
-                message:com.message,
-                replies:com.replies,
-                date:com.date,                
-            }
-        );
+        var comment = new CommentsModel({
+            _id: com._id,
+            likes: com.likes,
+            likedby: com.likedby,
+            owner: com.owner,
+            message: com.message,
+            replies: com.replies,
+            date: com.date
+        });
 
-        
-
-
-//        console.log(comment);
-        post.comments.splice(updateIndex,1);
+        //        console.log(comment);
+        post.comments.splice(updateIndex, 1);
         post.comments.push(comment);
 
-       
-            const savedpost = await post.save();
-//            console.log(savedpost);
-        
+        const savedpost = await post.save();
+        //            console.log(savedpost);
 
         return res.json(savedpost);
     } catch (error) {
         return res.status(500).json({ message: "Post not found !!" });
-    } 
-
+    }
 };
 
-
-
-exports.getAllPosts = async (req,res,next) => {
-    
+exports.getAllPosts = async (req, res, next) => {
     try {
         const fields = {
-            "title" : true,
-            "content": true,
-            "date" : true,
-            "likes" : true,
-            "owner" : true,
-            "category": true,
-            "imageurls": true,
-            "comments" : true,
+            title: true,
+            content: true,
+            date: true,
+            likes: true,
+            owner: true,
+            category: true,
+            imageurls: true,
+            comments: true
         };
-        const posts = await Post.find().select(fields).sort({datefield: -1});
+        const posts = await Post.find()
+            .select(fields)
+            .sort({ datefield: -1 });
         console.log(posts);
         return res.status(200).json(posts);
     } catch (error) {
@@ -565,21 +488,8 @@ exports.getAllPosts = async (req,res,next) => {
     }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
-*/
+ */
 /*
 exports.replyComment = (req, res) => {
     let reply = req.body.reply;
@@ -693,4 +603,3 @@ exports.replyCommentLike = (req, res) => {
 
 };
 */
-

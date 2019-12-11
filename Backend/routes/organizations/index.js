@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { OrganizationSchema } = require("../../models/Organizations");
+const { OrganizationModel } = require("../../models/Organizations");
 const { NotificationSchema } = require("../../models/Notifications");
 const { OtheruserModel } = require("../../models/Otheruser");
 const post = require("../../models/Post");
@@ -11,66 +11,59 @@ const { verifyToken, verifyUserWithToken } = require("../auth/helper");
 // instance of router
 const router = express.Router();
 
-router.get("/allOrganizaions", (req, res) => {
-  res.json(UserModel.organizations);
+router.get("/getall", verifyToken, verifyUserWithToken, async (req, res) => {
+  res.json(req.loggedUser.organizations);
+});
+
+router.post("/create", verifyToken, verifyUserWithToken, async (req, res) => {
+  // format:
+  // name:
+  // description:
+
+  console.log(req.body);
+
+  // apply as avaliable to work
+  const validatedData = organizationValidation(req.body);
+
+  // if error with validation return error
+  if (validatedData.error) {
+    return res
+      .status(400)
+      .json({ message: validatedData.error.details[0].message });
+  }
+  const adminUser = new OtheruserModel({
+    _id: req.loggedUser._id,
+    username: req.loggedUser.name,
+    profileurl: req.loggedUser.profileurl
+  });
+  const createOrganization = new OrganizationModel({
+    name: req.body.name,
+    description: req.body.description,
+    adminUsers: adminUser
+  });
+
+  await createOrganization.save();
+
+  // save the new doc to database
+  try {
+    // saving to database
+    const currentUser = await UserModel.findById(req.loggedUser._id);
+    currentUser.organizations.push(createOrganization);
+
+    const doc = await currentUser.save();
+
+    return res.status(200).json({
+      message: "Successfully send notification to User",
+      doc: doc
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 router.post(
-  "/Organization/:type",
-  create,
-  verifyToken,
-  verifyUserWithToken,
-  async (req, res) => {
-    // format:
-    // name:
-    // description:
-
-    // apply as avaliable to work
-    const validatedData = organizationValidation(req.body);
-
-    // if error with validation return error
-    if (validatedData.error) {
-      return res
-        .status(400)
-        .json({ message: validatedData.error.details[0].message });
-    }
-    const adminUser = new OtheruserModel({
-      _id: req.loggedUser._id,
-      username: req.loggedUser.name,
-      profileurl: req.loggedUser.profileurl
-    });
-    const createOrganization = new OrganizationSchema({
-      _id: mongoose.Types.ObjectId(),
-      name: req.body.name,
-      description: req.body.description,
-      adminUsers: adminUser
-    });
-
-    await createOrganization.save();
-
-    // save the new doc to database
-    try {
-      // saving to database
-      const currentUser = await UserModel.findById(req.loggedUser._id);
-      currentUser.organizations.push(createOrganization);
-
-      const doc = await currentUser.save();
-
-      // return success message
-      return res.status(200).json({
-        message: "Successfully created Organization",
-        doc: doc
-      });
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  }
-);
-
-router.post(
   "requestusers/:type",
-  requestuser,
   verifyToken,
   verifyUserWithToken,
   async (req, res) => {
@@ -83,6 +76,7 @@ router.post(
       const currentorganization = await currentUser.find(
         (organizations = req.body.organizationId)
       );
+
       for (i = 0; i < req.body.userIds.length; i++) {
         const findUser = await OtheruserModel.findById(req.body.userIds[i]);
         currentorganization.PendingUsers.push(findUser);
@@ -93,7 +87,7 @@ router.post(
           message:
             "new Organizatoion wants to add you " + currentorganization.name
         });
-        await createNotifiaction.save();
+        // await createNotifiaction.save();
 
         const requestUser = await UserModel.findById(req.body.userIds[i]);
         requestUser.notifications.push(createNotifiaction);
@@ -111,18 +105,15 @@ router.post(
   }
 );
 
-router.post(
-  "/adduser/:type",
-  adduser,
-  verifyToken,
-  verifyUserWithToken,
-  async (req, res) => {
-    // format
-    // userId:
-    // orgName:
+router.post("/adduser", verifyToken, verifyUserWithToken, async (req, res) => {
+  // format
+  // userId:
+  // orgName:
+  // check:
+  if (check) {
     try {
       const requestedUser = await UserModel.findById(req.loggedUser._id);
-      const findOrganization = await OrganizationSchema.find((name = orgName));
+      const findOrganization = await OrganizationModel.find((name = orgName));
       requestedUser.organizations.push(findOrganization);
       findOrganization.Users.push(requestedUser);
       const doc_User = await requestedUser.save();
@@ -136,60 +127,106 @@ router.post(
       console.log(error);
       return res.status(500).json({ message: "Internal server error" });
     }
-  }
-);
-
-router.post(
-  "deleteOrganization/:type",
-  deleteOrganization,
-  verifyToken,
-  verifyUserWithToken,
-  async (req, res) => {
-    // format
-    // userId:
-    // orgName:
-
+  } else {
     try {
-      var removeElement = null;
-      const currentUser = await UserModel.findById(req.loggedUser._id);
-      allOrganization = currentUser.organizations;
-      for (i = 0; i < allOrganization.length(); i++) {
-        if (allOrganization[i].name == req.body.orgName) {
-          removeElement = i;
+      const findOrganization = await OrganizationModel.find((name = orgName));
+      for (i = 0; i < findOrganization.PendingUsers.length; i++) {
+        if (findOrganization.PendingUsers._id == req.body.userId) {
+          findOrganization.PendingUsers.slice(i, i + 1);
         }
       }
-
-      currentUser.organizations.slice(i, i + 1);
-      await currentUser.save();
-
-      const currentorganization = await OrganizationSchema.find(
-        (name = req.body.orgName)
-      );
-      await currentorganization.remove();
-      // currentorganization.(currentorganization._id);
+      const doc = findOrganization.save();
       return res.status(200).json({
-        message: "Successfully delected Organization",
+        message: "Successfully rejected notification from User",
         doc: doc
       });
     } catch (error) {
       console.log(error);
-      return res
-        .status(500)
-        .json({ message: "Internal server error or cant find Organization" });
+      return res.status(500).json({ message: "Internal server error" });
     }
   }
+});
+
+router.post(
+  "/makeAdmin",
+  verifyToken,
+  verifyUserWithToken,
+  async (req, res) => {}
 );
 
 // router.post(
-//   'addPost/:type',
-//   addPost,
+//   "/requestuser",
 //   verifyToken,
 //   verifyUserWithToken,
-//   async(req, res) => {
-//   // format
-//   // postdetails:
-//   const newPost = new post({
+//   async (req, res) => {
+//     // format:
+//     // organizationId:""
+//     // userIds:""
 
-//   })
+//     try {
+//       const currentUser = await UserModel.findById(req.loggedUser._id);
+//       const currentorganization = await currentUser.find(
+//         (organizations = req.body.organizationId)
+//       );
 
-// });
+//       const findUser = await OtheruserModel.findById(req.body.userId);
+//       currentorganization.PendingUsers.push(findUser);
+
+//       //TODO send request to User
+//       const createNotifiaction = new NotificationSchema({
+//         message:
+//           "new Organizatoion wants to add you " + currentorganization.name
+//       });
+//       await createNotifiaction.save();
+
+//       const requestUser = await UserModel.findById(req.body.userId);
+//       requestUser.notifications.push(createNotifiaction);
+
+//       const doc = await requestUser.save();
+
+//       return res.status(200).json({
+//         message: "Successfully send notification to User",
+//         doc: doc
+//       });
+//     } catch (error) {
+//       console.log(error);
+//       return res.status(500).json({ message: "Internal server error" });
+//     }
+//   }
+// );
+
+router.post("/delete", verifyToken, verifyUserWithToken, async (req, res) => {
+  // format
+  // userId:
+  // orgName:
+
+  try {
+    var removeElement = null;
+    const currentUser = await UserModel.findById(req.loggedUser._id);
+    allOrganization = currentUser.organizations;
+    for (i = 0; i < allOrganization.length(); i++) {
+      if (allOrganization[i].name == req.body.orgName) {
+        removeElement = i;
+      }
+    }
+
+    currentUser.organizations.slice(i, i + 1);
+    await currentUser.save();
+
+    const currentorganization = await OrganizationModel.find(
+      (name = req.body.orgName)
+    );
+    await currentorganization.remove();
+    // currentorganization.(currentorganization._id);
+    return res.status(200).json({
+      message: "Successfully delected Organization",
+      doc: doc
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error or cant find Organization"
+    });
+  }
+});
+module.exports = router;
