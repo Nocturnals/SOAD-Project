@@ -214,23 +214,6 @@ router.post("/new/:recipient", async (req, res, next) => {
 //     });
 // };
 
-router.post("/:conversationId", async (req, res, next) => {
-    const reply = new Message({
-        conversationId: req.params.conversationId,
-        body: req.body.composedMessage,
-        author: req.user._id
-    });
-
-    reply.save(function(err, sentReply) {
-        if (err) {
-            res.send({ error: err });
-            return next(err);
-        }
-
-        res.status(200).json({ message: "Reply successfully sent!" });
-        return next;
-    });
-});
 // router.sendReply = function(req, res, next) {
 //     const reply = new Message({
 //         conversationId: req.params.conversationId,
@@ -303,6 +286,24 @@ let io = socket(server);
 io.on("connection", socket => {
     socket.on("new-message", data => {
         io.sockets.emit("new-message", data);
+    });
+});
+
+router.post("/:conversationId", async (req, res, next) => {
+    const reply = new Message({
+        conversationId: req.params.conversationId,
+        body: req.body.composedMessage,
+        author: req.loggedUser
+    });
+
+    reply.save(function(err, sentReply) {
+        if (err) {
+            res.send({ error: err });
+            return next(err);
+        }
+
+        res.status(200).json({ message: "Reply successfully sent!" });
+        return next;
     });
 });
 
