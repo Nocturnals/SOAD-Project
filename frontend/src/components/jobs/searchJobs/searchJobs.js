@@ -97,7 +97,7 @@ class SearchJobs extends Component {
             workAt: this.state.locationSearchInput,
             workTypes: this.state.jobType
         };
-        this.props.getFilteredJobs(options);
+        this.props.getFilteredJobs({ options });
         this.setState({ getFilteredJobsFetched: true });
     }
 

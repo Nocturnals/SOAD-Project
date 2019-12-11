@@ -9,9 +9,7 @@ export function getFilteredJobs(options) {
         console.log(options);
 
         axios
-            .get("http://localhost:4000/api/colab/jobOffers", {
-                Asdfsadfsadf: "asd"
-            })
+            .post("http://localhost:4000/api/colab/jobOffers", options)
             .then(res => {
                 console.log(res);
                 dispatch(successAction(res.data));
