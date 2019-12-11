@@ -54,7 +54,9 @@ class LeftContent extends Component {
                                 </div>
                                 <div className="userDetails row">
                                     <div className="col-12">
-                                        <h4>{auth.user && auth.user.name}</h4>
+                                        <h4>
+                                            {auth.user ? auth.user.name : ""}
+                                        </h4>
                                         <h6>Professional Red Hat Hacker</h6>
                                     </div>
                                 </div>
@@ -64,7 +66,9 @@ class LeftContent extends Component {
                             <div className="title">
                                 <h4>Following</h4>
                                 <h6>
-                                    {auth.user && auth.user.following.length}
+                                    {auth.user && auth.user.following
+                                        ? auth.user.following.length
+                                        : 0}
                                 </h6>
                             </div>
                         </div>
@@ -72,7 +76,9 @@ class LeftContent extends Component {
                             <div className="title">
                                 <h4>Followers</h4>
                                 <h6>
-                                    {auth.user && auth.user.followers.length}
+                                    {auth.user && auth.user.followers
+                                        ? auth.user.followers.length
+                                        : 0}
                                 </h6>
                             </div>
                         </div>

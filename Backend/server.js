@@ -74,6 +74,8 @@ app.use("/api/user", authRouter);
 app.use("/api/docMatch", docMatch);
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/chat", ChatController);
+//Route for Organisations
+app.use("/api/organization", require("./routes/organizations/index"));
 //Route for Competitions
 app.use("/api/competition", require("./routes/competitions/utils"));
 
