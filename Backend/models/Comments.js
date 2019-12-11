@@ -55,6 +55,11 @@ const CommentSchema = new mongoose.Schema({
 
     replies: {
         type: [ReplySchema]
+    },
+
+    createdOn: {
+        type: Date,
+        default: Date.now
     }
 });
 

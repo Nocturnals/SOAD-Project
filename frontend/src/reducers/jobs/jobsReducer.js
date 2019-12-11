@@ -2,7 +2,7 @@ import { jobsConstants } from "../../constants/index";
 
 const initialState = {
     interestedJobs: [],
-    currentJob: [],
+    currentJob: null,
     isLoading: true
 };
 
@@ -23,7 +23,7 @@ export default function(state = initialState, action) {
         case jobsConstants.GET_JOB_REQUEST:
             return {
                 ...state,
-                currentJob: [],
+                currentJob: null,
                 isLoading: true
             };
         case jobsConstants.GET_JOB_SUCCESS:

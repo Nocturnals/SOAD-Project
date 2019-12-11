@@ -40,6 +40,11 @@ const JobsAvailableSchema = new mongoose.Schema({
     cvLocation: {
         type: String,
         required: true
+    },
+
+    createdOn: {
+        type: Date,
+        default: Date.now
     }
 });
 
