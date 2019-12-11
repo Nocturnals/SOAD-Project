@@ -1,36 +1,51 @@
-html, body {
-  width: 100%; height: 100%;
-  margin: 0;
-  overflow-x: hidden;
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow-x: hidden;
 }
 body {
-  background-color: rgb(230, 230, 230);
+    background-color: rgb(230, 230, 230);
+}
+
+.blur {
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
 }
 
 body::-webkit-scrollbar,
 .competitionPage .viewAllParticipants::-webkit-scrollbar,
-.uploadPostPopUP::-webkit-scrollbar {
-  width: 7px;
-  background: rgb(251, 250, 250);
+.uploadPostPopUP::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+    background: rgb(251, 250, 250);
 }
 body::-webkit-scrollbar-track,
 .uploadPostPopUP::-webkit-scrollbar-track,
-.competitionPage .viewAllParticipants::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+.competitionPage .viewAllParticipants::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
 }
 body::-webkit-scrollbar-thumb,
 .uploadPostPopUP::-webkit-scrollbar-thumb,
-.competitionPage .viewAllParticipants::-webkit-scrollbar-thumb {
-  background: rgb(117, 58, 245);
-  border-radius: 60px;
-  outline: 1px solid slategrey;
+.competitionPage .viewAllParticipants::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
+    background: rgb(117, 58, 245);
+    border-radius: 60px;
+    outline: 1px solid slategrey;
 }
 
 .categories::-webkit-scrollbar {
-  height: 7px;
-  background: transparent;
+    height: 7px;
+    background: transparent;
 }
 .categories::-webkit-scrollbar-thumb {
-  background: rgb(148, 110, 39);
-  border-radius: 60px;
+    background: rgb(148, 110, 39);
+    border-radius: 60px;
+}
+
+.loader {
+    margin: auto;
 }

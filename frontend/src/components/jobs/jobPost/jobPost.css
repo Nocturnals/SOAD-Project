@@ -1,0 +1,141 @@
+.jobsSearch .otherJobs .jobPost {
+    margin: 0 15px 5px 15px; padding: 15px 30px 0 30px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.4);
+    transition: all 0.2s linear;
+}
+.jobsSearch .otherJobs .hover:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+/* 
+*
+*   Job Brief
+*/
+/* Header */
+.jobsSearch .otherJobs .jobPost .header h6 {
+    margin: auto 0;
+}
+.jobsSearch .otherJobs .jobPost .header .title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: rgba(0, 0, 0, 0.85);
+}
+.jobsSearch .otherJobs .jobPost .header .copyJobLink {
+    font-size: 1.4rem;
+    color: rgba(0, 0, 0, 0.6);
+    transform: rotate(-45deg);
+    transition: all 0.1s linear;
+}
+.jobsSearch .otherJobs .jobPost .header .copyJobLink:hover {
+    cursor: pointer;
+    color: royalblue;
+}
+/* Company And Locations */
+.jobsSearch .otherJobs .jobPost .comLoc {
+    padding: 10px 0;
+    color: rgba(0, 0, 0, 0.6);
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.4);
+}
+.jobsSearch .otherJobs .jobPost .comLoc .child {
+    margin: auto 10px;
+    font-size: 0.9rem;
+}
+.jobsSearch .otherJobs .jobPost .comLoc .child:first-child {
+    margin-left: 0;
+}
+.jobsSearch .otherJobs .jobPost .comLoc .child i {
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.4);
+}
+/* Qualifications */
+.jobsSearch .otherJobs .jobPost .body {
+    padding: 15px 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.65);
+}
+.jobsSearch .otherJobs .jobPost .body .header {
+    font-size: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgba(0, 0, 0, 0.85);
+    letter-spacing: 0.03rem;
+    text-align: left;
+    transform: scaleY(0.95);
+}
+.jobsSearch .otherJobs .jobPost .body {
+    text-align: left;
+}
+.jobsSearch .otherJobs .jobPost .body .qualifications li {
+    padding: 2px 0 0 0;
+}
+/* Expand Button */
+.jobsSearch .otherJobs .jobPost .body .expandJob {
+    position: absolute; bottom: 10px; left: 48%;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: royalblue;
+    transform: scaleY(0.95);
+    background: none;
+    border: none;
+    outline: none;
+    opacity: 0;
+    transition: all 0.3s linear;
+}
+.jobsSearch .otherJobs .jobPost:hover > .col .body .col .expandJob {
+    bottom: -10px;
+    opacity: 1;
+}
+
+
+/* 
+*
+*   Job Detail
+*/
+/* Company and Location */
+.jobsSearch .otherJobs .expanded .header .title {
+    font-size: 1.6rem;
+    color: rgba(0, 0, 0, 0.75);
+}
+.jobsSearch .otherJobs .expanded .comLoc {
+    padding: 15px 0 30px 0;
+}
+.jobsSearch .otherJobs .expanded .jobDetail .detail {
+    padding: 20px 0;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.4);
+}
+.jobsSearch .otherJobs .expanded .jobDetail .detail:last-child {
+    border-bottom: none;
+}
+.jobsSearch .otherJobs .expanded .jobDetail .detail .header {
+    font-size: 1.4rem;
+}
+.jobsSearch .otherJobs .expanded .jobDetail .detail .body {
+    margin-top: 20px;
+}
+.jobsSearch .otherJobs .expanded .jobDetail .detail li {
+    padding: 5px 0;
+}
+/* Apply Button */
+.jobsSearch .otherJobs .expanded .jobDetail .applyButton {
+    margin-top: 15px;
+    padding: 10px 50px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgb(77, 27, 156);
+    border: 1px solid rgb(77, 27, 156);
+    border-radius: 50px;
+    background: none;
+    transition: all 0.2s linear;
+}
+.jobsSearch .otherJobs .expanded .jobDetail .applyButton:hover {
+    border: 1px solid rgba(77, 27, 156, 0);
+    background-color: rgb(77, 27, 156);
+    color: seashell;
+    box-shadow: -4px 4px 15px rgba(0, 0, 0, 0.4);
+}

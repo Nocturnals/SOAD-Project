@@ -1,0 +1,136 @@
+.create-organisation .row,
+.create-organisation .col,
+.create-organisation .col-1,
+.create-organisation .col-2,
+.create-organisation .col-3,
+.create-organisation .col-4,
+.create-organisation .col-5,
+.create-organisation .col-6,
+.create-organisation .col-7,
+.create-organisation .col-8,
+.create-organisation .col-9,
+.create-organisation .col-10,
+.create-organisation .col-11,
+.create-organisation .col-12 {
+    padding: 0; margin: 0;
+}
+.create-organisation h6 {
+    margin: auto;
+}
+.create-organisation {
+    padding: 0;
+    width: 800px; margin: 20px auto;
+    border-radius: 3px;
+    background-color: white;
+}
+/* Header */
+.create-organisation .header {
+    padding: 15px 25px;
+    font-size: 1.1rem;
+    letter-spacing: 0.2px;
+    color: seashell;
+    background-image: linear-gradient(135deg, #7f2bb8 1%, #7f2bb8, #5a1d7e 50%);
+}
+/* Body */
+.create-organisation .body {
+    padding: 10px 25px;
+}
+.create-organisation .body .inputs {
+    padding: 10px 0;
+}
+.create-organisation .body .inputs .noHover:focus {
+    transform: scale(1);
+}
+.create-organisation .body .searchInput .searchInputResults {
+    position: absolute;
+    width: 100%;
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s linear;
+    z-index: 10;
+}
+.create-organisation .body .searchInput .searchInputResults .searchUserPic {
+    margin: auto;
+    height: 40px; width: 40px;
+    border: 1px solid rgba(127, 43, 184, 0.7);
+    border-radius: 50%;
+}
+.create-organisation .body .selectedUsers .slectedUser .col,
+.create-organisation .body .searchInput .searchInputResults .col {
+    align-self: center;
+}
+.create-organisation .body .selectedUsers .slectedUser .selectedUserDeatils,
+.create-organisation .body .searchInput .searchInputResults .searchUserDeatils {
+    text-align: left; margin: auto;
+}
+.create-organisation .body .selectedUsers .slectedUser,
+.create-organisation .body .searchInput .searchInputResults .result {
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+.create-organisation .body .selectedUsers .slectedUser:hover,
+.create-organisation .body .searchInput .searchInputResults .result:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.02);
+}
+.create-organisation .body .searchInput .searchInputResults .result .searchUserDeatils .primaryInterest {
+    color: rgba(0, 0, 0, 0.6);
+}
+/* Selected Users */
+.create-organisation .body .selectedUsers {
+    max-height: 250px;
+    border-radius: 2px;
+    border: 0.5px solid rgba(0, 0, 0, 0.15);
+    overflow: auto;
+    overflow-x: hidden;
+}
+.create-organisation .body .selectedUsers .slectedUser .remove-user{
+    align-self: center;
+    opacity: 0;
+    right: -40px;
+    transition: all 0.3s linear;
+}
+.create-organisation .body .selectedUsers .slectedUser .remove-user:hover {
+    color: rgb(245, 65, 45);
+}
+.create-organisation .body .selectedUsers .slectedUser:hover > .remove-user {
+    opacity: 1;
+    right: 0;
+}
+.create-organisation .body .selectedUsers .slectedUser .selectedUserPic {
+    margin: auto;
+    width: 50px; height: 50px;
+    border: 1px solid rgba(127, 43, 184, 0.7);
+    border-radius: 50%;
+}
+/* Description */
+.create-organisation .body .description .mh-sm {
+    max-height: 100px;
+}
+/* Submit */
+.create-organisation .body .submit button {
+    padding: 5px 30px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgb(116, 48, 180);
+    border: 0.5px solid rgb(116, 48, 180);
+    border-radius: 50px;
+    background: none;
+    outline: none;
+    transition: all 0.2s linear;
+}
+.create-organisation .body .submit button:hover {
+    color: seashell;
+    border: 0.5px solid rgba(116, 48, 180, 0);
+    background-color: rgba(116, 48, 180, 1);
+    box-shadow: -3px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+/* Display */
+.create-organisation .hide {
+    display: none
+}

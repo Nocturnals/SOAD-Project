@@ -18,8 +18,20 @@ class LinkClass {
 class NavBar extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            newNotifications: 10
+        };
+
         this.logoutUser = this.logoutUser.bind(this);
     }
+
+    // Clear Notifications badge...
+    clearNotificationsBadge = () => {
+        this.setState({
+            newNotifications: 0
+        });
+    };
 
     // logout function
     logoutUser() {
@@ -55,11 +67,22 @@ class NavBar extends Component {
         const links = this.props.auth.isAuthed
             ? [
                   new LinkClass("/feed", "Home"),
-                  new LinkClass("/search", "Search", "_blank")
+                  new LinkClass("/search", "Search", "_blank"),
+                  new LinkClass(
+                      "/artists/organisation-1/feed",
+                      "Organisations"
+                  ),
+                  new LinkClass("/jobs/results/", "Jobs"),
+                  new LinkClass("/colab/messages", "Messages")
               ]
             : [
                   new LinkClass("/", "Home"),
-                  new LinkClass("/search", "Search", "_blank")
+                  new LinkClass("/search", "Search", "_blank"),
+                  new LinkClass(
+                      "/artists/organisation-1/feed",
+                      "Organisations"
+                  ),
+                  new LinkClass("/jobs", "Jobs")
               ];
 
         return (
@@ -68,9 +91,18 @@ class NavBar extends Component {
                     "navbar sticky-top navbar-expand-lg" +
                     (this.props.auth.isAuthed
                         ? " bg-theme"
-                        : " bg-black-06 nav-min-height")
+                        : this.props.contract
+                        ? " bg-theme"
+                        : " bg-black-06 nav-min-height") +
+                    (this.props.blur ? " blur" : "")
                 }
-                id={!this.props.auth.isAuthed ? "nav-bar" : ""}
+                id={
+                    this.props.auth.isAuthed
+                        ? ""
+                        : this.props.contract
+                        ? ""
+                        : "nav-bar"
+                }
             >
                 <Link to="/">
                     <button className="navbar-brand navTitle">
@@ -87,7 +119,7 @@ class NavBar extends Component {
                     aria-expanded="false"
                     aria-label="Toggle navigation"
                 >
-                    <span className="navbar-toggler-icon">
+                    <span className="navBarToggler navbar-toggler-icon">
                         <i className="fa fa-bars" aria-hidden="true"></i>
                     </span>
                 </button>
@@ -100,33 +132,82 @@ class NavBar extends Component {
 
                         {/* Notiifcations */}
                         {this.props.auth.isAuthed ? (
-                            <li className="nav-item dropdown notifications">
-                                <button
-                                    className="nav-link dropdown-toggle"
-                                    id="navbarDropdownMenuLink-333"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                >
-                                    <i className="fa fa-bell"></i> Notifcations
-                                </button>
-                                <div
-                                    className="dropdown-menu dropdown-menu-right dropdown-default"
-                                    aria-labelledby="navbarDropdownMenuLink-333"
-                                >
-                                    <div className="dropdown-item view-all-notifications d-flex justify-content-between">
+                            <React.Fragment>
+                                <li className="nav-item dropdown notifications">
+                                    <button
+                                        className="nav-link dropdown-toggle"
+                                        id="navbarDropdownMenuLink-333"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        onClick={this.clearNotificationsBadge}
+                                    >
+                                        Notifcations{" "}
+                                        {this.state.newNotifications ? (
+                                            <span className="badge badge-info">
+                                                10
+                                            </span>
+                                        ) : null}
+                                    </button>
+                                    <div
+                                        className="dropdown-menu dropdown-menu-right dropdown-default"
+                                        aria-labelledby="navbarDropdownMenuLink-333"
+                                    >
+                                        <div className="dropdown-item view-all-notifications d-flex justify-content-between">
+                                            <Link
+                                                to="/"
+                                                style={{
+                                                    textDecoration: "none"
+                                                }}
+                                            >
+                                                <button>View All</button>
+                                            </Link>
+                                        </div>
+                                        <div className="dropdown-item notification">
+                                            <div className="">Vishwanth</div>
+                                        </div>
+                                    </div>
+                                </li>
+                                {/* Create New Things */}
+                                <li className="nav-item dropdown user">
+                                    <button
+                                        className="nav-link dropdown-toggle"
+                                        id="navbarDropdownMenuLink-333"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                    >
+                                        <i className="fa fa-plus"></i>{" "}
+                                    </button>
+                                    <div
+                                        className="dropdown-menu dropdown-menu-right dropdown-default"
+                                        aria-labelledby="navbarDropdownMenuLink-333"
+                                    >
                                         <Link
-                                            to="/"
-                                            style={{ textDecoration: "none" }}
+                                            to="/artists/create-organisation"
+                                            style={{
+                                                textDecoration: "none",
+                                                textTransform: "uppercase"
+                                            }}
                                         >
-                                            <button>View All</button>
+                                            <button className="dropdown-item">
+                                                Create Organisation
+                                            </button>
+                                        </Link>
+                                        <Link
+                                            to="/create-competition"
+                                            style={{
+                                                textDecoration: "none",
+                                                textTransform: "uppercase"
+                                            }}
+                                        >
+                                            <button className="dropdown-item">
+                                                Create Competition
+                                            </button>
                                         </Link>
                                     </div>
-                                    <div className="dropdown-item notification">
-                                        <div className="">Vishwanth</div>
-                                    </div>
-                                </div>
-                            </li>
+                                </li>
+                            </React.Fragment>
                         ) : null}
 
                         {/* User Profile and Logout */}
