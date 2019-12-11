@@ -41,6 +41,7 @@ bower_components
 build/Release
 
 # Dependency directories
+/venv_soad/
 node_modules/
 jspm_packages/
 

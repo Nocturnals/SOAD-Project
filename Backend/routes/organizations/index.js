@@ -69,36 +69,37 @@ router.post(
 );
 
 router.post(
-  "requestuser/:type",
+  "requestusers/:type",
   requestuser,
   verifyToken,
   verifyUserWithToken,
   async (req, res) => {
     // format:
     // organizationId:""
-    // userId:""
+    // userIds:""
 
     try {
       const currentUser = await UserModel.findById(req.loggedUser._id);
       const currentorganization = await currentUser.find(
         (organizations = req.body.organizationId)
       );
+      for (i = 0; i < req.body.userIds.length; i++) {
+        const findUser = await OtheruserModel.findById(req.body.userIds[i]);
+        currentorganization.PendingUsers.push(findUser);
 
-      const findUser = await OtheruserModel.findById(req.body.userId);
-      currentorganization.PendingUsers.push(findUser);
+        //TODO send request to User
+        const createNotifiaction = new NotificationSchema({
+          userId: req.body.organizationId,
+          message:
+            "new Organizatoion wants to add you " + currentorganization.name
+        });
+        await createNotifiaction.save();
 
-      //TODO send request to User
-      const createNotifiaction = new NotificationSchema({
-        message:
-          "new Organizatoion wants to add you " + currentorganization.name
-      });
-      await createNotifiaction.save();
+        const requestUser = await UserModel.findById(req.body.userIds[i]);
+        requestUser.notifications.push(createNotifiaction);
 
-      const requestUser = await UserModel.findById(req.body.userId);
-      requestUser.notifications.push(createNotifiaction);
-
-      const doc = await requestUser.save();
-
+        const doc = await requestUser.save();
+      }
       return res.status(200).json({
         message: "Successfully send notification to User",
         doc: doc
