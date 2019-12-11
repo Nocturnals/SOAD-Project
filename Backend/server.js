@@ -24,11 +24,11 @@ const databaseConnect = process.env.DB_Connect;
 
 // connect to mongooseDB
 mongoose.connect(
-  databaseConnect,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  () => {
-    console.log("connected to mongooseDB");
-  }
+    databaseConnect,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    () => {
+        console.log("connected to mongooseDB");
+    }
 );
 
 // intializing the app instance
@@ -36,19 +36,19 @@ const app = express();
 
 //CORS middleware
 var allowCrossDomain = function(req, res, next) {
-  // website which can only access this backend server
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    // website which can only access this backend server
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
 
-  // Request methods which are allowed to this backend server
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+    // Request methods which are allowed to this backend server
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
 
-  // Request headers which are allowed to this backend server
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    // Request headers which are allowed to this backend server
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  res.header("Access-Control-Expose-Headers", "*");
+    res.header("Access-Control-Expose-Headers", "*");
 
-  // Pass to next layer
-  next();
+    // Pass to next layer
+    next();
 };
 
 // Middleware
@@ -60,13 +60,13 @@ app.use(bodyParser.json());
 app.use(allowCrossDomain);
 
 if (process.env.Node_Env === "development") {
-  // for logging the infomation
-  app.use(morgan("tiny"));
+    // for logging the infomation
+    app.use(morgan("tiny"));
 
-  // for securing the routes with adding headers
-  app.use(helmet());
+    // for securing the routes with adding headers
+    app.use(helmet());
 
-  console.log("Logging the data using morgan");
+    console.log("Logging the data using morgan");
 }
 
 // Route for login
