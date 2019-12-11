@@ -27,7 +27,8 @@ const {
     addcommentValidation,
     editcommentValidation,
     commentlikeValidation,
-    commentreplyValidation
+    commentreplyValidation,
+    similarCompetitionValidation
 } = require("./compValidation");
 
 const { upload } = require("./fileUpload");
@@ -780,7 +781,12 @@ router.get(
     verifyToken,
     verifyUserWithToken,
     async (req, res, next) => {
-        console.log("sdihgio");
+        const validatedData = commentreplyValidation(req.body);
+        if (validatedData.error)
+            return res
+                .status(400)
+                .json({ message: validatedData.error.details[0].message });
+        // console.log("sdihgio");
         try {
             const comp = await CompetitionsModel.findById(req.body._id);
             const compparticipants = [];
