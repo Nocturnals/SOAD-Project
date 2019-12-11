@@ -2,12 +2,16 @@ import axios from "axios";
 
 import { jobsConstants, alertConstants } from "../../constants/index";
 
-export function getFilteredJobs(filters) {
+export function getFilteredJobs(options) {
     return dispatch => {
         dispatch(requestAction());
 
+        console.log(options);
+
         axios
-            .get("http://localhost:4000/api/colab/jobOffers", filters)
+            .get("http://localhost:4000/api/colab/jobOffers", {
+                Asdfsadfsadf: "asd"
+            })
             .then(res => {
                 console.log(res);
                 dispatch(successAction(res.data));
