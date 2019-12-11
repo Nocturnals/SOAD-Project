@@ -56,13 +56,11 @@ class Organisations extends Component {
             comps.push(
                 <React.Fragment key={index}>
                     <div className="row member">
-                        <div className="userImage">
+                        <div className="col userImage">
                             <Img src={this.orgImage} className="image" />
                         </div>
                         <div className="col user">
-                            <h6 className="details">
-                                {member.username} &nbsp; (Photographer)
-                            </h6>
+                            <h6 className="details">{member.username}</h6>
                         </div>
                     </div>
                 </React.Fragment>
@@ -74,6 +72,7 @@ class Organisations extends Component {
 
     render() {
         const { auth } = this.props;
+        const { search } = this.state;
 
         return (
             <React.Fragment>
@@ -84,25 +83,65 @@ class Organisations extends Component {
                             type="text"
                             name="search"
                             onChange={this.handleInputChange}
-                            value={this.state.search}
+                            value={search}
                             className="search"
                             placeholder="Your Organisations..."
+                            autoComplete="off"
                         />
-                        {this.userOrganisationsComp(auth.user.organizations)}
+                        {auth.user
+                            ? this.userOrganisationsComp(
+                                  auth.user.organizations.filter(org =>
+                                      org.name
+                                          .replace(/\s/g, "")
+                                          .toLowerCase()
+                                          .includes(
+                                              search
+                                                  .replace(/\s/g, "")
+                                                  .toLowerCase()
+                                          )
+                                  )
+                              )
+                            : null}
                     </div>
                     <div className="row body">
                         <div className="col members">
                             <h6 className="orgMemHeader">Members:</h6>
-                            <div className="row blocks">
+                            <div className="row orgMemBody">
                                 <div className="col">
-                                    {this.displayOrgMembers(
-                                        auth.user.organizations.Users
-                                    )}
+                                    {auth.isAuthed && auth.user.organizations
+                                        ? this.displayOrgMembers(
+                                              auth.user.organizations[0].Users
+                                          )
+                                        : null}
                                 </div>
                             </div>
                         </div>
                         <div className="col feed"></div>
-                        <div className="col"></div>
+                        <div className="col orgRightContent">
+                            <div className="row editOrganisation">
+                                <div className="col">
+                                    <button>Edit Organization</button>
+                                </div>
+                            </div>
+                            <div className="row adminUsers">
+                                <div className="col admin-users">
+                                    <h6 className="adminMemHeader">
+                                        Admin Users:
+                                    </h6>
+                                    <div className="row adminMemBody">
+                                        <div className="col">
+                                            {auth.isAuthed &&
+                                            auth.user.organizations
+                                                ? this.displayOrgMembers(
+                                                      auth.user.organizations[0]
+                                                          .adminUsers
+                                                  )
+                                                : null}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </React.Fragment>

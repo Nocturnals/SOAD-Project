@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const artistTypes = require("./artistTypes");
 const otherUserSchema = require("./Otheruser");
 
-const JobsAppliedSchema = new mongoose.Schema({
+const JobsAvailableSchema = new mongoose.Schema({
     artistType: {
         enum: [...artistTypes],
         type: String,
@@ -43,7 +43,7 @@ const JobsAppliedSchema = new mongoose.Schema({
     }
 });
 
-const JobsAppliedModel = mongoose.model("JobsApplied", JobsAppliedSchema);
+const JobsAvailableModel = mongoose.model("JobsAvailable", JobsAvailableSchema);
 
-module.exports = JobsAppliedModel;
-module.exports.JobsAppliedSchema = JobsAppliedSchema;
+module.exports = JobsAvailableModel;
+module.exports.JobsAvailableSchema = JobsAvailableSchema;
