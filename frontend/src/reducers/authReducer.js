@@ -3,7 +3,7 @@ import { userAuthConst } from "../constants";
 const initialState = {
     user: null,
     isAuthed: false,
-    isLoading: false
+    isLoading: true
 };
 
 export default function(state = initialState, action) {

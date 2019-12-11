@@ -114,17 +114,17 @@ class LeftContent extends Component {
                             <div className="title col-6">
                                 <h4>Following</h4>
                                 <h6>
-                                    {auth.user &&
-                                        auth.user.following &&
-                                        auth.user.following.length}
+                                    {auth.user && auth.user.following
+                                        ? auth.user.following.length
+                                        : 0}
                                 </h6>
                             </div>
                             <div className="title col-6">
                                 <h4>Followers</h4>
                                 <h6>
-                                    {auth.user &&
-                                        auth.user.following &&
-                                        auth.user.followers.length}
+                                    {auth.user && auth.user.followers
+                                        ? auth.user.followers.length
+                                        : 0}
                                 </h6>
                             </div>
                         </div>

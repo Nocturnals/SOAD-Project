@@ -8,7 +8,6 @@ import PostComp, { Post } from "../post/post";
 import LeftContent from "./leftContent/leftContent";
 import RightContent from "./rightContent/rightContent";
 import CreatePostComp from "../post/createPost/createPost";
-import MainLoader from "../helpers/mainLoader/mainLoader";
 
 import "./home.css";
 
