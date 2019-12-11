@@ -34,7 +34,9 @@ const artistWantedValidation = data => {
 
         descriptionOfJob: Joi.string().required(),
 
-        responsibilites: Joi.string().required()
+        qualifications: Joi.string().required(),
+
+        responsibilities: Joi.string().required()
     };
 
     return Joi.validate(data, schema);

@@ -113,6 +113,7 @@ router.post(
             workType: req.body.workType,
             salary: req.body.salary,
             descriptionOfJob: req.body.descriptionOfJob,
+            qualifications: req.body.qualifications,
             responsibilities: req.body.responsibilities
         });
 

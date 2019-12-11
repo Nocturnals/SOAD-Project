@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const artistTypes = require("./artistTypes");
 const otherUserSchema = require("./Otheruser");
 
-const workTypes = ["Full-time", "Part-time", "Temporary", "Intern"];
+const workTypes = ["FULL_TIME", "PART_TIME", "TEMPORARY", "INTERN"];
 
 const otherJobSchema = new mongoose.Schema({
     _id: {
