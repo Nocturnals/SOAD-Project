@@ -5,9 +5,48 @@ const otherUserSchema = require("./Otheruser");
 
 const workTypes = ["Full-time", "Part-time", "Temporary", "Intern"];
 
-const artistWantedSchema = new mongoose.Schema({
+const otherJobSchema = new mongoose.Schema({
+    _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "jobOffers",
+        required: true
+    },
+
+    title: {
+        type: String,
+        required: true
+    },
+
     artistType: {
         enum: [...artistTypes],
+        type: String,
+        required: true
+    },
+
+    jobProvider: {
+        type: otherUserSchema,
+        required: true
+    },
+
+    salary: {
+        type: String,
+        required: true
+    },
+
+    status: {
+        type: String,
+        enum: ["onGoing", "done", "cancelled"]
+    }
+});
+
+const jobOfferSchema = new mongoose.Schema({
+    artistType: {
+        enum: [...artistTypes],
+        type: String,
+        required: true
+    },
+
+    title: {
         type: String,
         required: true
     },
@@ -44,13 +83,24 @@ const artistWantedSchema = new mongoose.Schema({
         required: true
     },
 
+    qualifications: {
+        type: String,
+        required: true
+    },
+
+    responsibilities: {
+        type: String,
+        required: true
+    },
+
     applied: {
         type: [otherUserSchema],
         default: []
     }
 });
 
-const artistWantedModel = mongoose.model("artistWanted", artistWantedSchema);
+const JobOffersModel = mongoose.model("jobOffers", jobOfferSchema);
 
-module.exports = artistWantedModel;
+module.exports = JobOffersModel;
 module.exports.workType = workTypes;
+module.exports.otherJobOfferSchema = otherJobSchema;

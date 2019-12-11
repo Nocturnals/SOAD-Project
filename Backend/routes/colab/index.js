@@ -1,8 +1,8 @@
 const express = require("express");
 
 const artistTypes = require("../../models/artistTypes");
-const jobsAppliedModel = require("../../models/jobsApplied");
-const artistWantedModel = require("../../models/artistsWanted");
+const JobsAvailableModel = require("../../models/jobsApplied");
+const JobOffersModel = require("../../models/artistsWanted");
 const UserModel = require("../../models/user");
 const { OtheruserModel } = require("../../models/Otheruser");
 const { getArtistType } = require("./helper");
@@ -48,7 +48,7 @@ router.post(
         // TODO:: upload the cv file and get its url
 
         // create the new jogapplied model
-        const jobApplied = new jobsAppliedModel({
+        const jobApplied = new JobsAvailableModel({
             artistType: req.artistType,
             user: user,
             availableAt: req.body.availableAt,
@@ -80,7 +80,7 @@ router.post(
 
 // route to post a job wanted request
 router.post(
-    "/artistWanted/:type",
+    "/jobOffer/:type",
     getArtistType,
     verifyToken,
     verifyUserWithToken,
@@ -103,7 +103,7 @@ router.post(
         });
 
         // create artist wanted model
-        const artistWanted = new artistWantedModel({
+        const artistWanted = new JobOffersModel({
             artistType: req.artistType,
             jobProvider: jobProvider,
             workDuration: req.body.workDuration,
@@ -131,9 +131,9 @@ router.get(
     async (req, res) => {
         try {
             // fetch the database to get all works of type artists
-            const allArtistsInterested = await jobsAppliedModel
-                .find()
-                .where({ artistType: req.artistType });
+            const allArtistsInterested = await JobsAvailableModel.find().where({
+                artistType: req.artistType
+            });
             return res.json(allArtistsInterested);
         } catch (error) {
             console.log(error);
@@ -149,7 +149,7 @@ router.get(
     async (req, res) => {
         try {
             // fetch the database to get all works of type artists
-            const allArtistsInterested = await jobsAppliedModel.find().where({
+            const allArtistsInterested = await JobsAvailableModel.find().where({
                 artistType: req.artistType,
                 availableAt: req.params.area
             });
@@ -165,9 +165,9 @@ router.get(
 router.get("/getJobOffers/:type", getArtistType, async (req, res) => {
     try {
         // fetches the database to get all job offers for a particular artist type
-        const allJobOffers = await artistWantedModel
-            .find()
-            .where({ artistType: req.artistType });
+        const allJobOffers = await JobOffersModel.find().where({
+            artistType: req.artistType
+        });
 
         return res.status(200).json(allJobOffers);
     } catch (error) {
@@ -180,7 +180,7 @@ router.get("/getJobOffers/:type", getArtistType, async (req, res) => {
 router.get("/getJobOffers/:type/:area", getArtistType, async (req, res) => {
     try {
         // fetches the database to get all job offers for a particular artist type
-        const allJobOffers = await artistWantedModel.find().where({
+        const allJobOffers = await JobOffersModel.find().where({
             artistType: req.artistType,
             workAt: req.params.area
         });
@@ -205,9 +205,7 @@ router.post("/applyJob", verifyToken, verifyUserWithToken, async (req, res) => {
 
     try {
         // apply for job
-        const jobOfferDoc = await artistWantedModel.findById(
-            req.body.jobOfferId
-        );
+        const jobOfferDoc = await JobOffersModel.findById(req.body.jobOfferId);
         if (jobOfferDoc) {
             // check if already applied
             jobOfferDoc.applied.forEach(participatent => {

@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
 
-const { JobsAppliedSchema } = require("./jobsApplied");
+const { JobsAvailableSchema } = require("./jobsApplied");
 const otheruserschema = require("./Otheruser");
 const othercompetititonschema = require("./Othercompetitions");
 const { NotificationSchema } = require("./Notifications");
 const { OrganizationSchema } = require("./Organizations");
 const artistTypes = require("./artistTypes");
+const { otherJobOfferSchema } = require("./artistsWanted");
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -86,13 +87,20 @@ const userSchema = new mongoose.Schema({
     },
 
     jobsApplied: {
-        type: [JobsAppliedSchema],
+        type: [otherJobOfferSchema],
         default: []
     },
+
     notifications: {
         type: [NotificationSchema],
         default: []
     },
+
+    jobsAvailableFor: {
+        type: [JobsAvailableSchema],
+        default: []
+    },
+
     organizations: {
         type: [OrganizationSchema],
         default: []
