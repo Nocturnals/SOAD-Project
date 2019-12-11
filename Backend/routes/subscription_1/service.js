@@ -8,61 +8,56 @@ const UserModel = require("./../../models/user");
 const { OtheruserModel } = require("./../../models/Otheruser");
 const { addtoplanValidation } = require("./serviceValidation");
 
-router.post(
+router.get(
     "/showallplans",
-    verifyToken,
-    verifyUserWithToken,
+
     async (req, res, next) => {
         // const user = req.loggedUser;
 
         try {
             const plans = await planModel.find().select("name , _id");
-            res.send(plans);
+            if (plans) res.send(plans);
+            else return res.json({ message: "no plans found" });
         } catch (error) {
             res.status(500).json({ message: "internal server error" });
         }
     }
 );
 
-router.post(
-    "/subscribe/:id",
-    verifyToken,
-    verifyUserWithToken,
-    async (req, res, next) => {
-        try {
-            var isalreadypresent = false;
-            const user = new OtheruserModel({
-                _id: req.loggedUser._id,
-                username: req.loggedUser.name,
-                profileurl: req.loggedUser.profileurl
+router.post("/subscribe/:id", async (req, res, next) => {
+    try {
+        var isalreadypresent = false;
+        const user = new OtheruserModel({
+            _id: req.loggedUser._id,
+            username: req.loggedUser.name,
+            profileurl: req.loggedUser.profileurl
+        });
+
+        const plan = await planModel.findById(req.params.id);
+        if (plan) {
+            plan.subscribers.forEach(i => {
+                if (JSON.stringify(i.id) == JSON.stringify(user.id)) {
+                    isalreadypresent = true;
+                }
             });
 
-            const plan = await planModel.findById(req.params.id);
-            if (plan) {
-                plan.subscribers.forEach(i => {
-                    if (JSON.stringify(i.id) == JSON.stringify(user.id)) {
-                        isalreadypresent = true;
-                    }
-                });
-
-                if (!isalreadypresent) {
-                    plan.subscribers.push(user);
-                    plan.save();
-                    return res.send(plan);
-                } else {
-                    return res.json({
-                        message: "You already Subscribed to this plan"
-                    });
-                }
+            if (!isalreadypresent) {
+                plan.subscribers.push(user);
+                plan.save();
+                return res.send(plan);
             } else {
-                return res.status(400).json({ message: "invalid planid" });
+                return res.json({
+                    message: "You already Subscribed to this plan"
+                });
             }
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ message: "internal server error" });
+        } else {
+            return res.status(400).json({ message: "invalid planid" });
         }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "internal server error" });
     }
-);
+});
 
 router.post(
     "/becomecontentcreator/:id",
