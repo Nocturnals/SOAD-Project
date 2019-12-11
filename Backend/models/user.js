@@ -5,7 +5,7 @@ const otheruserschema = require("./Otheruser");
 const othercompetititonschema = require("./Othercompetitions");
 const { NotificationSchema } = require("./Notifications");
 const { OrganizationSchema } = require("./Organizations");
-const artistTypes = require("./artistTypes");
+// const artistTypes = require("./artistTypes");
 const { otherJobOfferSchema } = require("./artistsWanted");
 
 const userSchema = new mongoose.Schema({
@@ -102,6 +102,11 @@ const userSchema = new mongoose.Schema({
     organizations: {
         type: [OrganizationSchema],
         default: []
+    },
+
+    resumeURL: {
+        type: String,
+        default: ""
     }
 });
 

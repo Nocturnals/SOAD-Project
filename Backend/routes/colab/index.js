@@ -131,6 +131,26 @@ router.post(
     }
 );
 
+// route to get the job offer with the id given
+router.get("/jobOffer/:id", async (req, res) => {
+    if (req.params.id !== null) {
+        try {
+            // gets the document with id
+            const jobOfferDoc = await JobOffersModel.findById(req.params.id);
+            if (jobOfferDoc == null) {
+                return res
+                    .status(400)
+                    .json({ message: "No Job exists with such id" });
+            }
+
+            return res.json(jobOfferDoc);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    }
+});
+
 // route to get all the avaliable artists for work
 router.get("/artistForWork/:type", getArtistType, async (req, res) => {
     try {
