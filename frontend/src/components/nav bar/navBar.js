@@ -205,6 +205,17 @@ class NavBar extends Component {
                                                 Create Competition
                                             </button>
                                         </Link>
+                                        <Link
+                                            to="/job/ask"
+                                            style={{
+                                                textDecoration: "none",
+                                                textTransform: "uppercase"
+                                            }}
+                                        >
+                                            <button className="dropdown-item">
+                                                Ask for a Job
+                                            </button>
+                                        </Link>
                                     </div>
                                 </li>
                             </React.Fragment>

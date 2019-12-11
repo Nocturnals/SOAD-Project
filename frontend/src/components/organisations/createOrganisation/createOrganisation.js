@@ -102,7 +102,7 @@ class CreateOrganisation extends Component {
         let searchResults = [];
         const user = this.users[0];
         searchResults.push(
-            <React.Fragment>
+            <React.Fragment key={1}>
                 <div
                     className="row result"
                     onClick={() => {
@@ -133,7 +133,7 @@ class CreateOrganisation extends Component {
         for (let index = 0; index < this.state.selectedUsers.length; index++) {
             const user = this.state.selectedUsers[index];
             selectedUsers.push(
-                <React.Fragment>
+                <React.Fragment key={index}>
                     <div className="row slectedUser">
                         <div className="col-2">
                             <Img

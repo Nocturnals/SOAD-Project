@@ -27,8 +27,7 @@ class HomePage extends Component {
         ];
 
         this.state = {
-            showUploadPostPopUP: false,
-            isLoading: true
+            showUploadPostPopUP: false
         };
 
         this.toggleUploadPostPopUp = this.toggleUploadPostPopUp.bind(this);
@@ -37,12 +36,6 @@ class HomePage extends Component {
     // After Mounting the Component...
     componentDidMount() {
         document.body.scrollTo(0, 0);
-
-        setTimeout(() => {
-            this.setState({
-                isLoading: false
-            });
-        }, 1000);
     }
 
     // Toggling Upload Post PopUp

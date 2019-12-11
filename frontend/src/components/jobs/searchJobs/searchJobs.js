@@ -22,7 +22,6 @@ class SearchJobs extends Component {
         this.formData = qs.parse(this.props.location.search, {
             ignoreQueryPrefix: true
         });
-        console.log(this.formData.jobType);
 
         // Jobs Brief
         this.jobs = [

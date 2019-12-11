@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 import Img from "react-image";
 import { Document, Page } from "react-pdf";
@@ -12,6 +14,8 @@ import categoryProperties from "./categoryProps";
 import "./createPost.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "video-react/dist/video-react.css";
+
+import { createPost } from "../../../actions/index";
 
 class CreatePostComp extends Component {
     constructor(props) {
@@ -28,25 +32,31 @@ class CreatePostComp extends Component {
         ];
 
         this.initialState = {
+            isPrivate: false,
             title: "",
             category: this.categories[0],
             categoryInput: "",
             categoryInputFiles: [],
+            content: "",
+            description: "",
             wrongCategoryInput: false,
-            description: ""
+            submitted: false
         };
 
         this.state = this.initialState;
 
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.toggleCheckBox = this.toggleCheckBox.bind(this);
         this.categoryInputs = this.categoryInputs.bind(this);
         this.clearAndToggle = this.clearAndToggle.bind(this);
         this.previewFiles = this.previewFiles.bind(this);
         this.cancelSelection = this.cancelSelection.bind(this);
+        this.handleFormSubmit = this.handleFormSubmit.bind(this);
     }
 
     handleInputChange = e => {
         const { name, value } = e.target;
+
         this.setState({ [name]: value });
 
         switch (name) {
@@ -61,6 +71,43 @@ class CreatePostComp extends Component {
                 break;
             default:
                 break;
+        }
+    };
+    toggleCheckBox = e => {
+        const { name } = e.target;
+        this.setState({ [name]: !this.state[name] });
+    };
+
+    // Handling deafault form Submission...
+    handleFormSubmit = e => {
+        e.preventDefault();
+        this.setState({ submitted: true });
+        console.log("this.state.submitted");
+
+        const {
+            isPrivate,
+            title,
+            categoryInput,
+            content,
+            description,
+            categoryInputFiles
+        } = this.state;
+        if (title && content && description) {
+            console.log("asdfasdfasdfasdf");
+            const formData = {
+                isPrivate: isPrivate,
+                title: title,
+                category: categoryInput,
+                content: content,
+                description: description,
+                file:
+                    categoryInput !== "Story Writer" &&
+                    categoryInputFiles.length
+                        ? categoryInputFiles[0]
+                        : null
+            };
+            this.props.createPost(formData);
+            console.log("asdfasdfasdfasdf");
         }
     };
 
@@ -269,7 +316,6 @@ class CreatePostComp extends Component {
                     value={this.state.categoryInput}
                     onChange={this.handleInputChange}
                     multiple
-                    required
                 />
                 <label htmlFor="categoryInput" className="categoryInputLabel">
                     <i className="fa fa-upload" aria-hidden="true"></i>{" "}
@@ -295,6 +341,15 @@ class CreatePostComp extends Component {
 
     // Rednering
     render() {
+        const {
+            isPrivate,
+            title,
+            category,
+            content,
+            description,
+            submitted
+        } = this.state;
+
         return (
             <div
                 className={
@@ -302,7 +357,10 @@ class CreatePostComp extends Component {
                     (this.props.showPopUp ? " showUploadPostPopUP" : "")
                 }
             >
-                <div className="row createPostRow justify-content-center">
+                <form
+                    className="row createPostRow justify-content-center"
+                    onSubmit={this.handleFormSubmit}
+                >
                     <div className="col-6 createPost">
                         <div className="row header justify-content-end">
                             <div className="col">
@@ -312,26 +370,34 @@ class CreatePostComp extends Component {
                         <div className="row body">
                             <div className="col">
                                 <div className="row isPrivate">
-                                    <div className="col">
+                                    <div className="col is-private">
+                                        <input
+                                            className="isPrivateCheck"
+                                            name="isPrivate"
+                                            type="checkbox"
+                                            id="isPrivate"
+                                            checked={isPrivate}
+                                            onChange={this.toggleCheckBox}
+                                        ></input>{" "}
+                                        &nbsp;
                                         <label htmlFor="isPrivate">
                                             <h6>Private</h6>
                                         </label>
-                                        <input
-                                            className="isPrivateCheck"
-                                            type="checkbox"
-                                            id="isPrivate"
-                                        ></input>
                                     </div>
                                 </div>
                                 <div className="row title bodyRow">
                                     <div className="col">
                                         <input
+                                            className={
+                                                submitted && !title
+                                                    ? "error"
+                                                    : ""
+                                            }
                                             type="text"
                                             name="title"
                                             placeholder="Title"
-                                            value={this.state.title}
+                                            value={title}
                                             onChange={this.handleInputChange}
-                                            required
                                         />
                                     </div>
                                 </div>
@@ -340,7 +406,7 @@ class CreatePostComp extends Component {
                                         <select
                                             className="custom-select"
                                             name="category"
-                                            value={this.state.category}
+                                            value={category}
                                             onChange={this.handleInputChange}
                                         >
                                             <option disabled="disabled">
@@ -350,16 +416,38 @@ class CreatePostComp extends Component {
                                         </select>
                                     </div>
                                 </div>
-                                <div className="row category-inputs bodyRow">
+                                {category !== "Story Writer" ? (
+                                    <div className="row category-inputs bodyRow">
+                                        <div className="col">
+                                            {this.categoryInputs()}
+                                        </div>
+                                    </div>
+                                ) : null}
+                                <div className="row content bodyRow">
                                     <div className="col">
-                                        {this.categoryInputs()}
+                                        <textarea
+                                            className={
+                                                submitted && !content
+                                                    ? " error"
+                                                    : ""
+                                            }
+                                            name="content"
+                                            value={content}
+                                            onChange={this.handleInputChange}
+                                            placeholder="Post Content..."
+                                        ></textarea>
                                     </div>
                                 </div>
                                 <div className="row description bodyRow">
                                     <div className="col">
                                         <textarea
+                                            className={
+                                                submitted && !description
+                                                    ? " error"
+                                                    : ""
+                                            }
                                             name="description"
-                                            value={this.state.description}
+                                            value={description}
                                             onChange={this.handleInputChange}
                                             placeholder="Description"
                                         ></textarea>
@@ -369,7 +457,7 @@ class CreatePostComp extends Component {
                         </div>
                         <div className="row buttons justify-content-center">
                             <div className="col-4">
-                                <button>Submit</button>
+                                <button type="submit">Submit</button>
                             </div>
                             <div className="col-4">
                                 <button onClick={this.clearAndToggle}>
@@ -378,10 +466,14 @@ class CreatePostComp extends Component {
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         );
     }
 }
 
-export default CreatePostComp;
+CreatePostComp.propTypes = {
+    createPost: PropTypes.func.isRequired
+};
+
+export default connect(null, { createPost })(CreatePostComp);
