@@ -35,7 +35,7 @@ const otherJobSchema = new mongoose.Schema({
 
     status: {
         type: String,
-        enum: ["onGoing", "done", "cancelled"]
+        enum: ["working", "done", "cancelled", "pending"]
     }
 });
 

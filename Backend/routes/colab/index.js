@@ -3,6 +3,7 @@ const express = require("express");
 const artistTypes = require("../../models/artistTypes");
 const JobsAvailableModel = require("../../models/jobsApplied");
 const JobOffersModel = require("../../models/artistsWanted");
+const { otherJobOfferSchema } = require("../../models/artistsWanted");
 const UserModel = require("../../models/user");
 const { OtheruserModel } = require("../../models/Otheruser");
 const { getArtistType } = require("./helper");
@@ -48,7 +49,7 @@ router.post(
         // TODO:: upload the cv file and get its url
 
         // create the new jogapplied model
-        const jobApplied = new JobsAvailableModel({
+        const jobAvailable = new JobsAvailableModel({
             artistType: req.artistType,
             user: user,
             availableAt: req.body.availableAt,
@@ -62,7 +63,7 @@ router.post(
         try {
             // saving to database
             const currentUser = await UserModel.findById(req.loggedUser._id);
-            currentUser.jobsApplied.push(jobApplied);
+            currentUser.jobsApplied.push(jobAvailable);
 
             const doc = await currentUser.save();
 
@@ -103,17 +104,20 @@ router.post(
         });
 
         // create artist wanted model
-        const artistWanted = new JobOffersModel({
+        const jobOffer = new JobOffersModel({
             artistType: req.artistType,
+            title: req.title,
             jobProvider: jobProvider,
+            workAt: req.body.workAt,
             workDuration: req.body.workDuration,
+            workType: req.body.workType,
             salary: req.body.salary,
             descriptionOfJob: req.body.descriptionOfJob,
-            workAt: req.body.workAt
+            responsibilities: req.body.responsibilities
         });
 
         try {
-            const doc = await artistWanted.save();
+            const doc = await jobOffer.save();
             return res
                 .status(200)
                 .json({ message: "Successfully created job offer", doc: doc });
@@ -131,10 +135,10 @@ router.get(
     async (req, res) => {
         try {
             // fetch the database to get all works of type artists
-            const allArtistsInterested = await JobsAvailableModel.find().where({
+            const allArtistsAvailable = await JobsAvailableModel.find().where({
                 artistType: req.artistType
             });
-            return res.json(allArtistsInterested);
+            return res.json(allArtistsAvailable);
         } catch (error) {
             console.log(error);
             return res.status(500).json({ message: "Internal server error" });
@@ -149,11 +153,11 @@ router.get(
     async (req, res) => {
         try {
             // fetch the database to get all works of type artists
-            const allArtistsInterested = await JobsAvailableModel.find().where({
+            const allArtistsAvailable = await JobsAvailableModel.find().where({
                 artistType: req.artistType,
                 availableAt: req.params.area
             });
-            return res.json(allArtistsInterested);
+            return res.json(allArtistsAvailable);
         } catch (error) {
             console.log(error);
             return res.status(500).json({ message: "Internal server error" });
@@ -195,7 +199,7 @@ router.get("/getJobOffers/:type/:area", getArtistType, async (req, res) => {
 // route for appling for a job offer
 router.post("/applyJob", verifyToken, verifyUserWithToken, async (req, res) => {
     const validatedData = applyJobValidation(res.body);
-    console.log(validatedData);
+    // console.log(validatedData);
 
     if (validatedData.error) {
         return res
@@ -226,8 +230,20 @@ router.post("/applyJob", verifyToken, verifyUserWithToken, async (req, res) => {
                 profileurl: req.loggedUser.profileurl
             });
 
+            // push the new other user to the list of appliedusers
             jobOfferDoc.applied.push(newOtheruser);
             const UpdatedOfferdoc = await jobOfferDoc.save();
+
+            // add the otherJobOffer schema to the user list of appliedjobs
+            const newOtherJobOffer = new otherJobOfferSchema({
+                _id: jobOfferDoc._id,
+                title: jobOfferDoc.title,
+                artistType: jobOfferDoc.artistType,
+                jobProvider: jobOfferDoc.jobProvider,
+                salary: jobOfferDoc.salary,
+                status: "pending"
+            });
+
             return res.status(200).json(UpdatedOfferdoc);
         } else {
             return res.status(400).json({ message: "Invalid jobOffer id" });
