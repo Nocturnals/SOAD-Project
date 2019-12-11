@@ -3,6 +3,7 @@ const express = require("express");
 const artistTypes = require("../../models/artistTypes");
 const jobsAppliedModel = require("../../models/jobsApplied");
 const artistWantedModel = require("../../models/artistsWanted");
+const UserModel = require("../../models/user");
 const { OtheruserModel } = require("../../models/Otheruser");
 const { getArtistType } = require("./helper");
 const { verifyToken, verifyUserWithToken } = require("../auth/helper");
@@ -44,6 +45,8 @@ router.post(
             profileurl: req.loggedUser.profileurl
         });
 
+        // TODO:: upload the cv file and get its url
+
         // create the new jogapplied model
         const jobApplied = new jobsAppliedModel({
             artistType: req.artistType,
@@ -52,12 +55,16 @@ router.post(
             freeTimeFrom: req.body.freeTimeFrom,
             freeTimeTill: req.body.freeTimeTill,
             portpolioSite: req.body.portpolioSite || ""
+            // cvLocation: req.
         });
 
         // save the new doc to database
         try {
             // saving to database
-            const doc = await jobApplied.save();
+            const currentUser = await UserModel.findById(req.loggedUser._id);
+            currentUser.jobsApplied.push(jobApplied);
+
+            const doc = await currentUser.save();
 
             // return success message
             return res.status(200).json({

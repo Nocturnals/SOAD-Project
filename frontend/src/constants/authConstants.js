@@ -1,4 +1,5 @@
 export const userAuthConst = {
+    LOAD_USER_REQUEST: "LOAD_USER_REQUEST",
     LOAD_USER: "LOAD_USER",
 
     REGISTER_REQUEST: "REGISTER_REQUEST",

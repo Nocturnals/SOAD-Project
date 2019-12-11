@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-import {
-    BrowserRouter as Router,
-    Route,
-    Redirect,
-    Switch
-} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import store from "./store";
@@ -32,7 +27,7 @@ class App extends Component {
                 return <Redirect to="/" />;
             }
         }
-
+        // store.dispatch({ type: "LOAD_DONE" });
         store.dispatch({ type: "ALERT_CLEAR" });
     }
 

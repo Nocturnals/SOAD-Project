@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -10,6 +10,16 @@ import PostComments from "../helperCards/comments/postComments/comments";
 
 import "./post.css";
 
+export class Post {
+    constructor(name, time, job, location, liked) {
+        this.name = name;
+        this.time = time;
+        this.job = job;
+        this.location = location;
+        this.liked = liked;
+    }
+}
+
 class Comment {
     constructor(commentedUser, comment, image) {
         this.commentedUser = commentedUser;
@@ -19,6 +29,8 @@ class Comment {
 }
 
 class PostComp extends Component {
+    _isMounted = false;
+
     constructor(props) {
         super(props);
 
@@ -55,7 +67,7 @@ class PostComp extends Component {
             )
         ];
 
-        this.state = {
+        this.initialState = {
             name: this.post_details.name,
             time: this.post_details.time,
             job: this.post_details.job,
@@ -69,6 +81,7 @@ class PostComp extends Component {
             newCommentHighlight: false,
             addCommentError: ""
         };
+        this.state = { ...this.initialState };
 
         this.alterLike = this.alterLike.bind(this);
         this.toggleCommentsSection = this.toggleCommentsSection.bind(this);
@@ -76,8 +89,15 @@ class PostComp extends Component {
         this.dropDownEventListener = this.dropDownEventListener.bind(this);
         this.handleCommentInput = this.handleCommentInput.bind(this);
         this.addComment = this.addComment.bind(this);
-
-        this.dropDownEventListener();
+    }
+    componentDidMount() {
+        this.dropDownEventListener(false);
+        this._isMounted = true;
+    }
+    componentWillUnmount() {
+        this.setState({ ...this.initialState });
+        this._isMounted = false;
+        this.dropDownEventListener(true);
     }
 
     // Handling new comment input change...
@@ -140,19 +160,29 @@ class PostComp extends Component {
     };
 
     // DoropDown Event Listener...
-    dropDownEventListener = () => {
-        document.addEventListener("click", event => {
-            if (
-                !event.target.matches("#post-more-" + this.index) &&
-                !event.target.matches("#post-more-button-" + this.index)
-            ) {
-                this.setState({
-                    moreOptionsDrop: this.moreOptionsDrop
-                        ? false
-                        : this.moreOptionsDrop
-                });
-            }
-        });
+    dropDownEventListener = remove => {
+        if (remove) {
+            console.log("Asdasd");
+            document.removeEventListener("click", event => {
+                this.eventListener(event);
+            });
+        } else {
+            document.addEventListener("click", event => {
+                this.eventListener(event);
+            });
+        }
+    };
+    eventListener = event => {
+        if (
+            !event.target.matches("#post-more-" + this.index) &&
+            !event.target.matches("#post-more-button-" + this.index)
+        ) {
+            this.setState({
+                moreOptionsDrop: this.moreOptionsDrop
+                    ? false
+                    : this.moreOptionsDrop
+            });
+        }
     };
 
     // Rendering...
@@ -166,7 +196,7 @@ class PostComp extends Component {
                 id={"post-" + this.index}
                 key={this.index}
             >
-                <div className="post-header row">
+                <div className="row post-header">
                     <div className="col-3">
                         <div
                             className="user-photo"
@@ -203,7 +233,7 @@ class PostComp extends Component {
                                     &nbsp;{this.state.time} ago
                                 </div>
                             </div>
-                            <div className="user-about col-5 column-2">
+                            <div className="col-5 user-about column-2">
                                 <div className="user-job">
                                     <i
                                         className="fa fa-bookmark"
@@ -219,7 +249,7 @@ class PostComp extends Component {
                                     &nbsp;&nbsp;{this.state.location}
                                 </div>
                             </div>
-                            <div className="more-options col-2 column-3">
+                            <div className="col-2 more-options column-3">
                                 <button
                                     onClick={this.toggleDropDown}
                                     id={"post-more-button-" + this.index}
@@ -255,9 +285,9 @@ class PostComp extends Component {
                 </div>
 
                 {/* Post Content */}
-                <div className="post-content row">
+                <div className="row post-content">
                     <div className="col">
-                        <div className="post-descr row">
+                        <div className="row post-descr">
                             <div className="col-12">
                                 <p>
                                     'handleResponse' is defined but never used
@@ -265,7 +295,7 @@ class PostComp extends Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="post-image col">
+                            <div className="col post-image">
                                 <Img
                                     src={img}
                                     loader={
@@ -284,7 +314,7 @@ class PostComp extends Component {
                 </div>
 
                 {/* Likes and Comments */}
-                <div className="post-impressions row">
+                <div className="row post-impressions">
                     <div className="col">
                         <span
                             className={
@@ -298,7 +328,11 @@ class PostComp extends Component {
                                         : "fa fa-heart-o"
                                 }
                                 aria-hidden="true"
-                                onClick={this.alterLike}
+                                onClick={
+                                    this.props.auth.isAuthed
+                                        ? this.alterLike
+                                        : null
+                                }
                             ></i>
                             <button>{this.state.likes}</button>
                         </span>

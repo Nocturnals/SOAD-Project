@@ -1,11 +1,11 @@
 .uploadPostPopUP {
     position: fixed; top: 0;
-    padding: 100px 0;
+    padding: 90px 0 0 0;
     width: 100%;
     height: 100%;
     z-index: 2000;
     background-color: rgba(0, 0, 0, 0.7);
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     display: none;
 }
@@ -35,9 +35,25 @@
 .createPost .bodyRow {
     margin: 20px 0;
 }
-.createPost .body input {
+.createPost .body .error {
+    border-bottom: 0.5px solid red;
+}
+.createPost .body .bodyRow input {
     width: 100%;
     padding: 10px 20px;
+}
+
+.createPost .body .isPrivate {
+    padding: 0 20px; margin: auto;
+}
+.createPost .body .isPrivate .is-private {
+    text-align: right;
+}
+.createPost .body .isPrivate .is-private label {
+    padding-top: 10px; margin: 0;
+}
+.createPost .body .isPrivate .is-private h6 {
+    margin: 0;
 }
 
 .createPost .body input,

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import ProfileCard from "../helperCards/profileCards/profileCard";
+import ResultCard from "./reslutCards/resultCard";
 
 import "./search.css";
 
@@ -10,7 +10,7 @@ class SearchComp extends Component {
 
         this.state = {
             searchType: "Users",
-            searchText: ""
+            searchInput: ""
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -25,9 +25,10 @@ class SearchComp extends Component {
     profileCardsComp = cards => {
         let pCards = [];
         for (let index = 0; index < cards.length; index++) {
-            const pCard = cards[index];
-            pCards.push(<ProfileCard userDetails="" />);
+            pCards.push(<ResultCard userDetails="" />);
         }
+
+        return pCards;
     };
 
     render() {
@@ -63,16 +64,15 @@ class SearchComp extends Component {
                                                 </option>
                                             </select>
                                         </div>
-                                        <div className="searchInput col-7">
+                                        <div className="searchInput col-9">
                                             <input
                                                 type="text"
-                                                name="searchText"
+                                                name="searchInput"
                                                 onChange={this.handleChange}
+                                                value={this.state.searchInput}
                                                 placeholder="Search Here"
+                                                autoFocus="true"
                                             />
-                                        </div>
-                                        <div className="searchButton col-2">
-                                            <button>Search</button>
                                         </div>
                                     </div>
                                 </div>
@@ -86,15 +86,16 @@ class SearchComp extends Component {
                                     <h4>{this.state.searchType}</h4>
                                 </div>
                             </div>
-                            <div className="row">
-                                <h5>
+                            <div className="row resultBlocks">
+                                {/* <h5>
                                     {this.state.searchText
                                         ? 'No search results found for "' +
                                           this.state.searchText +
                                           '" in ' +
                                           this.state.searchType
                                         : null}
-                                </h5>
+                                </h5> */}
+                                <ResultCard />
                             </div>
                         </div>
                     </div>

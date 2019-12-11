@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { history } from "../helpers";
 
-import { userAuthConst, alertConstants } from "../constants";
+import { userAuthConst } from "../constants";
 import setAuthTokenHeader from "../setAuthTokenHeader";
 import alertActions from "./alertActions";
 
@@ -10,7 +10,7 @@ import alertActions from "./alertActions";
 export function login(email, password) {
     return dispatch => {
         // change the loading state to true
-        dispatch(requestAction({ email }));
+        dispatch(requestAction());
 
         const user = {
             email: email,
@@ -20,6 +20,7 @@ export function login(email, password) {
             .post("http://localhost:4000/api/auth/login", user)
             .then(res => {
                 const { authorization } = res.headers;
+                console.log(res.data);
 
                 localStorage.setItem("userToken", authorization);
                 setAuthTokenHeader(authorization);
@@ -28,20 +29,27 @@ export function login(email, password) {
                 history.goBack();
             })
             .catch(err => {
-                const err_msg = err.response.data.message;
-                dispatch(failureAction());
-                dispatch(alertActions.error(err_msg));
+                try {
+                    const err_msg = err.response.data.message;
+                    dispatch(failureAction({ email }));
+                    dispatch(alertActions.error(err_msg));
+                } catch (error) {
+                    dispatch(failureAction({ email }));
+                    dispatch(
+                        alertActions.error("BackEnd sever didn't respond")
+                    );
+                }
             });
     };
 
-    function requestAction(email) {
+    function requestAction() {
         return { type: userAuthConst.LOGIN_REQUEST };
     }
     function successAction(user) {
         return { type: userAuthConst.LOGIN_SUCCESS, user: user };
     }
-    function failureAction(error) {
-        return { type: userAuthConst.LOGIN_FAILURE };
+    function failureAction(email) {
+        return { type: userAuthConst.LOGIN_FAILURE, email };
     }
 }
 
@@ -71,16 +79,28 @@ export function register(email, username, dateofbirth, password) {
                     type: userAuthConst.REGISTER_SUCCESS,
                     user: res.data
                 });
+
+                history.goBack();
             })
             .catch(err => {
-                dispatch({ type: userAuthConst.REGISTER_FAILURE });
-                dispatch(alertActions.error(err.response.data));
+                try {
+                    dispatch({ type: userAuthConst.REGISTER_FAILURE });
+                    dispatch(alertActions.error(err.response.data));
+                } catch (error) {
+                    console.log(error);
+                    dispatch(
+                        alertActions.error("Backend Server didn't respond")
+                    );
+                }
             });
     };
 }
 
 export function getUserWithToken(token) {
     return dispatch => {
+        // Request User
+        dispatch({ type: userAuthConst.LOAD_USER_REQUEST });
+
         // set the token to headers
         setAuthTokenHeader(token);
 

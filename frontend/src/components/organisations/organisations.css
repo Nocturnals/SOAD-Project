@@ -4,36 +4,80 @@
 }
 /* User Organisations */
 .organisations .userOrganisations {
-    text-align: center;
     margin: 5px;
     background-color: white;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
     overflow: auto;
     white-space: nowrap;
 }
+/* Organisations Search */
+.organisations .userOrganisations .search {
+    height: 100%; width: 300px;
+    margin-right: 20px;
+    padding: 20px 30px 15px 30px;
+    vertical-align: bottom;
+    border: none;
+    outline: none;
+    border-bottom: 3px solid rgba(0, 0, 0, 0);
+    border-right: 1px solid rgb(135, 71, 179);
+    font-weight: 500;
+    transition: all 0.2s linear;
+}
+.organisations .userOrganisations .search::placeholder {
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.4);
+}
+.organisations .userOrganisations .search:focus 
+{
+    width: 400px;
+    border-right: 1px solid rgba(135, 71, 179, 0);
+    border-bottom: 3px solid rgb(135, 71, 179);
+}
+/* Organisations */
 .organisations .userOrganisations .organisation {
-    margin: 5px;
+    margin: 5px 10px;
     padding: 0;
-    /* width: 80px; */
     text-align: center;
+    color: seashell;
+    background-color: rgb(83, 29, 119);
+    border-radius: 50px;
     display: inline-block;
+    transition: all 0.3s linear;
 }
 .organisations .userOrganisations .organisation .image {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     margin: 0;
     border-radius: 50%;
 }
 .organisations .userOrganisations .organisation .name {
-    display: inline-block;
-    font-size: 0rem;
+    margin: auto 20px auto 10px;
+    font-size: 1rem;
     transition: all 0.2s linear;
+    display: inline-block;
 }
 .organisations .userOrganisations .organisation:nth-child(n):hover {
+    color: rgb(83, 29, 119);
+    background: transparent;
     cursor: pointer;
 }
-.organisations .userOrganisations .organisation:nth-child(n):hover > .name {
-    font-size: 1rem;
+
+/* Body */
+.organisations .body {
+    width: 1350px; margin: auto;
+    padding: 0;
+}
+/* Members */
+.organisations .body .members {
+    max-width: 310px; padding: 0;
+    background-color: white;
+}
+/* Header */
+.organisations .body .members .orgMemHeader {
+    text-align: left;
+    padding: 10px 20px; margin: auto;
+    color: seashell;
+    background-color: rgb(68, 6, 109);
 }
 
 

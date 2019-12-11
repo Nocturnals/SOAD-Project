@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const artistTypes = require("./artistTypes");
 const otherUserSchema = require("./Otheruser");
 
+const workTypes = ["Full-time", "Part-time", "Temporary", "Intern"];
+
 const artistWantedSchema = new mongoose.Schema({
     artistType: {
         enum: [...artistTypes],
@@ -25,6 +27,13 @@ const artistWantedSchema = new mongoose.Schema({
         required: true
     },
 
+    workType: {
+        enum: [...workTypes],
+        type: String,
+        required: true,
+        default: "Full-time"
+    },
+
     salary: {
         type: String,
         required: true
@@ -44,3 +53,4 @@ const artistWantedSchema = new mongoose.Schema({
 const artistWantedModel = mongoose.model("artistWanted", artistWantedSchema);
 
 module.exports = artistWantedModel;
+module.exports.workType = workTypes;
