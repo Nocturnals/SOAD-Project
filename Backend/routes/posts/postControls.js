@@ -544,6 +544,7 @@ exports.getSpecialPost = async ( req, res) => {
         const fields = {
             title: true,
             content: true,
+            description: true,
             date: true,
             likes: true,
             owner: true,
