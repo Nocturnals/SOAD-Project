@@ -20,7 +20,8 @@ const otherJobOfferSchema = new mongoose.Schema({
     artistType: {
         enum: [...artistTypes],
         type: String,
-        required: true
+        required: true,
+        lowercase: true
     },
 
     jobProvider: {
@@ -35,7 +36,8 @@ const otherJobOfferSchema = new mongoose.Schema({
 
     status: {
         type: String,
-        enum: ["working", "done", "cancelled", "pending"]
+        enum: ["working", "done", "cancelled", "pending"],
+        lowercase: true
     }
 });
 
@@ -63,7 +65,8 @@ const jobOfferSchema = new mongoose.Schema({
 
     workAt: {
         type: String,
-        required: true
+        required: true,
+        lowercase: true
     },
 
     workDuration: {
@@ -75,7 +78,8 @@ const jobOfferSchema = new mongoose.Schema({
         enum: [...workTypes],
         type: String,
         required: true,
-        default: "Full-time"
+        default: "FULL-TIME",
+        uppercase: true
     },
 
     salary: {
