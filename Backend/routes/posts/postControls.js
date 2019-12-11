@@ -11,7 +11,13 @@ const { ReplyModel, CommentsModel } = require("../../models/Comments");
 const artist = require("../../models/artistTypes");
 const { OtheruserModel } = require("../../models/Otheruser");
 const Image = require("../../models/Image");
-const { upload } = require("./imageUpload");
+const {upload} = require("./imageUpload");
+const {Notification} = require("../../models/Notifications");
+const User = require("../../models/user");
+
+
+
+
 
 exports.createPost = async (req, res, next) => {
     const validatedData = createPostValidation(req.body);
@@ -95,6 +101,28 @@ exports.like = async (req, res) => {
             post.likedBy.push(likeduser);
 
             post.likes = post.likes + 1;
+            const u = likeduser.username;
+            const msg = u + " liked your post";
+            const owner = post.owner[0]._id;
+
+            const notify = new Notification(
+                {
+                    userid : owner,
+                    message : msg,
+                    url: req.body.url,
+                }
+            );
+            const saved = await notify.save();
+
+            const notifyUser = await User.findById(
+                {
+                    _id: owner
+                }
+            );
+            notifyUser.notifications = notifyUser.notifications.push(saved);
+
+            await notifyUser.save;
+
 
             try {
                 const savedpost = await post.save();

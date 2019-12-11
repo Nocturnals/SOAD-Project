@@ -1,0 +1,9 @@
+export const orgConst = {
+    GET_ALL_REQUEST: "GET_ALL_REQUEST",
+    GET_ALL_SUCCESS: "GET_ALL_SUCCESS",
+
+    CREATE_NEW: "CREATE_NEW",
+    REQUEST_USERS: "REQUEST_USERS",
+
+    ADD_USER: "ADD_USER"
+};
