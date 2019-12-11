@@ -141,7 +141,7 @@ router.post("/new/:recipient", async (req, res, next) => {
     }
 
     const conversation = new Conversation({
-        participants: [req.user._id, req.params.recipient]
+        participants: [req.loggedUser._id, req.params.recipient]
     });
 
     conversation.save(function(err, newConversation) {
@@ -218,7 +218,7 @@ router.post("/:conversationId", async (req, res, next) => {
     const reply = new Message({
         conversationId: req.params.conversationId,
         body: req.body.composedMessage,
-        author: req.user._id
+        author: req.loggedUser
     });
 
     reply.save(function(err, sentReply) {
