@@ -558,18 +558,45 @@ exports.getSpecialPost = async ( req, res) => {
                 $gte: firstDay,
                 $lte: lastDay
             },
-            "imageurls":{$ne: []},
+            "imageurls":{$ne: [],$ne:[{}]},
+            "isPrivate":{$ne: true},
             $or:[
                 {category:"Photographer"},
                 {category:"Painter"}
               ]
 
         };
-        const posts = await Post.find(query).limit(5)        
+        const posts = await Post.find(query).limit(10)        
             .select(fields)
             .sort({ datefield: -1 });
 
-        console.log(posts);
+/*        
+        for (var i=0;i<posts.length;i++)
+        {
+            var month = new Array();
+            month[0] = "January";
+            month[1] = "February";
+            month[2] = "March";
+            month[3] = "April";
+            month[4] = "May";
+            month[5] = "June";
+            month[6] = "July";
+            month[7] = "August";
+            month[8] = "September";
+            month[9] = "October";
+            month[10] = "November";
+            month[11] = "December";
+            var d = new Date(posts[i].date);
+            var n = month[d.getMonth()];
+            var w = d.getFullYear();
+            var date = d.getDate();
+            const str = date +"&nbsp;"+ n+"&nbsp;" + w;
+            posts[i].date = str;
+            
+            console.log(posts[i].date);
+        };  
+*/        console.log(posts);
+
         return res.status(200).json(posts);
 
 
