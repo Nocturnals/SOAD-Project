@@ -20,6 +20,12 @@ export default function(state = initialState, action) {
                 filteredJobs: action.interestedJobs,
                 isLoading: false
             };
+        case jobsConstants.GET_FILTERED_JOBS_FAILURE:
+            return {
+                ...state,
+                filteredJobs: [],
+                isLoading: false
+            };
         case jobsConstants.GET_JOB_REQUEST:
             return {
                 ...state,
@@ -30,6 +36,12 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 currentJob: action.job,
+                isLoading: false
+            };
+        case jobsConstants.GET_JOB_FAILURE:
+            return {
+                ...state,
+                currentJob: [],
                 isLoading: false
             };
         default:

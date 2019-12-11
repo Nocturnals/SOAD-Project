@@ -18,6 +18,7 @@ export function getFilteredJobs(options) {
             })
             .catch(err => {
                 console.log(err);
+                dispatch(failureAction());
             });
     };
 
@@ -28,6 +29,11 @@ export function getFilteredJobs(options) {
         return {
             type: jobsConstants.GET_FILTERED_JOBS_SUCCESS,
             flteredJobs: jobs
+        };
+    }
+    function failureAction() {
+        return {
+            type: jobsConstants.GET_FILTERED_JOBS_FAILURE
         };
     }
 }
@@ -44,6 +50,7 @@ export function getJobById(job_id) {
             })
             .catch(err => {
                 console.log(err);
+                dispatch(failureAction());
                 dispatch({
                     type: alertConstants.ERROR,
                     message: err.response.data.message
@@ -56,5 +63,10 @@ export function getJobById(job_id) {
     }
     function successAction(job) {
         return { type: jobsConstants.GET_JOB_SUCCESS, job: job };
+    }
+    function failureAction() {
+        return {
+            type: jobsConstants.GET_JOB_FAILURE
+        };
     }
 }
