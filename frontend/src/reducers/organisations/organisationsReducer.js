@@ -2,6 +2,7 @@ import { orgConst } from "../../constants/index";
 
 const initialState = {
     loggedUserOrganisations: null,
+    newOrg: null,
     isLoading: false
 };
 
@@ -17,6 +18,18 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 loggedUserOrganisations: action.organisations,
+                isLoading: false
+            };
+        case orgConst.CREATE_NEW_REQUEST:
+            return {
+                ...state,
+                newOrg: action.name,
+                isLoading: true
+            };
+        case orgConst.CREATE_NEW_SUCCESS:
+            return {
+                ...state,
+                newOrg: null,
                 isLoading: false
             };
         default:

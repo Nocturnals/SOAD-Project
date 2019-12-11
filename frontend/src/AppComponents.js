@@ -87,6 +87,8 @@ class MainAppComponents extends Component {
             />
         );
 
+        console.log(this.props.auth);
+
         return (
             <Router>
                 <Switch>
