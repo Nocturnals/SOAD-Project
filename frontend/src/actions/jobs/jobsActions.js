@@ -6,8 +6,12 @@ export function getInterestedJobs(interest) {
     return dispatch => {
         dispatch(requestAction());
 
+        if (!interest) {
+            interest = "Photographer";
+        }
+
         axios
-            .get(`http://localhost:4000/api/colab/getJobOffers/${interest}`)
+            .get(`http://localhost:4000/api/colab/jobOffers/${interest}`)
             .then(res => {
                 console.log(res);
                 dispatch(successAction(res.data));
@@ -28,7 +32,7 @@ export function getInterestedJobs(interest) {
     }
 }
 
-export function getJob(job_id) {
+export function getJobById(job_id) {
     return dispatch => {
         dispatch(requestAction());
 
@@ -40,6 +44,10 @@ export function getJob(job_id) {
             })
             .catch(err => {
                 console.log(err);
+                dispatch({
+                    type: alertConstants.ERROR,
+                    message: err.response.data.message
+                });
             });
     };
 

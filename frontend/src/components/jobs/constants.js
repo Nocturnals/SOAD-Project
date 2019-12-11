@@ -1,6 +1,7 @@
 export const jobStatusConst = {
     DONE: "done",
-    ONGOING: "onGoing",
+    WORKING: "working",
+    PENDING: "pending",
     CANCELLED: "cancelled"
 };
 
