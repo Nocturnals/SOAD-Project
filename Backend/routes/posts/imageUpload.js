@@ -30,6 +30,7 @@ exports.upload = async (req, res, next) => {
             if (!req.file) {
                 next();
             }
+            else {
             const newFileName = `${Date.now()}-${req.file.originalname}`;
 
             // Create a new blob in the bucket and upload the file data.
@@ -71,6 +72,7 @@ exports.upload = async (req, res, next) => {
             });
 
             blobStream.end(req.file.buffer);
+          }
 
             break;
     }

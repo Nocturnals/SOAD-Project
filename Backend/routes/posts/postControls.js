@@ -12,7 +12,7 @@ const artist = require("../../models/artistTypes");
 const { OtheruserModel } = require("../../models/Otheruser");
 const Image = require("../../models/Image");
 const {upload} = require("./imageUpload");
-const {Notification} = require("../../models/Notifications");
+const Notification = require("../../models/Notifications");
 const User = require("../../models/user");
 
 
@@ -68,6 +68,7 @@ exports.createPost = async (req, res, next) => {
 
     try {
         const savedpost = await post.save();
+        console.log(savedpost._id);
         res.json({ message: "Uploaded Successfully" });
     } catch (err) {
         res.status(500).json({ message: err });
@@ -76,6 +77,7 @@ exports.createPost = async (req, res, next) => {
 
 exports.like = async (req, res) => {
     console.log(req.body);
+    
 
     try {
         const post = await Post.findById({
@@ -104,6 +106,11 @@ exports.like = async (req, res) => {
             const u = likeduser.username;
             const msg = u + " liked your post";
             const owner = post.owner[0]._id;
+            const notifyUser = await User.findById(
+                { 
+                    _id: owner
+                }
+            );
 
             const notify = new Notification(
                 {
@@ -114,18 +121,31 @@ exports.like = async (req, res) => {
             );
             const saved = await notify.save();
 
-            const notifyUser = await User.findById(
-                {
-                    _id: owner
-                }
-            );
-            notifyUser.notifications = notifyUser.notifications.push(saved);
+            try {
+                const saved = await notify.save();
+                console.log(saved);
+            } catch (err) {
+                return res.status(500).json({ message: err });
+            }
 
-            await notifyUser.save;
+            let n = notifyUser.notifications;
+            
+            n = n.push(saved);
+            console.log(notifyUser);
+
+
+            
+            try {
+                const saveduser = await notifyUser.save();
+                console.log(saveduser);
+            } catch (err) {
+                return res.status(500).json({ message: err });
+            }
 
 
             try {
                 const savedpost = await post.save();
+                console.log(savedpost);
                 return res.json(savedpost);
             } catch (err) {
                 return res.status(500).json({ message: err });
@@ -488,6 +508,76 @@ exports.getAllPosts = async (req, res, next) => {
     }
 };
 
+exports.getSinglePost = async (req, res, next) => {
+    try {
+        const fields = {
+            title: true,
+            content: true,
+            date: true,
+            likes: true,
+            owner: true,
+            category: true,
+            imageurls: true,
+            comments: true,
+        };
+        const post = await Post.findById({_id:req.params.postid})
+            .select(fields)
+            .sort({ datefield: -1 });
+        console.log(post);
+        if (post.isPrivate)
+        {
+            return res.json({ message: "This is a private post" });
+        }
+        else 
+        {
+            return res.status(200).json(post);
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "internal server error" });
+    }
+};
+
+
+exports.getSpecialPost = async ( req, res) => {
+    try {
+        const fields = {
+            title: true,
+            content: true,
+            date: true,
+            likes: true,
+            owner: true,
+            category: true,
+            imageurls: true,
+        };
+        var date = new Date();
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        var query = {
+            "date":{
+                $gte: firstDay,
+                $lte: lastDay
+            },
+            "imageurls":{$ne: []},
+            $or:[
+                {category:"Photographer"},
+                {category:"Painter"}
+              ]
+
+        };
+        const posts = await Post.find(query).limit(5)        
+            .select(fields)
+            .sort({ datefield: -1 });
+
+        console.log(posts);
+        return res.status(200).json(posts);
+
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "internal server error" });
+    }
+};
 /*
  */
 /*
