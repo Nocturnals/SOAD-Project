@@ -11,7 +11,10 @@ import { jobStatusConst, employment_type } from "../constants";
 
 import { JobBrief } from "../classes";
 
+import { ClipLoader } from "react-spinners";
 import "./searchJobs.css";
+
+import { getInterestedJobs } from "../../../actions/index";
 
 const qs = require("query-string");
 
@@ -22,44 +25,6 @@ class SearchJobs extends Component {
         this.formData = qs.parse(this.props.location.search, {
             ignoreQueryPrefix: true
         });
-
-        // Jobs Brief
-        this.jobs = [
-            new JobBrief(
-                "Web Development",
-                "Photography",
-                "Google",
-                "cancelled",
-                "20,000"
-            ),
-            new JobBrief(
-                "Database Developer",
-                "Vfx Artist",
-                "Microsoft",
-                "done"
-            ),
-            new JobBrief(
-                "Web Development",
-                "Photography",
-                "Google",
-                "cancelled",
-                "20,000"
-            ),
-            new JobBrief(
-                "Database Developer",
-                "Vfx Artist",
-                "Microsoft",
-                "onGoing",
-                "10,000"
-            ),
-            new JobBrief(
-                "Web Development",
-                "Photography",
-                "Google",
-                "done",
-                "20,000"
-            )
-        ];
 
         // Sorting and Filtering
         this.myJobsSorts = ["Application Status", "Date Applied"];
@@ -114,7 +79,9 @@ class SearchJobs extends Component {
             sliderValue: [25, 50]
         };
 
+        // Component State...
         this.state = {
+            getInterestedJobsFetched: false,
             sortMyJobs: this.myJobsSorts[0],
             sortByApplStatType: 0,
             showMyJobsSortDD: false,
@@ -226,9 +193,9 @@ class SearchJobs extends Component {
     };
 
     // Displaying My Jobs...
-    myJobsDone = () => {
+    displayMyJobs = myJobs => {
         let jobsComps = [];
-        const jobs = this.sortByApplStatus();
+        const jobs = this.sortByApplStatus(myJobs);
 
         for (let index = 0; index < jobs.length; index++) {
             const job = jobs[index];
@@ -300,13 +267,13 @@ class SearchJobs extends Component {
 
         return jobsComps;
     };
-    sortByApplStatus = () => {
+    sortByApplStatus = myJobs => {
         let jobsDone = [];
         let jobsCancelled = [];
         let jobsOnGoing = [];
 
-        for (let index = 0; index < this.jobs.length; index++) {
-            const job = this.jobs[index];
+        for (let index = 0; index < myJobs.length; index++) {
+            const job = myJobs[index];
             switch (job.status) {
                 case jobStatusConst.DONE:
                     jobsDone.push(job);
@@ -343,6 +310,18 @@ class SearchJobs extends Component {
     };
 
     render() {
+        const { auth, jobs } = this.props;
+        // Fetch Interested Jobs if not fetched before...
+        if (
+            !auth.isLoading &&
+            auth.isAuthed &&
+            !this.state.getInterestedJobsFetched
+        ) {
+            this.props.getInterestedJobs(auth.user.primaryInterest);
+            this.setState({ getInterestedJobsFetched: true });
+        }
+
+        // State Variables...
         const {
             sortMyJobs,
             showMyJobsSortDD,
@@ -352,13 +331,14 @@ class SearchJobs extends Component {
             qualificationSearchInput
         } = this.state;
 
+        // Return Statement...
         return (
             <React.Fragment>
                 <NavBar contract={true} />
                 <div className="container-fluid">
                     <div className="row jobsSearch">
                         {/* Jobs User Connected To */}
-                        {this.props.auth.isAuthed ? (
+                        {auth.isAuthed ? (
                             <div className="myJobs">
                                 <div className="jobs" id="myJobs">
                                     <div className="row searchYourJobs">
@@ -392,7 +372,14 @@ class SearchJobs extends Component {
                                             <h6 className="header">
                                                 Jobs you applied:
                                             </h6>
-                                            {this.myJobsDone()}
+                                            {jobs.isLoading ? (
+                                                <ClipLoader />
+                                            ) : (
+                                                // ===========================================My Jobs=================================================== //
+                                                this.displayMyJobs(
+                                                    jobs.currentJob
+                                                )
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -437,11 +424,30 @@ class SearchJobs extends Component {
                                                     <div className="posts">
                                                         <Route
                                                             path="/jobs/results/:filters?"
-                                                            render={props => (
-                                                                <JobPost
-                                                                    {...props}
-                                                                />
-                                                            )}
+                                                            render={props =>
+                                                                jobs.isLoading ? (
+                                                                    <ClipLoader
+                                                                        sizeUnit={
+                                                                            "px"
+                                                                        }
+                                                                        size={
+                                                                            80
+                                                                        }
+                                                                        color={
+                                                                            "#123abc"
+                                                                        }
+                                                                        loading={
+                                                                            this
+                                                                                .state
+                                                                                .loading
+                                                                        }
+                                                                    />
+                                                                ) : (
+                                                                    <JobPost
+                                                                        {...props}
+                                                                    />
+                                                                )
+                                                            }
                                                         />
                                                         <Route
                                                             path="/jobs/:job_id/results/"
@@ -470,11 +476,14 @@ class SearchJobs extends Component {
 }
 
 SearchJobs.propTypes = {
-    auth: PropTypes.object.isRequired
+    getInterestedJobs: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    jobs: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    jobs: state.jobs
 });
 
-export default connect(mapStateToProps)(SearchJobs);
+export default connect(mapStateToProps, { getInterestedJobs })(SearchJobs);
