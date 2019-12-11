@@ -12,7 +12,8 @@ const {
     LoginValidation,
     EmailIDValidation,
     passwordValidation,
-    editProfileValidation
+    editProfileValidation,
+    findUserValidation
 } = require("./authValidation");
 
 // intance of a router
@@ -311,9 +312,32 @@ router.post(
     }
 );
 
-// testing routes
-router.get("/test", verifyToken, verifyUserWithToken, (req, res) => {
-    return res.json({ message: "working perfectly" });
+router.get("/findUserMatch", async (req, res) => {
+    // validate data
+    const validateData = findUserValidation(req.body);
+    if (validateData.error) {
+        return res
+            .status(400)
+            .json({ message: validateData.error.details[0].message });
+    }
+
+    // find the user which matches
+    try {
+        const reqTime = Date.now();
+
+        const usersList = await UserModel.find({
+            name: { $regex: req.body.name }
+        });
+
+        const result = {
+            usersList: usersList,
+            reqTime: reqTime
+        };
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res.status(400).json({ message: "Internal server error" });
+    }
 });
 
 // exports the routers
