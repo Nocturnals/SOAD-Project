@@ -1,12 +1,5 @@
 .commentsSection {
-    /* display: none; */
-}
-.commentsSection::before {
-    content: "";
-    position: absolute;
-    left: 10%;
-    right: 10%;
-    border: 0.25px solid rgba(0, 0, 0, 0.2);
+    border-top: 0.5px solid rgba(0, 0, 0, 0.5);
 }
 .commentsSection .column-1 {
     padding: 5px 30px;

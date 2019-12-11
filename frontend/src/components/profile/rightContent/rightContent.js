@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import Competition from "../../competitions/competitionClass";
 
@@ -68,7 +71,11 @@ class RightContent extends Component {
                     </div>
                     <div className="userDetails row">
                         <div className="col">
-                            <h5>{fSComp.username}</h5>
+                            <h5>
+                                <Link to={"/artist/" + fSComp.username}>
+                                    {fSComp.username}
+                                </Link>
+                            </h5>
                             <h6>
                                 <i
                                     className="fa fa-bookmark"
@@ -150,4 +157,12 @@ class RightContent extends Component {
     }
 }
 
-export default RightContent;
+RightContent.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(RightContent);

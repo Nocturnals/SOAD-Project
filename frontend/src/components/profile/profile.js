@@ -28,6 +28,7 @@ class ProfilePage extends Component {
 
         this.authedUser = false;
         this.state = {
+            user: this.props.auth.user,
             nav: "nav1",
             showUploadPostPopUP: false
         };
@@ -37,6 +38,9 @@ class ProfilePage extends Component {
     }
 
     componentDidMount() {
+        document.body.scrollTo(0, 0);
+    }
+    componentDidUpdate() {
         document.body.scrollTo(0, 0);
     }
 
@@ -85,10 +89,13 @@ class ProfilePage extends Component {
             new Post(username, "59 min", "Epic Coder", "India", true)
         ];
 
-        this.authedUser =
-            this.props.auth.user.name === this.props.match.params.username
+        const { auth } = this.props;
+
+        this.authedUser = auth.user
+            ? auth.user.name === this.props.match.params.username
                 ? true
-                : false;
+                : false
+            : false;
 
         return (
             <React.Fragment>
@@ -99,9 +106,8 @@ class ProfilePage extends Component {
                             className="coverImage row justify-content-end"
                             style={{ backgroundImage: `url(${coverimage})` }}
                         >
-                            {this.props.auth.isAuthed ? (
-                                this.props.auth.user.name ===
-                                this.props.match.params.username ? (
+                            {auth.isAuthed ? (
+                                this.authedUser ? (
                                     <React.Fragment>
                                         <div className="overLay"></div>
                                         <div className="col-1 account-settings">
@@ -113,7 +119,7 @@ class ProfilePage extends Component {
                                             >
                                                 <button className="accountSettingsButton">
                                                     <i
-                                                        className="fa fa-cog"
+                                                        className="fa fa-cog fa-spin"
                                                         aria-hidden="true"
                                                     ></i>
                                                 </button>
@@ -125,7 +131,7 @@ class ProfilePage extends Component {
                         </div>
                         <div className="profile-content row">
                             <div className="col-3">
-                                <LeftContent email="mail.mail.com" />
+                                <LeftContent />
                             </div>
                             <div className="col-6">
                                 <div className="userContent row">
@@ -140,7 +146,9 @@ class ProfilePage extends Component {
                                                         className="fa fa-envelope"
                                                         aria-hidden="true"
                                                     ></i>
-                                                    &nbsp;&nbsp;&nbsp;venkatvishwanth.s17@iiits.in
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    {auth.user &&
+                                                        auth.user.email}
                                                 </h6>
                                             </div>
                                         </div>

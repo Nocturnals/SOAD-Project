@@ -35,20 +35,17 @@ nav .navBarToggler i {
 .navbar-nav {
     margin-right: 50px;
 }
-.nav-item {
-    margin-right: 10px;
-}
 .navbar-nav button,
 .navbar-nav button:focus {
-    /* padding: 5px 20px 5px 20px; */
     font-size: 1.1rem;
-    font-family: "maagkramp";
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bold;
     transition: 0.3s all ease-in;
-    border-left: 1px solid rgb(0, 0, 0, 0);
-    border-right: 1px solid rgb(0, 0, 0, 0);
+    border-bottom: 1px solid rgb(0, 0, 0, 0);
     color: rgba(238, 219, 196, 0.9);
 }
 .navbar-nav button:hover {
+    border-bottom: 1px solid rgb(255, 255, 255);
     color: rgba(255, 255, 255, 1);
 }
 
@@ -56,16 +53,18 @@ nav .navBarToggler i {
     text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.6);
     font-size: 2rem;
     font-family: "LALORG";
-    transition: 0.2s all linear;
+    transition: 0.1s all linear;
 }
 .navTitle:hover {
     text-shadow: 5px 4px 1px rgba(0, 0, 0, 0.9);
 }
 .navTitle .fname {
     color: rgba(108, 238, 177, 1);
+    transition: 0.1s all linear;
 }
 .navTitle .lname {
     color: rgb(241, 218, 189);
+    transition: 0.1s all linear;
 }
 .navTitle:hover > .fname {
     color: rgb(241, 218, 189);

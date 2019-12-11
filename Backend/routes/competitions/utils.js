@@ -117,21 +117,6 @@ router.post(
     }
 );
 
-// retrieve a comp
-
-router.get("/:id", verifyToken, verifyUserWithToken, async (req, res, next) => {
-    try {
-        const comp = await CompetitionsModel.findById(req.params.id);
-        if (comp) {
-            return res.status(200).json(comp);
-        } else {
-            return res.status(400).json({ message: "competition not found" });
-        }
-    } catch (error) {
-        return res.status(500).json({ message: "Internal Server Error" });
-    }
-});
-
 // delete a competition
 
 router.delete(
@@ -760,5 +745,63 @@ router.post(
         }
     }
 );
+
+router.get(
+    "/similarcompetetions",
+    verifyToken,
+    verifyUserWithToken,
+    async (req, res, next) => {
+        console.log("sdihgio");
+        try {
+            const comp = await CompetitionsModel.findById(req.body._id);
+            const compparticipants = [];
+            comp.participants.forEach(i => {
+                compparticipants.push(i._id);
+            });
+
+            const allcompetitions = await CompetitionsModel.find();
+            const similarcomps = [];
+            var participantsindex = 0;
+            const totalparticipants = compparticipants.length;
+            allcompetitions.forEach(i => {
+                participantsindex = 0;
+
+                for (j = i.participants; ; participantsindex++) {
+                    console.log(j);
+                    // console.log(compparticipants);
+                    if (participantsindex >= totalparticipants) {
+                        break;
+                    }
+                    if (
+                        JSON.stringify(compparticipants[participantsindex]) ==
+                        JSON.stringify(j)
+                    ) {
+                        similarcomps.push(i);
+                    }
+                }
+            });
+
+            return res.json(similarcomps);
+        } catch (error) {
+            console.log(error);
+            return res.json({ message: " Cannot Find Similar Competitions" });
+        }
+    }
+);
+
+// retrieve a comp
+
+router.get("/:id", verifyToken, verifyUserWithToken, async (req, res, next) => {
+    try {
+        const comp = await CompetitionsModel.findById(req.params.id);
+        if (comp) {
+            return res.status(200).json(comp);
+        } else {
+            return res.status(400).json({ message: "Competition not found" });
+        }
+    } catch (error) {
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+});
 
 module.exports = router;

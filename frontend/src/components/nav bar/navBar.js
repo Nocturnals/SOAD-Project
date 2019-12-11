@@ -68,11 +68,21 @@ class NavBar extends Component {
             ? [
                   new LinkClass("/feed", "Home"),
                   new LinkClass("/search", "Search", "_blank"),
-                  new LinkClass("/artists/organisation-1/feed", "Organisations")
+                  new LinkClass(
+                      "/artists/organisation-1/feed",
+                      "Organisations"
+                  ),
+                  new LinkClass("/jobs/results/", "Jobs"),
+                  new LinkClass("/colab/messages", "Messages")
               ]
             : [
                   new LinkClass("/", "Home"),
-                  new LinkClass("/search", "Search", "_blank")
+                  new LinkClass("/search", "Search", "_blank"),
+                  new LinkClass(
+                      "/artists/organisation-1/feed",
+                      "Organisations"
+                  ),
+                  new LinkClass("/jobs", "Jobs")
               ];
 
         return (
@@ -83,7 +93,8 @@ class NavBar extends Component {
                         ? " bg-theme"
                         : this.props.contract
                         ? " bg-theme"
-                        : " bg-black-06 nav-min-height")
+                        : " bg-black-06 nav-min-height") +
+                    (this.props.blur ? " blur" : "")
                 }
                 id={
                     this.props.auth.isAuthed
@@ -121,39 +132,93 @@ class NavBar extends Component {
 
                         {/* Notiifcations */}
                         {this.props.auth.isAuthed ? (
-                            <li className="nav-item dropdown notifications">
-                                <button
-                                    className="nav-link dropdown-toggle"
-                                    id="navbarDropdownMenuLink-333"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                    onClick={this.clearNotificationsBadge}
-                                >
-                                    <i className="fa fa-bell"></i> Notifcations{" "}
-                                    {this.state.newNotifications ? (
-                                        <span className="badge badge-info">
-                                            10
-                                        </span>
-                                    ) : null}
-                                </button>
-                                <div
-                                    className="dropdown-menu dropdown-menu-right dropdown-default"
-                                    aria-labelledby="navbarDropdownMenuLink-333"
-                                >
-                                    <div className="dropdown-item view-all-notifications d-flex justify-content-between">
+                            <React.Fragment>
+                                <li className="nav-item dropdown notifications">
+                                    <button
+                                        className="nav-link dropdown-toggle"
+                                        id="navbarDropdownMenuLink-333"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        onClick={this.clearNotificationsBadge}
+                                    >
+                                        Notifcations{" "}
+                                        {this.state.newNotifications ? (
+                                            <span className="badge badge-info">
+                                                10
+                                            </span>
+                                        ) : null}
+                                    </button>
+                                    <div
+                                        className="dropdown-menu dropdown-menu-right dropdown-default"
+                                        aria-labelledby="navbarDropdownMenuLink-333"
+                                    >
+                                        <div className="dropdown-item view-all-notifications d-flex justify-content-between">
+                                            <Link
+                                                to="/"
+                                                style={{
+                                                    textDecoration: "none"
+                                                }}
+                                            >
+                                                <button>View All</button>
+                                            </Link>
+                                        </div>
+                                        <div className="dropdown-item notification">
+                                            <div className="">Vishwanth</div>
+                                        </div>
+                                    </div>
+                                </li>
+                                {/* Create New Things */}
+                                <li className="nav-item dropdown user">
+                                    <button
+                                        className="nav-link dropdown-toggle"
+                                        id="navbarDropdownMenuLink-333"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                    >
+                                        <i className="fa fa-plus"></i>{" "}
+                                    </button>
+                                    <div
+                                        className="dropdown-menu dropdown-menu-right dropdown-default"
+                                        aria-labelledby="navbarDropdownMenuLink-333"
+                                    >
                                         <Link
-                                            to="/"
-                                            style={{ textDecoration: "none" }}
+                                            to="/artists/create-organisation"
+                                            style={{
+                                                textDecoration: "none",
+                                                textTransform: "uppercase"
+                                            }}
                                         >
-                                            <button>View All</button>
+                                            <button className="dropdown-item">
+                                                Create Organisation
+                                            </button>
+                                        </Link>
+                                        <Link
+                                            to="/create-competition"
+                                            style={{
+                                                textDecoration: "none",
+                                                textTransform: "uppercase"
+                                            }}
+                                        >
+                                            <button className="dropdown-item">
+                                                Create Competition
+                                            </button>
+                                        </Link>
+                                        <Link
+                                            to="/job/ask"
+                                            style={{
+                                                textDecoration: "none",
+                                                textTransform: "uppercase"
+                                            }}
+                                        >
+                                            <button className="dropdown-item">
+                                                Ask for a Job
+                                            </button>
                                         </Link>
                                     </div>
-                                    <div className="dropdown-item notification">
-                                        <div className="">Vishwanth</div>
-                                    </div>
-                                </div>
-                            </li>
+                                </li>
+                            </React.Fragment>
                         ) : null}
 
                         {/* User Profile and Logout */}

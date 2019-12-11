@@ -10,7 +10,7 @@ import alertActions from "./alertActions";
 export function login(email, password) {
     return dispatch => {
         // change the loading state to true
-        dispatch(requestAction({ email }));
+        dispatch(requestAction());
 
         const user = {
             email: email,
@@ -30,10 +30,10 @@ export function login(email, password) {
             .catch(err => {
                 try {
                     const err_msg = err.response.data.message;
-                    dispatch(failureAction());
+                    dispatch(failureAction({ email }));
                     dispatch(alertActions.error(err_msg));
                 } catch (error) {
-                    console.log(error);
+                    dispatch(failureAction({ email }));
                     dispatch(
                         alertActions.error("BackEnd sever didn't respond")
                     );
@@ -41,14 +41,14 @@ export function login(email, password) {
             });
     };
 
-    function requestAction(email) {
+    function requestAction() {
         return { type: userAuthConst.LOGIN_REQUEST };
     }
     function successAction(user) {
         return { type: userAuthConst.LOGIN_SUCCESS, user: user };
     }
-    function failureAction(error) {
-        return { type: userAuthConst.LOGIN_FAILURE };
+    function failureAction(email) {
+        return { type: userAuthConst.LOGIN_FAILURE, email };
     }
 }
 
@@ -78,6 +78,8 @@ export function register(email, username, dateofbirth, password) {
                     type: userAuthConst.REGISTER_SUCCESS,
                     user: res.data
                 });
+
+                history.goBack();
             })
             .catch(err => {
                 try {
@@ -95,6 +97,9 @@ export function register(email, username, dateofbirth, password) {
 
 export function getUserWithToken(token) {
     return dispatch => {
+        // Request User
+        dispatch({ type: userAuthConst.LOAD_USER_REQUEST });
+
         // set the token to headers
         setAuthTokenHeader(token);
 

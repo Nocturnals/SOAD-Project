@@ -18,15 +18,22 @@ class GeneralSettings extends Component {
             emailId: "venkatvishwanth.s17@iiits.in"
         };
 
-        this.state = this.initialState;
+        this.state = {
+            ...this.initialState,
+            edited: false
+        };
 
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.revertAllChanges = this.revertAllChanges.bind(this);
         this.previewImage = this.previewImage.bind(this);
     }
 
     // Handling Inputs...
     handleInputChange = e => {
         const { name, value } = e.target;
+        this.setState({
+            edited: true
+        });
         switch (name) {
             case "coverImage":
             case "profileImage":
@@ -37,6 +44,14 @@ class GeneralSettings extends Component {
                 this.setState({ [name]: value });
                 break;
         }
+    };
+
+    // Revert Back all changes...
+    revertAllChanges = () => {
+        this.setState({
+            ...this.initialState,
+            edited: false
+        });
     };
 
     // Previewing Images...
@@ -161,7 +176,7 @@ class GeneralSettings extends Component {
                                 <button
                                     className={
                                         "save" +
-                                        (this.state !== this.initialState
+                                        (this.state.edited
                                             ? " button"
                                             : " disabled")
                                     }
@@ -170,7 +185,10 @@ class GeneralSettings extends Component {
                                 </button>
                             </div>
                             <div className="col-2">
-                                <button className="cancel button">
+                                <button
+                                    className="cancel button"
+                                    onClick={this.revertAllChanges}
+                                >
                                     Cancel Changes
                                 </button>
                             </div>

@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import CommentComp from "../helperCards/comments/comments";
 import { Comment, Participant } from "./objectClasses";
 
 import "./competition.css";
+import { stat } from "fs";
 
 class Competition extends Component {
     constructor(props) {
@@ -48,7 +51,8 @@ class Competition extends Component {
             showParticipants: false,
             viewAllParticipants: false,
             searchParticipants: "",
-            participantSearchList: this.participants
+            participantSearchList: this.participants,
+            isLoading: true
         };
 
         this.toggleParticipants = this.toggleParticipants.bind(this);
@@ -235,11 +239,11 @@ class Competition extends Component {
 
         const participants = this.participants;
 
-        const competitions = ["Cook Off"];
+        const { competitions } = this.props.competitions;
 
-        const { type } = this.props.match.params;
+        const { competitionName } = this.props.match.params;
 
-        return competitions.includes(type) ? (
+        return competitions[0] && competitions[0].title === competitionName ? (
             <div className="competitionPage">
                 <div className="container">
                     <div className="competition row">
@@ -259,7 +263,7 @@ class Competition extends Component {
                                         <div className="competition-header col">
                                             <div className="title row">
                                                 <div className="col">
-                                                    <h4>{type}</h4>
+                                                    <h4>{competitionName}</h4>
                                                 </div>
                                             </div>
                                             <div className="row">
@@ -490,9 +494,17 @@ class Competition extends Component {
                 </div>
             </div>
         ) : (
-            <h2>No Competition Named {type}</h2>
+            <h2>No Competition Named {competitionName}</h2>
         );
     }
 }
 
-export default Competition;
+Competition.propTypes = {
+    competition: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    competitions: state.competitions
+});
+
+export default connect(mapStateToProps)(Competition);

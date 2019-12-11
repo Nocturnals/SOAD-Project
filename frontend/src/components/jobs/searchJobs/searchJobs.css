@@ -1,0 +1,349 @@
+.jobsSearch .row,
+.jobsSearch .col,
+.jobsSearch .col-1,
+.jobsSearch .col-2,
+.jobsSearch .col-3,
+.jobsSearch .col-4,
+.jobsSearch .col-5,
+.jobsSearch .col-6,
+.jobsSearch .col-7,
+.jobsSearch .col-8,
+.jobsSearch .col-9,
+.jobsSearch .col-10,
+.jobsSearch .col-11,
+.jobsSearch .col-12 {
+    padding: 0; margin: 0;
+}
+
+/* User Jobs */
+.jobsSearch .myJobs {
+    position: relative;
+    width: 280px;
+}
+.jobsSearch .myJobs .jobs {
+    position: fixed; 
+    left: 0; bottom: 0; top: 73px;
+    width: 280px;
+    background-color: rgba(129, 95, 160, 0.8);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+/* Search in your Jobs input */
+.jobsSearch .myJobs .jobs .searchYourJobs {
+    position: sticky; top: 0;
+    padding: 10px 0;
+    z-index: 10;
+}
+.jobsSearch .myJobs .jobs .searchYourJobs .sortInput {
+    padding: 0 20px;
+    justify-content: space-between;
+}
+.jobsSearch .myJobs .jobs .searchYourJobs .sortInput h6 {
+    margin: auto;
+    font-size: 1rem;
+    font-weight: 600;
+}
+.jobsSearch .myJobs .jobs .searchYourJobs input {
+    padding: 8px 0; margin: auto;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.9);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    border: 0.5px solid rgb(0, 0, 0, 0.6);
+    border-radius: 50px;
+    outline: none;
+    background-color: whitesmoke;
+    /* box-shadow: 0 0 2px rgba(0, 0, 0, 0.4); */
+    transition: all 0.1s linear;
+}
+.jobsSearch .myJobs .jobs .searchYourJobs input::placeholder {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.4);
+    transition: all 0.1s linear;
+}
+.jobsSearch .myJobs .jobs .searchYourJobs input:hover,
+.jobsSearch .myJobs .jobs .searchYourJobs input:focus {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+}
+.jobsSearch .myJobs .jobs .searchYourJobs .sorts {
+    position: absolute; width: 100%;
+    padding: 0 25px; margin: auto;
+}
+.jobsSearch .myJobs .jobs .searchYourJobs .sorts .sortsDropDown {
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+.jobsSearch .myJobs .jobs .searchYourJobs .sorts .sortsDropDown button {
+    width: 100%;
+    padding: 5px 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.3);
+    background-color: whitesmoke;
+    transition: all 0.2s linear;
+}
+.jobsSearch .myJobs .jobs .searchYourJobs .sorts .sortsDropDown button:hover {
+    color: rgba(0, 0, 0, 0.8);
+    background-color: white;
+}
+/* Displaying Jobs */
+.jobsSearch .myJobs .jobs .jobStat .header {
+    padding: 12px 10px; margin: auto;
+    text-align: left;
+    color: seashell;
+    background-color: rgb(68, 6, 109);
+}
+.jobsSearch .myJobs .jobs .jobStat .job {
+    border-bottom: 1px solid rgb(189, 189, 189);
+    background-color: rgb(241, 218, 255);
+}
+.jobsSearch .myJobs .jobs .jobStat .job:last-child {
+    border-bottom: none;
+}
+.jobsSearch .myJobs .jobs .jobStat .job:hover {
+    cursor: pointer;
+}
+.jobsSearch .myJobs .jobs .jobStat .job .jobHeader .heading {
+    padding: 10px 0; padding-left: 15px;
+    background-color: rgba(68, 6, 109, 0.7);
+    color: rgb(233, 233, 233);
+    transition: all 0.2s linear;
+}
+.jobsSearch .myJobs .jobs .jobStat .job:hover > .jobHeader .heading {
+    color: white;
+}
+.jobsSearch .myJobs .jobs .jobStat .job h6 {
+    margin: auto 0;
+}
+.jobsSearch .myJobs .jobs .jobStat .job .title {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+.jobsSearch .myJobs .jobs .jobStat .job .title i {
+    font-size: 1rem;
+}
+.jobsSearch .myJobs .jobs .jobStat .job .title .fa-check {
+    color: rgb(70, 132, 248);
+}
+.jobsSearch .myJobs .jobs .jobStat .job .title .fa-spinner {
+    color: rgb(248, 217, 167);
+}
+.jobsSearch .myJobs .jobs .jobStat .job .title .fa-times {
+    color: rgb(148, 148, 148);
+}
+/* Job Description */
+.jobsSearch .myJobs .jobs .jobStat .job .descr {
+    padding: 0 15px 0 15px;
+    transition: all 0.3s ease-out;
+}
+.jobsSearch .myJobs .jobs .jobStat .job .descr .details {
+    font-size: 0rem;
+    transition: all 0.08s ease-in;
+}
+.jobsSearch .myJobs .jobs .jobStat .job .descr .details .sub {
+    font-size: 0rem;
+    margin-left: 5px;
+    transition: all 0.08s ease-in;
+}
+.jobsSearch .myJobs .jobs .jobStat .job:hover > .descr {
+    padding: 5px 15px 5px 25px;
+}
+.jobsSearch .myJobs .jobs .jobStat .job:hover > .descr .details {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+.jobsSearch .myJobs .jobs .jobStat .job:hover > .descr .sub {
+    font-size: 0.8rem;
+    font-weight: normal ;
+}
+
+
+/* Other Jobs */
+.jobsSearch .otherJobs {
+    padding: 0 5px;
+}
+/* Search Input for other jobs */
+.jobsSearch .otherJobs .searchAllJobs {
+    position: sticky; top: 74px;
+    z-index: 10;
+}
+.jobsSearch .otherJobs .searchAllJobs .cw-100 {
+    width: 98.5%;
+    padding: 10px 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+.jobsSearch .otherJobs .searchAllJobs input {
+    width: 80%;
+    padding: 12px 30px; margin: 5px auto;
+    letter-spacing: 0.3px;
+    word-spacing: 1px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.8);
+    background-color: rgb(251, 251, 251);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    border: none;
+    outline: none;
+    transition: all 0.2s linear;
+}
+.jobsSearch .otherJobs .searchAllJobs input::placeholder {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.4);
+}
+.jobsSearch .otherJobs .searchAllJobs input:hover,
+.jobsSearch .otherJobs .searchAllJobs input:focus {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+    background-color: white;
+}
+/*
+ *
+ *  Filters
+ *
+ */
+.jobsSearch .otherJobs .filters {
+    position: relative;
+    width: 250px;
+}
+.jobsSearch .otherJobs .filtersFix {
+    position: fixed; bottom: 4px; top: 76px;
+    margin: auto;
+    width: 250px;
+    background-color: rgb(251, 251, 251);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.jobsSearch .otherJobs .filtersFix .header {
+    padding: 10px 20px;
+    text-align: left;
+    font-size: 1.05rem;
+    font-weight: 500;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: seashell;
+    letter-spacing: 0.3px;
+    justify-content: space-between;
+    background-color: rgb(68, 6, 109);
+}
+.jobsSearch .otherJobs .filtersFix .header button {
+    float: right; padding: 0;
+    font-size: 0.9rem;
+    color: white;
+    background: none;
+    border: none;
+    outline: none;
+    transition: all 0.2s linear;
+}
+.jobsSearch .otherJobs .filtersFix .body {
+    padding: 0 10px;
+}
+.jobsSearch .otherJobs .filtersFix .body .filter {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.jobsSearch .otherJobs .filtersFix .body .filter:first-child {
+    padding-top: 0;
+    margin-top: 0;
+}
+/* Search INterest Input */
+.jobsSearch .otherJobs .filtersFix .body .filter h6 {
+    text-align: left;
+    font-size: 0.95rem;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: bold;
+    letter-spacing: 0.3px;
+}
+.jobsSearch .otherJobs .filtersFix .body .filter .input {
+    width: 100%;
+    padding: 8px 10px; margin: auto;
+    letter-spacing: 0.3px;
+    word-spacing: 1px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.9);
+    background-color: rgb(251, 251, 251);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 3px;
+    outline: none;
+    transition: all 0.2s linear;
+}
+.jobsSearch .otherJobs .filtersFix .body .filter .input::placeholder {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.4);
+}
+.jobsSearch .otherJobs .filtersFix .body .filter textarea {
+    min-height: 40px; max-height: 120px;
+    height: 40px;
+}
+.jobsSearch .otherJobs .filtersFix .body .filter textarea:focus {
+    height: 90px;
+}
+.jobsSearch .otherJobs .filtersFix .body .filter textarea::-webkit-scrollbar {
+    display: none;
+}
+.jobsSearch .otherJobs .filtersFix .body .jobType .type {
+    text-align: left;
+}
+.jobsSearch .otherJobs .filtersFix .body .filter label {
+    margin: auto 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+/* Salary Range Slider */
+.jobsSearch .otherJobs .filtersFix .body .salarySlider .inputs {
+    padding: 10px 0;
+}
+.jobsSearch .otherJobs .filtersFix .body .salarySlider .inputs .to {
+    align-self: center;
+}
+.jobsSearch .otherJobs .filtersFix .body .salarySlider .inputs .to h6 {
+    margin: auto;
+}
+.jobsSearch .otherJobs .filtersFix .body .salarySlider .inputs input {
+    width: 80%; padding: 5px 10px;
+    text-align: center;
+    font-size: 0.83rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+}
+.jobsSearch .otherJobs .filtersFix .body .header {
+    font-size: 0.8rem;
+}
+/* Related Jobs */
+.jobsSearch .otherJobs .filteredPosts {
+    padding: 5px 0 0 5px;
+}
+/* .jobsSearch .otherJobs .filteredPosts .mainHeader {
+    padding: 15px 30px;
+    text-align: left;
+    font-weight: bold;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: rgba(99, 46, 148, 0.9);
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+    background: transparent;
+    border: 0.5px solid rgba(129, 95, 160, 0.5);
+    border-radius: 2px;
+} */
+/* Related Jobs Body (Posts) */
+.jobsSearch .otherJobs .filteredPosts .body {
+}
+
+
+
+
+
+/* Display */
+.jobsSearch .hide {
+    display: none;
+}

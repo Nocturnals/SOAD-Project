@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import { Input, TextArea } from "../../helpers/inputs/styledInputs";
+
 import Dropzone from "react-dropzone";
 import { Document, Page } from "react-pdf";
 
@@ -215,52 +217,55 @@ class AskJob extends Component {
                                 </div>
                                 <div className="row input legalName">
                                     <div className="col">
-                                        <input
+                                        <Input
                                             type="text"
-                                            className={
+                                            error={
                                                 submitted && !legalName
-                                                    ? " errorInput"
-                                                    : ""
+                                                    ? true
+                                                    : false
                                             }
                                             name="legalName"
                                             placeholder="Legal Name*"
-                                            // required
-                                            onChange={this.handleInputChange}
+                                            handleInputChange={
+                                                this.handleInputChange
+                                            }
                                             value={legalName}
                                         />
                                     </div>
                                 </div>
                                 <div className="row input email">
                                     <div className="col">
-                                        <input
+                                        <Input
                                             type="email"
-                                            className={
+                                            error={
                                                 submitted &&
                                                 (!email || !isValidEmail(email))
-                                                    ? " errorInput"
-                                                    : ""
+                                                    ? true
+                                                    : false
                                             }
                                             placeholder="Email*"
-                                            // required
                                             name="email"
-                                            onChange={this.handleInputChange}
+                                            handleInputChange={
+                                                this.handleInputChange
+                                            }
                                             value={email}
                                         />
                                     </div>
                                 </div>
                                 <div className="row input address">
                                     <div className="col">
-                                        <textarea
+                                        <TextArea
                                             wrap="off"
-                                            className={
+                                            error={
                                                 submitted && !address
-                                                    ? " errorInput"
-                                                    : ""
+                                                    ? true
+                                                    : false
                                             }
                                             placeholder="Your Address goes here*"
-                                            // required
                                             name="address"
-                                            onChange={this.handleInputChange}
+                                            handleInputChange={
+                                                this.handleInputChange
+                                            }
                                             value={address}
                                         />
                                     </div>
@@ -291,17 +296,18 @@ class AskJob extends Component {
                                 </div>
                                 <div className="row input jobDescription">
                                     <div className="col">
-                                        <textarea
+                                        <TextArea
                                             wrap="on"
-                                            className={
+                                            error={
                                                 submitted && !description
-                                                    ? " errorInput"
-                                                    : ""
+                                                    ? true
+                                                    : false
                                             }
                                             placeholder="Description*"
-                                            // required
                                             name="description"
-                                            onChange={this.handleInputChange}
+                                            handleInputChange={
+                                                this.handleInputChange
+                                            }
                                             value={description}
                                         />
                                     </div>
@@ -330,44 +336,47 @@ class AskJob extends Component {
                                 </div>
                                 <div className="row input availableTime">
                                     <div className="col from">
-                                        <input
+                                        <Input
                                             type="text"
-                                            className={
+                                            error={
                                                 submitted && !fromTime
-                                                    ? " errorInput"
-                                                    : ""
+                                                    ? true
+                                                    : false
                                             }
                                             placeholder="Available From*"
-                                            // required
                                             name="fromTime"
-                                            onChange={this.handleInputChange}
+                                            handleInputChange={
+                                                this.handleInputChange
+                                            }
                                             value={fromTime}
                                         />
                                     </div>
                                     <div className="col to">
-                                        <input
+                                        <Input
                                             type="text"
-                                            className={
+                                            error={
                                                 submitted && !toTime
-                                                    ? " errorInput"
-                                                    : ""
+                                                    ? true
+                                                    : false
                                             }
                                             placeholder="Available Till*"
-                                            // required
                                             name="toTime"
-                                            onChange={this.handleInputChange}
+                                            handleInputChange={
+                                                this.handleInputChange
+                                            }
                                             value={toTime}
                                         />
                                     </div>
                                 </div>
                                 <div className="row input website">
                                     <div className="col">
-                                        <input
+                                        <Input
                                             type="text"
                                             placeholder="Website"
-                                            // required
                                             name="website"
-                                            onChange={this.handleInputChange}
+                                            handleInputChange={
+                                                this.handleInputChange
+                                            }
                                             value={website}
                                         />
                                         <div className="col">
@@ -388,34 +397,36 @@ class AskJob extends Component {
                                 </div>
                                 <div className="row input jobTitle">
                                     <div className="col">
-                                        <input
+                                        <Input
                                             type="text"
-                                            className={
+                                            error={
                                                 submitted && !prevJobTitle
-                                                    ? " errorInput"
-                                                    : ""
+                                                    ? true
+                                                    : false
                                             }
                                             placeholder="Job Title*"
-                                            // required
                                             name="prevJobTitle"
-                                            onChange={this.handleInputChange}
+                                            handleInputChange={
+                                                this.handleInputChange
+                                            }
                                             value={prevJobTitle}
                                         />
                                     </div>
                                 </div>
                                 <div className="row input prevJobDescription">
                                     <div className="col">
-                                        <textarea
+                                        <TextArea
                                             wrap="on"
-                                            className={
+                                            error={
                                                 submitted && !prevJobDescription
-                                                    ? " errorInput"
-                                                    : ""
+                                                    ? true
+                                                    : false
                                             }
                                             placeholder="Description*"
-                                            // required
                                             name="prevJobDescription"
-                                            onChange={this.handleInputChange}
+                                            handleInputChange={
+                                                this.handleInputChange
+                                            }
                                             value={prevJobDescription}
                                         />
                                     </div>
@@ -425,17 +436,18 @@ class AskJob extends Component {
                                         <div className="row dateHead">
                                             <h6>Started Date*:</h6>
                                         </div>
-                                        <input
+                                        <Input
                                             type="date"
-                                            className={
+                                            error={
                                                 submitted && !startDate
-                                                    ? " errorInput"
-                                                    : ""
+                                                    ? true
+                                                    : false
                                             }
                                             placeholder="Started*"
-                                            // required
                                             name="startDate"
-                                            onChange={this.handleInputChange}
+                                            handleInputChange={
+                                                this.handleInputChange
+                                            }
                                             value={startDate}
                                         />
                                     </div>
@@ -443,11 +455,13 @@ class AskJob extends Component {
                                         <div className="row dateHead">
                                             <h6>Ended Date:</h6>
                                         </div>
-                                        <input
+                                        <Input
                                             type="date"
                                             placeholder="End Date"
                                             name="endDate"
-                                            onChange={this.handleInputChange}
+                                            handleInputChange={
+                                                this.handleInputChange
+                                            }
                                             value={endDate}
                                         />
                                     </div>
@@ -463,17 +477,18 @@ class AskJob extends Component {
                                 </div>
                                 <div className="row input workedAddress">
                                     <div className="col">
-                                        <textarea
+                                        <TextArea
                                             wrap="off"
-                                            className={
+                                            error={
                                                 submitted && !workedAddress
-                                                    ? " errorInput"
-                                                    : ""
+                                                    ? true
+                                                    : false
                                             }
                                             placeholder="Your Worked Address goes here*"
-                                            // required
                                             name="workedAddress"
-                                            onChange={this.handleInputChange}
+                                            handleInputChange={
+                                                this.handleInputChange
+                                            }
                                             value={workedAddress}
                                         />
                                     </div>
