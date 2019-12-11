@@ -69,8 +69,8 @@ router.post(
 );
 
 router.post(
-  "adduser/:type",
-  adduser,
+  "requestuser/:type",
+  requestuser,
   verifyToken,
   verifyUserWithToken,
   async (req, res) => {
@@ -102,6 +102,34 @@ router.post(
       return res.status(200).json({
         message: "Successfully send notification to User",
         doc: doc
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+);
+
+router.post(
+  "/adduser/:type",
+  adduser,
+  verifyToken,
+  verifyUserWithToken,
+  async (req, res) => {
+    // format
+    // userId:
+    // orgName:
+    try {
+      const requestedUser = await UserModel.findById(req.loggedUser._id);
+      const findOrganization = await OrganizationSchema.find((name = orgName));
+      requestedUser.organizations.push(findOrganization);
+      findOrganization.Users.push(requestedUser);
+      const doc_User = await requestedUser.save();
+      const doc_organization = await findOrganization.save();
+      return res.status(200).json({
+        message: "Successfully send notification to User",
+        doc_User: doc_User,
+        doc_organization: doc_organization
       });
     } catch (error) {
       console.log(error);
@@ -150,3 +178,17 @@ router.post(
     }
   }
 );
+
+// router.post(
+//   'addPost/:type',
+//   addPost,
+//   verifyToken,
+//   verifyUserWithToken,
+//   async(req, res) => {
+//   // format
+//   // postdetails:
+//   const newPost = new post({
+
+//   })
+
+// });
