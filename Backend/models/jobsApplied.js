@@ -7,7 +7,8 @@ const JobsAvailableSchema = new mongoose.Schema({
     artistType: {
         enum: [...artistTypes],
         type: String,
-        required: true
+        required: true,
+        lowercase: true
     },
 
     user: {

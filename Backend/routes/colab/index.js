@@ -13,7 +13,8 @@ const {
 const {
     interestedInWorkValidation,
     artistWantedValidation,
-    applyJobValidation
+    applyJobValidation,
+    findJobOffersValidation
 } = require("./bodyValidations");
 
 // instance of router
@@ -174,6 +175,32 @@ router.get("/artistForWork/:type/:area", getArtistType, async (req, res) => {
             availableAt: req.params.area
         });
         return res.json(allArtistsAvailable);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+// route to get jobOffers with options
+router.get("/jobOffers", async (req, res) => {
+    const validateData = findJobOffersValidation(req.body);
+
+    // if error return error response
+    if (validateData.error) {
+        return res
+            .status(400)
+            .json({ message: validateData.error.details[0].message });
+    }
+
+    try {
+        // find the jobs based on the sepcified options
+        const jobsList = await JobOffersModel.find({
+            workAt: { $regex: req.body.options.workAt.toLowerCase() },
+            artistType: { $regex: req.body.options.artistType.toLowerCase() },
+            workType: { $in: req.body.options.workTypes }
+        });
+
+        return res.json(jobsList);
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "Internal server error" });
