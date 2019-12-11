@@ -20,12 +20,13 @@ export function login(email, password) {
             .post("http://localhost:4000/api/auth/login", user)
             .then(res => {
                 const { authorization } = res.headers;
+                console.log(res.data);
 
                 localStorage.setItem("userToken", authorization);
                 setAuthTokenHeader(authorization);
                 dispatch(successAction(res.data));
 
-                // history.goBack();
+                history.goBack();
             })
             .catch(err => {
                 try {
