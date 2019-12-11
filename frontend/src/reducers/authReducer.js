@@ -8,6 +8,11 @@ const initialState = {
 
 export default function(state = initialState, action) {
     switch (action.type) {
+        case "LOAD_DONE":
+            return {
+                ...state,
+                isLoading: false
+            };
         case userAuthConst.LOAD_USER_REQUEST:
             return {
                 ...state,
@@ -41,7 +46,8 @@ export default function(state = initialState, action) {
             localStorage.removeItem("userToken");
             return {
                 ...initialState,
-                user: action.email
+                user: action.email,
+                isLoading: false
             };
 
         default:

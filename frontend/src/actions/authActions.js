@@ -25,7 +25,7 @@ export function login(email, password) {
                 setAuthTokenHeader(authorization);
                 dispatch(successAction(res.data));
 
-                history.goBack();
+                // history.goBack();
             })
             .catch(err => {
                 try {

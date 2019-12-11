@@ -36,12 +36,36 @@ class Organisations extends Component {
         for (let index = 0; index < organisations.length; index++) {
             const comp = organisations[index];
             comps.push(
-                <Link to={"/artists/" + comp.name + "/feed"}>
-                    <div className="organisation" key={index}>
+                <Link to={"/artists/" + comp.name + "/feed"} key={index}>
+                    <div className="organisation">
                         <Img src={this.orgImage} className="image" />
                         <h6 className="name">{comp.name}</h6>
                     </div>
                 </Link>
+            );
+        }
+
+        return comps;
+    };
+    // Display Organization Members...
+    displayOrgMembers = members => {
+        let comps = [];
+        for (let index = 0; index < members.length; index++) {
+            const member = members[index];
+
+            comps.push(
+                <React.Fragment key={index}>
+                    <div className="row member">
+                        <div className="userImage">
+                            <Img src={this.orgImage} className="image" />
+                        </div>
+                        <div className="col user">
+                            <h6 className="details">
+                                {member.username} &nbsp; (Photographer)
+                            </h6>
+                        </div>
+                    </div>
+                </React.Fragment>
             );
         }
 
@@ -66,10 +90,19 @@ class Organisations extends Component {
                         />
                         {this.userOrganisationsComp(auth.user.organizations)}
                     </div>
-                    <div className="row">
-                        <div className="col-4 feed"></div>
-                        <div className="col-5 work"></div>
-                        <div className="col-2 members"></div>
+                    <div className="row body">
+                        <div className="col members">
+                            <h6 className="orgMemHeader">Members:</h6>
+                            <div className="row blocks">
+                                <div className="col">
+                                    {this.displayOrgMembers(
+                                        auth.user.organizations.Users
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col feed"></div>
+                        <div className="col"></div>
                     </div>
                 </div>
             </React.Fragment>
