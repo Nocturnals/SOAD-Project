@@ -2,8 +2,10 @@ const express = require("express");
 
 const artistTypes = require("../../models/artistTypes");
 const JobsAvailableModel = require("../../models/jobsApplied");
-const JobOffersModel = require("../../models/artistsWanted");
-const { otherJobOfferSchema } = require("../../models/artistsWanted");
+const {
+    JobOffersModel,
+    otherJobOfferModel
+} = require("../../models/artistsWanted");
 const UserModel = require("../../models/user");
 const { OtheruserModel } = require("../../models/Otheruser");
 const { getArtistType } = require("./helper");
@@ -106,7 +108,7 @@ router.post(
         // create artist wanted model
         const jobOffer = new JobOffersModel({
             artistType: req.artistType,
-            title: req.title,
+            title: req.body.title,
             jobProvider: jobProvider,
             workAt: req.body.workAt,
             workDuration: req.body.workDuration,
@@ -124,7 +126,7 @@ router.post(
                 .json({ message: "Successfully created job offer", doc: doc });
         } catch (error) {
             console.log(error);
-            return res.status(500).json({ message: "internal server error" });
+            return res.status(500).json({ message: "Internal server error" });
         }
     }
 );
@@ -219,7 +221,7 @@ router.post("/applyJob", verifyToken, verifyUserWithToken, async (req, res) => {
                     JSON.stringify(req.loggedUser._id)
                 ) {
                     return res
-                        .status(400)
+                        .status(200)
                         .json({ message: "already registered for the job" });
                 }
             });
@@ -236,7 +238,7 @@ router.post("/applyJob", verifyToken, verifyUserWithToken, async (req, res) => {
             const UpdatedOfferdoc = await jobOfferDoc.save();
 
             // add the otherJobOffer schema to the user list of appliedjobs
-            const newOtherJobOffer = new otherJobOfferSchema({
+            const newOtherJobOffer = new otherJobOfferModel({
                 _id: jobOfferDoc._id,
                 title: jobOfferDoc.title,
                 artistType: jobOfferDoc.artistType,
@@ -245,7 +247,14 @@ router.post("/applyJob", verifyToken, verifyUserWithToken, async (req, res) => {
                 status: "pending"
             });
 
-            return res.status(200).json(UpdatedOfferdoc);
+            const currentUser = await UserModel.findById(req.loggedUser._id);
+
+            currentUser.jobsApplied.push(newOtherJobOffer);
+            await currentUser.save();
+
+            return res
+                .status(200)
+                .json({ jobOfferDoc: UpdatedOfferdoc, user: req.loggedUser });
         } else {
             return res.status(400).json({ message: "Invalid jobOffer id" });
         }
