@@ -182,7 +182,7 @@ router.get("/artistForWork/:type/:area", getArtistType, async (req, res) => {
 });
 
 // route to get jobOffers with options
-router.get("/jobOffers", async (req, res) => {
+router.post("/jobOffers", async (req, res) => {
     console.log(req.body);
     const validateData = findJobOffersValidation(req.body);
 
