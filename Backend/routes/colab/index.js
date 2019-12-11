@@ -2,14 +2,14 @@ const express = require("express");
 
 const artistTypes = require("../../models/artistTypes");
 const JobsAvailableModel = require("../../models/jobsApplied");
-const {
-    JobOffersModel,
-    otherJobOfferModel
-} = require("../../models/artistsWanted");
 const UserModel = require("../../models/user");
 const { OtheruserModel } = require("../../models/Otheruser");
 const { getArtistType } = require("./helper");
 const { verifyToken, verifyUserWithToken } = require("../auth/helper");
+const {
+    JobOffersModel,
+    otherJobOfferModel
+} = require("../../models/artistsWanted");
 const {
     interestedInWorkValidation,
     artistWantedValidation,
@@ -132,44 +132,36 @@ router.post(
 );
 
 // route to get all the avaliable artists for work
-router.get(
-    "/getAvailableArtistForWork/:type",
-    getArtistType,
-    async (req, res) => {
-        try {
-            // fetch the database to get all works of type artists
-            const allArtistsAvailable = await JobsAvailableModel.find().where({
-                artistType: req.artistType
-            });
-            return res.json(allArtistsAvailable);
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ message: "Internal server error" });
-        }
+router.get("/artistForWork/:type", getArtistType, async (req, res) => {
+    try {
+        // fetch the database to get all works of type artists
+        const allArtistsAvailable = await JobsAvailableModel.find().where({
+            artistType: req.artistType
+        });
+        return res.json(allArtistsAvailable);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
     }
-);
+});
 
 // route to get all the avaliable artists for work
-router.get(
-    "/getAvailableArtistForWork/:type/:area",
-    getArtistType,
-    async (req, res) => {
-        try {
-            // fetch the database to get all works of type artists
-            const allArtistsAvailable = await JobsAvailableModel.find().where({
-                artistType: req.artistType,
-                availableAt: req.params.area
-            });
-            return res.json(allArtistsAvailable);
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ message: "Internal server error" });
-        }
+router.get("/artistForWork/:type/:area", getArtistType, async (req, res) => {
+    try {
+        // fetch the database to get all works of type artists
+        const allArtistsAvailable = await JobsAvailableModel.find().where({
+            artistType: req.artistType,
+            availableAt: req.params.area
+        });
+        return res.json(allArtistsAvailable);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
     }
-);
+});
 
 // route to get all job offers for all different artist
-router.get("/getJobOffers/:type", getArtistType, async (req, res) => {
+router.get("/jobOffers/:type", getArtistType, async (req, res) => {
     try {
         // fetches the database to get all job offers for a particular artist type
         const allJobOffers = await JobOffersModel.find().where({
@@ -184,7 +176,7 @@ router.get("/getJobOffers/:type", getArtistType, async (req, res) => {
 });
 
 // route to get all job offers for all different artist
-router.get("/getJobOffers/:type/:area", getArtistType, async (req, res) => {
+router.get("/JobOffers/:type/:area", getArtistType, async (req, res) => {
     try {
         // fetches the database to get all job offers for a particular artist type
         const allJobOffers = await JobOffersModel.find().where({
