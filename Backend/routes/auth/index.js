@@ -96,7 +96,8 @@ router.post("/login", async (req, res) => {
             expiresIn: "1d"
         });
 
-        res.status(200)
+        return res
+            .status(200)
             .header("authorization", jToken)
             .json(_.pick(user, ["_id", "name", "email"]));
     } catch (error) {
