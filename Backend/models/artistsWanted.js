@@ -101,6 +101,11 @@ const jobOfferSchema = new mongoose.Schema({
     applied: {
         type: [otherUserSchema],
         default: []
+    },
+
+    createdOn: {
+        type: Date,
+        default: Date.now
     }
 });
 
