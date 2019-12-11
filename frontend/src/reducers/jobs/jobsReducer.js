@@ -1,35 +1,35 @@
-import { orgConst } from "../../constants/index";
+import { jobsConstants } from "../../constants/index";
 
 const initialState = {
-    loggedUserOrganisations: null,
-    newOrg: null,
-    isLoading: false
+    filteredJobs: [],
+    currentJob: null,
+    isLoading: true
 };
 
 export default function(state = initialState, action) {
     switch (action.type) {
-        case orgConst.GET_ALL_REQUEST:
+        case jobsConstants.GET_FILTERED_JOBS_REQUEST:
             return {
                 ...state,
-                loggedUserOrganisations: [],
+                filteredJobs: [],
                 isLoading: true
             };
-        case orgConst.GET_ALL_SUCCESS:
+        case jobsConstants.GET_FILTERED_JOBS_SUCCESS:
             return {
                 ...state,
-                loggedUserOrganisations: action.organisations,
+                filteredJobs: action.interestedJobs,
                 isLoading: false
             };
-        case orgConst.CREATE_NEW_REQUEST:
+        case jobsConstants.GET_JOB_REQUEST:
             return {
                 ...state,
-                newOrg: action.name,
+                currentJob: null,
                 isLoading: true
             };
-        case orgConst.CREATE_NEW_SUCCESS:
+        case jobsConstants.GET_JOB_SUCCESS:
             return {
                 ...state,
-                newOrg: null,
+                currentJob: action.job,
                 isLoading: false
             };
         default:

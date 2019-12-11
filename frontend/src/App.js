@@ -27,7 +27,7 @@ class App extends Component {
                 return <Redirect to="/" />;
             }
         }
-
+        // store.dispatch({ type: "LOAD_DONE" });
         store.dispatch({ type: "ALERT_CLEAR" });
     }
 

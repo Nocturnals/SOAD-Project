@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { orgConst } from "../../constants/index";
+import { orgConst, alertConstants } from "../../constants/index";
 
 export function getAllOrganizations() {
     return dispatch => {
@@ -29,15 +29,28 @@ export function getAllOrganizations() {
 export function createOrganisation(organisation) {
     console.log(organisation);
     return dispatch => {
+        dispatch(createNewRequest(organisation.name));
         axios
             .post("http://localhost:4000/api/organization/create", organisation)
             .then(res => {
                 console.log(res);
+                dispatch(createNewSuccess());
             })
             .catch(err => {
                 console.log(err);
+                dispatch(createNewFailure(err.response.data.message));
             });
     };
+
+    function createNewRequest(name) {
+        return { type: orgConst.CREATE_NEW_REQUEST, name: name };
+    }
+    function createNewSuccess() {
+        return { type: orgConst.CREATE_NEW_SUCCESS };
+    }
+    function createNewFailure(errMsg) {
+        return { type: alertConstants.ERROR, message: errMsg };
+    }
 }
 
 export function requestUsers(users) {

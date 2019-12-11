@@ -7,33 +7,45 @@ const OrganizationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+
     description: {
         type: String,
         required: true
     },
+
     startDate: {
         type: Date,
         default: Date.now
     },
+
     endDate: {
         type: Date,
         default: null
     },
+
     adminUsers: {
         type: [otheruserschema],
         require: true
     },
+
     Users: {
         type: [otheruserschema],
         default: []
     },
+
     PendingUsers: {
         type: [otheruserschema],
         default: []
     },
+
     Posts: {
         type: [PostSchema],
         default: []
+    },
+
+    createdOn: {
+        type: Date,
+        default: Date.now
     }
 });
 
