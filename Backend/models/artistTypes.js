@@ -2,8 +2,8 @@
 
 const artistType = [
     "Painter",
-    "VFX Artist",
-    "Story Writer",
+    "VFXArtist",
+    "StoryWriter",
     "Singer",
     "Photographer",
     "Dancer",
