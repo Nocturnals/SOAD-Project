@@ -64,8 +64,10 @@ class SearchJobs extends Component {
               }
             : this.initJobTypesChecked;
         this.defaultFilters = {
-            interest: this.formData.interest,
-            locationSearchInput: this.formData.locationSearchInput,
+            interest: this.formData.interest ? this.formData.interest : "",
+            locationSearchInput: this.formData.locationSearchInput
+                ? this.formData.locationSearchInput
+                : "",
             jobType: this.formData.jobType
                 ? this.formData.jobType
                 : this.jobTypes,
@@ -89,23 +91,14 @@ class SearchJobs extends Component {
         this.resetFilterToDefault = this.resetFilterToDefault.bind(this);
     }
     componentDidMount() {
-        const { auth } = this.props;
         // Fetch Interested Jobs if not fetched before...
-        if (
-            !auth.isLoading &&
-            auth.isAuthed &&
-            !this.state.getFilteredJobsFetched
-        ) {
-            const filters = {
-                options: {
-                    artistType: this.state.interest,
-                    workAt: this.state.location,
-                    workTypes: this.state.jobType
-                }
-            };
-            this.props.getFilteredJobs(filters);
-            this.setState({ getFilteredJobsFetched: true });
-        }
+        const options = {
+            artistType: this.state.interest,
+            workAt: this.state.locationSearchInput,
+            workTypes: this.state.jobType
+        };
+        this.props.getFilteredJobs(options);
+        this.setState({ getFilteredJobsFetched: true });
     }
 
     // Handling Inputs Change...
