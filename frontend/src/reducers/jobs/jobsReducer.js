@@ -1,23 +1,23 @@
 import { jobsConstants } from "../../constants/index";
 
 const initialState = {
-    interestedJobs: [],
+    filteredJobs: [],
     currentJob: null,
     isLoading: true
 };
 
 export default function(state = initialState, action) {
     switch (action.type) {
-        case jobsConstants.GET_INTERESTED_JOBS_REQUEST:
+        case jobsConstants.GET_FILTERED_JOBS_REQUEST:
             return {
                 ...state,
-                interestedJobs: [],
+                filteredJobs: [],
                 isLoading: true
             };
-        case jobsConstants.GET_INTERESTED_JOBS_SUCCESS:
+        case jobsConstants.GET_FILTERED_JOBS_SUCCESS:
             return {
                 ...state,
-                interestedJobs: action.interestedJobs,
+                filteredJobs: action.interestedJobs,
                 isLoading: false
             };
         case jobsConstants.GET_JOB_REQUEST:

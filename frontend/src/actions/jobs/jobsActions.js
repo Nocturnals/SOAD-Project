@@ -2,16 +2,12 @@ import axios from "axios";
 
 import { jobsConstants, alertConstants } from "../../constants/index";
 
-export function getInterestedJobs(interest) {
+export function getFilteredJobs(filters) {
     return dispatch => {
         dispatch(requestAction());
 
-        if (!interest) {
-            interest = "Photographer";
-        }
-
         axios
-            .get(`http://localhost:4000/api/colab/jobOffers/${interest}`)
+            .get("http://localhost:4000/api/colab/jobOffers", filters)
             .then(res => {
                 console.log(res);
                 dispatch(successAction(res.data));
@@ -22,12 +18,12 @@ export function getInterestedJobs(interest) {
     };
 
     function requestAction() {
-        return { type: jobsConstants.GET_INTERESTED_JOBS_REQUEST };
+        return { type: jobsConstants.GET_FILTERED_JOBS_REQUEST };
     }
     function successAction(jobs) {
         return {
-            type: jobsConstants.GET_INTERESTED_JOBS_SUCCESS,
-            interestedJobs: jobs
+            type: jobsConstants.GET_FILTERED_JOBS_SUCCESS,
+            flteredJobs: jobs
         };
     }
 }
@@ -37,7 +33,7 @@ export function getJobById(job_id) {
         dispatch(requestAction());
 
         axios
-            .get(`http://localhost:4000/api/colab/getJob/${job_id}`)
+            .get(`http://localhost:4000/api/colab/jobOffer/${job_id}`)
             .then(res => {
                 console.log(res);
                 dispatch(successAction(res.data));

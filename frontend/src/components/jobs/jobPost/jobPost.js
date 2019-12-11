@@ -12,7 +12,7 @@ import "./jobPost.css";
 import { getJobById } from "../../../actions/index";
 
 class JobPost extends Component {
-    job_id = this.props.match.params;
+    job_id = this.props.match.params.job_id;
 
     componentDidMount() {
         if (!this.props.jobOffer && this.job_id) {

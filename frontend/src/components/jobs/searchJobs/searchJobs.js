@@ -14,7 +14,7 @@ import { JobBrief } from "../classes";
 import { ClipLoader } from "react-spinners";
 import "./searchJobs.css";
 
-import { getInterestedJobs } from "../../../actions/index";
+import { getFilteredJobs } from "../../../actions/index";
 
 const qs = require("query-string");
 
@@ -41,11 +41,6 @@ class SearchJobs extends Component {
             TEMPORARY: true,
             INTERN: true
         };
-        this.initInputs = {
-            otherJobsSearchInput: "",
-            locationSearchInput: "",
-            qualificationSearchInput: ""
-        };
         this.jobTypesChecked = this.formData.jobType
             ? {
                   FULL_TIME: this.formData.jobType.includes(
@@ -69,19 +64,17 @@ class SearchJobs extends Component {
               }
             : this.initJobTypesChecked;
         this.defaultFilters = {
-            otherJobsSearchInput: this.formData.otherJobsSearchInput,
+            interest: this.formData.interest,
             locationSearchInput: this.formData.locationSearchInput,
-            qualificationSearchInput: this.formData.qualificationSearchInput,
             jobType: this.formData.jobType
                 ? this.formData.jobType
                 : this.jobTypes,
-            jobTypesChecked: this.jobTypesChecked,
-            sliderValue: [25, 50]
+            jobTypesChecked: this.jobTypesChecked
         };
 
         // Component State...
         this.state = {
-            getInterestedJobsFetched: false,
+            getFilteredJobsFetched: false,
             sortMyJobs: this.myJobsSorts[0],
             sortByApplStatType: 0,
             showMyJobsSortDD: false,
@@ -91,12 +84,29 @@ class SearchJobs extends Component {
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleFiltersSubmit = this.handleFiltersSubmit.bind(this);
-        this.handleSliderChange = this.handleSliderChange.bind(this);
         this.toggleMyJobsSortDD = this.toggleMyJobsSortDD.bind(this);
         this.toggleCheckBox = this.toggleCheckBox.bind(this);
         this.resetFilterToDefault = this.resetFilterToDefault.bind(this);
     }
-    componentDidMount() {}
+    componentDidMount() {
+        const { auth } = this.props;
+        // Fetch Interested Jobs if not fetched before...
+        if (
+            !auth.isLoading &&
+            auth.isAuthed &&
+            !this.state.getFilteredJobsFetched
+        ) {
+            const filters = {
+                options: {
+                    artistType: this.state.interest,
+                    workAt: this.state.location,
+                    workTypes: this.state.jobType
+                }
+            };
+            this.props.getFilteredJobs(filters);
+            this.setState({ getFilteredJobsFetched: true });
+        }
+    }
 
     // Handling Inputs Change...
     handleInputChange = e => {
@@ -116,7 +126,7 @@ class SearchJobs extends Component {
             this.setState({ [name]: value });
         }
 
-        if (name === "otherJobsSearchInput") {
+        if (name === "interest") {
             document.body.scrollTo(0, 0);
         }
         if (name === "sortMyJobs") {
@@ -128,13 +138,6 @@ class SearchJobs extends Component {
             }
             document.getElementById("myJobs").scrollTo(0, 0);
         }
-    };
-
-    // Handling Slider Change...
-    handleSliderChange = (e, value) => {
-        this.setState({
-            sliderValue: value
-        });
     };
 
     // Show My Jobs Sort Types Dropdown...
@@ -152,6 +155,9 @@ class SearchJobs extends Component {
                 [e.target.value]: !this.state.jobTypesChecked[e.target.value]
             }
         });
+        setTimeout(() => {
+            document.getElementsByTagName("form")[0].submit();
+        }, 500);
     };
 
     // Reset Filters...
@@ -219,7 +225,7 @@ class SearchJobs extends Component {
             jobsComps.push(
                 <React.Fragment key={index}>
                     <Link
-                        to={"/jobs/" + job.title + "/results"}
+                        to={"/jobs/" + job._id + "/results"}
                         style={{ textDecoration: "none" }}
                     >
                         <div className="row job">
@@ -325,24 +331,14 @@ class SearchJobs extends Component {
 
     render() {
         const { auth, jobs } = this.props;
-        // Fetch Interested Jobs if not fetched before...
-        if (
-            !auth.isLoading &&
-            auth.isAuthed &&
-            !this.state.getInterestedJobsFetched
-        ) {
-            this.props.getInterestedJobs(auth.user.primaryInterest);
-            this.setState({ getInterestedJobsFetched: true });
-        }
 
         // State Variables...
         const {
             sortMyJobs,
             showMyJobsSortDD,
-            otherJobsSearchInput,
+            interest,
             locationSearchInput,
-            jobTypesChecked,
-            qualificationSearchInput
+            jobTypesChecked
         } = this.state;
 
         // Return Statement...
@@ -406,14 +402,9 @@ class SearchJobs extends Component {
                                     render={props => (
                                         <JobsFilters
                                             {...props}
-                                            otherJobsSearchInput={
-                                                otherJobsSearchInput
-                                            }
+                                            interest={interest}
                                             locationSearchInput={
                                                 locationSearchInput
-                                            }
-                                            qualificationSearchInput={
-                                                qualificationSearchInput
                                             }
                                             jobTypesChecked={jobTypesChecked}
                                             handleInputChange={
@@ -439,7 +430,7 @@ class SearchJobs extends Component {
                                                             path="/jobs/results/:filters?"
                                                             render={props =>
                                                                 jobs.isLoading &&
-                                                                jobs.interestedJobs ? (
+                                                                jobs.filteredJobs ? (
                                                                     <ClipLoader
                                                                         sizeUnit={
                                                                             "px"
@@ -458,7 +449,7 @@ class SearchJobs extends Component {
                                                                     />
                                                                 ) : (
                                                                     this.displayRelatedJobOffers(
-                                                                        jobs.interestedJobs,
+                                                                        jobs.filteredJobs,
                                                                         props
                                                                     )
                                                                 )
@@ -491,7 +482,7 @@ class SearchJobs extends Component {
 }
 
 SearchJobs.propTypes = {
-    getInterestedJobs: PropTypes.func.isRequired,
+    getFilteredJobs: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     jobs: PropTypes.object.isRequired
 };
@@ -501,4 +492,4 @@ const mapStateToProps = state => ({
     jobs: state.jobs
 });
 
-export default connect(mapStateToProps, { getInterestedJobs })(SearchJobs);
+export default connect(mapStateToProps, { getFilteredJobs })(SearchJobs);
