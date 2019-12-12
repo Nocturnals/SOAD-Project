@@ -38,7 +38,7 @@ export function getCompetitionMatches(competitionName) {
                 dispatch({
                     type: searchConst.GET_USER_SUCCESS,
                     payload: {
-                        usersList: competitionsList,
+                        competitionsList: competitionsList,
                         reqTime: reqTime
                     }
                 });
