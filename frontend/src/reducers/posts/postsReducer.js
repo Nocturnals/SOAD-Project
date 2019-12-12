@@ -3,6 +3,7 @@ import { postsConstants } from "../../constants/index";
 const initialState = {
     newPost: null,
     userPosts: null,
+    homeFeed: null,
     isLoading: false
 };
 
@@ -38,6 +39,25 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 userPosts: null,
+                isLoading: false
+            };
+
+        case postsConstants.GET_HOME_FEED_REQUEST:
+            return {
+                ...state,
+                homeFeed: null,
+                isLoading: true
+            };
+        case postsConstants.GET_HOME_FEED_SUCCESS:
+            return {
+                ...state,
+                homeFeed: action.feed,
+                isLoading: false
+            };
+        case postsConstants.GET_HOME_FEED_FAILURE:
+            return {
+                ...state,
+                homeFeed: null,
                 isLoading: false
             };
         default:
