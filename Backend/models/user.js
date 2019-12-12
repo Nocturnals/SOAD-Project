@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
     primaryinterest: {
         enum: [...artistTypes],
         type: String,
-        default: "photography"
+        default: "photographer"
     },
 
     otherinterest: {
