@@ -4,7 +4,7 @@ const initialState = {
     usersList: [],
     organisationsList: [],
     competitionsList: [],
-    reqTime: Date.now,
+    reqTime: 0,
     isLoading: false
 };
 
@@ -23,7 +23,7 @@ export default function(state = initialState, action) {
                 return {
                     ...state,
                     isLoading: false,
-                    usersList: action.payload.usesrList,
+                    usersList: action.payload.usersList,
                     reqTime: action.payload.reqTime
                 };
             else

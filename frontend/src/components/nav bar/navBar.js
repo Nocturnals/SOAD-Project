@@ -70,7 +70,7 @@ class NavBar extends Component {
                   new LinkClass("/search", "Search", "_blank"),
                   new LinkClass(
                       "/artists/" +
-                          (auth.user
+                          (auth.user && auth.user.organizations.length
                               ? auth.user.organizations[0].name + "/"
                               : "") +
                           "feed",

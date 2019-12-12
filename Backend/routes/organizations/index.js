@@ -335,7 +335,7 @@ router.get("/findOrganizationMatch/:name", async (req, res) => {
         });
 
         const result = {
-            organizationsList: organizationsList,
+            organisationsList: organizationsList,
             reqTime: reqTime
         };
         return res.status(200).json(result);
