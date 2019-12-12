@@ -3,11 +3,25 @@ import { jobsConstants } from "../../constants/index";
 const initialState = {
     filteredJobs: [],
     currentJob: null,
+    postJobOffer: null,
     isLoading: true
 };
 
 export default function(state = initialState, action) {
     switch (action.type) {
+        case jobsConstants.POST_JOB_OFFER_REQUEST:
+            return {
+                ...state,
+                postJobOffer: action.job,
+                isLoading: true
+            };
+        case jobsConstants.POST_JOB_OFFER_SUCCESS:
+        case jobsConstants.POST_JOB_OFFER_FAILURE:
+            return {
+                ...state,
+                postJobOffer: null,
+                isLoading: false
+            };
         case jobsConstants.GET_FILTERED_JOBS_REQUEST:
             return {
                 ...state,
