@@ -8,6 +8,8 @@ import { Comment, Participant } from "./objectClasses";
 
 import "./competition.css";
 
+import { getCompetitionById } from "../../actions/index";
+
 class Competition extends Component {
     constructor(props) {
         super(props);
@@ -51,7 +53,8 @@ class Competition extends Component {
             viewAllParticipants: false,
             searchParticipants: "",
             participantSearchList: this.participants,
-            isLoading: true
+            isLoading: true,
+            requestCompetition: false
         };
 
         this.toggleParticipants = this.toggleParticipants.bind(this);
@@ -64,6 +67,10 @@ class Competition extends Component {
     }
 
     componentDidMount() {
+        if (!this.state.requestCompetition) {
+            this.getCompetitionById(this.props.match.params.comp_id);
+            this.setState({ requestCompetition: true });
+        }
         document.body.scrollTo(0, 0);
     }
 
@@ -499,11 +506,12 @@ class Competition extends Component {
 }
 
 Competition.propTypes = {
-    competition: PropTypes.object.isRequired
+    getCompetitionById: PropTypes.func.isRequired,
+    competitions: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
     competitions: state.competitions
 });
 
-export default connect(mapStateToProps)(Competition);
+export default connect(mapStateToProps, { getCompetitionById })(Competition);

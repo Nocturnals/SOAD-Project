@@ -156,7 +156,7 @@ class MainAppComponents extends Component {
                                 {/* Specific Competition Page */}
                                 <Route
                                     exact
-                                    path="/competitions/:competitionName"
+                                    path="/competitions/:comp_id"
                                     component={Competition}
                                 />
                                 <AuthenticatedRoute
