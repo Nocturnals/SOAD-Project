@@ -44,7 +44,7 @@ const router = express.Router();
 // get posts
 router.get("/posts", getAllPosts);
 router.get("/post/:postid", getSinglePost);
-router.get("/specialposts",getSpecialPost);
+router.get("/specialposts/:key",getSpecialPost);
 
 //test
 //router.post("/image", uploadFile);

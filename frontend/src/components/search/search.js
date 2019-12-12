@@ -1,8 +1,17 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 import ResultCard from "./reslutCards/resultCard";
 
+import {
+    getUserMatches,
+    getCompetitionMatches,
+    getOrganisationMatches
+} from "../../actions/searchActions/searchActions";
+
 import "./search.css";
+import { tsImportEqualsDeclaration } from "@babel/types";
 
 class SearchComp extends Component {
     constructor(props) {
@@ -19,6 +28,36 @@ class SearchComp extends Component {
     handleChange = e => {
         const { name, value } = e.target;
         this.setState({ [name]: value });
+
+        if (name === "searchType") {
+            switch (value) {
+                case "Users":
+                    this.props.getUserMatches(this.state.searchInput);
+                    break;
+                case "Organisations":
+                    this.props.getOrganisationMatches(this.state.searchInput);
+                    break;
+                case "Competitions":
+                    this.props.getCompetitionMatches(this.state.searchInput);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            switch (this.state.searchType) {
+                case "Users":
+                    this.props.getUserMatches(value);
+                    break;
+                case "Organisations":
+                    this.props.getOrganisationMatches(value);
+                    break;
+                case "Competitions":
+                    this.props.getCompetitionMatches(value);
+                    break;
+                default:
+                    break;
+            }
+        }
     };
 
     // Profile Cards...
@@ -105,4 +144,19 @@ class SearchComp extends Component {
     }
 }
 
-export default SearchComp;
+SearchComp.propTypes = {
+    getUserMatches: PropTypes.func.isRequired,
+    getCompetitionMatches: PropTypes.func.isRequired,
+    getOrganisationMatches: PropTypes.func.isRequired,
+    searchState: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    searchState: state.search
+});
+
+export default connect(mapStateToProps, {
+    getUserMatches,
+    getCompetitionMatches,
+    getOrganisationMatches
+})(SearchComp);

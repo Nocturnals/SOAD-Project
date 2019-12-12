@@ -27,7 +27,8 @@ const {
     addcommentValidation,
     editcommentValidation,
     commentlikeValidation,
-    commentreplyValidation
+    commentreplyValidation,
+    findcompetitionmathcValidation
 } = require("./compValidation");
 
 const router = express.Router();
@@ -789,9 +790,35 @@ router.get(
     }
 );
 
+router.get("/findCompetitionMatch/:name", async (req, res) => {
+    const validateData = findcompetitionmathcValidation(req.params);
+    if (validateData.error) {
+        return res
+            .status(400)
+            .json({ message: validateData.error.details[0].message });
+    }
+
+    try {
+        const reqTime = Date.now();
+
+        const competitionsList = await CompetitionsModel.find({
+            title: { $regex: req.params.name }
+        });
+        const result = {
+            competitionsList: competitionsList,
+            reqTime: reqTime
+        };
+
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 // retrieve a comp
 
-router.get("/:id", verifyToken, verifyUserWithToken, async (req, res, next) => {
+router.get("/:id", verifyToken, verifyUserWithToken, async (req, res) => {
     try {
         const comp = await CompetitionsModel.findById(req.params.id);
         if (comp) {

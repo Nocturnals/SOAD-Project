@@ -41,7 +41,7 @@ export function postJobOffer(job) {
         };
     }
     function alertAction(message) {
-        return { type: "ALERT_ERROR", message: message };
+        return { type: alertConstants.ERROR, message: message };
     }
 }
 
@@ -93,6 +93,14 @@ export function getFilteredJobs(options) {
             .catch(err => {
                 console.log(err);
                 dispatch(failureAction());
+                try {
+                    // give off error alert
+                    dispatch(alertActions.error(err.response.data.message));
+                } catch (error) {
+                    dispatch(
+                        alertActions.error("Error in searching for job offers")
+                    );
+                }
             });
     };
 
