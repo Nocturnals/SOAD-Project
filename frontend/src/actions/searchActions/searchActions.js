@@ -34,11 +34,11 @@ export function getCompetitionMatches(competitionName) {
             `http://localhost:4000/api/auth/findCompetitionMatch/${competitionName}`
         )
             .then(res => {
-                const { usersList, reqTime } = res.data;
+                const { competitionsList, reqTime } = res.data;
                 dispatch({
                     type: searchConst.GET_USER_SUCCESS,
                     payload: {
-                        usersList: usersList,
+                        usersList: competitionsList,
                         reqTime: reqTime
                     }
                 });
