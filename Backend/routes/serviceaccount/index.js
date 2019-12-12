@@ -36,11 +36,14 @@ router.post(
                 service: req.body.service,
                 key: uniqid()
             });
-            const savedaccount = account.save();
-            return res.json(savedaccount);
+            console.log(account);
+            account.save();
+            return res.json(account);
         } catch (error) {
             console.log(error);
             return res.status(500).json({ message: "Internal Server Error" });
         }
     }
 );
+
+module.exports = router;
