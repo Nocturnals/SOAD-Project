@@ -49,7 +49,7 @@ exports.InterstedInWork = async (req, res) => {
         availableLocation: req.body.availableLocation,
         availableFrom: req.body.availableFrom,
         availableTill: req.body.availableTill,
-        portpolioSite: req.body.portpolioSite,
+        portfolioSite: req.body.portfolioSite,
         resumeLoc: fileLocDoc
     });
 
@@ -64,7 +64,7 @@ exports.InterstedInWork = async (req, res) => {
         // return success message
         return res.status(200).json({
             message: "Successfully created job oppurtunity",
-            doc: doc
+            loggedUser: doc
         });
     } catch (error) {
         console.log(error);

@@ -7,6 +7,50 @@ import {
 } from "../../constants/index";
 import alertActions from "../alertActions";
 
+export function postJobAvailable(formData) {
+    return dispatch => {
+        dispatch(requestAction(formData));
+
+        axios
+            .post("http://localhost:4000/api/colab/interestedInWork", formData)
+            .then(res => {
+                dispatch(successAction());
+                dispatch({
+                    type: userAuthConst.LOAD_USER,
+                    user: res.data.loggedUser
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                dispatch(failureAction());
+                dispatch(alertAction("Failed to post job available"));
+            });
+    };
+
+    function successAction() {
+        return {
+            type: jobsConstants.POST_JOB_AVAILABLE_SUCCESS
+        };
+    }
+
+    function failureAction() {
+        return {
+            type: jobsConstants.POST_JOB_AVAILABLE_FAILURE
+        };
+    }
+
+    function requestAction(formData) {
+        return {
+            type: jobsConstants.POST_JOB_AVAILABLE_REQUEST,
+            job: formData
+        };
+    }
+
+    function alertAction(message) {
+        return { type: alertConstants.ERROR, message: message };
+    }
+}
+
 export function postJobOffer(job) {
     return dispatch => {
         dispatch(requestAction(job));
