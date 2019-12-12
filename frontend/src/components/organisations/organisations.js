@@ -108,7 +108,8 @@ class Organisations extends Component {
                             <h6 className="orgMemHeader">Members:</h6>
                             <div className="row orgMemBody">
                                 <div className="col">
-                                    {auth.isAuthed && auth.user.organizations
+                                    {auth.isAuthed &&
+                                    auth.user.organizations.length
                                         ? this.displayOrgMembers(
                                               auth.user.organizations[0].Users
                                           )
@@ -131,7 +132,7 @@ class Organisations extends Component {
                                     <div className="row adminMemBody">
                                         <div className="col">
                                             {auth.isAuthed &&
-                                            auth.user.organizations
+                                            auth.user.organizations.length
                                                 ? this.displayOrgMembers(
                                                       auth.user.organizations[0]
                                                           .adminUsers
