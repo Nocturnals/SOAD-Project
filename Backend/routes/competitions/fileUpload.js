@@ -12,7 +12,7 @@ var BUCKET = process.env.BUCKET;
 
 const storage = new Storage({
     projectId: P_ID,
-    keyFilename: serviceAccount
+    keyFilename: __dirname + "/../../artist-colab-firebase.json"
 });
 
 const bucket = storage.bucket(BUCKET);
