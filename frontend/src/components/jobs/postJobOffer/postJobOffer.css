@@ -16,7 +16,7 @@
     padding: 0; margin: 0;
 }
 .postJobOffer {
-    width: 700px; margin: auto; margin-top: 30px;
+    width: 700px; margin: 30px auto;
     background-color: white;
 }
 .postJobOffer .header {
@@ -25,5 +25,37 @@
     background-image: linear-gradient(135deg, #7f2bb8, #5a1d7e);
 }
 .postJobOffer .inputs {
-    padding: 10px 20px;
+    padding: 10px 30px;
+    text-align: left;
+}
+.postJobOffer .inputs select {
+    width: 100%; height: 100%; padding: 0 0 0 25px;
+    border: none; border-bottom: 0.5px solid rgba(0, 0, 0, 0.5);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.6);
+    outline: none;
+}
+.postJobOffer .inputs .workTypes {
+    width: 95%;
+}
+/* Submission Buttons */
+.postJobOffer .submissionButtons {
+    padding: 10px 0;
+}
+.postJobOffer .submissionButtons button {
+    padding: 8px 35px;
+    font-size: 1.01rem;
+    font-weight: 500;
+    color: rgb(102, 51, 153);
+    border: 0.5px solid rebeccapurple;
+    border-radius: 50px;
+    background: none;
+    outline: none;
+    transition: all 0.2s linear;
+}
+.postJobOffer .submissionButtons button:hover {
+    color: seashell;
+    background-color: rgb(102, 51, 153);
+    box-shadow: -3px 3px 12px rgba(0, 0, 0, 0.3);
 }
