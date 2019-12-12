@@ -1,7 +1,7 @@
 import { artistTypesConst } from "../constants/index";
 
 const initialState = {
-    artitsTypes: [],
+    artistTypes: [],
     isLoading: false
 };
 
@@ -10,13 +10,13 @@ export default function(state = initialState, action) {
         case artistTypesConst.GET_TYPES_REQUEST:
             return {
                 ...state,
-                artitsTypes: [],
+                artistTypes: [],
                 isLoading: true
             };
         case artistTypesConst.GET_TYPES_SUCCESS:
             return {
                 ...state,
-                artitsTypes: action.payload,
+                artistTypes: action.payload,
                 isLoading: false
             };
         case artistTypesConst.GET_TYPES_FAILURE:

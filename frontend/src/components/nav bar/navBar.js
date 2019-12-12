@@ -211,6 +211,17 @@ class NavBar extends Component {
                                                 Ask for a Job
                                             </button>
                                         </Link>
+                                        <Link
+                                            to="/job/offer"
+                                            style={{
+                                                textDecoration: "none",
+                                                textTransform: "uppercase"
+                                            }}
+                                        >
+                                            <button className="dropdown-item">
+                                                Post a job offer
+                                            </button>
+                                        </Link>
                                     </div>
                                 </li>
                             </React.Fragment>
