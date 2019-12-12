@@ -84,7 +84,6 @@ app.use("/api/chat", ChatController);
 //Route for Organisations
 app.use("/api/organization", require("./routes/organizations/index"));
 app.use("/editProfile", require("./routes/editProfile/index"));
-
 //Route for Competitions
 app.use("/api/competition", require("./routes/competitions/utils"));
 

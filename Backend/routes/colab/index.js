@@ -22,7 +22,7 @@ const router = express.Router();
 
 // route to get all types of artists
 router.get("/allTypes", (req, res) => {
-    res.json(artistTypes);
+    return res.json(artistTypes);
 });
 
 // route to apply for a interested in working by a valid user
@@ -182,7 +182,7 @@ router.get("/artistForWork/:type/:area", getArtistType, async (req, res) => {
 });
 
 // route to get jobOffers with options
-router.get("/jobOffers", async (req, res) => {
+router.post("/jobOffers", async (req, res) => {
     console.log(req.body);
     const validateData = findJobOffersValidation(req.body);
 

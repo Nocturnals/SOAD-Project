@@ -6,18 +6,15 @@ export function getFilteredJobs(options) {
     return dispatch => {
         dispatch(requestAction());
 
-        console.log(options);
-
         axios
-            .get("http://localhost:4000/api/colab/jobOffers", {
-                Asdfsadfsadf: "asd"
-            })
+            .post("http://localhost:4000/api/colab/jobOffers", options)
             .then(res => {
                 console.log(res);
                 dispatch(successAction(res.data));
             })
             .catch(err => {
                 console.log(err);
+                dispatch(failureAction());
             });
     };
 
@@ -27,7 +24,12 @@ export function getFilteredJobs(options) {
     function successAction(jobs) {
         return {
             type: jobsConstants.GET_FILTERED_JOBS_SUCCESS,
-            flteredJobs: jobs
+            filteredJobs: jobs
+        };
+    }
+    function failureAction() {
+        return {
+            type: jobsConstants.GET_FILTERED_JOBS_FAILURE
         };
     }
 }
@@ -44,6 +46,7 @@ export function getJobById(job_id) {
             })
             .catch(err => {
                 console.log(err);
+                dispatch(failureAction());
                 dispatch({
                     type: alertConstants.ERROR,
                     message: err.response.data.message
@@ -56,5 +59,10 @@ export function getJobById(job_id) {
     }
     function successAction(job) {
         return { type: jobsConstants.GET_JOB_SUCCESS, job: job };
+    }
+    function failureAction() {
+        return {
+            type: jobsConstants.GET_JOB_FAILURE
+        };
     }
 }
