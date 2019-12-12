@@ -41,14 +41,14 @@ exports.InterstedInWork = async (req, res) => {
 
     // create the new jogapplied model
     const jobAvailable = new JobsAvailableModel({
-        legalUser: req.body.legalUser,
+        legalName: req.body.legalName,
         email: req.body.email,
         address: req.body.address,
         artistType: req.body.artistType,
         user: user,
         availableLocation: req.body.availableLocation,
         availableFrom: req.body.availableFrom,
-        availableAtTill: req.body.availableAtTill,
+        availableTill: req.body.availableTill,
         portpolioSite: req.body.portpolioSite,
         resumeLoc: fileLocDoc
     });
@@ -57,7 +57,7 @@ exports.InterstedInWork = async (req, res) => {
     try {
         // saving to database
         const currentUser = await UserModel.findById(req.loggedUser._id);
-        currentUser.jobsApplied.push(jobAvailable);
+        currentUser.jobsAvailableFor.push(jobAvailable);
 
         const doc = await currentUser.save();
 
