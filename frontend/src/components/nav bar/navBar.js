@@ -60,6 +60,23 @@ class NavBar extends Component {
         return linkComps;
     };
 
+    // Notifications...
+    notificationsComp = notifications => {
+        let comps = [];
+
+        for (let index = 0; index < notifications.length; index++) {
+            const notification = notifications[index];
+
+            comps.push(
+                <div className="dropdown-item notification" key={index}>
+                    <h6>{notification.message}</h6>
+                </div>
+            );
+        }
+
+        return comps;
+    };
+
     // Rednering...
     render() {
         const { auth } = this.props;
@@ -70,7 +87,7 @@ class NavBar extends Component {
                   new LinkClass("/search", "Search", "_blank"),
                   new LinkClass(
                       "/artists/" +
-                          (auth.user
+                          (auth.user && auth.user.organizations.length
                               ? auth.user.organizations[0].name + "/"
                               : "") +
                           "feed",
@@ -148,19 +165,9 @@ class NavBar extends Component {
                                         className="dropdown-menu dropdown-menu-right dropdown-default"
                                         aria-labelledby="navbarDropdownMenuLink-333"
                                     >
-                                        <div className="dropdown-item view-all-notifications d-flex justify-content-between">
-                                            <Link
-                                                to="/"
-                                                style={{
-                                                    textDecoration: "none"
-                                                }}
-                                            >
-                                                <button>View All</button>
-                                            </Link>
-                                        </div>
-                                        <div className="dropdown-item notification">
-                                            <div className="">Vishwanth</div>
-                                        </div>
+                                        {this.notificationsComp(
+                                            auth.user.notifications
+                                        )}
                                     </div>
                                 </li>
                                 {/* Create New Things */}
@@ -179,7 +186,7 @@ class NavBar extends Component {
                                         aria-labelledby="navbarDropdownMenuLink-333"
                                     >
                                         <Link
-                                            to="/create/artists"
+                                            to="/create/organisation"
                                             style={{
                                                 textDecoration: "none",
                                                 textTransform: "uppercase"

@@ -8,20 +8,35 @@ import Img from "react-image";
 import NavBar from "../nav bar/navBar";
 import "./organisations.css";
 
+import {
+    getOrganizationByName,
+    getOrganizationById
+} from "../../actions/index";
+
 class Organisations extends Component {
     constructor(props) {
         super(props);
 
         this.orgImage = require("../media/images/categories/photographer.png");
 
+        this.organisationName = this.props.match.params;
         this.initialState = {
             search: ""
         };
         this.state = {
-            ...this.initialState
+            ...this.initialState,
+            fethced: false
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
+    }
+    componentDidMount() {
+        const { organizations } = this.props;
+        if (!organizations.isLoading) {
+            this.props.getOrganizationByName(
+                this.props.match.params.organisationName
+            );
+        }
     }
 
     // Handling input Change
@@ -70,9 +85,34 @@ class Organisations extends Component {
         return comps;
     };
 
+    // Admin Check...
+    adminCheck = users => {
+        console.log(this.props.auth);
+
+        for (let index = 0; index < users.length; index++) {
+            if (users[index]._id === this.props.auth.user._id) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     render() {
-        const { auth } = this.props;
+        const { auth, organizations } = this.props;
         const { search } = this.state;
+
+        if (
+            this.organisationName &&
+            (!this.state.fetched ||
+                this.organisationName !==
+                    this.props.match.params.organisationName)
+        ) {
+            this.organisationName = this.props.match.params.organisationName;
+            this.props.getOrganizationByName(
+                this.props.match.params.organisationName
+            );
+            this.setState({ fetched: true });
+        }
 
         return (
             <React.Fragment>
@@ -108,11 +148,33 @@ class Organisations extends Component {
                             <h6 className="orgMemHeader">Members:</h6>
                             <div className="row orgMemBody">
                                 <div className="col">
-                                    {auth.isAuthed && auth.user.organizations
+                                    {organizations.currentOrganisation &&
+                                    organizations.currentOrganisation
+                                        .organisation
                                         ? this.displayOrgMembers(
-                                              auth.user.organizations[0].Users
+                                              organizations.currentOrganisation
+                                                  .organisation.Users
                                           )
                                         : null}
+                                    {organizations.currentOrganisation &&
+                                    organizations.currentOrganisation
+                                        .organisation &&
+                                    auth.user &&
+                                    this.adminCheck(
+                                        organizations.currentOrganisation
+                                            .organisation.adminUsers
+                                    ) ? (
+                                        <React.Fragment>
+                                            {this.displayOrgMembers(
+                                                organizations
+                                                    .currentOrganisation
+                                                    .organisation.PendingUsers
+                                            )}
+                                            {/* <button className="addUsers">
+                                                Add Users
+                                            </button> */}
+                                        </React.Fragment>
+                                    ) : null}
                                 </div>
                             </div>
                         </div>
@@ -120,7 +182,25 @@ class Organisations extends Component {
                         <div className="col orgRightContent">
                             <div className="row editOrganisation">
                                 <div className="col">
-                                    <button>Edit Organization</button>
+                                    {organizations.currentOrganisation &&
+                                    organizations.currentOrganisation
+                                        .organisation &&
+                                    auth.user &&
+                                    this.adminCheck(
+                                        organizations.currentOrganisation
+                                            .organisation.adminUsers
+                                    ) ? (
+                                        <Link
+                                            to={
+                                                "/edit/organisation/" +
+                                                organizations
+                                                    .currentOrganisation
+                                                    .organisation._id
+                                            }
+                                        >
+                                            <button>Edit Organization</button>
+                                        </Link>
+                                    ) : null}
                                 </div>
                             </div>
                             <div className="row adminUsers">
@@ -130,10 +210,13 @@ class Organisations extends Component {
                                     </h6>
                                     <div className="row adminMemBody">
                                         <div className="col">
-                                            {auth.isAuthed &&
-                                            auth.user.organizations
+                                            {organizations.currentOrganisation &&
+                                            organizations.currentOrganisation
+                                                .organisation
                                                 ? this.displayOrgMembers(
-                                                      auth.user.organizations[0]
+                                                      organizations
+                                                          .currentOrganisation
+                                                          .organisation
                                                           .adminUsers
                                                   )
                                                 : null}
@@ -150,11 +233,18 @@ class Organisations extends Component {
 }
 
 Organisations.propTypes = {
-    auth: PropTypes.object.isRequired
+    getOrganizationByName: PropTypes.func.isRequired,
+    getOrganizationById: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    organizations: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    organizations: state.organizations
 });
 
-export default connect(mapStateToProps)(Organisations);
+export default connect(mapStateToProps, {
+    getOrganizationByName,
+    getOrganizationById
+})(Organisations);

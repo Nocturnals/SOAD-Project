@@ -11,6 +11,8 @@ import CreatePostComp from "../post/createPost/createPost";
 
 import "./profile.css";
 
+import { getUserByName } from "../../actions/index";
+
 // Post Element Class...
 class Post {
     constructor(name, time, job, location, liked) {
@@ -26,11 +28,14 @@ class ProfilePage extends Component {
     constructor(props) {
         super(props);
 
+        this.username = this.props.match.params.username;
         this.authedUser = false;
         this.state = {
             user: this.props.auth.user,
             nav: "nav1",
-            showUploadPostPopUP: false
+            showUploadPostPopUP: false,
+            requestUserByName: false,
+            userExists: true
         };
 
         this.handleNavigation = this.handleNavigation.bind(this);
@@ -39,6 +44,10 @@ class ProfilePage extends Component {
 
     componentDidMount() {
         document.body.scrollTo(0, 0);
+        if (!this.state.requestUserByName) {
+            this.props.getUserByName(this.props.match.params.username);
+            this.setState({ requestUserByName: true });
+        }
     }
     componentDidUpdate() {
         document.body.scrollTo(0, 0);
@@ -77,7 +86,10 @@ class ProfilePage extends Component {
     };
 
     render() {
-        // const postUserImage = require("../media/images/categories/photographer.png");
+        if (this.username !== this.props.match.params.username) {
+            this.username = this.props.match.params.username;
+            this.props.getUserByName(this.username);
+        }
         const coverimage = require("../media/images/profile/cover.jpg");
 
         const username = this.props.match.params.username;
@@ -131,7 +143,9 @@ class ProfilePage extends Component {
                         </div>
                         <div className="profile-content row">
                             <div className="col-3">
-                                <LeftContent />
+                                <LeftContent
+                                    username={this.props.match.params.username}
+                                />
                             </div>
                             <div className="col-6">
                                 <div className="userContent row">
@@ -251,11 +265,14 @@ class ProfilePage extends Component {
 }
 
 ProfilePage.propTypes = {
-    auth: PropTypes.object.isRequired
+    getUserByName: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    otherUsers: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    otherUsers: state.otherUsers
 });
 
-export default connect(mapStateToProps)(ProfilePage);
+export default connect(mapStateToProps, { getUserByName })(ProfilePage);

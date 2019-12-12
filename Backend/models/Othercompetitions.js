@@ -8,6 +8,21 @@ const OtherCompetitionSchema = new mongoose.Schema({
 
     name: {
         type: String
+    },
+
+    starttime: {
+        type: Date,
+        required: true
+    },
+
+    endtime: {
+        type: Date,
+        required: true
+    },
+
+    shortdescription: {
+        type: String,
+        required: true
     }
 });
 

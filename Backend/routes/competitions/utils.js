@@ -790,7 +790,7 @@ router.get(
     }
 );
 
-router.get("/findcompetitionmatch/:name", async (req, res, next) => {
+router.get("/findCompetitionMatch/:name", async (req, res) => {
     const validateData = findcompetitionmathcValidation(req.params);
     if (validateData.error) {
         return res
@@ -802,7 +802,7 @@ router.get("/findcompetitionmatch/:name", async (req, res, next) => {
         const reqTime = Date.now();
 
         const competitionsList = await CompetitionsModel.find({
-            name: { $regex: req.params.name }
+            title: { $regex: req.params.name }
         });
         const result = {
             competitionsList: competitionsList,
@@ -812,13 +812,13 @@ router.get("/findcompetitionmatch/:name", async (req, res, next) => {
         return res.status(200).json(result);
     } catch (error) {
         console.log(error);
-        return res.status(400).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error" });
     }
 });
 
 // retrieve a comp
 
-router.get("/:id", verifyToken, verifyUserWithToken, async (req, res, next) => {
+router.get("/:id", verifyToken, verifyUserWithToken, async (req, res) => {
     try {
         const comp = await CompetitionsModel.findById(req.params.id);
         if (comp) {

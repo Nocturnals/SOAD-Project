@@ -4,7 +4,7 @@ import { searchConst } from "../../constants";
 
 export function getUserMatches(username) {
     return dispatch => {
-        dispatch(searchConst.GET_USER_REQUEST);
+        dispatch({ type: searchConst.GET_USER_REQUEST });
 
         Axios.get(`http://localhost:4000/api/auth/findUserMatch/${username}`)
             .then(res => {
@@ -28,15 +28,15 @@ export function getUserMatches(username) {
 
 export function getCompetitionMatches(competitionName) {
     return dispatch => {
-        dispatch(searchConst.GET_USER_REQUEST);
+        dispatch({ type: searchConst.GET_USER_REQUEST });
 
         Axios.get(
-            `http://localhost:4000/api/auth/findCompetitionMatch/${competitionName}`
+            `http://localhost:4000/api/competition/findCompetitionMatch/${competitionName}`
         )
             .then(res => {
                 const { competitionsList, reqTime } = res.data;
                 dispatch({
-                    type: searchConst.GET_USER_SUCCESS,
+                    type: searchConst.GET_COMPETITIONS_SUCCESS,
                     payload: {
                         competitionsList: competitionsList,
                         reqTime: reqTime
@@ -46,7 +46,7 @@ export function getCompetitionMatches(competitionName) {
             .catch(err => {
                 console.log(err);
                 dispatch({
-                    type: searchConst.GET_USER_FAILURE
+                    type: searchConst.GET_COMPETITIONS_FAILURE
                 });
             });
     };
@@ -54,15 +54,15 @@ export function getCompetitionMatches(competitionName) {
 
 export function getOrganisationMatches(organisationName) {
     return dispatch => {
-        dispatch(searchConst.GET_USER_REQUEST);
+        dispatch({ type: searchConst.GET_ORGANISATION_REQUEST });
 
         Axios.get(
-            `http://localhost:4000/api/auth/findOrganizationMatch/${organisationName}`
+            `http://localhost:4000/api/organization/findOrganizationMatch/${organisationName}`
         )
             .then(res => {
                 const { organisationsList, reqTime } = res.data;
                 dispatch({
-                    type: searchConst.GET_USER_SUCCESS,
+                    type: searchConst.GET_ORGANISATION_SUCCESS,
                     payload: {
                         organisationsList: organisationsList,
                         reqTime: reqTime
@@ -72,7 +72,7 @@ export function getOrganisationMatches(organisationName) {
             .catch(err => {
                 console.log(err);
                 dispatch({
-                    type: searchConst.GET_USER_FAILURE
+                    type: searchConst.GET_ORGANISATION_FAILURE
                 });
             });
     };

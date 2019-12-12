@@ -1,25 +1,28 @@
-import { artistTypesConst } from "../constants/index";
+import { otherUsersConst } from "../constants/index";
 
 const initialState = {
-    artistTypes: [],
+    userProfile: null,
     isLoading: false
 };
 
 export default function(state = initialState, action) {
     switch (action.type) {
-        case artistTypesConst.GET_TYPES_REQUEST:
+        case otherUsersConst.GET_OTHER_USER_REQUEST:
             return {
                 ...state,
-                artistTypes: [],
                 isLoading: true
             };
-        case artistTypesConst.GET_TYPES_SUCCESS:
+        case otherUsersConst.GET_OTHER_USER_SUCCESS:
             return {
                 ...state,
-                artistTypes: action.payload,
+                userProfile: action.profile,
                 isLoading: false
             };
-        case artistTypesConst.GET_TYPES_FAILURE:
+        case otherUsersConst.GET_OTHER_USER_FAILURE:
+            return {
+                ...state,
+                isLoading: false
+            };
         default:
             return { ...state };
     }

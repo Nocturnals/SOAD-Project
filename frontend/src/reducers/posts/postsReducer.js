@@ -1,25 +1,25 @@
-import { artistTypesConst } from "../constants/index";
+import { postsConstants } from "../../constants/index";
 
 const initialState = {
-    artistTypes: [],
+    newPost: null,
     isLoading: false
 };
 
 export default function(state = initialState, action) {
     switch (action.type) {
-        case artistTypesConst.GET_TYPES_REQUEST:
+        case postsConstants.CREATE_POST_REQUEST:
             return {
                 ...state,
-                artistTypes: [],
+                newPost: action.post,
                 isLoading: true
             };
-        case artistTypesConst.GET_TYPES_SUCCESS:
+        case postsConstants.CREATE_POST_SUCCESS:
+        case postsConstants.CREATE_POST_FAILURE:
             return {
                 ...state,
-                artistTypes: action.payload,
+                newPost: null,
                 isLoading: false
             };
-        case artistTypesConst.GET_TYPES_FAILURE:
         default:
             return { ...state };
     }

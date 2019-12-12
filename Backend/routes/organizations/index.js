@@ -21,7 +21,7 @@ router.get("/getall", verifyToken, verifyUserWithToken, async (req, res) => {
     res.json(req.loggedUser.organizations);
 });
 
-router.post("/getOrganization", async (req, res) => {
+router.post("/getByName", async (req, res) => {
     // Format
     // orgName:""
 
@@ -30,8 +30,24 @@ router.post("/getOrganization", async (req, res) => {
             name: req.body.orgName
         });
         return res.status(200).json({
-            message: "Successfully send notification to User",
-            doc: getOrganization
+            organisation: getOrganization[0]
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(404).json({ message: "Could not find orgnaization" });
+    }
+});
+
+router.post("/getById", async (req, res) => {
+    // Format
+    // orgName:""
+
+    try {
+        const getOrganization = await OrganizationModel.find().where({
+            _id: req.body.orgId
+        });
+        return res.status(200).json({
+            organisation: getOrganization[0]
         });
     } catch (error) {
         console.log(error);
@@ -84,65 +100,60 @@ router.post("/create", verifyToken, verifyUserWithToken, async (req, res) => {
     }
 });
 
-router.post(
-    "/requestusers",
-    verifyToken,
-    verifyUserWithToken,
-    async (req, res) => {
-        // format:
-        // organizationId:""
-        // userIds:""
+router.post("/edit", verifyToken, verifyUserWithToken, async (req, res) => {
+    // format:
+    // organizationId:""
+    // users:""
+    // description:""
 
-        const validatedData = requestUserValidation(res.body);
-        console.log(validatedData);
+    const validatedData = requestUserValidation(res.body);
+    console.log(validatedData);
 
-        if (validatedData.error) {
-            return res
-                .status(400)
-                .json({ message: validatedData.error.details[0].message });
-        }
-
-        try {
-            // const currentUser = await UserModel.findById(req.loggedUser._id);
-            const currentorganization = await OrganizationModel.findById(
-                req.body.organizationId
-            );
-
-            for (i = 0; i < req.body.userIds.length; i++) {
-                const requestUser = await UserModel.findById(
-                    req.body.userIds[i]
-                );
-
-                const findUser = new OtheruserModel({
-                    _id: requestUser._id,
-                    username: requestUser.name,
-                    profileurl: requestUser.profileurl
-                });
-                currentorganization.PendingUsers.push(findUser);
-
-                //TODO send request to User
-                const createNotifiaction = new NotificationsModel({
-                    userId: req.body.userIds,
-                    message:
-                        "new Organizatoion wants to add you " +
-                        currentorganization.name
-                });
-                // await createNotifiaction.save();
-                requestUser.notifications.push(createNotifiaction);
-                await requestUser.save();
-                await currentorganization.save();
-            }
-            // const doc = await requestUser.save();
-            return res.status(200).json({
-                message: "Successfully send notification to User"
-                // doc: doc
-            });
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ message: "Internal server error" });
-        }
+    if (validatedData.error) {
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
     }
-);
+
+    try {
+        // const currentUser = await UserModel.findById(req.loggedUser._id);
+        const currentorganization = await OrganizationModel.findById(
+            req.body.organizationId
+        );
+        currentorganization.description = req.body.description;
+
+        for (i = 0; i < req.body.users.length; i++) {
+            const requestUser = await UserModel.findById(req.body.users[i]._id);
+
+            const findUser = new OtheruserModel({
+                _id: requestUser._id,
+                username: requestUser.name,
+                profileurl: requestUser.profileurl
+            });
+            currentorganization.PendingUsers.push(findUser);
+
+            //TODO send request to User
+            const createNotifiaction = new NotificationsModel({
+                userId: req.body.users[i]._id,
+                message:
+                    "new Organizatoion wants to add you " +
+                    currentorganization.name
+            });
+            // await createNotifiaction.save();
+            requestUser.notifications.push(createNotifiaction);
+            await requestUser.save();
+            await currentorganization.save();
+        }
+        // const doc = await requestUser.save();
+        return res.status(200).json({
+            message: "Successfully send notification to User"
+            // doc: doc
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
 
 router.post("/adduser", verifyToken, verifyUserWithToken, async (req, res) => {
     // format
@@ -335,13 +346,13 @@ router.get("/findOrganizationMatch/:name", async (req, res) => {
         });
 
         const result = {
-            organizationsList: organizationsList,
+            organisationsList: organizationsList,
             reqTime: reqTime
         };
         return res.status(200).json(result);
     } catch (error) {
         console.log(error);
-        return res.status(400).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error" });
     }
 });
 module.exports = router;

@@ -11,16 +11,14 @@ const { ReplyModel, CommentsModel } = require("../../models/Comments");
 const artist = require("../../models/artistTypes");
 const { OtheruserModel } = require("../../models/Otheruser");
 const Image = require("../../models/Image");
-const {upload} = require("./imageUpload");
+const { upload } = require("./imageUpload");
 const Notification = require("../../models/Notifications");
 const User = require("../../models/user");
-const {ServiceaccountModel} = require("../../models/serviceaccount");
-
-
-
-
+const { ServiceaccountModel } = require("../../models/serviceaccount");
 
 exports.createPost = async (req, res, next) => {
+    console.log(req.body);
+
     const validatedData = createPostValidation(req.body);
 
     if (validatedData.error)
@@ -53,7 +51,7 @@ exports.createPost = async (req, res, next) => {
             }
         ]
     });
-    if (req.body.category != "Story Writer" && req.imageurls) {
+    if (req.body.category != "story writer" && req.imageurls) {
         const images = req.imageurls;
         console.log(images);
         const len = images.length;
@@ -78,7 +76,6 @@ exports.createPost = async (req, res, next) => {
 
 exports.like = async (req, res) => {
     console.log(req.body);
-    
 
     try {
         const post = await Post.findById({
@@ -107,19 +104,15 @@ exports.like = async (req, res) => {
             const u = likeduser.username;
             const msg = u + " liked your post";
             const owner = post.owner[0]._id;
-            const notifyUser = await User.findById(
-                { 
-                    _id: owner
-                }
-            );
+            const notifyUser = await User.findById({
+                _id: owner
+            });
 
-            const notify = new Notification(
-                {
-                    userid : owner,
-                    message : msg,
-                    url: req.body.url,
-                }
-            );
+            const notify = new Notification({
+                userid: owner,
+                message: msg,
+                url: req.body.url
+            });
             const saved = await notify.save();
 
             try {
@@ -130,19 +123,16 @@ exports.like = async (req, res) => {
             }
 
             let n = notifyUser.notifications;
-            
+
             n = n.push(saved);
             console.log(notifyUser);
 
-
-            
             try {
                 const saveduser = await notifyUser.save();
                 console.log(saveduser);
             } catch (err) {
                 return res.status(500).json({ message: err });
             }
-
 
             try {
                 const savedpost = await post.save();
@@ -488,20 +478,37 @@ exports.unlikeComment = async (req, res, next) => {
 
 exports.getAllPosts = async (req, res, next) => {
     try {
-        const fields = {
-            title: true,
-            content: true,
-            date: true,
-            likes: true,
-            owner: true,
-            category: true,
-            imageurls: true,
-            comments: true
+        const userId = req.loggedUser._id;
+        const f = {
+            name:true,
+            "following._id": true,
+            primaryinterest:true
         };
-        const posts = await Post.find()
-            .select(fields)
+        const userModel = await User.findById(
+            {
+                _id: userId
+            }
+        ).select(f);
+        console.log(userModel); 
+        console.log(userModel.primaryinterest);
+        
+        
+        let followers = [];
+        let fo = userModel.following;
+        fo.forEach(element => {
+            followers.push(element._id);
+        });
+        followers.push(userId);
+        console.log(followers);
+
+        var query = {
+            $or: [
+                    {category: userModel.primaryinterest },
+                    {"owner._id": { $in : followers }}
+                ]
+        };
+        const posts = await Post.find(query)
             .sort({ datefield: -1 });
-        console.log(posts);
         return res.status(200).json(posts);
     } catch (error) {
         console.log(error);
@@ -519,18 +526,15 @@ exports.getSinglePost = async (req, res, next) => {
             owner: true,
             category: true,
             imageurls: true,
-            comments: true,
+            comments: true
         };
-        const post = await Post.findById({_id:req.params.postid})
+        const post = await Post.findById({ _id: req.params.postid })
             .select(fields)
             .sort({ datefield: -1 });
         console.log(post);
-        if (post.isPrivate)
-        {
+        if (post.isPrivate) {
             return res.json({ message: "This is a private post" });
-        }
-        else 
-        {
+        } else {
             return res.status(200).json(post);
         }
     } catch (error) {
@@ -539,58 +543,66 @@ exports.getSinglePost = async (req, res, next) => {
     }
 };
 
+exports.getUserPosts = async (req, res, next) => {
+    try {
+        const posts = await Post.find({ "owner._id": req.params.userId })
+            .sort({ datefield: -1 });
+        console.log(posts);
+            return res.status(200).json(posts);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "internal server error" });
+    }
+};
 
-exports.getSpecialPost = async ( req, res) => {
+exports.getSpecialPost = async (req, res) => {
     const r_key = req.params.key;
     console.log(r_key);
     try {
         const resp = await ServiceaccountModel.find({
             key: req.params.key
         });
-    
-    if(resp) {
-        const fields = {
-            title: true,
-            content: true,
-            description: true,
-            date: true,
-            likes: true,
-            owner: true,
-            category: true,
-            imageurls: true,
-        };
-        var date = new Date();
-        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-        var query = {
-            "date":{
-                $gte: firstDay,
-                $lte: lastDay
-            },
-            "imageurls":{$ne: [],$ne:[{}]},
-            "isPrivate":{$ne: true},
-            $or:[
-                {category:"Photographer"},
-                {category:"Painter"}
-              ]
 
-        };
-        const posts = await Post.find(query).limit(10)        
-            .select(fields)
-            .sort({ datefield: -1 });
-        console.log(posts);
+        if (resp) {
+            const fields = {
+                title: true,
+                content: true,
+                description: true,
+                date: true,
+                likes: true,
+                owner: true,
+                category: true,
+                imageurls: true
+            };
+            var date = new Date();
+            var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            var query = {
+                date: {
+                    $gte: firstDay,
+                    $lte: lastDay
+                },
+                imageurls: { $ne: [], $ne: [{}] },
+                isPrivate: { $ne: true },
+                $or: [{ category: "Photographer" }, { category: "Painter" }]
+            };
+            const posts = await Post.find(query)
+                .limit(10)
+                .select(fields)
+                .sort({ datefield: -1 });
+            console.log(posts);
 
-        return res.status(200).json(posts);
-    
-
-    } else {
-        return res.status(500).json({ message: "internal server error" });
+            return res.status(200).json(posts);
+        } else {
+            return res.status(500).json({ message: "internal server error" });
+        }
+    } catch (error) {
+        return res.status(500).json({ message: "Access is denied" });
     }
-} catch (error) {
-    return res.status(500).json({ message: "Access is denied" });
-}
-
 };
+
+
+
 /*
  */
 /*
