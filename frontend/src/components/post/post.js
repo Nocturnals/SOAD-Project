@@ -35,45 +35,15 @@ class PostComp extends Component {
         super(props);
 
         this.post_details = this.props.post_details;
+        console.log(this.post_details);
+
         this.index = this.props.index;
 
         const cmnt_img = require("../media/images/categories/animator.png");
 
-        this.comments = [
-            new Comment(
-                "Anonymous",
-                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
-                cmnt_img
-            ),
-            new Comment(
-                "Anonymous",
-                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
-                cmnt_img
-            ),
-            new Comment(
-                "Anonymous",
-                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
-                cmnt_img
-            ),
-            new Comment(
-                "Anonymous",
-                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
-                cmnt_img
-            ),
-            new Comment(
-                "hello1",
-                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
-                cmnt_img
-            )
-        ];
+        this.comments = this.post_details.comments;
 
         this.initialState = {
-            name: this.post_details.name,
-            time: this.post_details.time,
-            job: this.post_details.job,
-            location: this.post_details.location,
-            liked: this.post_details.liked,
-            likes: 7000,
             showCmnts: false,
             moreOptionsDrop: false,
             comments: this.comments,
@@ -303,7 +273,7 @@ class PostComp extends Component {
                             <div className="row">
                                 <div className="col post-image">
                                     <Img
-                                        src={post_details.imageurls[0]}
+                                        src={post_details.imageurls[0].url}
                                         loader={
                                             <ClipLoader
                                                 sizeUnit={"px"}
