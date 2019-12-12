@@ -99,7 +99,8 @@ class SearchComp extends Component {
         for (let index = 0; index < cards.length; index++) {
             const card = cards[index];
             const result = {
-                name: card._id,
+                id: card._id,
+                name: card.title,
                 descr: card.shortdescription.substring(0, 15)
             };
             pCards.push(<ResultCard result={result} searchIn={searchIn} />);
