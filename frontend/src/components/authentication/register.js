@@ -125,7 +125,7 @@ class RegisterComp extends Component {
                 "username",
                 "Username..."
             ),
-            new RegInputFieldProps("text", "date", "dateOfBirth", "dd/mm/yyyy"),
+            new RegInputFieldProps("date", "date", "dateOfBirth", "dd/mm/yyyy"),
             new RegInputFieldProps(
                 "password",
                 "reg_password",
