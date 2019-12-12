@@ -118,7 +118,7 @@ export function getUserWithToken(token) {
                 dispatch({
                     type: userAuthConst.LOGIN_FAILURE
                 });
-                dispatch(alertActions.error(err.response.data));
+                dispatch(alertActions.error(err.response.data.message));
             });
     };
 }

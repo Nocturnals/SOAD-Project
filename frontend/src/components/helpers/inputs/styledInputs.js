@@ -15,6 +15,7 @@ export class Input extends Component {
             id,
             name,
             value,
+            disabled,
             handleInputChange,
             onClick,
             error
@@ -33,6 +34,7 @@ export class Input extends Component {
                 onChange={handleInputChange}
                 onClick={onClick}
                 value={value}
+                disabled={disabled}
             />
         );
     }
