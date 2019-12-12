@@ -28,13 +28,14 @@ class ProfilePage extends Component {
     constructor(props) {
         super(props);
 
-        this.username = this.props.match.params;
+        this.username = this.props.match.params.username;
         this.authedUser = false;
         this.state = {
             user: this.props.auth.user,
             nav: "nav1",
             showUploadPostPopUP: false,
-            requestUserByName: false
+            requestUserByName: false,
+            userExists: true
         };
 
         this.handleNavigation = this.handleNavigation.bind(this);
@@ -44,7 +45,7 @@ class ProfilePage extends Component {
     componentDidMount() {
         document.body.scrollTo(0, 0);
         if (!this.state.requestUserByName) {
-            this.props.getUserByName(this.props.username);
+            this.props.getUserByName(this.props.match.params.username);
             this.setState({ requestUserByName: true });
         }
     }
@@ -85,8 +86,8 @@ class ProfilePage extends Component {
     };
 
     render() {
-        if (this.username !== this.props.match.params) {
-            this.username = this.props.match.params;
+        if (this.username !== this.props.match.params.username) {
+            this.username = this.props.match.params.username;
             this.props.getUserByName(this.username);
         }
         const coverimage = require("../media/images/profile/cover.jpg");
