@@ -33,6 +33,9 @@ router.post("/register", async (req, res) => {
         const emailExists = await UserModel.findOne({ email: req.body.email });
         if (emailExists)
             return res.status(400).json({ message: "Email already exists!" });
+        const userNameExists = await UserModel.findOne({ name: req.body.name });
+        if (userNameExists)
+            return res.status(400).json({ message: "username already exists" });
     } catch (error) {
         return res.status(500).json({ message: "Database didn't respond" });
     }

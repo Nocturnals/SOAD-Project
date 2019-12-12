@@ -40,15 +40,7 @@ const PostSchema = new mongoose.Schema({
     },
 
     category: {
-        enum: [
-            "Painter",
-            "VFX Artist",
-            "Story Writer",
-            "Singer",
-            "Photographer",
-            "Dancer",
-            "Comedian"
-        ],
+        enum: artistType,
         type: String
     },
 

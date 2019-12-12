@@ -13,6 +13,8 @@ const interestedInWorkValidation = data => {
         availableFrom: Joi.string().required(),
         availableTill: Joi.string().required(),
         portpolioSite: Joi.string()
+            .allow("")
+            .required()
     };
 
     return Joi.validate(data, schema);

@@ -4,6 +4,7 @@ const Multer = require("multer");
 const artistTypes = require("../../models/artistTypes");
 const { getArtistType } = require("./helper");
 const { verifyToken, verifyUserWithToken } = require("../auth/helper");
+const { uploadFile } = require("../../services/fileUpload");
 
 const colabControls = require("./colabControls");
 
@@ -29,6 +30,7 @@ router.post(
     verifyToken,
     verifyUserWithToken,
     multer.single("file"),
+    uploadFile,
     colabControls.InterstedInWork
 );
 

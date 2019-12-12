@@ -5,6 +5,7 @@ const {
     JobOffersModel,
     otherJobOfferModel
 } = require("../../models/artistsWanted");
+const FileLocModel = require("../../models/fileLocModel");
 const {
     interestedInWorkValidation,
     artistWantedValidation,
@@ -21,8 +22,6 @@ exports.InterstedInWork = async (req, res) => {
         return res
             .status(400)
             .json({ message: validatedData.error.details[0].message });
-    } else {
-        return res.json({ message: "success" });
     }
 
     // create a other user model with current user
@@ -32,14 +31,26 @@ exports.InterstedInWork = async (req, res) => {
         profileurl: req.loggedUser.profileurl
     });
 
+    const fileUrl = req.fileURL.url;
+    const fileName = req.fileURL.name;
+
+    const fileLocDoc = new FileLocModel({
+        url: fileUrl,
+        name: fileName
+    });
+
     // create the new jogapplied model
     const jobAvailable = new JobsAvailableModel({
-        artistType: req.body.artistType.toLowerCase(),
+        legalUser: req.body.legalUser,
+        email: req.body.email,
+        address: req.body.address,
+        artistType: req.body.artistType,
         user: user,
-        availableAt: req.body.availableAt,
-        freeTimeFrom: req.body.freeTimeFrom,
-        freeTimeTill: req.body.freeTimeTill,
-        portpolioSite: req.body.portpolioSite || ""
+        availableLocation: req.body.availableLocation,
+        availableFrom: req.body.availableFrom,
+        availableAtTill: req.body.availableAtTill,
+        portpolioSite: req.body.portpolioSite,
+        resumeLoc: fileLocDoc
     });
 
     // save the new doc to database
