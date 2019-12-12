@@ -110,6 +110,10 @@ const CompetitionsSchema = new mongoose.Schema({
 
     fileurls: {
         type: [imageschema]
+    },
+    createdOn: {
+        type: Date,
+        default: Date.now
     }
 });
 

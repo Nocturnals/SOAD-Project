@@ -6,6 +6,7 @@ const { OtheruserModel } = require("../../models/Otheruser");
 const { ReplyModel, CommentsModel } = require("../../models/Comments");
 const UserModel = require("./../../models/user");
 const { UpdateCompetition } = require("./helper");
+const otherCompetitonsModel = require("./../../models/Othercompetitions");
 
 const {
     CompRegisterValidation,
@@ -29,6 +30,8 @@ const {
     commentlikeValidation,
     commentreplyValidation,
     similarCompetitionValidation
+
+    findcompetitionmathcValidation
 } = require("./compValidation");
 
 const { upload } = require("./fileUpload");
@@ -88,12 +91,40 @@ router.post(
 
         try {
             const comp = await CompetitionsModel.findById(req.body._id);
+            var flag = false;
+            comp.participants.forEach(i => {
+                if (
+                    JSON.stringify(i._id) == JSON.stringify(req.loggedUser._id)
+                ) {
+                    flag = true;
+                }
+            });
+            if (flag) {
+                return res.json({
+                    message: "You are already Registered for this competition"
+                });
+            }
 
             comp.participants[comp.noofparticipants] = {
                 _id: req.loggedUser._id,
                 username: req.loggedUser.name,
                 profileurl: req.loggedUser.profileurl
             };
+
+            const user = await UserModel.findById(req.loggedUser._id);
+
+            const othercompetition = new otherCompetitonsModel({
+                id: comp._id,
+                name: comp.title,
+                starttime: comp.starttime,
+                endtime: comp.endtime,
+                shortdescription: comp.shortdescription
+            });
+
+            user.competitionsparticipating.push(othercompetition);
+
+            await user.save();
+            console.log(user.competitionsparticipating);
 
             comp.noofparticipants = comp.noofparticipants + 1;
             comp.save();
@@ -126,6 +157,7 @@ router.post(
             fulldescription: req.body.fulldescription,
             starttime: req.body.starttime,
             endtime: req.body.endtime,
+            category: req.body.category,
             hosts: [
                 {
                     _id: user._id,
@@ -824,9 +856,35 @@ router.get(
     }
 );
 
+router.get("/findCompetitionMatch/:name", async (req, res) => {
+    const validateData = findcompetitionmathcValidation(req.params);
+    if (validateData.error) {
+        return res
+            .status(400)
+            .json({ message: validateData.error.details[0].message });
+    }
+
+    try {
+        const reqTime = Date.now();
+
+        const competitionsList = await CompetitionsModel.find({
+            title: { $regex: req.params.name }
+        });
+        const result = {
+            competitionsList: competitionsList,
+            reqTime: reqTime
+        };
+
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 // retrieve a comp
 
-router.get("/:id", verifyToken, verifyUserWithToken, async (req, res, next) => {
+router.get("/:id", verifyToken, verifyUserWithToken, async (req, res) => {
     try {
         const comp = await CompetitionsModel.findById(req.params.id);
         if (comp) {

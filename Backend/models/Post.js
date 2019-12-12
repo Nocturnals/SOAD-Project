@@ -1,65 +1,74 @@
 const mongoose = require("mongoose");
 const otheruserschema = require("./Otheruser");
 const { CommentsSchema } = require("./Comments");
-const {imageschema} = require("./Image");
+const { imageschema } = require("./Image");
 const artistType = require("./artistTypes");
 
 const PostSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String,
-    required: true
-  },
-  content: {
-    type: String,
-    required: true
-  },
-  date: {
-    type: Date,
-    default: Date.now
-  },
+    title: {
+        type: String,
+        required: true
+    },
 
-  likedBy: {
-    type: [otheruserschema]
-  },
+    description: {
+        type: String,
+        required: true
+    },
 
-  likes: {
-    type: Number,
-    default: 0
-  },
+    content: {
+        type: String,
+        required: true
+    },
 
-  owner: {
-    type: [otheruserschema],
-    required: true
-  },
+    date: {
+        type: Date,
+        default: Date.now
+    },
 
-  category: {
-    enum: ["Painter","VFX Artist","Story Writer","Singer","Photographer","Dancer","Comedian"],
-    type: String
-  },
+    likedBy: {
+        type: [otheruserschema]
+    },
 
-  sharedby: {
-    type: [otheruserschema]
-  },
+    likes: {
+        type: Number,
+        default: 0
+    },
 
-  sharedcount: {
-    type: Number
-  },
+    owner: {
+        type: [otheruserschema],
+        required: true
+    },
 
-  comments: {
-    type: [CommentsSchema]
-  },
+    category: {
+        enum: [...artistType],
+        type: String
+    },
 
-  imageurls: {
-    type: [imageschema]
-  },
-  isprivate: {
-    type: Boolean,
-    required: true
-  }
+    sharedby: {
+        type: [otheruserschema]
+    },
+
+    sharedcount: {
+        type: Number
+    },
+
+    comments: {
+        type: [CommentsSchema]
+    },
+
+    imageurls: {
+        type: [imageschema]
+    },
+
+    isprivate: {
+        type: Boolean,
+        required: true
+    },
+
+    createdOn: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 module.exports = mongoose.model("Posts", PostSchema);

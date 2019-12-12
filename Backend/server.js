@@ -71,9 +71,19 @@ if (process.env.Node_Env === "development") {
 
 // Route for login
 app.use("/api/user", authRouter);
+
+// Route for document matching api
 app.use("/api/docMatch", docMatch);
+
+// Route for authentication routes
 app.use("/api/auth", require("./routes/auth"));
+
+// Route for chatting api
 app.use("/api/chat", ChatController);
+
+//Route for Organisations
+app.use("/api/organization", require("./routes/organizations/index"));
+app.use("/editProfile", require("./routes/editProfile/index"));
 //Route for Competitions
 app.use("/api/competition", require("./routes/competitions/utils"));
 
@@ -86,8 +96,13 @@ app.use("/api/subscriptions", require("./routes/subscription_1/service"));
 // route for colabaration
 app.use("/api/colab", require("./routes/colab"));
 
-// Route for notifications
+// route for service account registration
+app.use("/api/serviceaccount", require("./routes/serviceaccount/index"));
 
+// Route to manageUserProfile
+app.use("/api/manageProfile", require("./routes/manageProfile/index"));
+
+// Route for notifications
 app.use("/api/notifications", require("./routes/notifications/utils"));
 // app.use("api/subscription", require("./routes/subscription/stripefunctions"));
 

@@ -87,6 +87,8 @@ class MainAppComponents extends Component {
             />
         );
 
+        console.log(this.props.auth);
+
         return (
             <Router>
                 <Switch>
@@ -165,12 +167,17 @@ class MainAppComponents extends Component {
                                 {/* Organisations Page */}
                                 <Route
                                     exact
-                                    path="/artists/:organisationName/:content"
+                                    path="/artists/:organisationName?/:content"
                                     component={Organisations}
                                 />
                                 <AuthenticatedRoute
                                     exact
-                                    path="/artists/:action"
+                                    path="/create/organisation"
+                                    component={CreateOrganisation}
+                                />
+                                <AuthenticatedRoute
+                                    exact
+                                    path="/edit/organisation/:org_id"
                                     component={CreateOrganisation}
                                 />
 

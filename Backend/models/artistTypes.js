@@ -1,13 +1,15 @@
 // will update in near future with new types
 
 const artistType = [
-    "Painter",
-    "VFX Artist",
-    "Story Writer",
-    "Singer",
-    "Photographer",
-    "Dancer",
-    "Comedian"
+    "painter",
+    "vfx artist",
+    "story writer",
+    "singer",
+    "photographer",
+    "dancer",
+    "comedian",
+    "director",
+    "music director"
 ];
 
 module.exports = artistType;

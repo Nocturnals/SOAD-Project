@@ -2,12 +2,29 @@ const mongoose = require("mongoose");
 
 const artistTypes = require("./artistTypes");
 const otherUserSchema = require("./Otheruser");
+const { fileLocSchema } = require("./fileLocModel");
 
-const JobsAppliedSchema = new mongoose.Schema({
+const JobsAvailableSchema = new mongoose.Schema({
+    legalName: {
+        type: String,
+        required: true
+    },
+
+    email: {
+        type: String,
+        required: true
+    },
+
+    address: {
+        type: String,
+        required: true
+    },
+
     artistType: {
         enum: [...artistTypes],
         type: String,
-        required: true
+        required: true,
+        lowercase: true
     },
 
     user: {
@@ -15,35 +32,38 @@ const JobsAppliedSchema = new mongoose.Schema({
         required: true
     },
 
-    availableAt: {
+    availableLocation: {
         type: String,
         required: true
     },
 
-    freeTimeFrom: {
-        type: Number,
-        default: 0,
+    availableFrom: {
+        type: String,
         required: true
     },
 
-    freeTimeTill: {
-        type: Number,
-        default: 0,
+    availableTill: {
+        type: String,
         required: true
     },
 
-    portpolioSite: {
+    portfolioSite: {
         type: String,
         default: ""
     },
 
-    cvLocation: {
-        type: String,
+    resumeLoc: {
+        type: fileLocSchema,
         required: true
+    },
+
+    createdOn: {
+        type: Date,
+        default: Date.now
     }
 });
 
-const JobsAppliedModel = mongoose.model("JobsApplied", JobsAppliedSchema);
+const JobsAvailableModel = mongoose.model("JobsAvailable", JobsAvailableSchema);
 
-module.exports = JobsAppliedModel;
-module.exports.JobsAppliedSchema = JobsAppliedSchema;
+module.exports = JobsAvailableModel;
+module.exports.JobsAvailableSchema = JobsAvailableSchema;

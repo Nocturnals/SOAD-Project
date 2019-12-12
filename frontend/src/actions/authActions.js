@@ -20,6 +20,7 @@ export function login(email, password) {
             .post("http://localhost:4000/api/auth/login", user)
             .then(res => {
                 const { authorization } = res.headers;
+                console.log(res.data);
 
                 localStorage.setItem("userToken", authorization);
                 setAuthTokenHeader(authorization);
@@ -84,7 +85,7 @@ export function register(email, username, dateofbirth, password) {
             .catch(err => {
                 try {
                     dispatch({ type: userAuthConst.REGISTER_FAILURE });
-                    dispatch(alertActions.error(err.response.data));
+                    dispatch(alertActions.error(err.response.data.message));
                 } catch (error) {
                     console.log(error);
                     dispatch(
@@ -117,7 +118,7 @@ export function getUserWithToken(token) {
                 dispatch({
                     type: userAuthConst.LOGIN_FAILURE
                 });
-                dispatch(alertActions.error(err.response.data));
+                dispatch(alertActions.error(err.response.data.message));
             });
     };
 }

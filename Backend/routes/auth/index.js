@@ -12,7 +12,8 @@ const {
     LoginValidation,
     EmailIDValidation,
     passwordValidation,
-    editProfileValidation
+    editProfileValidation,
+    findUserValidation
 } = require("./authValidation");
 
 // intance of a router
@@ -32,6 +33,9 @@ router.post("/register", async (req, res) => {
         const emailExists = await UserModel.findOne({ email: req.body.email });
         if (emailExists)
             return res.status(400).json({ message: "Email already exists!" });
+        const userNameExists = await UserModel.findOne({ name: req.body.name });
+        if (userNameExists)
+            return res.status(400).json({ message: "username already exists" });
     } catch (error) {
         return res.status(500).json({ message: "Database didn't respond" });
     }
@@ -59,7 +63,7 @@ router.post("/register", async (req, res) => {
 
         res.status(200)
             .header("authorization", jToken)
-            .json(_.pick(savedUser, ["_id", "name", "email"]));
+            .json(savedUser);
     } catch (err) {
         res.status(400).json({ message: err });
     }
@@ -96,9 +100,10 @@ router.post("/login", async (req, res) => {
             expiresIn: "1d"
         });
 
-        res.status(200)
+        return res
+            .status(200)
             .header("authorization", jToken)
-            .json(_.pick(user, ["_id", "name", "email"]));
+            .json(user);
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "Internal server error" });
@@ -310,9 +315,53 @@ router.post(
     }
 );
 
-// testing routes
-router.get("/test", verifyToken, verifyUserWithToken, (req, res) => {
-    return res.json({ message: "working perfectly" });
+router.get("/findUserMatch/:name", async (req, res) => {
+    // validate data
+    const validateData = findUserValidation(req.params);
+    if (validateData.error) {
+        return res
+            .status(400)
+            .json({ message: validateData.error.details[0].message });
+    }
+
+    // find the user which matches
+    try {
+        const reqTime = Date.now();
+
+        const usersList = await UserModel.find({
+            name: { $regex: req.params.name }
+        });
+
+        const result = {
+            usersList: usersList,
+            reqTime: reqTime
+        };
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+// route to get user model via username
+router.get("/userProfile/:name", async (req, res) => {
+    // validate data
+    const validateData = findUserValidation(req.params);
+    if (validateData.error) {
+        return res
+            .status(400)
+            .json({ message: validateData.error.details[0].message });
+    }
+
+    // find the user which matches
+    try {
+        const user = await UserModel.findOne({ name: req.params.name });
+
+        return res.status(200).json(user);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
 });
 
 // exports the routers

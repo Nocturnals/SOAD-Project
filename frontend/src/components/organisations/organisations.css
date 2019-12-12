@@ -62,6 +62,106 @@
     cursor: pointer;
 }
 
+/* Body */
+.organisations .body {
+    width: 1350px; margin: auto;
+    padding: 0;
+}
+/* Members */
+.organisations .body .orgRightContent .adminUsers,
+.organisations .body .members {
+    max-width: 310px; padding: 0;
+    background-color: white;
+    align-self: flex-start;
+}
+/* Header */
+.organisations .body .orgRightContent .adminUsers .adminMemHeader,
+.organisations .body .members .orgMemHeader {
+    text-align: left;
+    padding: 10px 20px; margin: auto;
+    color: seashell;
+    background-color: rgb(68, 6, 109);
+}
+.organisations .body .orgRightContent .adminUsers .adminMemBody .member,
+.organisations .body .members .orgMemBody .member {
+    padding: 10px 10px; margin: auto;
+    background-color: rgb(0, 0, 0, 0.03);
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.3);
+    transition: all 0.1s linear;
+}
+.organisations .body .orgRightContent .adminUsers .adminMemBody .member:last-child,
+.organisations .body .members .orgMemBody .member:last-child {
+    border-bottom: none;
+}
+.organisations .body .orgRightContent .adminUsers .adminMemBody .member:hover,
+.organisations .body .members .orgMemBody .member:hover {
+    cursor: pointer;
+    background-color: rgb(0, 0, 0, 0.01);
+}
+.organisations .body .orgRightContent .adminUsers .adminMemBody .member .userImage,
+.organisations .body .members .orgMemBody .member .userImage {
+    padding: 0;
+    max-width: 60px; margin: auto;
+}
+.organisations .body .orgRightContent .adminUsers .adminMemBody .member .userImage .image,
+.organisations .body .members .orgMemBody .member .userImage .image {
+    margin: 0;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(68, 6, 109, 0.5);
+}
+.organisations .body .orgRightContent .adminUsers .adminMemBody .member .user,
+.organisations .body .members .orgMemBody .member .user {
+    padding: 0;
+    text-align: left;
+    align-self: center
+}
+.organisations .body .orgRightContent .adminUsers .adminMemBody .member .user .details,
+.organisations .body .members .orgMemBody .member .user .details {
+    margin: auto;
+}
+/* add User Button */
+.organisations .body .members .orgMemBody .addUsers {
+    width: 100%; padding: 8px 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba(68, 6, 109, 0.9);
+    border: 2px dotted rgba(68, 6, 109, 0.5);
+    transition: all 0.2s linear;
+    outline: none;
+}
+.organisations .body .members .orgMemBody .addUsers:hover {
+    transform: scale(1.01);
+    border: 2px solid rgba(68, 6, 109, 0.5);
+}
+/* Feed */
+/* Organisation Controls */
+.organisations .body .orgRightContent {
+    max-width: 310px; padding: 10px 0;
+}
+.organisations .body .orgRightContent .adminUsers {
+    margin: auto; margin-top: 20px;
+}
+.organisations .body .orgRightContent .adminUsers .admin-users {
+    padding: 0;
+}
+.organisations .body .orgRightContent .editOrganisation button {
+    padding: 8px 35px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: rgba(83, 29, 119, 1);
+    border: .5px solid rgba(83, 29, 119, 0.7);
+    background-color: white;
+    outline: none;
+    transition: all 0.2s linear;
+}
+.organisations .body .orgRightContent .editOrganisation button:hover {
+    transform: scale(1.05);
+    background-color: rgba(83, 29, 119, 1);
+    color: seashell;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+}
+
 
 
 

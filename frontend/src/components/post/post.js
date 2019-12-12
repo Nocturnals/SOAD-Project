@@ -29,6 +29,8 @@ class Comment {
 }
 
 class PostComp extends Component {
+    _isMounted = false;
+
     constructor(props) {
         super(props);
 
@@ -65,7 +67,7 @@ class PostComp extends Component {
             )
         ];
 
-        this.state = {
+        this.initialState = {
             name: this.post_details.name,
             time: this.post_details.time,
             job: this.post_details.job,
@@ -79,6 +81,7 @@ class PostComp extends Component {
             newCommentHighlight: false,
             addCommentError: ""
         };
+        this.state = { ...this.initialState };
 
         this.alterLike = this.alterLike.bind(this);
         this.toggleCommentsSection = this.toggleCommentsSection.bind(this);
@@ -86,8 +89,15 @@ class PostComp extends Component {
         this.dropDownEventListener = this.dropDownEventListener.bind(this);
         this.handleCommentInput = this.handleCommentInput.bind(this);
         this.addComment = this.addComment.bind(this);
-
-        this.dropDownEventListener();
+    }
+    componentDidMount() {
+        this.dropDownEventListener(false);
+        this._isMounted = true;
+    }
+    componentWillUnmount() {
+        this.setState({ ...this.initialState });
+        this._isMounted = false;
+        this.dropDownEventListener(true);
     }
 
     // Handling new comment input change...
@@ -150,19 +160,29 @@ class PostComp extends Component {
     };
 
     // DoropDown Event Listener...
-    dropDownEventListener = () => {
-        document.addEventListener("click", event => {
-            if (
-                !event.target.matches("#post-more-" + this.index) &&
-                !event.target.matches("#post-more-button-" + this.index)
-            ) {
-                this.setState({
-                    moreOptionsDrop: this.moreOptionsDrop
-                        ? false
-                        : this.moreOptionsDrop
-                });
-            }
-        });
+    dropDownEventListener = remove => {
+        if (remove) {
+            console.log("Asdasd");
+            document.removeEventListener("click", event => {
+                this.eventListener(event);
+            });
+        } else {
+            document.addEventListener("click", event => {
+                this.eventListener(event);
+            });
+        }
+    };
+    eventListener = event => {
+        if (
+            !event.target.matches("#post-more-" + this.index) &&
+            !event.target.matches("#post-more-button-" + this.index)
+        ) {
+            this.setState({
+                moreOptionsDrop: this.moreOptionsDrop
+                    ? false
+                    : this.moreOptionsDrop
+            });
+        }
     };
 
     // Rendering...
@@ -195,10 +215,7 @@ class PostComp extends Component {
                                     }
                                 >
                                     <Link
-                                        to={
-                                            "/artist/" +
-                                            this.state.name.replace(/\s/g, "")
-                                        }
+                                        to={"/artist/" + this.state.name}
                                         className="userLink"
                                         style={{ textDecoration: "none" }}
                                     >

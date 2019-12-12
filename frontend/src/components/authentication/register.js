@@ -33,14 +33,6 @@ class RegisterComp extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount() {
-        // if the user is logged in redirect to home page
-        if (this.props.auth.isAuthed) {
-            console.log(this.props.auth);
-            return <Redirect to="/user/home" />;
-        }
-    }
-
     handleChange(e) {
         const { name, value } = e.target;
         this.setState({ [name]: value });
@@ -133,15 +125,7 @@ class RegisterComp extends Component {
                 "username",
                 "Username..."
             ),
-            // new RegInputFieldProps('text', 'name first', 'firstName', 'First Name...'),
-            // new RegInputFieldProps('text', 'name last', 'lastName', 'Last Name...'),
-            new RegInputFieldProps(
-                "text",
-                "date",
-                "dateOfBirth",
-                "dd/mm/yyyy",
-                "d{1,2}/d{1,2}/d{4}"
-            ),
+            new RegInputFieldProps("text", "date", "dateOfBirth", "dd/mm/yyyy"),
             new RegInputFieldProps(
                 "password",
                 "reg_password",
