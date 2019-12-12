@@ -7,8 +7,6 @@ import {
 } from "../../constants/index";
 import alertActions from "../alertActions";
 
-import alertActions from "../../actions/alertActions";
-
 export function postJobOffer(job) {
     return dispatch => {
         dispatch(requestAction(job));

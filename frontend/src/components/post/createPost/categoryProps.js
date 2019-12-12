@@ -32,6 +32,6 @@ export default function categoryProperties(category) {
             };
 
         default:
-            break;
+            return "";
     }
 }
