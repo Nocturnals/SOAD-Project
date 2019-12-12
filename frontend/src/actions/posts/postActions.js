@@ -62,3 +62,16 @@ export function getHomeFeed() {
             });
     };
 }
+
+export function alterLike(post_id) {
+    return dispatch => {
+        axios
+            .post("http://localhost:4000/api/post/posts")
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
+}
