@@ -103,6 +103,7 @@ class RightContent extends Component {
     };
 
     render() {
+        const { userProfile } = this.props;
         const competitions = [
             new Competition(
                 "Cook Off",
@@ -150,7 +151,9 @@ class RightContent extends Component {
                             </div>
                         </div>
                     ) : null}
-                    <CompetitionsList competitions={competitions} />
+                    <CompetitionsList
+                        competitions={userProfile.competitionsparticipating}
+                    />
                 </div>
             </div>
         );

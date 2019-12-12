@@ -11,7 +11,7 @@ import CreatePostComp from "../post/createPost/createPost";
 
 import "./profile.css";
 
-import { getUserByName } from "../../actions/index";
+import { getUserByName, getUserPosts } from "../../actions/index";
 
 // Post Element Class...
 class Post {
@@ -35,6 +35,7 @@ class ProfilePage extends Component {
             nav: "nav1",
             showUploadPostPopUP: false,
             requestUserByName: false,
+            requestUserPosts: false,
             userExists: true
         };
 
@@ -47,6 +48,10 @@ class ProfilePage extends Component {
         if (!this.state.requestUserByName) {
             this.props.getUserByName(this.props.match.params.username);
             this.setState({ requestUserByName: true });
+        }
+        if (!this.state.requestUserPosts && this.props.otherUsers.userProfile) {
+            this.props.getUserPosts(this.props.otherUsers.userProfile._id);
+            this.setState({ requestUserPosts: true });
         }
     }
     componentDidUpdate() {
@@ -101,7 +106,7 @@ class ProfilePage extends Component {
             new Post(username, "59 min", "Epic Coder", "India", true)
         ];
 
-        const { auth } = this.props;
+        const { auth, otherUsers } = this.props;
 
         this.authedUser = auth.user
             ? auth.user.name === this.props.match.params.username
@@ -143,16 +148,24 @@ class ProfilePage extends Component {
                         </div>
                         <div className="profile-content row">
                             <div className="col-3">
-                                <LeftContent
-                                    username={this.props.match.params.username}
-                                />
+                                {otherUsers.userProfile &&
+                                !otherUsers.isLoading ? (
+                                    <LeftContent
+                                        userProfile={otherUsers.userProfile}
+                                    />
+                                ) : null}
                             </div>
                             <div className="col-6">
                                 <div className="userContent row">
                                     <div className="col">
                                         <div className="row">
                                             <div className="userName col">
-                                                <h3>{username}</h3>
+                                                <h3>
+                                                    {otherUsers.userProfile
+                                                        ? otherUsers.userProfile
+                                                              .name
+                                                        : ""}
+                                                </h3>
                                             </div>
                                             <div className="userMail col align-self-center">
                                                 <h6>
@@ -161,15 +174,24 @@ class ProfilePage extends Component {
                                                         aria-hidden="true"
                                                     ></i>
                                                     &nbsp;&nbsp;&nbsp;
-                                                    {auth.user &&
-                                                        auth.user.email}
+                                                    {otherUsers.userProfile
+                                                        ? otherUsers.userProfile
+                                                              .email
+                                                        : ""}
                                                 </h6>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="userJob col">
                                                 <h4>
-                                                    Professional Red Hat Hacker
+                                                    {otherUsers.userProfile
+                                                        ? otherUsers.userProfile
+                                                              .primaryInterset
+                                                            ? otherUsers
+                                                                  .userProfile
+                                                                  .primaryInterset
+                                                            : "No Primary Interest Opted"
+                                                        : ""}
                                                 </h4>
                                             </div>
                                             <div className="userLocation col">
@@ -178,7 +200,12 @@ class ProfilePage extends Component {
                                                         className="fa fa-map-marker"
                                                         aria-hidden="true"
                                                     ></i>
-                                                    &nbsp;&nbsp;India
+                                                    &nbsp;&nbsp;
+                                                    {otherUsers.userProfile
+                                                        ? otherUsers.userProfile.dateofbirth.split(
+                                                              "T"
+                                                          )[0]
+                                                        : "dd/mm/yyyy"}
                                                 </h4>
                                             </div>
                                         </div>
@@ -245,12 +272,14 @@ class ProfilePage extends Component {
                                 {this.postCards(posts)}
                             </div>
                             <div className="col-3">
-                                <RightContent
-                                    togglePopUp={this.toggleUploadPostPopUp.bind(
-                                        this
-                                    )}
-                                    authedUser={this.authedUser}
-                                />
+                                {otherUsers.userProfile ? (
+                                    <RightContent
+                                        togglePopUp={this.toggleUploadPostPopUp.bind(
+                                            this
+                                        )}
+                                        userProfile={otherUsers.userProfile}
+                                    />
+                                ) : null}
                             </div>
                         </div>
                     </div>
@@ -266,6 +295,7 @@ class ProfilePage extends Component {
 
 ProfilePage.propTypes = {
     getUserByName: PropTypes.func.isRequired,
+    getUserPosts: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     otherUsers: PropTypes.object.isRequired
 };
@@ -275,4 +305,6 @@ const mapStateToProps = state => ({
     otherUsers: state.otherUsers
 });
 
-export default connect(mapStateToProps, { getUserByName })(ProfilePage);
+export default connect(mapStateToProps, { getUserByName, getUserPosts })(
+    ProfilePage
+);
