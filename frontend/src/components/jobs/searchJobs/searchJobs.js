@@ -9,8 +9,6 @@ import JobsFilters from "../jobsFilters";
 
 import { jobStatusConst, employment_type } from "../constants";
 
-import { JobBrief } from "../classes";
-
 import { ClipLoader } from "react-spinners";
 import "./searchJobs.css";
 
