@@ -1,10 +1,3 @@
-
-const services = [
-    "Service1",
-    "Service2",
-    "Service3",
-    "Service4",
-    
-];
+const services = ["Subscription", "Document Matching", "Jobs", "Promotions"];
 
 module.exports = services;
