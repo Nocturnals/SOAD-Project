@@ -47,7 +47,7 @@ const JobsAvailableSchema = new mongoose.Schema({
         required: true
     },
 
-    portpolioSite: {
+    portfolioSite: {
         type: String,
         default: ""
     },
