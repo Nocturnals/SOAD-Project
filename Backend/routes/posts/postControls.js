@@ -543,6 +543,18 @@ exports.getSinglePost = async (req, res, next) => {
     }
 };
 
+exports.getUserPosts = async (req, res, next) => {
+    try {
+        const posts = await Post.find({ "owner._id": req.params.userId })
+            .sort({ datefield: -1 });
+        console.log(posts);
+            return res.status(200).json(posts);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "internal server error" });
+    }
+};
+
 exports.getSpecialPost = async (req, res) => {
     const r_key = req.params.key;
     console.log(r_key);
@@ -588,6 +600,9 @@ exports.getSpecialPost = async (req, res) => {
         return res.status(500).json({ message: "Access is denied" });
     }
 };
+
+
+
 /*
  */
 /*
