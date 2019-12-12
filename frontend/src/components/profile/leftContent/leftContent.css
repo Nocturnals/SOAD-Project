@@ -5,7 +5,6 @@
     margin-right: 5px;
     margin-top: 40px;
     background-color: white;
-    /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); */
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 .profile .left-content:first-child {
@@ -17,7 +16,6 @@
 
 .profile .left-content .userImage {
     height: 80px;
-    /* background-image: linear-gradient(135deg, #5a1d7e, #7f2bb8); */
 }
 .profile .left-content .userImage .image-div {
     width: 170px;

@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import { Input, TextArea } from "../../helpers/inputs/styledInputs";
 
@@ -9,6 +11,8 @@ import { LocationSearchInput } from "../../googleMaps/googleMaps";
 
 import isValidEmail from "../../../validation/emailValidation";
 import "./askJob.css";
+
+import { getAllArtistTypes } from "../../../actions/index";
 
 class AskJob extends Component {
     static defaultProps = {
@@ -22,40 +26,28 @@ class AskJob extends Component {
     constructor(props) {
         super(props);
 
-        this.artistTypes = [
-            "Photographer",
-            "Painter",
-            "VFX Artist",
-            "Story Writer",
-            "Singer",
-            "Dancer",
-            "Comedian"
-        ];
-
         this.inputs = {
             legalName: "",
             address: "",
-            email: "venkatvishwanth.s17@iiits.in",
-            artistType: this.artistTypes[0],
+            email: "",
+            artistType: "",
             description: "",
             location: "",
             fromTime: "",
             toTime: "",
             website: "",
-            prevJobDescription: "",
-            prevJobTitle: "",
-            startDate: "",
-            endDate: "",
-            workedAddress: "",
             resume: ""
         };
 
         this.state = {
             inputs: this.inputs,
+            artistTypes: [],
             resumeName: null,
             showResume: false,
             submitted: false,
-            noOfEmptyFields: 15
+            noOfEmptyFields: 15,
+            requestArtistTypes: false,
+            fetchedArtistTypes: false
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -68,6 +60,12 @@ class AskJob extends Component {
         );
 
         this.resumeDisplayEventListener();
+    }
+    componentDidMount() {
+        if (!this.state.requestArtistTypes) {
+            this.props.getAllArtistTypes();
+            this.setState({ requestArtistTypes: true });
+        }
     }
 
     // Counting Empty Input Fields...
@@ -97,6 +95,18 @@ class AskJob extends Component {
             submitted: true,
             noOfEmptyFields: this.countEmptyFields()
         });
+
+        let formData = new FormData();
+        formData.append("legalName", this.state.inputs.legalName);
+        formData.append("email", this.state.inputs.email);
+        formData.append("address", this.state.inputs.address);
+        formData.append("artistType", this.state.inputs.artistType);
+        formData.append("description", this.state.inputs.description);
+        formData.append("availableLocation", this.state.inputs.location);
+        formData.append("availableFrom", this.state.inputs.fromTime);
+        formData.append("availableTill", this.state.inputs.toTime);
+        formData.append("portfolioSite", this.state.inputs.website);
+        formData.append("file", this.state.inputs.resume);
         document.body.scrollTo(0, 0);
     };
 
@@ -149,22 +159,33 @@ class AskJob extends Component {
     };
 
     // Creating Artist Type Options...
-    artistTypeOptions = () => {
-        let options = [];
-        for (let index = 0; index < this.artistTypes.length; index++) {
-            const artist = this.artistTypes[index];
+    artistTypeOptions = options => {
+        let optionsComp = [];
+        for (let index = 0; index < options.length; index++) {
+            const artist = options[index];
 
-            options.push(
+            optionsComp.push(
                 <option value={artist} key={index}>
                     {artist}
                 </option>
             );
         }
 
-        return options;
+        return optionsComp;
     };
 
     render() {
+        const { artistTypes } = this.props;
+        if (!this.state.fetchedArtistTypes && artistTypes.artistTypes.length) {
+            this.setState({
+                artistTypes: artistTypes.artistTypes,
+                inputs: {
+                    ...this.state.inputs,
+                    artistType: artistTypes.artistTypes[0]
+                },
+                fetchedArtistTypes: true
+            });
+        }
         const {
             legalName,
             address,
@@ -175,11 +196,6 @@ class AskJob extends Component {
             fromTime,
             toTime,
             website,
-            prevJobTitle,
-            prevJobDescription,
-            startDate,
-            endDate,
-            workedAddress,
             resume
         } = this.state.inputs;
 
@@ -290,7 +306,11 @@ class AskJob extends Component {
                                             <option disabled="disabled">
                                                 --Select Artist Type--
                                             </option>
-                                            {this.artistTypeOptions()}
+                                            {artistTypes.artistTypes.length
+                                                ? this.artistTypeOptions(
+                                                      artistTypes.artistTypes
+                                                  )
+                                                : null}
                                         </select>
                                     </div>
                                 </div>
@@ -392,7 +412,7 @@ class AskJob extends Component {
                                  ******** Work Experience
                                  *
                                  */}
-                                <div className="row section">
+                                {/* <div className="row section">
                                     <h6>Work Experience:</h6>
                                 </div>
                                 <div className="row input jobTitle">
@@ -492,7 +512,7 @@ class AskJob extends Component {
                                             value={workedAddress}
                                         />
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                             {/*
                              *
@@ -572,4 +592,13 @@ class AskJob extends Component {
     }
 }
 
-export default AskJob;
+AskJob.propTypes = {
+    getAllArtistTypes: PropTypes.func.isRequired,
+    artistTypes: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    artistTypes: state.artistTypes
+});
+
+export default connect(mapStateToProps, { getAllArtistTypes })(AskJob);
