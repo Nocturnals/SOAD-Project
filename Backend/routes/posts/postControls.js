@@ -530,7 +530,7 @@ exports.getSinglePost = async (req, res, next) => {
 exports.getUserPosts = async (req, res, next) => {
     try {
         const posts = await Post.find({ "owner._id": req.params.userId, isprivate: false })
-            .sort({ datefield: -1 });
+            .sort({ date: -1 });
         console.log(posts);
             return res.status(200).json(posts);
     } catch (error) {
@@ -572,8 +572,7 @@ exports.getSpecialPost = async (req, res) => {
             };
             const posts = await Post.find(query)
                 .limit(10)
-                .select(fields)
-                .sort({ date: -1 });
+                .select(fields);
             console.log(posts);
 
             return res.status(200).json(posts);
