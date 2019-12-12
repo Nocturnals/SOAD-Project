@@ -4,17 +4,6 @@ const artistTypes = require("../../models/artistTypes");
 const { getArtistType } = require("./helper");
 const { verifyToken, verifyUserWithToken } = require("../auth/helper");
 
-// const {
-//     InterstedInWork,
-//     createJobOffer,
-//     getJobByID,
-//     getAllArtistsOfType,
-//     getAllArtistsOfTypeAndArea,
-//     getJobOffersWithOptions,
-//     getAllJobOffersOfType,
-//     getAllJobOffersOfTypeAndArea,
-//     applyForJob
-// } = require("./colabControls");
 const colabControls = require("./colabControls");
 
 // instance of router

@@ -5,6 +5,7 @@ import {
     alertConstants,
     userAuthConst
 } from "../../constants/index";
+import alertActions from "../alertActions";
 
 export function postJobOffer(job) {
     return dispatch => {
