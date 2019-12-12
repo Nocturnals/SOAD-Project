@@ -252,11 +252,20 @@ const commentreplyValidation = data => {
     return Joi.validate(data, schema);
 };
 
+const similarCompetitionValidation = data => {
+    const schema = {
+        _id: Joi.string()
+            .min(4)
+            .required()
+    };
+    return Joi.validate(data, schema);
+};
+
 const findcompetitionmathcValidation = data => {
-    const schma = {
+    const schema = {
         name: Joi.string().required()
     };
-    return Joi.validate(data, schma);
+    return Joi.validate(data, schema);
 };
 
 module.exports = {
@@ -280,5 +289,6 @@ module.exports = {
     editcommentValidation,
     commentlikeValidation,
     commentreplyValidation,
+    similarCompetitionValidation,
     findcompetitionmathcValidation
 };

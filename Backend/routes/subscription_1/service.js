@@ -6,63 +6,76 @@ postModel = require("./../../models/Post");
 const { planpostModel } = require("./../../models/Subcriptions");
 const UserModel = require("./../../models/user");
 const { OtheruserModel } = require("./../../models/Otheruser");
-const { addtoplanValidation } = require("./serviceValidation");
+const {
+    addtoplanValidation,
+    showpostsValidation
+} = require("./serviceValidation");
+const { ServiceaccountModel } = require("./../../models/serviceaccount");
 
-router.post(
-    "/showallplans",
-    verifyToken,
-    verifyUserWithToken,
+router.get(
+    "/:key/showallplans",
+
     async (req, res, next) => {
         // const user = req.loggedUser;
 
         try {
-            const plans = await planModel.find().select("name , _id");
-            res.send(plans);
+            // const serviceaccount = await ServiceaccountModel.find().where({
+            //     key: req.params.key
+            // });
+            const serviceaccount = await ServiceaccountModel.find({
+                key: req.params.key
+            });
+            console.log(serviceaccount);
+
+            if (serviceaccount[0]) {
+                const plans = await planModel.find().select("name , _id");
+                if (plans) res.send(plans);
+                else return res.json({ message: "no plans found" });
+            } else {
+                return res.json({
+                    message: "Register for this Service From our Website"
+                });
+            }
         } catch (error) {
             res.status(500).json({ message: "internal server error" });
         }
     }
 );
 
-router.post(
-    "/subscribe/:id",
-    verifyToken,
-    verifyUserWithToken,
-    async (req, res, next) => {
-        try {
-            var isalreadypresent = false;
-            const user = new OtheruserModel({
-                _id: req.loggedUser._id,
-                username: req.loggedUser.name,
-                profileurl: req.loggedUser.profileurl
+router.post("/subscribe/:id", async (req, res, next) => {
+    try {
+        var isalreadypresent = false;
+        const user = new OtheruserModel({
+            _id: req.loggedUser._id,
+            username: req.loggedUser.name,
+            profileurl: req.loggedUser.profileurl
+        });
+
+        const plan = await planModel.findById(req.params.id);
+        if (plan) {
+            plan.subscribers.forEach(i => {
+                if (JSON.stringify(i.id) == JSON.stringify(user.id)) {
+                    isalreadypresent = true;
+                }
             });
 
-            const plan = await planModel.findById(req.params.id);
-            if (plan) {
-                plan.subscribers.forEach(i => {
-                    if (JSON.stringify(i.id) == JSON.stringify(user.id)) {
-                        isalreadypresent = true;
-                    }
-                });
-
-                if (!isalreadypresent) {
-                    plan.subscribers.push(user);
-                    plan.save();
-                    return res.send(plan);
-                } else {
-                    return res.json({
-                        message: "You already Subscribed to this plan"
-                    });
-                }
+            if (!isalreadypresent) {
+                plan.subscribers.push(user);
+                plan.save();
+                return res.send(plan);
             } else {
-                return res.status(400).json({ message: "invalid planid" });
+                return res.json({
+                    message: "You already Subscribed to this plan"
+                });
             }
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ message: "internal server error" });
+        } else {
+            return res.status(400).json({ message: "invalid planid" });
         }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "internal server error" });
     }
-);
+});
 
 router.post(
     "/becomecontentcreator/:id",
@@ -192,24 +205,32 @@ router.post("/createplan", async (req, res, next) => {
 });
 
 router.post(
-    "/showcategories/:id",
-    verifyToken,
-    verifyUserWithToken,
+    "/:key/showcategories/:id",
+
     async (req, res, next) => {
         try {
-            const plan = await planModel.findById(req.params.id);
+            const serviceaccount = await ServiceaccountModel.find().where({
+                key: req.params.key
+            });
+            if (serviceaccount) {
+                const plan = await planModel.findById(req.params.id);
 
-            if (plan) {
-                var categories = [];
-                plan.posts.forEach(i => {
-                    console.log(i.category);
-                    console.log("safgsruih");
-                    categories.push(i.category);
-                });
-                // console.log(categories);
-                return res.json(categories);
+                if (plan) {
+                    var categories = [];
+                    plan.posts.forEach(i => {
+                        // console.log(i.category);
+                        // console.log("safgsruih");
+                        categories.push(i.category);
+                    });
+                    // console.log(categories);
+                    return res.json(categories);
+                } else {
+                    return res.json({ message: "Plan not found" });
+                }
             } else {
-                return res.json({ message: "Plan not found" });
+                return res.json({
+                    message: "Register for this Service From our Website"
+                });
             }
         } catch (error) {
             return res.status(500).json({ message: "Internal Server Error" });
@@ -218,50 +239,49 @@ router.post(
 );
 
 router.post(
-    "/showposts/:id",
-    verifyToken,
-    verifyUserWithToken,
+    "/:key/showposts/:id",
+
     async (req, res, next) => {
+        const validatedData = showpostsValidation(req.body);
+        if (validatedData.error)
+            return res
+                .status(400)
+                .json({ message: validatedData.error.details[0].message });
+
         try {
-            const plan = await planModel.findById(req.params.id);
-            // console.log(plan);
+            const serviceaccount = await ServiceaccountModel.find().where({
+                key: req.params.key
+            });
 
-            if (plan) {
-                const posts = [];
-                // plan.posts.forEach(async i => {
-                //     const post = await postModel.findById(i.id);
-                //     console.log(post);
-                //     console.log(post.category, req.body.category);
-                // if (
-                //     JSON.stringify(post.category) ==
-                //     JSON.stringify(req.body.category)
-                // ) {
-                //     console.log("eafsag");
-                //     posts.push(post);
-                //     console.log(posts);
-                //     console.log("kufdgkfudhuk");
-                // }
-                // });
+            if (serviceaccount[0]) {
+                const plan = await planModel.findById(req.params.id);
+                // console.log(plan);
+                console.log(serviceaccount);
+                if (plan) {
+                    const posts = [];
 
-                for (var i = 0; i < plan.posts.length; i++) {
-                    const post = await postModel.findById(plan.posts[i].id);
-                    if (
-                        JSON.stringify(post.category) ==
-                        JSON.stringify(req.body.category)
-                    ) {
-                        console.log("eafsag");
-                        posts.push(post);
-                        console.log(posts);
-                        console.log("kufdgkfudhuk");
+                    for (var i = 0; i < plan.posts.length; i++) {
+                        const post = await postModel.findById(plan.posts[i].id);
+                        // console.log(post);
+                        if (
+                            JSON.stringify(post.category) ==
+                            JSON.stringify(req.body.category)
+                        ) {
+                            console.log("eafsag");
+                            posts.push(post);
+                            // console.log(posts);
+                            // console.log("kufdgkfudhuk");
+                        }
                     }
-                }
 
-                // plan.save();
-                console.log("eafdafdyuagdfjklfd<sjkfgyudj");
-                console.log(posts);
-                return res.json(posts);
+                    return res.json(posts);
+                } else {
+                    return res.status(400).json({ message: "Plan not found" });
+                }
             } else {
-                return res.status(400).json({ message: "Plan not found" });
+                return res.json({
+                    message: "Register for this Service From our Website"
+                });
             }
         } catch (error) {
             console.log(error);

@@ -50,6 +50,10 @@ router.get(
                                 return res
                                     .status(200)
                                     .json({ conversations: fullConversations });
+                            } else {
+                                return res
+                                    .status(200)
+                                    .json("No Conversations found");
                             }
                         });
                 });
@@ -153,7 +157,7 @@ router.post("/new/:recipient", async (req, res, next) => {
         const message = new Message({
             conversationId: newConversation._id,
             body: req.body.composedMessage,
-            author: req.user._id
+            author: req.user.loggedUser._id
         });
 
         message.save(function(err, newMessage) {
