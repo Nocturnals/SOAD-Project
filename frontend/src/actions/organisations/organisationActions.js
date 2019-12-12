@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { orgConst, alertConstants } from "../../constants/index";
+import { orgConst, alertConstants, userAuthConst } from "../../constants/index";
 
 export function getAllOrganizations() {
     return dispatch => {
@@ -26,7 +26,7 @@ export function getAllOrganizations() {
     }
 }
 
-export function getOrganization(name) {
+export function getOrganizationByName(name) {
     return dispatch => {
         dispatch(requestAction());
         axios
@@ -61,6 +61,27 @@ export function getOrganization(name) {
     }
 }
 
+export function getOrganizationById(orgId) {
+    return dispatch => {
+        dispatch({ type: orgConst.GET_ORGANISATION_REQUEST });
+        axios
+            .post("http://localhost:4000/api/organization/getById", {
+                orgId: orgId
+            })
+            .then(res => {
+                dispatch({
+                    type: orgConst.GET_ORGANISATION_SUCCESS,
+                    organisation: res.data
+                });
+                console.log(res);
+            })
+            .catch(err => {
+                dispatch({ type: orgConst.GET_ORGANISATION_FAILURE });
+                console.log(err);
+            });
+    };
+}
+
 export function createOrganisation(organisation) {
     console.log(organisation);
     return dispatch => {
@@ -70,6 +91,7 @@ export function createOrganisation(organisation) {
             .then(res => {
                 console.log(res);
                 dispatch(createNewSuccess());
+                dispatch({ type: userAuthConst.LOAD_USER, user: res.data.doc });
             })
             .catch(err => {
                 console.log(err);
@@ -86,6 +108,25 @@ export function createOrganisation(organisation) {
     function createNewFailure(errMsg) {
         return { type: alertConstants.ERROR, message: errMsg };
     }
+}
+
+export function editOrganisation(formData) {
+    return dispatch => {
+        dispatch({
+            type: orgConst.EDIT_ORGANISATION_REQUEST,
+            orgId: formData.organizationId
+        });
+        axios
+            .post("http://localhost:4000/api/organization/edit", formData)
+            .then(res => {
+                console.log(res);
+                dispatch({ type: orgConst.EDIT_ORGANISATION_SUCCESS });
+            })
+            .catch(err => {
+                console.log(err);
+                dispatch({ type: orgConst.GET_ORGANISATION_FAILURE });
+            });
+    };
 }
 
 export function requestUsers(users) {
