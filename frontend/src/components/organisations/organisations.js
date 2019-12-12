@@ -8,6 +8,8 @@ import Img from "react-image";
 import NavBar from "../nav bar/navBar";
 import "./organisations.css";
 
+import { getOrganization } from "../../actions/index";
+
 class Organisations extends Component {
     constructor(props) {
         super(props);
@@ -22,6 +24,14 @@ class Organisations extends Component {
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
+    }
+    componentDidMount() {
+        const { organizations } = this.props;
+        if (!organizations.isLoading) {
+            this.props.getOrganization(
+                this.props.match.params.organisationName
+            );
+        }
     }
 
     // Handling input Change
@@ -71,8 +81,9 @@ class Organisations extends Component {
     };
 
     render() {
-        const { auth } = this.props;
+        const { auth, organizations } = this.props;
         const { search } = this.state;
+        console.log(organizations);
 
         return (
             <React.Fragment>
@@ -113,6 +124,9 @@ class Organisations extends Component {
                                               auth.user.organizations[0].Users
                                           )
                                         : null}
+                                    <button className="addUsers">
+                                        Add Users
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -150,11 +164,14 @@ class Organisations extends Component {
 }
 
 Organisations.propTypes = {
-    auth: PropTypes.object.isRequired
+    getOrganization: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    organizations: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    organizations: state.organizations
 });
 
-export default connect(mapStateToProps)(Organisations);
+export default connect(mapStateToProps, { getOrganization })(Organisations);

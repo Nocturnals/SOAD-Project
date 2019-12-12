@@ -211,6 +211,7 @@ class SearchJobs extends Component {
                     jobStatus = <i className="fa fa-check"></i>;
                     break;
                 case jobStatusConst.WORKING:
+                case jobStatusConst.PENDING:
                     jobStatus = <i className="fa fa-spinner fa-spin"></i>;
                     break;
                 case jobStatusConst.CANCELLED:

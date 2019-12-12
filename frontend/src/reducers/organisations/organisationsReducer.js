@@ -2,12 +2,26 @@ import { orgConst } from "../../constants/index";
 
 const initialState = {
     loggedUserOrganisations: null,
+    currentOrganisation: null,
     newOrg: null,
     isLoading: false
 };
 
 export default function(state = initialState, action) {
     switch (action.type) {
+        case orgConst.GET_ORGANISATION_FAILURE:
+        case orgConst.GET_ORGANISATION_REQUEST:
+            return {
+                ...state,
+                currentOrganisation: null,
+                isLoading: true
+            };
+        case orgConst.GET_ORGANISATION_SUCCESS:
+            return {
+                ...state,
+                currentOrganisation: action.organisation,
+                isLoading: false
+            };
         case orgConst.GET_ALL_REQUEST:
             return {
                 ...state,
@@ -33,6 +47,6 @@ export default function(state = initialState, action) {
                 isLoading: false
             };
         default:
-            return { ...initialState };
+            return { ...state };
     }
 }

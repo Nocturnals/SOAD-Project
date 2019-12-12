@@ -21,6 +21,6 @@ export default function(state = initialState, action) {
             };
         case artistTypesConst.GET_TYPES_FAILURE:
         default:
-            return { ...initialState };
+            return { ...state };
     }
 }

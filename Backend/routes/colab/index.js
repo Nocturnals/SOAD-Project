@@ -291,7 +291,7 @@ router.post("/applyJob", verifyToken, verifyUserWithToken, async (req, res) => {
             const newOtherJobOffer = new otherJobOfferModel({
                 _id: jobOfferDoc._id,
                 title: jobOfferDoc.title,
-                artistType: jobOfferDoc.artistType,
+                artistType: jobOfferDoc.artistType.toLowerCase(),
                 jobProvider: jobOfferDoc.jobProvider,
                 salary: jobOfferDoc.salary,
                 status: "pending"
