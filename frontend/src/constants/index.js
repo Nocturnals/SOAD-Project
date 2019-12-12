@@ -7,3 +7,4 @@ export * from "./jobsConstants";
 export * from "./artistTypes";
 export * from "./postsConstants";
 export * from "./otherUsersConstants";
+export * from "./subscriptionsConstants";
