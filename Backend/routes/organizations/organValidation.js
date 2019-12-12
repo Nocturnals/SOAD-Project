@@ -38,9 +38,17 @@ const deleteValidation = data => {
   return Joi.validate(data, schema);
 };
 
+const findOrganizationValidation = data => {
+  const schema = {
+    name: Joi.string().required()
+  };
+  return Joi.validate(data, schema);
+};
+
 module.exports = {
   organizationValidation,
   requestUserValidation,
   addUserValidation,
-  deleteValidation
+  deleteValidation,
+  findOrganizationValidation
 };

@@ -7,7 +7,7 @@ import jwt_decode from "jwt-decode";
 
 import "./App.css";
 
-import { logout, getUserWithToken } from "./actions/authActions";
+import { logout, getUserWithToken, getAllArtistTypes } from "./actions/index";
 
 import MainAppComponents from "./AppComponents";
 
@@ -27,8 +27,6 @@ class App extends Component {
                 return <Redirect to="/" />;
             }
         }
-        // store.dispatch({ type: "LOAD_DONE" });
-        store.dispatch({ type: "ALERT_CLEAR" });
     }
 
     render() {

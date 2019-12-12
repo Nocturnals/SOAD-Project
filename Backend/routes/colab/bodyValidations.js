@@ -18,6 +18,7 @@ const interestedInWorkValidation = data => {
 
 const artistWantedValidation = data => {
     const schema = {
+        artistType: Joi.string().required(),
         title: Joi.string().required(),
         workAt: Joi.string().required(),
         workDuration: Joi.string().required(),

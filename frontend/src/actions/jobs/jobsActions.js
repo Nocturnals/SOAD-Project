@@ -2,6 +2,41 @@ import axios from "axios";
 
 import { jobsConstants, alertConstants } from "../../constants/index";
 
+export function postJobOffer(job) {
+    return dispatch => {
+        dispatch(requestAction(job));
+
+        axios
+            .post("http://localhost:4000/api/colab/jobOffer", job)
+            .then(res => {
+                dispatch(successAction());
+                console.log(res);
+            })
+            .catch(err => {
+                dispatch(failureAction());
+                dispatch(alertAction("Failed to post job offer"));
+                console.log(err);
+            });
+    };
+
+    function requestAction(job) {
+        return { type: jobsConstants.POST_JOB_OFFER_REQUEST, job: job };
+    }
+    function successAction() {
+        return {
+            type: jobsConstants.POST_JOB_OFFER_SUCCESS
+        };
+    }
+    function failureAction() {
+        return {
+            type: jobsConstants.POST_JOB_OFFER_FAILURE
+        };
+    }
+    function alertAction(message) {
+        return { type: "ALERT_ERROR", message: message };
+    }
+}
+
 export function getFilteredJobs(options) {
     return dispatch => {
         dispatch(requestAction());
