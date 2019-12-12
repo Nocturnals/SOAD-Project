@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { Redirect } from "react-router-dom";
 
 import { Input, TextArea } from "../../helpers/inputs/styledInputs";
 
@@ -46,7 +47,8 @@ class AskJob extends Component {
             submitted: false,
             noOfEmptyFields: 15,
             requestArtistTypes: false,
-            fetchedArtistTypes: false
+            fetchedArtistTypes: false,
+            reqestFormSubmission: false
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -129,6 +131,9 @@ class AskJob extends Component {
             console.log(formData);
 
             this.props.postJobAvailable(formData);
+            this.setState({
+                reqestFormSubmission: true
+            });
         }
         document.body.scrollTo(0, 0);
     };
@@ -193,16 +198,20 @@ class AskJob extends Component {
     };
 
     render() {
-        const { artistTypes } = this.props;
+        const { artistTypes, jobs } = this.props;
         if (!this.state.fetchedArtistTypes && artistTypes.artistTypes.length) {
+            this.inputs = {
+                ...this.inputs,
+                artistType: artistTypes.artistTypes[0]
+            };
             this.setState({
                 artistTypes: artistTypes.artistTypes,
-                inputs: {
-                    ...this.state.inputs,
-                    artistType: artistTypes.artistTypes[0]
-                },
+                inputs: this.inputs,
                 fetchedArtistTypes: true
             });
+        }
+        if (this.state.reqestFormSubmission && !jobs.isLoading) {
+            return <Redirect to="/jobs/results" />;
         }
         const {
             legalName,
@@ -609,11 +618,13 @@ class AskJob extends Component {
 AskJob.propTypes = {
     getAllArtistTypes: PropTypes.func.isRequired,
     postJobAvailable: PropTypes.func.isRequired,
-    artistTypes: PropTypes.object.isRequired
+    artistTypes: PropTypes.object.isRequired,
+    jobs: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    artistTypes: state.artistTypes
+    artistTypes: state.artistTypes,
+    jobs: state.jobs
 });
 
 export default connect(mapStateToProps, {
