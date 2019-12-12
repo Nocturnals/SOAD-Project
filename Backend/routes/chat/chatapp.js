@@ -214,8 +214,6 @@ router.post("/new/:recipient", async (req, res, next) => {
 //     });
 // };
 
-<<<<<<< HEAD
-=======
 router.post("/:conversationId", async (req, res, next) => {
     const reply = new Message({
         conversationId: req.params.conversationId,
@@ -233,7 +231,6 @@ router.post("/:conversationId", async (req, res, next) => {
         return next;
     });
 });
->>>>>>> 30aa20343cb1cf0027f53cfd1683be98af33680b
 // router.sendReply = function(req, res, next) {
 //     const reply = new Message({
 //         conversationId: req.params.conversationId,

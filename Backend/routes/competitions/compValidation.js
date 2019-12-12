@@ -252,6 +252,13 @@ const commentreplyValidation = data => {
     return Joi.validate(data, schema);
 };
 
+const findcompetitionmathcValidation = data => {
+    const schma = {
+        name: Joi.string().required()
+    };
+    return Joi.validate(data, schma);
+};
+
 module.exports = {
     CompRegisterValidation,
     CompCreateValidation,
@@ -272,5 +279,6 @@ module.exports = {
     addcommentValidation,
     editcommentValidation,
     commentlikeValidation,
-    commentreplyValidation
+    commentreplyValidation,
+    findcompetitionmathcValidation
 };
