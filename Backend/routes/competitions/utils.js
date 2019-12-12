@@ -84,7 +84,7 @@ router.post(
 
             const othercompetition = new otherCompetitonsModel({
                 id: comp._id,
-                name: comp.name,
+                name: comp.title,
                 starttime: comp.starttime,
                 endtime: comp.endtime,
                 shortdescription: comp.shortdescription
@@ -126,6 +126,7 @@ router.post(
             fulldescription: req.body.fulldescription,
             starttime: req.body.starttime,
             endtime: req.body.endtime,
+            category: req.body.category,
             hosts: [
                 {
                     _id: user._id,
