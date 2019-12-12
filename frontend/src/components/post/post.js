@@ -215,10 +215,7 @@ class PostComp extends Component {
                                     }
                                 >
                                     <Link
-                                        to={
-                                            "/artist/" +
-                                            this.state.name.replace(/\s/g, "")
-                                        }
+                                        to={"/artist/" + this.state.name}
                                         className="userLink"
                                         style={{ textDecoration: "none" }}
                                     >

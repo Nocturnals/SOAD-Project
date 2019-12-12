@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -27,12 +28,15 @@ class CreatePostComp extends Component {
             categories: [],
             category: "",
             categoryInput: "",
+            rawCategoryInputFile: null,
             categoryInputFiles: [],
             content: "",
             description: "",
             wrongCategoryInput: false,
             submitted: false,
-            fetchedArtistTypes: false
+            requestSent: false,
+            fetchedArtistTypes: false,
+            requestArtistTypes: false
         };
 
         this.state = this.initialState;
@@ -46,7 +50,10 @@ class CreatePostComp extends Component {
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
     }
     componentDidMount() {
-        this.props.getAllArtistTypes();
+        if (!this.state.requestArtistTypes) {
+            this.props.getAllArtistTypes();
+            this.setState({ requestArtistTypes: true });
+        }
     }
 
     handleInputChange = e => {
@@ -58,6 +65,7 @@ class CreatePostComp extends Component {
             case "category":
                 this.setState({
                     categoryInput: "",
+                    rawCategoryInputFile: null,
                     categoryInputFiles: []
                 });
                 break;
@@ -75,7 +83,6 @@ class CreatePostComp extends Component {
 
     // Handling deafault form Submission...
     handleFormSubmit = e => {
-        console.log(e);
         e.preventDefault();
         this.setState({ submitted: true });
 
@@ -85,21 +92,22 @@ class CreatePostComp extends Component {
             category,
             content,
             description,
+            rawCategoryInputFile,
             categoryInputFiles
         } = this.state;
+
         if (title && content && description) {
-            const formData = {
-                isPrivate: isPrivate,
-                title: title,
-                category: category,
-                content: content,
-                description: description,
-                file:
-                    category !== "Story Writer" && categoryInputFiles.length
-                        ? categoryInputFiles[0]
-                        : null
-            };
+            let formData = new FormData();
+            formData.append("isPrivate", isPrivate);
+            formData.append("title", title);
+            formData.append("category", category);
+            formData.append("content", content);
+            formData.append("description", description);
+            if (rawCategoryInputFile) {
+                formData.append("file", rawCategoryInputFile);
+            }
             this.props.createPost(formData);
+            this.setState({ requestSent: true });
         }
     };
 
@@ -111,6 +119,8 @@ class CreatePostComp extends Component {
     /** Preview Image */
     previewFiles = () => {
         const inputFiles = document.getElementById("categoryInput").files;
+        this.setState({ rawCategoryInputFile: inputFiles[0] });
+
         let inputFilesList = [];
         for (let index = 0; index < inputFiles.length; index++) {
             if (
@@ -151,7 +161,8 @@ class CreatePostComp extends Component {
         }
         if (modifiedFiles.length === 0) {
             this.setState({
-                categoryInput: ""
+                categoryInput: "",
+                rawCategoryInputFile: null
             });
         }
         this.setState({
@@ -252,7 +263,7 @@ class CreatePostComp extends Component {
                     index++
                 ) {
                     filePreview.push(
-                        <div className="col-6">
+                        <div className="col-6" key={index}>
                             <Player playsInline controls className="video">
                                 <source
                                     src={this.state.categoryInputFiles[index]}
@@ -333,9 +344,10 @@ class CreatePostComp extends Component {
 
     // Rednering
     render() {
-        console.log(this.state);
-
-        const { artistTypes } = this.props;
+        const { auth, artistTypes, posts } = this.props;
+        if (this.state.requestSent && !posts.isLoading && auth.user) {
+            return <Redirect to={"/artist/" + auth.user.name} />;
+        }
         if (!this.state.fetchedArtistTypes && artistTypes.artistTypes) {
             this.setState({
                 categories: artistTypes.artistTypes,
@@ -349,7 +361,8 @@ class CreatePostComp extends Component {
             category,
             content,
             description,
-            submitted
+            submitted,
+            requestSent
         } = this.state;
 
         return (
@@ -369,109 +382,133 @@ class CreatePostComp extends Component {
                                 <h6>Post An Update</h6>
                             </div>
                         </div>
-                        <div className="row body">
-                            <div className="col">
-                                <div className="row isPrivate">
-                                    <div className="col is-private">
-                                        <input
-                                            className="isPrivateCheck"
-                                            name="isPrivate"
-                                            type="checkbox"
-                                            id="isPrivate"
-                                            checked={isPrivate}
-                                            onChange={this.toggleCheckBox}
-                                        ></input>{" "}
-                                        &nbsp;
-                                        <label htmlFor="isPrivate">
-                                            <h6>Private</h6>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="row title bodyRow">
+                        {requestSent && posts.isLoading ? (
+                            <ClipLoader
+                                sizeUnit={"rem"}
+                                size={10}
+                                color={"#123abc"}
+                                loading={posts.isLoading}
+                                className="loader"
+                            />
+                        ) : (
+                            <React.Fragment>
+                                <div className="row body">
                                     <div className="col">
-                                        <input
-                                            className={
-                                                submitted && !title
-                                                    ? "error"
-                                                    : ""
-                                            }
-                                            type="text"
-                                            name="title"
-                                            placeholder="Title"
-                                            value={title}
-                                            onChange={this.handleInputChange}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="row category bodyRow">
-                                    <div className="col">
-                                        <select
-                                            className="custom-select"
-                                            name="category"
-                                            value={category}
-                                            onChange={this.handleInputChange}
-                                        >
-                                            <option disabled="disabled">
-                                                --Select Category--
-                                            </option>
-                                            {this.categoryOptions()}
-                                        </select>
-                                    </div>
-                                </div>
-                                {category &&
-                                category.replace(/\s/g, "").toLowerCase() !==
-                                    "storywriter" ? (
-                                    <div className="row category-inputs bodyRow">
-                                        <div className="col">
-                                            {this.categoryInputs()}
+                                        <div className="row isPrivate">
+                                            <div className="col is-private">
+                                                <input
+                                                    className="isPrivateCheck"
+                                                    name="isPrivate"
+                                                    type="checkbox"
+                                                    id="isPrivate"
+                                                    checked={isPrivate}
+                                                    onChange={
+                                                        this.toggleCheckBox
+                                                    }
+                                                ></input>{" "}
+                                                &nbsp;
+                                                <label htmlFor="isPrivate">
+                                                    <h6>Private</h6>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div className="row title bodyRow">
+                                            <div className="col">
+                                                <input
+                                                    className={
+                                                        submitted && !title
+                                                            ? "error"
+                                                            : ""
+                                                    }
+                                                    type="text"
+                                                    name="title"
+                                                    placeholder="Title"
+                                                    value={title}
+                                                    onChange={
+                                                        this.handleInputChange
+                                                    }
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="row category bodyRow">
+                                            <div className="col">
+                                                <select
+                                                    className="custom-select"
+                                                    name="category"
+                                                    value={category}
+                                                    onChange={
+                                                        this.handleInputChange
+                                                    }
+                                                >
+                                                    <option disabled="disabled">
+                                                        --Select Category--
+                                                    </option>
+                                                    {this.categoryOptions()}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        {category &&
+                                        category
+                                            .replace(/\s/g, "")
+                                            .toLowerCase() !== "storywriter" ? (
+                                            <div className="row category-inputs bodyRow">
+                                                <div className="col">
+                                                    {this.categoryInputs()}
+                                                </div>
+                                            </div>
+                                        ) : null}
+                                        <div className="row content bodyRow">
+                                            <div className="col">
+                                                <textarea
+                                                    className={
+                                                        submitted && !content
+                                                            ? " error"
+                                                            : ""
+                                                    }
+                                                    name="content"
+                                                    value={content}
+                                                    onChange={
+                                                        this.handleInputChange
+                                                    }
+                                                    placeholder="Post Content..."
+                                                ></textarea>
+                                            </div>
+                                        </div>
+                                        <div className="row description bodyRow">
+                                            <div className="col">
+                                                <textarea
+                                                    className={
+                                                        submitted &&
+                                                        !description
+                                                            ? " error"
+                                                            : ""
+                                                    }
+                                                    name="description"
+                                                    value={description}
+                                                    onChange={
+                                                        this.handleInputChange
+                                                    }
+                                                    placeholder="Description"
+                                                ></textarea>
+                                            </div>
                                         </div>
                                     </div>
-                                ) : null}
-                                <div className="row content bodyRow">
-                                    <div className="col">
-                                        <textarea
-                                            className={
-                                                submitted && !content
-                                                    ? " error"
-                                                    : ""
-                                            }
-                                            name="content"
-                                            value={content}
-                                            onChange={this.handleInputChange}
-                                            placeholder="Post Content..."
-                                        ></textarea>
+                                </div>
+                                <div className="row buttons justify-content-center">
+                                    <div className="col-4">
+                                        <button type="submit">Submit</button>
+                                    </div>
+                                    <div className="col-4">
+                                        <button
+                                            type="button"
+                                            onClick={this.clearAndToggle}
+                                        >
+                                            Cancel
+                                        </button>
                                     </div>
                                 </div>
-                                <div className="row description bodyRow">
-                                    <div className="col">
-                                        <textarea
-                                            className={
-                                                submitted && !description
-                                                    ? " error"
-                                                    : ""
-                                            }
-                                            name="description"
-                                            value={description}
-                                            onChange={this.handleInputChange}
-                                            placeholder="Description"
-                                        ></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row buttons justify-content-center">
-                            <div className="col-4">
-                                <button type="submit">Submit</button>
-                            </div>
-                            <div className="col-4">
-                                <button
-                                    type="button"
-                                    onClick={this.clearAndToggle}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
+                            </React.Fragment>
+                        )}
                     </div>
                 </form>
             </div>
@@ -482,11 +519,15 @@ class CreatePostComp extends Component {
 CreatePostComp.propTypes = {
     getAllArtistTypes: PropTypes.func.isRequired,
     createPost: PropTypes.func.isRequired,
-    artistTypes: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    artistTypes: PropTypes.object.isRequired,
+    posts: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    artistTypes: state.artistTypes
+    auth: state.auth,
+    artistTypes: state.artistTypes,
+    posts: state.posts
 });
 
 export default connect(mapStateToProps, { createPost, getAllArtistTypes })(
