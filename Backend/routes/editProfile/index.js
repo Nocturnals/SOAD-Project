@@ -16,6 +16,7 @@ router.post("/:type", verifyToken, verifyUserWithToken, async (req, res) => {
   // profileurl:""
   // coverphotourl:""
   // profilephotourl:""
+
   try {
     const currentUser = await UserModel.findById(req.loggedUser._id);
     currentUser.dataofbirth = req.body.dataofbirth;

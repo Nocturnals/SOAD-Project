@@ -104,6 +104,11 @@ const userSchema = new mongoose.Schema({
         default: []
     },
 
+    jobsOffered: {
+        type: [otherJobOfferSchema],
+        default: []
+    },
+
     resumeURL: {
         type: String,
         default: ""

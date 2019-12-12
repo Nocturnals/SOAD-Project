@@ -9,7 +9,8 @@ const {
   organizationValidation,
   requestUserValidation,
   addUserValidation,
-  deleteValidation
+  deleteValidation,
+  findOrganizationValidation
 } = require("./organValidation");
 const { verifyToken, verifyUserWithToken } = require("../auth/helper");
 
@@ -312,6 +313,34 @@ router.post("/delete", verifyToken, verifyUserWithToken, async (req, res) => {
     return res.status(500).json({
       message: "Internal server error or cant find Organization"
     });
+  }
+});
+
+router.get("/findOrganizationMatch", async (req, res) => {
+  // validate data
+  const validateData = findOrganizationValidation(req.body);
+  if (validateData.error) {
+    return res
+      .status(400)
+      .json({ message: validateData.error.details[0].message });
+  }
+
+  // find the user which matches
+  try {
+    const reqTime = Date.now();
+
+    const organizationList = await OrganizationModel.find({
+      name: { $regex: req.body.name }
+    });
+
+    const result = {
+      organizationList: organizationList,
+      reqTime: reqTime
+    };
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: "Internal server error" });
   }
 });
 module.exports = router;
