@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const { JobsAvailableSchema } = require("./jobsApplied");
 const otheruserschema = require("./Otheruser");
-const othercompetititonschema = require("./Othercompetitions");
+const { othercompetititonschema } = require("./Othercompetitions");
 const { NotificationSchema } = require("./Notifications");
 const { OrganizationSchema } = require("./Organizations");
 // const artistTypes = require("./artistTypes");
