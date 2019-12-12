@@ -58,6 +58,7 @@ exports.InterstedInWork = async (req, res) => {
         // saving to database
         const currentUser = await UserModel.findById(req.loggedUser._id);
         currentUser.jobsAvailableFor.push(jobAvailable);
+        jobAvailable.save();
 
         const doc = await currentUser.save();
 

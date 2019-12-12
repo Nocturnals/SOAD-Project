@@ -11,6 +11,8 @@ import CreatePostComp from "../post/createPost/createPost";
 
 import "./home.css";
 
+import { getHomeFeed } from "../../actions/index";
+
 // Home Page Component...
 class HomePage extends Component {
     constructor(props) {
@@ -18,15 +20,10 @@ class HomePage extends Component {
 
         // Defining Elements
         this.postUserImage = require("../media/images/categories/photographer.png");
-        this.posts = [
-            new Post("Shiva Ram Dubey", "3 min", "Epic Coder", "India", false),
-            new Post("Hemanth", "10 min", "Epic Coder", "India", true),
-            new Post("Vishwanth", "20 min", "Epic Coder", "India", false),
-            new Post("Nikhil", "59 min", "Epic Coder", "India", true)
-        ];
 
         this.state = {
-            showUploadPostPopUP: false
+            showUploadPostPopUP: false,
+            requestUserPosts: false
         };
 
         this.toggleUploadPostPopUp = this.toggleUploadPostPopUp.bind(this);
@@ -34,6 +31,9 @@ class HomePage extends Component {
 
     // After Mounting the Component...
     componentDidMount() {
+        if (!this.state.requestUserPosts) {
+            this.props.getHomeFeed();
+        }
         document.body.scrollTo(0, 0);
     }
 
@@ -45,18 +45,11 @@ class HomePage extends Component {
     };
 
     // Generates Cards of Posts...
-    postCards = () => {
+    postCards = posts => {
         let postCards = [];
-        for (let i = 0; i < this.posts.length; i++) {
-            const post = this.posts[i];
-            const post_details = {
-                name: post.name,
-                time: post.time,
-                job: post.job,
-                liked: post.liked,
-                location: post.location
-            };
-            postCards.push(<PostComp post_details={post_details} key={i} />);
+        for (let i = 0; i < posts.length; i++) {
+            const post = posts[i];
+            postCards.push(<PostComp post_details={post} key={i} />);
         }
 
         return postCards;
@@ -66,7 +59,7 @@ class HomePage extends Component {
     render() {
         const postUserImage = require("../media/images/categories/photographer.png");
 
-        const { auth } = this.props;
+        const { auth, posts } = this.props;
 
         return (
             <React.Fragment>
@@ -106,10 +99,18 @@ class HomePage extends Component {
                                 </div>
                             </div>
                         </div>
-                        {this.postCards()}
+                        {posts.homeFeed && !posts.isLoading
+                            ? this.postCards(posts.homeFeed)
+                            : null}
                     </div>
                     <div className="rightContent col-3">
-                        <RightContent />
+                        {auth.user ? (
+                            <RightContent
+                                competitions={
+                                    auth.user.competitionsparticipating
+                                }
+                            />
+                        ) : null}
                     </div>
                 </div>
                 <CreatePostComp
@@ -122,11 +123,14 @@ class HomePage extends Component {
 }
 
 HomePage.propTypes = {
-    auth: PropTypes.object.isRequired
+    getHomeFeed: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    posts: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    posts: state.posts
 });
 
-export default connect(mapStateToProps)(HomePage);
+export default connect(mapStateToProps, { getHomeFeed })(HomePage);

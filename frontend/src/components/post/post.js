@@ -35,45 +35,15 @@ class PostComp extends Component {
         super(props);
 
         this.post_details = this.props.post_details;
+        console.log(this.post_details);
+
         this.index = this.props.index;
 
         const cmnt_img = require("../media/images/categories/animator.png");
 
-        this.comments = [
-            new Comment(
-                "Anonymous",
-                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
-                cmnt_img
-            ),
-            new Comment(
-                "Anonymous",
-                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
-                cmnt_img
-            ),
-            new Comment(
-                "Anonymous",
-                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
-                cmnt_img
-            ),
-            new Comment(
-                "Anonymous",
-                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
-                cmnt_img
-            ),
-            new Comment(
-                "hello1",
-                "Katelyn Tarver's 'You Don't Know' is a Pop song from her album",
-                cmnt_img
-            )
-        ];
+        this.comments = this.post_details.comments;
 
         this.initialState = {
-            name: this.post_details.name,
-            time: this.post_details.time,
-            job: this.post_details.job,
-            location: this.post_details.location,
-            liked: this.post_details.liked,
-            likes: 7000,
             showCmnts: false,
             moreOptionsDrop: false,
             comments: this.comments,
@@ -185,10 +155,22 @@ class PostComp extends Component {
         }
     };
 
+    // Check Liked?
+    checkLiked = likedBy => {
+        for (let index = 0; index < likedBy.length; index++) {
+            if (this.props.auth.user._id === likedBy[index]._id) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     // Rendering...
     render() {
         const img = require("../media/images/v10-header4.svg");
         const userImg = require("../media/images/categories/photographer.png");
+
+        const { auth, post_details } = this.props;
 
         return (
             <div
@@ -209,17 +191,20 @@ class PostComp extends Component {
                                 <div
                                     className={
                                         "user-name" +
-                                        (this.state.name.length <= 13
+                                        (post_details.owner[0].username <= 13
                                             ? " ft-s-1-2"
                                             : " ft-s-1")
                                     }
                                 >
                                     <Link
-                                        to={"/artist/" + this.state.name}
+                                        to={
+                                            "/artist/" +
+                                            post_details.owner[0].username
+                                        }
                                         className="userLink"
                                         style={{ textDecoration: "none" }}
                                     >
-                                        {this.state.name}
+                                        {post_details.owner[0].username}
                                     </Link>
                                 </div>
                                 <div className="time">
@@ -227,7 +212,7 @@ class PostComp extends Component {
                                         className="fa fa-clock-o"
                                         aria-hidden="true"
                                     ></i>
-                                    &nbsp;{this.state.time} ago
+                                    &nbsp;{post_details.date.split("T")[0]}
                                 </div>
                             </div>
                             <div className="col-5 user-about column-2">
@@ -236,14 +221,14 @@ class PostComp extends Component {
                                         className="fa fa-bookmark"
                                         aria-hidden="true"
                                     ></i>
-                                    &nbsp;&nbsp;{this.state.job}
+                                    &nbsp;&nbsp;{post_details.category}
                                 </div>
                                 <div className="user-loc">
                                     <i
                                         className="fa fa-location-arrow"
                                         aria-hidden="true"
                                     ></i>
-                                    &nbsp;&nbsp;{this.state.location}
+                                    &nbsp;&nbsp;India
                                 </div>
                             </div>
                             <div className="col-2 more-options column-3">
@@ -284,71 +269,77 @@ class PostComp extends Component {
                 {/* Post Content */}
                 <div className="row post-content">
                     <div className="col">
+                        {post_details.imageurls.length ? (
+                            <div className="row">
+                                <div className="col post-image">
+                                    <Img
+                                        src={post_details.imageurls[0].url}
+                                        loader={
+                                            <ClipLoader
+                                                sizeUnit={"px"}
+                                                size={80}
+                                                color={"#123abc"}
+                                                loading={this.state.loading}
+                                                className="loader"
+                                            />
+                                        }
+                                    />
+                                </div>
+                            </div>
+                        ) : null}
                         <div className="row post-descr">
                             <div className="col-12">
-                                <p>
-                                    'handleResponse' is defined but never used
-                                </p>
+                                <p>{post_details.description}</p>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col post-image">
-                                <Img
-                                    src={img}
-                                    loader={
-                                        <ClipLoader
-                                            sizeUnit={"px"}
-                                            size={80}
-                                            color={"#123abc"}
-                                            loading={this.state.loading}
-                                            className="loader"
-                                        />
-                                    }
-                                />
+                        <div className="row post-descr">
+                            <div className="col-12">
+                                <p>{post_details.content}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Likes and Comments */}
-                <div className="row post-impressions">
-                    <div className="col">
-                        <span
-                            className={
-                                "likes " + (this.state.liked ? "liked" : "")
-                            }
-                        >
-                            <i
+                {auth.isAuthed ? (
+                    <div className="row post-impressions">
+                        <div className="col">
+                            <span
                                 className={
-                                    this.state.liked
-                                        ? "fa fa-heart"
-                                        : "fa fa-heart-o"
+                                    "likes " +
+                                    (this.checkLiked(post_details.likedBy)
+                                        ? "liked"
+                                        : "")
                                 }
-                                aria-hidden="true"
-                                onClick={
-                                    this.props.auth.isAuthed
-                                        ? this.alterLike
-                                        : null
-                                }
-                            ></i>
-                            <button>{this.state.likes}</button>
-                        </span>
-                        <span className="comments">
-                            <i
-                                className="fa fa-comments"
-                                aria-hidden="true"
-                                onClick={this.toggleCommentsSection}
-                            ></i>
-                            <button onClick={this.toggleCommentsSection}>
-                                400
-                            </button>
-                        </span>
+                            >
+                                <i
+                                    className={
+                                        this.state.liked
+                                            ? "fa fa-heart"
+                                            : "fa fa-heart-o"
+                                    }
+                                    aria-hidden="true"
+                                    onClick={this.alterLike}
+                                ></i>
+                                <button>{post_details.likes}</button>
+                            </span>
+                            <span className="comments">
+                                <i
+                                    className="fa fa-comments"
+                                    aria-hidden="true"
+                                    onClick={this.toggleCommentsSection}
+                                ></i>
+                                <button onClick={this.toggleCommentsSection}>
+                                    {post_details.comments.length}
+                                </button>
+                            </span>
+                        </div>
                     </div>
-                </div>
+                ) : null}
                 <PostComments
                     auth={this.props.auth}
                     showCmnts={this.state.showCmnts}
-                    comments={this.state.comments}
+                    comments={post_details.comments}
                     newCommentHighlight={this.state.newCommentHighlight}
                     addCommentError={this.state.addCommentError}
                     handleCommentInput={this.handleCommentInput.bind(this)}

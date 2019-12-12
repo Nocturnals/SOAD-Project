@@ -48,9 +48,11 @@ class ResultCard extends Component {
     };
 
     render() {
-        // const { result, searchIn } = this.props;
+        const { result, searchIn } = this.props;
 
         const resultImage = require("../../media/images/categories/photographer.png");
+
+        console.log(result);
 
         return (
             <div className="result col-2">
@@ -68,22 +70,22 @@ class ResultCard extends Component {
                 </div>
                 <div className="resultDetails row">
                     <div className="col">
-                        {/* <h5>{result.name}</h5> */}
-                        <h5>Vishwanth</h5>
+                        <h5>{result.name}</h5>
+                        {/* <h5>Vishwanth</h5> */}
                         <h6>
                             <i
                                 className="fa fa-newspaper-o"
                                 aria-hidden="true"
                             ></i>
                             &nbsp;&nbsp;
-                            {/* {result.descr} */}
-                            Red Hat Hacker
+                            {result.descr}
+                            {/* Red Hat Hacker */}
                         </h6>
                     </div>
                 </div>
                 <div className="viewDetails row">
                     <div className="col">
-                        {/* <Link
+                        <Link
                             to={
                                 searchIn === "Users"
                                     ? "/artist/" + result.name
@@ -95,10 +97,10 @@ class ResultCard extends Component {
                             }
                         >
                             <button>View Details</button>
-                        </Link> */}
-                        <Link to={"/artist/Vishwanth"}>
-                            <button>View Details</button>
                         </Link>
+                        {/* <Link to={"/artist/Vishwanth"}>
+                            <button>View Details</button>
+                        </Link> */}
                     </div>
                 </div>
             </div>

@@ -7,7 +7,6 @@ import CommentComp from "../helperCards/comments/comments";
 import { Comment, Participant } from "./objectClasses";
 
 import "./competition.css";
-import { stat } from "fs";
 
 class Competition extends Component {
     constructor(props) {

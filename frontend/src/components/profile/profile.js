@@ -49,10 +49,6 @@ class ProfilePage extends Component {
             this.props.getUserByName(this.props.match.params.username);
             this.setState({ requestUserByName: true });
         }
-        if (!this.state.requestUserPosts && this.props.otherUsers.userProfile) {
-            this.props.getUserPosts(this.props.otherUsers.userProfile._id);
-            this.setState({ requestUserPosts: true });
-        }
     }
     componentDidUpdate() {
         document.body.scrollTo(0, 0);
@@ -76,15 +72,12 @@ class ProfilePage extends Component {
         for (let i = 0; i < postDetails.length; i++) {
             const post = postDetails[i];
             const post_details = {
-                name: post.name,
-                time: post.time,
-                job: post.job,
-                liked: post.liked,
-                location: post.location
+                name: post.title,
+                time: post.date.split("T")[0],
+                owner: post.owner[0],
+                likes: post.likes
             };
-            postCards.push(
-                <PostComp post_details={post_details} index={i} key={i} />
-            );
+            postCards.push(<PostComp post_details={post} index={i} key={i} />);
         }
 
         return postCards;
@@ -95,18 +88,15 @@ class ProfilePage extends Component {
             this.username = this.props.match.params.username;
             this.props.getUserByName(this.username);
         }
+        if (!this.state.requestUserPosts && this.props.otherUsers.userProfile) {
+            this.props.getUserPosts(this.props.otherUsers.userProfile._id);
+            this.setState({ requestUserPosts: true });
+        }
         const coverimage = require("../media/images/profile/cover.jpg");
 
         const username = this.props.match.params.username;
-        // Defining Elements
-        const posts = [
-            new Post(username, "3 min", "Epic Coder", "India", false),
-            new Post(username, "10 min", "Epic Coder", "India", true),
-            new Post(username, "20 min", "Epic Coder", "India", false),
-            new Post(username, "59 min", "Epic Coder", "India", true)
-        ];
 
-        const { auth, otherUsers } = this.props;
+        const { auth, otherUsers, posts } = this.props;
 
         this.authedUser = auth.user
             ? auth.user.name === this.props.match.params.username
@@ -269,7 +259,9 @@ class ProfilePage extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                {this.postCards(posts)}
+                                {posts.userPosts
+                                    ? this.postCards(posts.userPosts)
+                                    : null}
                             </div>
                             <div className="col-3">
                                 {otherUsers.userProfile ? (
@@ -297,12 +289,14 @@ ProfilePage.propTypes = {
     getUserByName: PropTypes.func.isRequired,
     getUserPosts: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    otherUsers: PropTypes.object.isRequired
+    otherUsers: PropTypes.object.isRequired,
+    posts: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
     auth: state.auth,
-    otherUsers: state.otherUsers
+    otherUsers: state.otherUsers,
+    posts: state.posts
 });
 
 export default connect(mapStateToProps, { getUserByName, getUserPosts })(

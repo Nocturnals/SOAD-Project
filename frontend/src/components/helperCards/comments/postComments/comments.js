@@ -22,6 +22,7 @@ class PostComments extends Component {
 
     // Comments Section Component...
     commentsSection = comments => {
+        const cmnt_img = require("../../../media/images/categories/animator.png");
         let comments_section = [];
         for (let index = comments.length - 1; index >= 0; index--) {
             const comment = comments[index];
@@ -34,7 +35,7 @@ class PostComments extends Component {
                             ? " show"
                             : this.props.auth.isAuthed
                             ? this.props.auth.user.name ===
-                              comment.commentedUser
+                              comment.owner.username
                                 ? " show"
                                 : ""
                             : "") +
@@ -48,30 +49,30 @@ class PostComments extends Component {
                     <div className="col-2 cmntImg align-self-start">
                         <div
                             className="cmnt_img"
-                            style={{ backgroundImage: `url(${comment.image})` }}
+                            style={{ backgroundImage: `url(${cmnt_img})` }}
                         ></div>
                     </div>
                     <div className="col commentContent">
                         <div className="row">
                             <h6>
                                 <Link
-                                    to={"/artist/" + comment.commentedUser}
+                                    to={"/artist/" + comment.owner.username}
                                     className="commentedUser"
                                     style={{ textDecoration: "none" }}
                                 >
                                     {this.props.auth.isAuthed
                                         ? this.props.auth.user.name ===
-                                          comment.commentedUser
+                                          comment.owner.username
                                             ? "You"
-                                            : comment.commentedUser
-                                        : comment.commentedUser}
+                                            : comment.owner.username
+                                        : comment.owner.username}
                                 </Link>{" "}
                                 <span className="commentedTime">
                                     <i className="fa fa-history"></i> 3 days ago
                                 </span>
                             </h6>
                         </div>
-                        <p className="commentText">{comment.comment}</p>
+                        <p className="commentText">{comment.message}</p>
                         <div className="row">
                             <div className="likes-replies row">
                                 <button>
@@ -79,7 +80,7 @@ class PostComments extends Component {
                                         className="fa fa-heart-o"
                                         aria-hidden="true"
                                     ></i>
-                                    &nbsp;500
+                                    &nbsp;{comment.likes}
                                 </button>
                             </div>
                         </div>

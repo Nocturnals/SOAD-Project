@@ -60,16 +60,83 @@ class SearchComp extends Component {
     };
 
     // Profile Cards...
-    profileCardsComp = cards => {
+    profileCardsComp = (cards, searchIn) => {
         let pCards = [];
+        console.log(cards);
+
         for (let index = 0; index < cards.length; index++) {
-            pCards.push(<ResultCard userDetails="" />);
+            const card = cards[index];
+            const result = {
+                name: card.name,
+                descr: card.primaryinterest
+            };
+            pCards.push(
+                <ResultCard result={result} searchIn={searchIn} key={index} />
+            );
         }
 
         return pCards;
     };
 
+    // Organisation Cards...
+    organisationCardsComp = (cards, searchIn) => {
+        let pCards = [];
+        for (let index = 0; index < cards.length; index++) {
+            const card = cards[index];
+            const result = {
+                name: card.name,
+                descr: card.description.substring(0, 15)
+            };
+            pCards.push(<ResultCard result={result} searchIn={searchIn} />);
+        }
+
+        return pCards;
+    };
+
+    // Competition Cards...
+    competitionCardsComp = (cards, searchIn) => {
+        let pCards = [];
+        for (let index = 0; index < cards.length; index++) {
+            const card = cards[index];
+            const result = {
+                name: card.title,
+                descr: card.shortdescription.substring(0, 15)
+            };
+            pCards.push(<ResultCard result={result} searchIn={searchIn} />);
+        }
+
+        return pCards;
+    };
+
+    // Result Cards...
+    resultCards = (cards, searchIn) => {
+        switch (searchIn) {
+            case "Users":
+                return cards.usersList
+                    ? this.profileCardsComp(cards.usersList, "Users")
+                    : null;
+            case "Organisations":
+                return cards.organisationsList
+                    ? this.organisationCardsComp(
+                          cards.organisationsList,
+                          "Organisations"
+                      )
+                    : null;
+            case "Competitions":
+                return cards.competitionsList
+                    ? this.competitionCardsComp(
+                          cards.competitionsList,
+                          "Competitions"
+                      )
+                    : null;
+            default:
+                break;
+        }
+    };
+
     render() {
+        const { searchState } = this.props;
+
         return (
             <div className="search row">
                 <div className="col">
@@ -109,7 +176,7 @@ class SearchComp extends Component {
                                                 onChange={this.handleChange}
                                                 value={this.state.searchInput}
                                                 placeholder="Search Here"
-                                                autoFocus="true"
+                                                autoFocus={true}
                                             />
                                         </div>
                                     </div>
@@ -133,7 +200,10 @@ class SearchComp extends Component {
                                           this.state.searchType
                                         : null}
                                 </h5> */}
-                                <ResultCard />
+                                {this.resultCards(
+                                    searchState,
+                                    this.state.searchType
+                                )}
                             </div>
                         </div>
                     </div>
