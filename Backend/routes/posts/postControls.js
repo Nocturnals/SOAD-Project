@@ -509,7 +509,7 @@ exports.getAllPosts = async (req, res, next) => {
                 ]
         };
         const posts = await Post.find(query)
-            .sort({ datefield: -1 });
+            .sort({ date: -1 });
         return res.status(200).json(posts);
     } catch (error) {
         console.log(error);
@@ -590,7 +590,7 @@ exports.getSpecialPost = async (req, res) => {
             const posts = await Post.find(query)
                 .limit(10)
                 .select(fields)
-                .sort({ datefield: -1 });
+                .sort({ date: -1 });
             console.log(posts);
 
             return res.status(200).json(posts);
