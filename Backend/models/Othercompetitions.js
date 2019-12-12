@@ -26,4 +26,9 @@ const OtherCompetitionSchema = new mongoose.Schema({
     }
 });
 
-module.exports = OtherCompetitionSchema;
+module.exports = mongoose.model(
+    "otherCompetitonsModel",
+    OtherCompetitionSchema
+);
+
+module.exports.OtherCompetitionSchema = OtherCompetitionSchema;
