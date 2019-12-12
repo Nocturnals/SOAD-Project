@@ -69,7 +69,6 @@ router.patch("/deleteallcomments/:postid", verifyToken, verifyUserWithToken, del
 // like unlike
 router.put('/like/:postid', verifyToken, verifyUserWithToken, like);
 
-router.put('/unlike/:postid', verifyToken, verifyUserWithToken, unlike);
 
 // comments
 router.post('/comment/:postid',  verifyToken, verifyUserWithToken, commentPost);

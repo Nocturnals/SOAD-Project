@@ -12,7 +12,7 @@ const artist = require("../../models/artistTypes");
 const { OtheruserModel } = require("../../models/Otheruser");
 const Image = require("../../models/Image");
 const { upload } = require("./imageUpload");
-const Notification = require("../../models/Notifications");
+const {NotificationsModel} = require("../../models/Notifications");
 const User = require("../../models/user");
 const { ServiceaccountModel } = require("../../models/serviceaccount");
 
@@ -89,6 +89,7 @@ exports.like = async (req, res) => {
                 return item._id;
             })
             .indexOf(userid);
+            console.log(exist);
 
         if (exist == -1) {
             const user = req.loggedUser;
@@ -108,19 +109,15 @@ exports.like = async (req, res) => {
                 _id: owner
             });
 
-            const notify = new Notification({
+            const notify = new NotificationsModel({
                 userid: owner,
                 message: msg,
-                url: req.body.url
+                url: req.body.url || "random string"
             });
+            console.log(notify);
             const saved = await notify.save();
+            console.log(saved);
 
-            try {
-                const saved = await notify.save();
-                console.log(saved);
-            } catch (err) {
-                return res.status(500).json({ message: err });
-            }
 
             let n = notifyUser.notifications;
 
@@ -142,44 +139,30 @@ exports.like = async (req, res) => {
                 return res.status(500).json({ message: err });
             }
         } else {
-            return res.status(500).json({ message: "You've already liked !!" });
-        }
-    } catch (error) {
-        return res.status(500).json({ message: "Post not found !!" });
-    }
-};
-
-exports.unlike = async (req, res, next) => {
-    const user = req.loggedUser;
-    console.log(req.body);
-
-    try {
-        const post = await Post.findById({
-            _id: req.params.postid
-        });
-
-        const userid = req.loggedUser._id;
-
-        var removeIndex = post.likedBy
+            var removeIndex = post.likedBy
             .map(function(item) {
                 return item._id;
             })
             .indexOf(userid);
 
-        if (removeIndex != -1) {
-            post.likedBy.splice(removeIndex, 1);
-            post.likes = post.likes - 1;
+            if (removeIndex != -1) {
+                post.likedBy.splice(removeIndex, 1);
+                post.likes = post.likes - 1;
 
-            const savedpost = await post.save();
-
-            return res.json(savedpost);
-        } else {
-            return res.json({ message: "You've not liked yet !" });
+                try {
+                    const savedpost = await post.save();
+                    console.log(savedpost);
+                    return res.json(savedpost);
+                } catch (err) {
+                    return res.status(500).json({ message: err });
+                }
+            };
         }
     } catch (error) {
         return res.status(500).json({ message: "Post not found !!" });
     }
 };
+
 
 exports.commentPost = async (req, res, next) => {
     const validatedData = createCommentValidation(req.body);
