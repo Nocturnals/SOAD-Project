@@ -5,7 +5,7 @@ const otheruserschema = require("./Otheruser");
 const othercompetititonschema = require("./Othercompetitions");
 const { NotificationSchema } = require("./Notifications");
 const { OrganizationSchema } = require("./Organizations");
-// const artistTypes = require("./artistTypes");
+ const artistTypes = require("./artistTypes");
 const { otherJobOfferSchema } = require("./artistsWanted");
 
 const userSchema = new mongoose.Schema({
@@ -38,8 +38,9 @@ const userSchema = new mongoose.Schema({
     },
 
     primaryinterest: {
+        enum: [...artistType],
         type: String,
-        default: null
+        default: "photography"
     },
 
     otherinterest: {
