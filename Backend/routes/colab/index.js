@@ -104,7 +104,7 @@ router.post("/jobOffer", verifyToken, verifyUserWithToken, async (req, res) => {
     try {
         // create artist wanted model
         const jobOffer = new JobOffersModel({
-            artistType: req.body.artistType,
+            artistType: req.body.artistType.toLowerCase(),
             title: req.body.title,
             jobProvider: jobProvider,
             workAt: req.body.workAt,
