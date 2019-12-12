@@ -40,7 +40,7 @@ const PostSchema = new mongoose.Schema({
     },
 
     category: {
-        enum: artistType,
+        enum: [...artistType],
         type: String
     },
 

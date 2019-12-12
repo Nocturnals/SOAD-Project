@@ -15,32 +15,24 @@ import "./createPost.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "video-react/dist/video-react.css";
 
-import { createPost } from "../../../actions/index";
+import { createPost, getAllArtistTypes } from "../../../actions/index";
 
 class CreatePostComp extends Component {
     constructor(props) {
         super(props);
 
-        this.categories = [
-            "Photographer",
-            "Painter",
-            "VFX Artist",
-            "Story Writer",
-            "Singer",
-            "Dancer",
-            "Comedian"
-        ];
-
         this.initialState = {
             isPrivate: false,
             title: "",
-            category: this.categories[0],
+            categories: [],
+            category: "",
             categoryInput: "",
             categoryInputFiles: [],
             content: "",
             description: "",
             wrongCategoryInput: false,
-            submitted: false
+            submitted: false,
+            fetchedArtistTypes: false
         };
 
         this.state = this.initialState;
@@ -52,6 +44,9 @@ class CreatePostComp extends Component {
         this.previewFiles = this.previewFiles.bind(this);
         this.cancelSelection = this.cancelSelection.bind(this);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    }
+    componentDidMount() {
+        this.props.getAllArtistTypes();
     }
 
     handleInputChange = e => {
@@ -80,34 +75,31 @@ class CreatePostComp extends Component {
 
     // Handling deafault form Submission...
     handleFormSubmit = e => {
+        console.log(e);
         e.preventDefault();
         this.setState({ submitted: true });
-        console.log("this.state.submitted");
 
         const {
             isPrivate,
             title,
-            categoryInput,
+            category,
             content,
             description,
             categoryInputFiles
         } = this.state;
         if (title && content && description) {
-            console.log("asdfasdfasdfasdf");
             const formData = {
                 isPrivate: isPrivate,
                 title: title,
-                category: categoryInput,
+                category: category,
                 content: content,
                 description: description,
                 file:
-                    categoryInput !== "Story Writer" &&
-                    categoryInputFiles.length
+                    category !== "Story Writer" && categoryInputFiles.length
                         ? categoryInputFiles[0]
                         : null
             };
             this.props.createPost(formData);
-            console.log("asdfasdfasdfasdf");
         }
     };
 
@@ -181,8 +173,8 @@ class CreatePostComp extends Component {
     // Creating Category Options...
     categoryOptions = () => {
         let options = [];
-        for (let index = 0; index < this.categories.length; index++) {
-            const category = this.categories[index];
+        for (let index = 0; index < this.state.categories.length; index++) {
+            const category = this.state.categories[index];
 
             options.push(
                 <option value={category} key={index}>
@@ -341,6 +333,16 @@ class CreatePostComp extends Component {
 
     // Rednering
     render() {
+        console.log(this.state);
+
+        const { artistTypes } = this.props;
+        if (!this.state.fetchedArtistTypes && artistTypes.artistTypes) {
+            this.setState({
+                categories: artistTypes.artistTypes,
+                category: artistTypes.artistTypes[0],
+                fetchedArtistTypes: true
+            });
+        }
         const {
             isPrivate,
             title,
@@ -416,7 +418,9 @@ class CreatePostComp extends Component {
                                         </select>
                                     </div>
                                 </div>
-                                {category !== "Story Writer" ? (
+                                {category &&
+                                category.replace(/\s/g, "").toLowerCase() !==
+                                    "storywriter" ? (
                                     <div className="row category-inputs bodyRow">
                                         <div className="col">
                                             {this.categoryInputs()}
@@ -460,7 +464,10 @@ class CreatePostComp extends Component {
                                 <button type="submit">Submit</button>
                             </div>
                             <div className="col-4">
-                                <button onClick={this.clearAndToggle}>
+                                <button
+                                    type="button"
+                                    onClick={this.clearAndToggle}
+                                >
                                     Cancel
                                 </button>
                             </div>
@@ -473,7 +480,15 @@ class CreatePostComp extends Component {
 }
 
 CreatePostComp.propTypes = {
-    createPost: PropTypes.func.isRequired
+    getAllArtistTypes: PropTypes.func.isRequired,
+    createPost: PropTypes.func.isRequired,
+    artistTypes: PropTypes.object.isRequired
 };
 
-export default connect(null, { createPost })(CreatePostComp);
+const mapStateToProps = state => ({
+    artistTypes: state.artistTypes
+});
+
+export default connect(mapStateToProps, { createPost, getAllArtistTypes })(
+    CreatePostComp
+);

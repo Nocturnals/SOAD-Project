@@ -172,7 +172,12 @@ class MainAppComponents extends Component {
                                 />
                                 <AuthenticatedRoute
                                     exact
-                                    path="/:action/artists"
+                                    path="/create/organisation"
+                                    component={CreateOrganisation}
+                                />
+                                <AuthenticatedRoute
+                                    exact
+                                    path="/edit/organisation/:org_id"
                                     component={CreateOrganisation}
                                 />
 

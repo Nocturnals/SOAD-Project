@@ -42,13 +42,14 @@
     transform: scale(1);
 }
 .create-organisation .body .searchInput .searchInputResults {
-    position: absolute;
+    position: absolute; max-height: 300px;
     width: 100%;
     background-color: white;
     border-radius: 3px;
     box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
     transition: all 0.2s linear;
     z-index: 10;
+    overflow: auto;
 }
 .create-organisation .body .searchInput .searchInputResults .searchUserPic {
     margin: auto;
