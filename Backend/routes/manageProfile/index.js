@@ -3,7 +3,7 @@ const express = require("express");
 const Multer = require("multer");
 
 const { verifyToken, verifyUserWithToken } = require("../auth/helper");
-const {} = require("./manageControls");
+const { addFollowing } = require("./manageControls");
 
 // instance of router
 const router = express.Router();
@@ -16,4 +16,6 @@ const multer = Multer({
 });
 
 // ------------------ routes start from here --------------
-router.post("/addFollower", verifyToken, verifyUserWithToken);
+router.post("/addFollowing", verifyToken, verifyUserWithToken, addFollowing);
+
+module.exports = router;

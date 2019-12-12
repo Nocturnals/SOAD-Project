@@ -343,5 +343,26 @@ router.get("/findUserMatch/:name", async (req, res) => {
     }
 });
 
+// route to get user model via username
+router.get("/userProfile/:name", async (req, res) => {
+    // validate data
+    const validateData = findUserValidation(req.params);
+    if (validateData.error) {
+        return res
+            .status(400)
+            .json({ message: validateData.error.details[0].message });
+    }
+
+    // find the user which matches
+    try {
+        const user = await UserModel.findOne({ name: req.params.name });
+
+        return res.status(200).json(user);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 // exports the routers
 module.exports = router;

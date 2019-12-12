@@ -75,7 +75,17 @@ nav .navBarToggler i {
 
 .notifications .dropdown-menu {
     max-height: 200px;
-    overflow-y: auto;
+}
+.notifications .notification {
+    transition: all 0.1s linear;
+    text-overflow: clip;
+}
+.notifications .notification:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+.notifications .notification h6 {
+    text-overflow: clip;
 }
 .notifications .dropdown-menu,
 .user .dropdown-menu {

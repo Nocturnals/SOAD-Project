@@ -1,14 +1,16 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import { Input, TextArea } from "../../helpers/inputs/styledInputs";
 
 import Dropzone from "react-dropzone";
 import { Document, Page } from "react-pdf";
 
-import { LocationSearchInput } from "../../googleMaps/googleMaps";
-
 import isValidEmail from "../../../validation/emailValidation";
 import "./askJob.css";
+
+import { getAllArtistTypes, postJobAvailable } from "../../../actions/index";
 
 class AskJob extends Component {
     static defaultProps = {
@@ -22,45 +24,33 @@ class AskJob extends Component {
     constructor(props) {
         super(props);
 
-        this.artistTypes = [
-            "Photographer",
-            "Painter",
-            "VFX Artist",
-            "Story Writer",
-            "Singer",
-            "Dancer",
-            "Comedian"
-        ];
-
         this.inputs = {
             legalName: "",
             address: "",
-            email: "venkatvishwanth.s17@iiits.in",
-            artistType: this.artistTypes[0],
+            email: "",
+            artistType: "",
             description: "",
             location: "",
             fromTime: "",
             toTime: "",
             website: "",
-            prevJobDescription: "",
-            prevJobTitle: "",
-            startDate: "",
-            endDate: "",
-            workedAddress: "",
+            rawResumeFile: null,
             resume: ""
         };
 
         this.state = {
             inputs: this.inputs,
+            artistTypes: [],
             resumeName: null,
             showResume: false,
             submitted: false,
-            noOfEmptyFields: 15
+            noOfEmptyFields: 15,
+            requestArtistTypes: false,
+            fetchedArtistTypes: false
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.getLocationInput = this.getLocationInput.bind(this);
         this.getSelectedFile = this.getSelectedFile.bind(this);
         this.showResume = this.showResume.bind(this);
         this.resumeDisplayEventListener = this.resumeDisplayEventListener.bind(
@@ -68,6 +58,12 @@ class AskJob extends Component {
         );
 
         this.resumeDisplayEventListener();
+    }
+    componentDidMount() {
+        if (!this.state.requestArtistTypes) {
+            this.props.getAllArtistTypes();
+            this.setState({ requestArtistTypes: true });
+        }
     }
 
     // Counting Empty Input Fields...
@@ -94,22 +90,54 @@ class AskJob extends Component {
         e.preventDefault();
 
         this.setState({
-            submitted: true,
-            noOfEmptyFields: this.countEmptyFields()
+            submitted: true
+            // noOfEmptyFields: this.countEmptyFields()
         });
-        document.body.scrollTo(0, 0);
-    };
 
-    // getting Location Input...
-    getLocationInput = location => {
-        this.setState({
-            location: location
-        });
+        const {
+            legalName,
+            email,
+            address,
+            description,
+            location,
+            fromTime,
+            toTime,
+            rawResumeFile
+        } = this.state.inputs;
+
+        if (
+            legalName &&
+            email &&
+            address &&
+            description &&
+            location &&
+            fromTime &&
+            toTime &&
+            rawResumeFile
+        ) {
+            let formData = new FormData();
+            formData.append("legalName", this.state.inputs.legalName);
+            formData.append("email", this.state.inputs.email);
+            formData.append("address", this.state.inputs.address);
+            formData.append("artistType", this.state.inputs.artistType);
+            formData.append("description", this.state.inputs.description);
+            formData.append("availableLocation", this.state.inputs.location);
+            formData.append("availableFrom", this.state.inputs.fromTime);
+            formData.append("availableTill", this.state.inputs.toTime);
+            formData.append("portfolioSite", this.state.inputs.website);
+            formData.append("file", this.state.inputs.rawResumeFile);
+            console.log(formData);
+
+            this.props.postJobAvailable(formData);
+        }
+        document.body.scrollTo(0, 0);
     };
 
     // Handle Dropped File...
     getSelectedFile = acceptedFiles => {
         if (acceptedFiles[0].type.split("/")[1] === "pdf") {
+            this.inputs = { ...this.inputs, rawResumeFile: acceptedFiles[0] };
+            this.setState({ inputs: this.inputs });
             var oFReader = new FileReader();
             oFReader.readAsDataURL(acceptedFiles[0]);
 
@@ -149,22 +177,33 @@ class AskJob extends Component {
     };
 
     // Creating Artist Type Options...
-    artistTypeOptions = () => {
-        let options = [];
-        for (let index = 0; index < this.artistTypes.length; index++) {
-            const artist = this.artistTypes[index];
+    artistTypeOptions = options => {
+        let optionsComp = [];
+        for (let index = 0; index < options.length; index++) {
+            const artist = options[index];
 
-            options.push(
+            optionsComp.push(
                 <option value={artist} key={index}>
                     {artist}
                 </option>
             );
         }
 
-        return options;
+        return optionsComp;
     };
 
     render() {
+        const { artistTypes } = this.props;
+        if (!this.state.fetchedArtistTypes && artistTypes.artistTypes.length) {
+            this.setState({
+                artistTypes: artistTypes.artistTypes,
+                inputs: {
+                    ...this.state.inputs,
+                    artistType: artistTypes.artistTypes[0]
+                },
+                fetchedArtistTypes: true
+            });
+        }
         const {
             legalName,
             address,
@@ -175,11 +214,6 @@ class AskJob extends Component {
             fromTime,
             toTime,
             website,
-            prevJobTitle,
-            prevJobDescription,
-            startDate,
-            endDate,
-            workedAddress,
             resume
         } = this.state.inputs;
 
@@ -201,12 +235,12 @@ class AskJob extends Component {
                         </div>
                         <div className="row body">
                             <div className="col-6 column inputs">
-                                {submitted && noOfEmptyFields ? (
+                                {/* {submitted && noOfEmptyFields ? (
                                     <h6 className="mainErrorMsg">
                                         Missing responses for {noOfEmptyFields}{" "}
                                         fields
                                     </h6>
-                                ) : null}
+                                ) : null} */}
                                 {/*
                                  *
                                  ******** Contact Details
@@ -290,7 +324,11 @@ class AskJob extends Component {
                                             <option disabled="disabled">
                                                 --Select Artist Type--
                                             </option>
-                                            {this.artistTypeOptions()}
+                                            {artistTypes.artistTypes.length
+                                                ? this.artistTypeOptions(
+                                                      artistTypes.artistTypes
+                                                  )
+                                                : null}
                                         </select>
                                     </div>
                                 </div>
@@ -314,23 +352,19 @@ class AskJob extends Component {
                                 </div>
                                 <div className="row input availableArea">
                                     <div className="col locationSearch">
-                                        {this.state.location ? (
-                                            <div className="row">
-                                                <div className="col locationSelected">
-                                                    <i className="fa fa-map-marker"></i>{" "}
-                                                    <span>
-                                                        &nbsp;
-                                                        {location}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        ) : null}
-                                        <LocationSearchInput
-                                            getLocationInput={this.getLocationInput.bind(
-                                                this
-                                            )}
-                                            submitted={submitted}
-                                            location={location}
+                                        <Input
+                                            type="text"
+                                            error={
+                                                submitted && !location
+                                                    ? true
+                                                    : false
+                                            }
+                                            placeholder="Location*"
+                                            name="location"
+                                            handleInputChange={
+                                                this.handleInputChange
+                                            }
+                                            value={location}
                                         />
                                     </div>
                                 </div>
@@ -392,7 +426,7 @@ class AskJob extends Component {
                                  ******** Work Experience
                                  *
                                  */}
-                                <div className="row section">
+                                {/* <div className="row section">
                                     <h6>Work Experience:</h6>
                                 </div>
                                 <div className="row input jobTitle">
@@ -492,7 +526,7 @@ class AskJob extends Component {
                                             value={workedAddress}
                                         />
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                             {/*
                              *
@@ -556,7 +590,7 @@ class AskJob extends Component {
                         </div>
                     </div>
                 </form>
-                {showResume ? (
+                {/* {showResume ? (
                     <div className="container-fluid resumeDisplay">
                         <div className="row">
                             <div className="col-6 resumeDoc">
@@ -566,10 +600,23 @@ class AskJob extends Component {
                             </div>
                         </div>
                     </div>
-                ) : null}
+                ) : null} */}
             </React.Fragment>
         );
     }
 }
 
-export default AskJob;
+AskJob.propTypes = {
+    getAllArtistTypes: PropTypes.func.isRequired,
+    postJobAvailable: PropTypes.func.isRequired,
+    artistTypes: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    artistTypes: state.artistTypes
+});
+
+export default connect(mapStateToProps, {
+    getAllArtistTypes,
+    postJobAvailable
+})(AskJob);

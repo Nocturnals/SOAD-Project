@@ -128,6 +128,11 @@ class LeftContent extends Component {
                                 </h6>
                             </div>
                         </div>
+                        <div className="row">
+                            <div className="col">
+                                <button></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className="left-content row organisations">
