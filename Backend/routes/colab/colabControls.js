@@ -21,6 +21,8 @@ exports.InterstedInWork = async (req, res) => {
         return res
             .status(400)
             .json({ message: validatedData.error.details[0].message });
+    } else {
+        return res.json({ message: "success" });
     }
 
     // create a other user model with current user

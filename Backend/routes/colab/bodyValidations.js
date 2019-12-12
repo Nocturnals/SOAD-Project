@@ -6,6 +6,7 @@ const interestedInWorkValidation = data => {
         email: Joi.string()
             .email()
             .required(),
+        address: Joi.string().required(),
         artistType: Joi.string().required(),
         description: Joi.string().required(),
         availableLocation: Joi.string().required(),
