@@ -42,3 +42,23 @@ export function getUserPosts(user_id) {
             });
     };
 }
+
+export function getHomeFeed() {
+    return dispatch => {
+        dispatch({ type: postsConstants.GET_HOME_FEED_REQUEST });
+
+        axios
+            .get("http://localhost:4000/api/post/posts")
+            .then(res => {
+                console.log(res);
+                dispatch({
+                    type: postsConstants.GET_HOME_FEED_SUCCESS,
+                    feed: res.data
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                dispatch({ type: postsConstants.GET_HOME_FEED_FAILURE });
+            });
+    };
+}

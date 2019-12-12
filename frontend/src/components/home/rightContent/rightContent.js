@@ -8,32 +8,9 @@ import "./rightContent.css";
 
 class RightContent extends Component {
     render() {
-        const competitions = [
-            new Competition(
-                "Cook Off",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
-            ),
-            new Competition(
-                "Cook Off",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
-            ),
-            new Competition(
-                "Cook Off",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
-            ),
-            new Competition(
-                "Cook Off",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
-            ),
-            new Competition(
-                "Cook Off",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
-            )
-        ];
-
         return (
             <div className="right-content">
-                <CompetitionsList competitions={competitions} />
+                <CompetitionsList competitions={this.props.competitions} />
             </div>
         );
     }
