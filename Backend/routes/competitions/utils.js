@@ -29,8 +29,7 @@ const {
     editcommentValidation,
     commentlikeValidation,
     commentreplyValidation,
-    similarCompetitionValidation
-
+    similarCompetitionValidation,
     findcompetitionmathcValidation
 } = require("./compValidation");
 
