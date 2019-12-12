@@ -53,7 +53,7 @@ exports.createPost = async (req, res, next) => {
             }
         ]
     });
-    if (req.body.category != "Story Writer" && req.imageurls) {
+    if (req.body.category != "story writer" && req.imageurls) {
         const images = req.imageurls;
         console.log(images);
         const len = images.length;

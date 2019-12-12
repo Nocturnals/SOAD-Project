@@ -23,7 +23,7 @@ exports.upload = async (req, res, next) => {
     console.log("Upload Image");
     console.log(req.body);
     switch (req.body.category) {
-        case "Story Writer":
+        case "story writer":
             next();
             break;
         default:
