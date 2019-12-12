@@ -306,4 +306,22 @@ io.on("connection", socket => {
     });
 });
 
+router.post("/:conversationId", async (req, res, next) => {
+    const reply = new Message({
+        conversationId: req.params.conversationId,
+        body: req.body.composedMessage,
+        author: req.loggedUser
+    });
+
+    reply.save(function(err, sentReply) {
+        if (err) {
+            res.send({ error: err });
+            return next(err);
+        }
+
+        res.status(200).json({ message: "Reply successfully sent!" });
+        return next;
+    });
+});
+
 module.exports = router;
