@@ -14,6 +14,7 @@ const Image = require("../../models/Image");
 const {upload} = require("./imageUpload");
 const Notification = require("../../models/Notifications");
 const User = require("../../models/user");
+const {ServiceaccountModel} = require("../../models/serviceaccount");
 
 
 
@@ -540,7 +541,14 @@ exports.getSinglePost = async (req, res, next) => {
 
 
 exports.getSpecialPost = async ( req, res) => {
+    const r_key = req.params.key;
+    console.log(r_key);
     try {
+        const resp = await ServiceaccountModel.find({
+            key: req.params.key
+        });
+    
+    if(resp) {
         const fields = {
             title: true,
             content: true,
@@ -570,41 +578,18 @@ exports.getSpecialPost = async ( req, res) => {
         const posts = await Post.find(query).limit(10)        
             .select(fields)
             .sort({ datefield: -1 });
-
-/*        
-        for (var i=0;i<posts.length;i++)
-        {
-            var month = new Array();
-            month[0] = "January";
-            month[1] = "February";
-            month[2] = "March";
-            month[3] = "April";
-            month[4] = "May";
-            month[5] = "June";
-            month[6] = "July";
-            month[7] = "August";
-            month[8] = "September";
-            month[9] = "October";
-            month[10] = "November";
-            month[11] = "December";
-            var d = new Date(posts[i].date);
-            var n = month[d.getMonth()];
-            var w = d.getFullYear();
-            var date = d.getDate();
-            const str = date +"&nbsp;"+ n+"&nbsp;" + w;
-            posts[i].date = str;
-            
-            console.log(posts[i].date);
-        };  
-*/        console.log(posts);
+        console.log(posts);
 
         return res.status(200).json(posts);
+    
 
-
-    } catch (error) {
-        console.log(error);
+    } else {
         return res.status(500).json({ message: "internal server error" });
     }
+} catch (error) {
+    return res.status(500).json({ message: "Access is denied" });
+}
+
 };
 /*
  */

@@ -97,7 +97,7 @@ app.use("/api/subscriptions", require("./routes/subscription_1/service"));
 app.use("/api/colab", require("./routes/colab"));
 
 // route for service account registration
-app.use("/api/service", require("./routes/serviceaccount/index"));
+app.use("/api/serviceaccount", require("./routes/serviceaccount/index"));
 
 // Route for notifications
 app.use("/api/notifications", require("./routes/notifications/utils"));

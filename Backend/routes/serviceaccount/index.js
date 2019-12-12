@@ -36,7 +36,7 @@ router.post(
                 service: req.body.service,
                 key: uniqid()
             });
-            const savedaccount = account.save();
+            const savedaccount = await account.save();
             return res.json(savedaccount);
         } catch (error) {
             console.log(error);
