@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { jobsConstants, alertConstants } from "../../constants/index";
+import alertActions from "../alertActions";
 
 export function getFilteredJobs(options) {
     return dispatch => {
@@ -15,6 +16,14 @@ export function getFilteredJobs(options) {
             .catch(err => {
                 console.log(err);
                 dispatch(failureAction());
+                try {
+                    // give off error alert
+                    dispatch(alertActions.error(err.response.data.message));
+                } catch (error) {
+                    dispatch(
+                        alertActions.error("Error in searching for job offers")
+                    );
+                }
             });
     };
 

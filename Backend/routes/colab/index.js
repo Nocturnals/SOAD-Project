@@ -27,8 +27,7 @@ router.get("/allTypes", (req, res) => {
 
 // route to apply for a interested in working by a valid user
 router.post(
-    "/interestedInWork/:type",
-    getArtistType,
+    "/interestedInWork",
     verifyToken,
     verifyUserWithToken,
     async (req, res) => {
@@ -49,17 +48,14 @@ router.post(
             profileurl: req.loggedUser.profileurl
         });
 
-        // TODO:: upload the cv file and get its url
-
         // create the new jogapplied model
         const jobAvailable = new JobsAvailableModel({
-            artistType: req.artistType,
+            artistType: req.body.artistType.toLowerCase(),
             user: user,
             availableAt: req.body.availableAt,
             freeTimeFrom: req.body.freeTimeFrom,
             freeTimeTill: req.body.freeTimeTill,
             portpolioSite: req.body.portpolioSite || ""
-            // cvLocation: req.
         });
 
         // save the new doc to database

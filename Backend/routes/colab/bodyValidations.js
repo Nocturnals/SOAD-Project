@@ -2,6 +2,7 @@ const Joi = require("@hapi/joi");
 
 const interestedInWorkValidation = data => {
     const schema = {
+        artistType: Joi.string().required(),
         availableAt: Joi.string().required(),
         freeTimeFrom: Joi.number()
             .integer()
@@ -9,8 +10,7 @@ const interestedInWorkValidation = data => {
         freeTimeTill: Joi.number()
             .integer()
             .required(),
-        portpolioSite: Joi.string(),
-        cvLocation: Joi.string().required()
+        portpolioSite: Joi.string()
     };
 
     return Joi.validate(data, schema);

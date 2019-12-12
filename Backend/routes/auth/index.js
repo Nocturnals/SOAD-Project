@@ -312,9 +312,9 @@ router.post(
     }
 );
 
-router.get("/findUserMatch", async (req, res) => {
+router.get("/findUserMatch/:name", async (req, res) => {
     // validate data
-    const validateData = findUserValidation(req.body);
+    const validateData = findUserValidation(req.params);
     if (validateData.error) {
         return res
             .status(400)
@@ -326,7 +326,7 @@ router.get("/findUserMatch", async (req, res) => {
         const reqTime = Date.now();
 
         const usersList = await UserModel.find({
-            name: { $regex: req.body.name }
+            name: { $regex: req.params.name }
         });
 
         const result = {
