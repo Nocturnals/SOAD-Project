@@ -21,7 +21,7 @@ router.get("/getall", verifyToken, verifyUserWithToken, async (req, res) => {
     res.json(req.loggedUser.organizations);
 });
 
-router.post("/getOrganization", async (req, res) => {
+router.post("/getByName", async (req, res) => {
     // Format
     // orgName:""
 

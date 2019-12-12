@@ -120,6 +120,20 @@
 .organisations .body .members .orgMemBody .member .user .details {
     margin: auto;
 }
+/* add User Button */
+.organisations .body .members .orgMemBody .addUsers {
+    width: 100%; padding: 8px 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba(68, 6, 109, 0.9);
+    border: 2px dotted rgba(68, 6, 109, 0.5);
+    transition: all 0.2s linear;
+    outline: none;
+}
+.organisations .body .members .orgMemBody .addUsers:hover {
+    transform: scale(1.01);
+    border: 2px solid rgba(68, 6, 109, 0.5);
+}
 /* Feed */
 /* Organisation Controls */
 .organisations .body .orgRightContent {

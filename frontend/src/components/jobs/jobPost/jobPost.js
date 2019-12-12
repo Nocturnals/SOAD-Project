@@ -12,12 +12,16 @@ import "./jobPost.css";
 import { getJobById } from "../../../actions/index";
 
 class JobPost extends Component {
-    job_id = this.props.match.params.job_id;
+    constructor(props) {
+        super(props);
 
-    componentDidMount() {
-        if (!this.props.jobOffer && this.job_id) {
-            this.props.getJobById(this.job_id);
-        }
+        this.job_id = this.props.match.params.job_id;
+        this.state = {
+            fetched: false
+        };
+    }
+    componentDidUpdate() {
+        document.body.scrollTo(0, 0);
     }
 
     render() {
@@ -25,6 +29,17 @@ class JobPost extends Component {
         const jobOffer = this.props.jobOffer
             ? this.props.jobOffer
             : jobs.currentJob;
+
+        if (
+            !this.props.jobOffer &&
+            this.job_id &&
+            (!this.state.fetched ||
+                this.job_id !== this.props.match.params.job_id)
+        ) {
+            this.job_id = this.props.match.params.job_id;
+            this.props.getJobById(this.job_id);
+            this.setState({ fetched: true });
+        }
 
         return (
             <React.Fragment>

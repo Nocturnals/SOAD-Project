@@ -26,6 +26,41 @@ export function getAllOrganizations() {
     }
 }
 
+export function getOrganization(name) {
+    return dispatch => {
+        dispatch(requestAction());
+        axios
+            .post("http://localhost:4000/api/organization/getByName", {
+                orgName: name
+            })
+            .then(res => {
+                console.log(res);
+                dispatch(successAction(res.data));
+            })
+            .catch(err => {
+                console.log(err);
+                dispatch(failureAction());
+            });
+    };
+
+    function requestAction() {
+        return {
+            type: orgConst.GET_ORGANISATION_REQUEST
+        };
+    }
+    function successAction(organisation) {
+        return {
+            type: orgConst.GET_ORGANISATION_SUCCESS,
+            organisation: organisation
+        };
+    }
+    function failureAction() {
+        return {
+            type: orgConst.GET_ORGANISATION_FAILURE
+        };
+    }
+}
+
 export function createOrganisation(organisation) {
     console.log(organisation);
     return dispatch => {

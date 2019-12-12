@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -98,6 +99,9 @@ class PostJobOffer extends Component {
     };
 
     render() {
+        if (this.state.postSuccessFul) {
+            return <Redirect to="/jobs/results" />;
+        }
         const { artistTypes } = this.props;
         const {
             title,

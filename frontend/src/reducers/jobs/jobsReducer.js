@@ -4,11 +4,25 @@ const initialState = {
     filteredJobs: [],
     currentJob: null,
     postJobOffer: null,
+    message: null,
     isLoading: true
 };
 
 export default function(state = initialState, action) {
     switch (action.type) {
+        case jobsConstants.APPLY_JOB_REQUEST:
+            return {
+                ...state,
+                message: null,
+                isLoading: true
+            };
+        case jobsConstants.APPLY_JOB_SUCCESS:
+        case jobsConstants.APPLY_JOB_FAILURE:
+            return {
+                ...state,
+                message: action.message,
+                isLoading: false
+            };
         case jobsConstants.POST_JOB_OFFER_REQUEST:
             return {
                 ...state,
@@ -59,6 +73,6 @@ export default function(state = initialState, action) {
                 isLoading: false
             };
         default:
-            return { ...initialState };
+            return { ...state };
     }
 }

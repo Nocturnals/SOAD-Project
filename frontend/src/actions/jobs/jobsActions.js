@@ -1,7 +1,10 @@
 import axios from "axios";
 
-import { jobsConstants, alertConstants } from "../../constants/index";
-import alertActions from "../alertActions";
+import {
+    jobsConstants,
+    alertConstants,
+    userAuthConst
+} from "../../constants/index";
 
 export function postJobOffer(job) {
     return dispatch => {
@@ -11,6 +14,10 @@ export function postJobOffer(job) {
             .post("http://localhost:4000/api/colab/jobOffer", job)
             .then(res => {
                 dispatch(successAction());
+                dispatch({
+                    type: userAuthConst.LOAD_USER,
+                    user: res.data.loggedUser
+                });
                 console.log(res);
             })
             .catch(err => {
@@ -34,7 +41,42 @@ export function postJobOffer(job) {
         };
     }
     function alertAction(message) {
-        return { type: "ALERT_ERROR", message: message };
+        return { type: alertConstants.ERROR, message: message };
+    }
+}
+
+export function applyForJob(job_id) {
+    return dispatch => {
+        dispatch(requestAction());
+
+        axios
+            .post("http://localhost:4000/api/colab/applyJob", {
+                jobOfferId: job_id
+            })
+            .then(res => {
+                console.log(res);
+                dispatch(successAction(res.data.message));
+            })
+            .catch(err => {
+                console.log(err);
+                dispatch(failureAction(err.data));
+            });
+    };
+
+    function requestAction() {
+        return { type: jobsConstants.APPLY_JOB_REQUEST };
+    }
+    function successAction(message) {
+        return {
+            type: jobsConstants.APPLY_JOB_SUCCESS,
+            message: message
+        };
+    }
+    function failureAction(message) {
+        return {
+            type: jobsConstants.APPLY_JOB_FAILURE,
+            message: message
+        };
     }
 }
 

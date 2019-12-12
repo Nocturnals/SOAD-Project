@@ -15,6 +15,6 @@ export default function(state = initialState, action) {
                 isLoading: false
             };
         default:
-            break;
+            return state;
     }
 }
