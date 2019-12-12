@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const artistTypes = require("./artistTypes");
 const otherUserSchema = require("./Otheruser");
+const { fileLocSchema } = require("./fileLocModel");
 
 const JobsAvailableSchema = new mongoose.Schema({
     legalName: {
@@ -46,13 +47,13 @@ const JobsAvailableSchema = new mongoose.Schema({
         required: true
     },
 
-    portpolioSite: {
+    portfolioSite: {
         type: String,
         default: ""
     },
 
     resumeLoc: {
-        type: String,
+        type: fileLocSchema,
         required: true
     },
 

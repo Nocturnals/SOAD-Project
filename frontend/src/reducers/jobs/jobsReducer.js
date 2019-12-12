@@ -4,6 +4,7 @@ const initialState = {
     filteredJobs: [],
     currentJob: null,
     postJobOffer: null,
+    postJobAvailable: null,
     message: null,
     isLoading: true
 };
@@ -28,6 +29,19 @@ export default function(state = initialState, action) {
                 ...state,
                 postJobOffer: action.job,
                 isLoading: true
+            };
+        case jobsConstants.POST_JOB_AVAILABLE_REQUEST:
+            return {
+                ...state,
+                postJobAvailable: action.job,
+                isLoading: true
+            };
+        case jobsConstants.POST_JOB_AVAILABLE_FAILURE:
+        case jobsConstants.POST_JOB_AVAILABLE_SUCCESS:
+            return {
+                ...state,
+                postJobAvailable: null,
+                isLoading: false
             };
         case jobsConstants.POST_JOB_OFFER_SUCCESS:
         case jobsConstants.POST_JOB_OFFER_FAILURE:

@@ -1,13 +1,22 @@
 const express = require("express");
+const Multer = require("multer");
 
 const artistTypes = require("../../models/artistTypes");
 const { getArtistType } = require("./helper");
 const { verifyToken, verifyUserWithToken } = require("../auth/helper");
+const { uploadFile } = require("../../services/fileUpload");
 
 const colabControls = require("./colabControls");
 
 // instance of router
 const router = express.Router();
+
+const multer = Multer({
+    storage: Multer.memoryStorage(),
+    limits: {
+        fileSize: 50 * 1024 * 1024 // no larger than 50mb, you can change as needed.
+    }
+});
 
 // ----------------- routes start here ------------------------
 // route to get all types of artists
@@ -20,6 +29,8 @@ router.post(
     "/interestedInWork",
     verifyToken,
     verifyUserWithToken,
+    multer.single("file"),
+    uploadFile,
     colabControls.InterstedInWork
 );
 
