@@ -17,7 +17,7 @@ export default function(state = initialState, action) {
         case jobsConstants.GET_FILTERED_JOBS_SUCCESS:
             return {
                 ...state,
-                filteredJobs: action.interestedJobs,
+                filteredJobs: action.filteredJobs,
                 isLoading: false
             };
         case jobsConstants.GET_FILTERED_JOBS_FAILURE:

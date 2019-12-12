@@ -61,13 +61,17 @@ class SearchJobs extends Component {
                       : false
               }
             : this.initJobTypesChecked;
+
+        // Default Filters...
         this.defaultFilters = {
             interest: this.formData.interest ? this.formData.interest : "",
             locationSearchInput: this.formData.locationSearchInput
                 ? this.formData.locationSearchInput
                 : "",
             jobType: this.formData.jobType
-                ? this.formData.jobType
+                ? typeof this.formData.jobType === "string"
+                    ? [this.formData.jobType]
+                    : this.formData.jobType
                 : this.jobTypes,
             jobTypesChecked: this.jobTypesChecked
         };
@@ -167,6 +171,10 @@ class SearchJobs extends Component {
     };
     handleFiltersSubmit = e => {
         e.preventDefault();
+
+        setTimeout(() => {
+            document.getElementsByTagName("form")[0].submit();
+        }, 500);
     };
 
     // My Jobs Sort Types...

@@ -39,7 +39,7 @@ class JobsFilters extends Component {
                                         name="interest"
                                         onChange={this.handleInputChange}
                                         value={interest}
-                                        placeholder="Photography, Painting"
+                                        placeholder="Photographer, Painter"
                                     />
                                 </div>
                             </div>
@@ -130,6 +130,9 @@ class JobsFilters extends Component {
                                     </div>
                                 </div>
                             </div>
+                            <button type="submit" style={{ display: "none" }}>
+                                Apply Filters
+                            </button>
                         </div>
                     </form>
                 </div>

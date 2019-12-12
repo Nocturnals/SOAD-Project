@@ -26,7 +26,7 @@ export function getFilteredJobs(options) {
     function successAction(jobs) {
         return {
             type: jobsConstants.GET_FILTERED_JOBS_SUCCESS,
-            flteredJobs: jobs
+            filteredJobs: jobs
         };
     }
     function failureAction() {

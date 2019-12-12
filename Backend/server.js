@@ -24,11 +24,11 @@ const databaseConnect = process.env.DB_Connect;
 
 // connect to mongooseDB
 mongoose.connect(
-  databaseConnect,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  () => {
-    console.log("connected to mongooseDB");
-  }
+    databaseConnect,
+    { useNewUrlParser: true, useUnifiedTopology: true },
+    () => {
+        console.log("connected to mongooseDB");
+    }
 );
 
 // intializing the app instance
@@ -36,19 +36,19 @@ const app = express();
 
 //CORS middleware
 var allowCrossDomain = function(req, res, next) {
-  // website which can only access this backend server
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    // website which can only access this backend server
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
 
-  // Request methods which are allowed to this backend server
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+    // Request methods which are allowed to this backend server
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
 
-  // Request headers which are allowed to this backend server
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    // Request headers which are allowed to this backend server
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  res.header("Access-Control-Expose-Headers", "*");
+    res.header("Access-Control-Expose-Headers", "*");
 
-  // Pass to next layer
-  next();
+    // Pass to next layer
+    next();
 };
 
 // Middleware
@@ -60,13 +60,13 @@ app.use(bodyParser.json());
 app.use(allowCrossDomain);
 
 if (process.env.Node_Env === "development") {
-  // for logging the infomation
-  app.use(morgan("tiny"));
+    // for logging the infomation
+    app.use(morgan("tiny"));
 
-  // for securing the routes with adding headers
-  app.use(helmet());
+    // for securing the routes with adding headers
+    app.use(helmet());
 
-  console.log("Logging the data using morgan");
+    console.log("Logging the data using morgan");
 }
 
 // Route for login
@@ -83,11 +83,7 @@ app.use("/api/chat", ChatController);
 
 //Route for Organisations
 app.use("/api/organization", require("./routes/organizations/index"));
-<<<<<<< HEAD
 app.use("/editProfile", require("./routes/editProfile/index"));
-=======
-
->>>>>>> 38e5d207a80ff92a83454ca544b90e899efa1fa8
 //Route for Competitions
 app.use("/api/competition", require("./routes/competitions/utils"));
 
@@ -105,16 +101,18 @@ app.use("/api/notifications", require("./routes/notifications/utils"));
 // app.use("api/subscription", require("./routes/subscription/stripefunctions"));
 
 if (process.env.Node_Env === "production") {
-  // for loading the static frontend app
-  app.use(express.static("../frontend/build"));
+    // for loading the static frontend app
+    app.use(express.static("../frontend/build"));
 
-  app.get("*", (req, res, next) => {
-    res.sendFile(path.resolve(__dirname, "../frontend", "build", "index.html"));
-  });
+    app.get("*", (req, res, next) => {
+        res.sendFile(
+            path.resolve(__dirname, "../frontend", "build", "index.html")
+        );
+    });
 }
 
 const port = process.env.PORT || 3000;
 let server = app.listen(port, () => {
-  console.log(`Server is up and running on port: ${port}!!`);
+    console.log(`Server is up and running on port: ${port}!!`);
 });
 module.exports = { server: server };
