@@ -1,32 +1,6 @@
 import axios from "axios";
 
-import {
-    jobsConstants,
-    alertConstants,
-    artistTypesConst
-} from "../../constants/index";
-
-export function getAllArtistTypes() {
-    return dispatch => {
-        // make isloading true
-        dispatch(requestAction());
-
-        axios.get("http://localhost:4000/api/colab/allTypes").then(res => {
-            dispatch(successAction(res.data));
-        });
-    };
-
-    function requestAction() {
-        return { type: artistTypesConst.GET_TYPES_REQUEST };
-    }
-
-    function successAction(payload) {
-        return {
-            type: artistTypesConst.GET_TYPES_SUCCESS,
-            payload: payload
-        };
-    }
-}
+import { jobsConstants, alertConstants } from "../../constants/index";
 
 export function getFilteredJobs(options) {
     return dispatch => {
