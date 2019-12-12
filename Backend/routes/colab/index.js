@@ -82,7 +82,7 @@ router.post(
     }
 );
 
-// route to post a job wanted request
+// route to post a job offer request
 router.post(
     "/jobOffer/:type",
     getArtistType,
@@ -106,25 +106,41 @@ router.post(
             profileurl: req.loggedUser.profileurl
         });
 
-        // create artist wanted model
-        const jobOffer = new JobOffersModel({
-            artistType: req.artistType,
-            title: req.body.title,
-            jobProvider: jobProvider,
-            workAt: req.body.workAt,
-            workDuration: req.body.workDuration,
-            workType: req.body.workType,
-            salary: req.body.salary,
-            descriptionOfJob: req.body.descriptionOfJob,
-            qualifications: req.body.qualifications,
-            responsibilities: req.body.responsibilities
-        });
-
         try {
+            // create artist wanted model
+            const jobOffer = new JobOffersModel({
+                artistType: req.artistType,
+                title: req.body.title,
+                jobProvider: jobProvider,
+                workAt: req.body.workAt,
+                workDuration: req.body.workDuration,
+                workType: req.body.workType,
+                salary: req.body.salary,
+                descriptionOfJob: req.body.descriptionOfJob,
+                qualifications: req.body.qualifications,
+                responsibilities: req.body.responsibilities
+            });
+
             const doc = await jobOffer.save();
-            return res
-                .status(200)
-                .json({ message: "Successfully created job offer", doc: doc });
+
+            const currentUser = await UserModel.findById(req.loggedUser._id);
+
+            const newOtherJobOffer = new otherJobOfferModel({
+                _id: doc._id,
+                artistType: doc.artistType,
+                title: doc.title,
+                jobProvider: doc.jobProvider,
+                salary: doc.salary,
+                status: "pending"
+            });
+
+            currentUser.jobsOffered.push(newOtherJobOffer);
+            const updatedUser = await currentUser.save();
+            return res.status(200).json({
+                message: "Successfully created job offer",
+                doc: doc,
+                loggedUser: updatedUser
+            });
         } catch (error) {
             console.log(error);
             return res.status(500).json({ message: "Internal server error" });
