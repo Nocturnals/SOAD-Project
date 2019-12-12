@@ -191,7 +191,9 @@ class ProfilePage extends Component {
                                                         aria-hidden="true"
                                                     ></i>
                                                     &nbsp;&nbsp;
-                                                    {otherUsers.userProfile
+                                                    {otherUsers.userProfile &&
+                                                    otherUsers.userProfile
+                                                        .dateofbirth
                                                         ? otherUsers.userProfile.dateofbirth.split(
                                                               "T"
                                                           )[0]

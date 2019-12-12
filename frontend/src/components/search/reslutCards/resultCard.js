@@ -92,7 +92,7 @@ class ResultCard extends Component {
                                     : searchIn === "Organisations"
                                     ? "/artists/" + result.name
                                     : searchIn === "Competitions"
-                                    ? "/competitions/" + result.name
+                                    ? "/competitions/" + result.id
                                     : null
                             }
                         >
