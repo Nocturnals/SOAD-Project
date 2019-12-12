@@ -22,3 +22,23 @@ export function createPost(post) {
             });
     };
 }
+
+export function getUserPosts(user_id) {
+    return dispatch => {
+        dispatch({ type: postsConstants.GET_USER_POSTS_REQUEST });
+
+        axios
+            .get(`http://localhost:4000/api/post/userposts/${user_id}`)
+            .then(res => {
+                console.log(res);
+                dispatch({
+                    type: postsConstants.GET_USER_POSTS_SUCCESS,
+                    posts: res.data
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                dispatch({ type: postsConstants.GET_USER_POSTS_FAILURE });
+            });
+    };
+}

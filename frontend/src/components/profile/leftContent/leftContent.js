@@ -30,6 +30,7 @@ class OrganisationsLink extends Component {
 class LeftContent extends Component {
     // Organisations Components...
     organisationComp = organisations => {
+        const userImg = require("../../media/images/categories/photographer.png");
         let orgs = [];
         for (let index = 0; index < organisations.length; index++) {
             const org = organisations[index];
@@ -39,23 +40,27 @@ class LeftContent extends Component {
                         <div
                             className="orgImage"
                             style={{
-                                backgroundImage: `url(${org.image})`
+                                backgroundImage: `url(${userImg})`
                             }}
                         ></div>
                     </div>
                     <div className="col-9">
                         <div className="row">
                             <div className="col-8">
-                                <div className="orgTitle row">{org.title}</div>
-                                <div className="orgDescr row">{org.descr}</div>
+                                <div className="orgTitle row">{org.name}</div>
+                                <div className="orgDescr row">
+                                    {org.description}
+                                </div>
                             </div>
                             <div className="col-4">
-                                <button className="orgBtn">
-                                    <i
-                                        className="fa fa-chevron-right"
-                                        aria-hidden="true"
-                                    ></i>
-                                </button>
+                                <Link to={"/artists/" + org.name + "/feed"}>
+                                    <button className="orgBtn">
+                                        <i
+                                            className="fa fa-chevron-right"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -67,6 +72,8 @@ class LeftContent extends Component {
     };
 
     render() {
+        const { userProfile } = this.props;
+
         const userImg = require("../../media/images/categories/photographer.png");
 
         const organisations = [
@@ -113,26 +120,20 @@ class LeftContent extends Component {
                         <div className="following row">
                             <div className="title col-6">
                                 <h4>Following</h4>
-                                <h6>
-                                    {auth.user && auth.user.following
-                                        ? auth.user.following.length
-                                        : 0}
-                                </h6>
+                                <h6>{userProfile.following.length}</h6>
                             </div>
                             <div className="title col-6">
                                 <h4>Followers</h4>
-                                <h6>
-                                    {auth.user && auth.user.followers
-                                        ? auth.user.followers.length
-                                        : 0}
-                                </h6>
+                                <h6>{userProfile.followers.length}</h6>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col">
-                                <button></button>
+                        {auth.user && userProfile._id !== auth.user._id ? (
+                            <div className="row">
+                                <div className="col">
+                                    <button></button>
+                                </div>
                             </div>
-                        </div>
+                        ) : null}
                     </div>
                 </div>
                 <div className="left-content row organisations">
@@ -142,7 +143,7 @@ class LeftContent extends Component {
                                 <h6>Organisations</h6>
                             </div>
                         </div>
-                        {this.organisationComp(organisations)}
+                        {this.organisationComp(userProfile.organizations)}
                         <div className="view-more row">
                             <div className="col-12">
                                 <OrganisationsLink

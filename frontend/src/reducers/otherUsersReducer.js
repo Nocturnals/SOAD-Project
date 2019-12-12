@@ -2,6 +2,7 @@ import { otherUsersConst } from "../constants/index";
 
 const initialState = {
     userProfile: null,
+    userPosts: null,
     isLoading: false
 };
 
@@ -10,6 +11,7 @@ export default function(state = initialState, action) {
         case otherUsersConst.GET_OTHER_USER_REQUEST:
             return {
                 ...state,
+                userProfile: null,
                 isLoading: true
             };
         case otherUsersConst.GET_OTHER_USER_SUCCESS:
@@ -23,6 +25,7 @@ export default function(state = initialState, action) {
                 ...state,
                 isLoading: false
             };
+
         default:
             return { ...state };
     }
