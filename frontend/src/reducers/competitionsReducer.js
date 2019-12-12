@@ -1,7 +1,7 @@
 import { compConst } from "../constants";
 
 const initialState = {
-    competitions: [],
+    competition: null,
     isLoading: false,
     error: false
 };
@@ -21,7 +21,7 @@ export default function(state = initialState, action) {
         case compConst.CREATE_COMPETITION_SUCCESS:
             return {
                 ...state,
-                competitions: [action.competition],
+                competition: action.competition,
                 isLoading: false
             };
         case compConst.CREATE_COMPETITION_FAILURE:

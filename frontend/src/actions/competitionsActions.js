@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import { compConst, alertConstants } from "../constants";
 
 export function createCompetition(competition) {
@@ -5,19 +7,25 @@ export function createCompetition(competition) {
         dispatch({
             type: compConst.CREATE_COMPETITION_REQUEST
         });
-        // if (!competition) {
-        //     dispatch({
-        //         type: alertConstants.ERROR,
-        //         message: "Invalid Competition Details"
-        //     });
-        //     dispatch({
-        //         type: compConst.CREATE_COMPETITION_FAILURE,
-        //         error: "Invalid Competition Details"
-        //     });
-        // }
-        dispatch({
-            type: compConst.CREATE_COMPETITION_SUCCESS,
-            competition: competition
-        });
+        console.log(competition);
+
+        axios
+            .post(
+                "http://localhost:4000/api/competition/createcompetition",
+                competition
+            )
+            .then(res => {
+                dispatch({
+                    type: compConst.CREATE_COMPETITION_SUCCESS,
+                    competition: competition
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                dispatch({
+                    type: compConst.CREATE_COMPETITION_FAILURE,
+                    error: err.response.data.message
+                });
+            });
     };
 }
