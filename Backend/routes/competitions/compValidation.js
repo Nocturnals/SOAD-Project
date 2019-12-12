@@ -26,9 +26,7 @@ const CompCreateValidation = data => {
         starttime: Joi.date().required(),
 
         endtime: Joi.date().required(),
-        prize: Joi.number()
-            .integer()
-            .required(),
+        prize: Joi.string().required(),
         rules: Joi.string().required(),
         category: Joi.string()
             .min(4)

@@ -883,7 +883,7 @@ router.get("/findCompetitionMatch/:name", async (req, res) => {
 
 // retrieve a comp
 
-router.get("/:id", verifyToken, verifyUserWithToken, async (req, res) => {
+router.get("/:id", async (req, res) => {
     try {
         const comp = await CompetitionsModel.findById(req.params.id);
         if (comp) {
