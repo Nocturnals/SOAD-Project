@@ -18,17 +18,23 @@ class CompetitionsList extends Component {
                         <div className="row">
                             <span className="col-8">
                                 <Link
-                                    to={"/competitions/" + competition.title}
+                                    to={"/competitions/" + competition.name}
                                     target="_blank"
                                     style={{ textDecoration: "none" }}
                                 >
-                                    {competition.title}
+                                    {competition.name}
                                 </Link>
                             </span>
-                            <span className="col-4">21:10:50</span>
+                            <span className="col-4">
+                                {competition.starttime
+                                    ? competition.starttime.split("T")[0]
+                                    : "Start Time"}
+                            </span>
                         </div>
                         <div className="descr row">
-                            <div className="col">{competition.descr}</div>
+                            <div className="col">
+                                {competition.shortdescription}
+                            </div>
                         </div>
                     </div>
                 </div>
