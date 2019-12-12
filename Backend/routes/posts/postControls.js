@@ -478,20 +478,37 @@ exports.unlikeComment = async (req, res, next) => {
 
 exports.getAllPosts = async (req, res, next) => {
     try {
-        const fields = {
-            title: true,
-            content: true,
-            date: true,
-            likes: true,
-            owner: true,
-            category: true,
-            imageurls: true,
-            comments: true
+        const userId = req.loggedUser._id;
+        const f = {
+            name:true,
+            "following._id": true,
+            primaryinterest:true
         };
-        const posts = await Post.find()
-            .select(fields)
+        const userModel = await User.findById(
+            {
+                _id: userId
+            }
+        ).select(f);
+        console.log(userModel); 
+        console.log(userModel.primaryinterest);
+        
+        
+        let followers = [];
+        let fo = userModel.following;
+        fo.forEach(element => {
+            followers.push(element._id);
+        });
+        followers.push(userId);
+        console.log(followers);
+
+        var query = {
+            $or: [
+                    {category: userModel.primaryinterest },
+                    {"owner._id": { $in : followers }}
+                ]
+        };
+        const posts = await Post.find(query)
             .sort({ datefield: -1 });
-        console.log(posts);
         return res.status(200).json(posts);
     } catch (error) {
         console.log(error);
