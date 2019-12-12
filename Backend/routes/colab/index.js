@@ -22,7 +22,7 @@ const router = express.Router();
 
 // route to get all types of artists
 router.get("/allTypes", (req, res) => {
-    res.json(artistTypes);
+    return res.json(artistTypes);
 });
 
 // route to apply for a interested in working by a valid user

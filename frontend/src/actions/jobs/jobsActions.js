@@ -6,8 +6,6 @@ export function getFilteredJobs(options) {
     return dispatch => {
         dispatch(requestAction());
 
-        console.log(options);
-
         axios
             .post("http://localhost:4000/api/colab/jobOffers", options)
             .then(res => {

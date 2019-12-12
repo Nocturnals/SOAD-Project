@@ -6,6 +6,7 @@ import competitions from "./competitionsReducer";
 import messaging from "./messages/messagingReducer";
 import organizations from "./organisations/organisationsReducer";
 import jobs from "./jobs/jobsReducer";
+import artistTypes from "./artistTypesReducer";
 
 export default combineReducers({
     auth: authentication,
@@ -13,5 +14,6 @@ export default combineReducers({
     competitions: competitions,
     messaging: messaging,
     organizations: organizations,
-    jobs: jobs
+    jobs: jobs,
+    artistTypes: artistTypes
 });
