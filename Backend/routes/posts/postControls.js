@@ -502,6 +502,7 @@ exports.getAllPosts = async (req, res, next) => {
         console.log(followers);
 
         var query = {
+            isprivate: false,
             $or: [
                     {category: userModel.primaryinterest },
                     {"owner._id": { $in : followers }}
