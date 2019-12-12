@@ -6,6 +6,7 @@ const { OtheruserModel } = require("../../models/Otheruser");
 const { ReplyModel, CommentsModel } = require("../../models/Comments");
 const UserModel = require("./../../models/user");
 const { UpdateCompetition } = require("./helper");
+const otherCompetitonsModel = require("./../../models/Othercompetitions");
 
 const {
     CompRegisterValidation,
@@ -59,12 +60,40 @@ router.post(
 
         try {
             const comp = await CompetitionsModel.findById(req.body._id);
+            var flag = false;
+            comp.participants.forEach(i => {
+                if (
+                    JSON.stringify(i._id) == JSON.stringify(req.loggedUser._id)
+                ) {
+                    flag = true;
+                }
+            });
+            if (flag) {
+                return res.json({
+                    message: "You are already Registered for this competition"
+                });
+            }
 
             comp.participants[comp.noofparticipants] = {
                 _id: req.loggedUser._id,
                 username: req.loggedUser.name,
                 profileurl: req.loggedUser.profileurl
             };
+
+            const user = await UserModel.findById(req.loggedUser._id);
+
+            const othercompetition = new otherCompetitonsModel({
+                id: comp._id,
+                name: comp.name,
+                starttime: comp.starttime,
+                endtime: comp.endtime,
+                shortdescription: comp.shortdescription
+            });
+
+            user.competitionsparticipating.push(othercompetition);
+
+            await user.save();
+            console.log(user.competitionsparticipating);
 
             comp.noofparticipants = comp.noofparticipants + 1;
             comp.save();
