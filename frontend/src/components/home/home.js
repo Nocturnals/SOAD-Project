@@ -128,7 +128,7 @@ HomePage.propTypes = {
 
 const mapStateToProps = state => ({
     auth: state.auth,
-    posts:
+    posts: state.posts
 });
 
 export default connect(mapStateToProps)(HomePage);
