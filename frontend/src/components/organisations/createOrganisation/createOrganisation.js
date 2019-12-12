@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import NavBar from "../../nav bar/navBar";
 import { Input, TextArea } from "../../helpers/inputs/styledInputs";
@@ -6,6 +9,11 @@ import { Input, TextArea } from "../../helpers/inputs/styledInputs";
 import Img from "react-image";
 
 import "./createOrganisation.css";
+
+import {
+    createOrganisation,
+    requestUsers
+} from "../../../actions/organisations/organisationActions";
 
 class User {
     constructor(name, profilePic, primaryInterest) {
@@ -38,7 +46,9 @@ class CreateOrganisation extends Component {
             ...this.initialInputs,
             selectedUsers: [],
             showSearchResults: false,
-            submitted: false
+            submitted: false,
+            isLoading: false,
+            createSuccessful: false
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -60,8 +70,18 @@ class CreateOrganisation extends Component {
     // Handling Submission...
     handleSubmit = e => {
         e.preventDefault();
-
         this.setState({ submitted: true });
+        const { title, selectedUsers, description } = this.state;
+        if (title && description) {
+            const formData = { name: title, description: description };
+            this.props.createOrganisation(formData);
+            if (selectedUsers.length) {
+                this.props.requestUsers(selectedUsers);
+            }
+            if (!this.props.alert.message) {
+                this.setState({ isLoading: true, createSuccessful: true });
+            }
+        }
     };
 
     // Show SearchResults...
@@ -169,6 +189,21 @@ class CreateOrganisation extends Component {
     };
 
     render() {
+        const { auth, organizations } = this.props;
+        if (this.state.createSuccessful && !organizations.isLoading) {
+            return (
+                <Redirect
+                    to={
+                        "/artists/" +
+                        auth.user.organizations[
+                            auth.user.organizations.length - 1
+                        ].name +
+                        "/feed"
+                    }
+                />
+            );
+        }
+
         const {
             title,
             searchUser,
@@ -247,6 +282,11 @@ class CreateOrganisation extends Component {
                                     <TextArea
                                         className="mh-sm"
                                         placeholder="Type some description..."
+                                        error={
+                                            submitted && !description
+                                                ? true
+                                                : false
+                                        }
                                         name="description"
                                         handleInputChange={
                                             this.handleInputChange
@@ -268,4 +308,21 @@ class CreateOrganisation extends Component {
     }
 }
 
-export default CreateOrganisation;
+CreateOrganisation.propTypes = {
+    createOrganisation: PropTypes.func.isRequired,
+    requestUsers: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    alert: PropTypes.object.isRequired,
+    organizations: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth,
+    alert: state.alert,
+    organizations: state.organizations
+});
+
+export default connect(mapStateToProps, {
+    createOrganisation,
+    requestUsers
+})(CreateOrganisation);

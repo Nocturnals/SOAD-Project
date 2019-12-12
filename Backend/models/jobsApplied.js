@@ -3,11 +3,12 @@ const mongoose = require("mongoose");
 const artistTypes = require("./artistTypes");
 const otherUserSchema = require("./Otheruser");
 
-const JobsAppliedSchema = new mongoose.Schema({
+const JobsAvailableSchema = new mongoose.Schema({
     artistType: {
         enum: [...artistTypes],
         type: String,
-        required: true
+        required: true,
+        lowercase: true
     },
 
     user: {
@@ -40,10 +41,15 @@ const JobsAppliedSchema = new mongoose.Schema({
     cvLocation: {
         type: String,
         required: true
+    },
+
+    createdOn: {
+        type: Date,
+        default: Date.now
     }
 });
 
-const JobsAppliedModel = mongoose.model("JobsApplied", JobsAppliedSchema);
+const JobsAvailableModel = mongoose.model("JobsAvailable", JobsAvailableSchema);
 
-module.exports = JobsAppliedModel;
-module.exports.JobsAppliedSchema = JobsAppliedSchema;
+module.exports = JobsAvailableModel;
+module.exports.JobsAvailableSchema = JobsAvailableSchema;

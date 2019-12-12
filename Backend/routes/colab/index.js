@@ -1,16 +1,20 @@
 const express = require("express");
 
 const artistTypes = require("../../models/artistTypes");
-const jobsAppliedModel = require("../../models/jobsApplied");
-const artistWantedModel = require("../../models/artistsWanted");
+const JobsAvailableModel = require("../../models/jobsApplied");
 const UserModel = require("../../models/user");
 const { OtheruserModel } = require("../../models/Otheruser");
 const { getArtistType } = require("./helper");
 const { verifyToken, verifyUserWithToken } = require("../auth/helper");
 const {
+    JobOffersModel,
+    otherJobOfferModel
+} = require("../../models/artistsWanted");
+const {
     interestedInWorkValidation,
     artistWantedValidation,
-    applyJobValidation
+    applyJobValidation,
+    findJobOffersValidation
 } = require("./bodyValidations");
 
 // instance of router
@@ -18,13 +22,12 @@ const router = express.Router();
 
 // route to get all types of artists
 router.get("/allTypes", (req, res) => {
-    res.json(artistTypes);
+    return res.json(artistTypes);
 });
 
 // route to apply for a interested in working by a valid user
 router.post(
-    "/interestedInWork/:type",
-    getArtistType,
+    "/interestedInWork",
     verifyToken,
     verifyUserWithToken,
     async (req, res) => {
@@ -45,24 +48,21 @@ router.post(
             profileurl: req.loggedUser.profileurl
         });
 
-        // TODO:: upload the cv file and get its url
-
         // create the new jogapplied model
-        const jobApplied = new jobsAppliedModel({
-            artistType: req.artistType,
+        const jobAvailable = new JobsAvailableModel({
+            artistType: req.body.artistType.toLowerCase(),
             user: user,
             availableAt: req.body.availableAt,
             freeTimeFrom: req.body.freeTimeFrom,
             freeTimeTill: req.body.freeTimeTill,
             portpolioSite: req.body.portpolioSite || ""
-            // cvLocation: req.
         });
 
         // save the new doc to database
         try {
             // saving to database
             const currentUser = await UserModel.findById(req.loggedUser._id);
-            currentUser.jobsApplied.push(jobApplied);
+            currentUser.jobsApplied.push(jobAvailable);
 
             const doc = await currentUser.save();
 
@@ -78,96 +78,149 @@ router.post(
     }
 );
 
-// route to post a job wanted request
-router.post(
-    "/artistWanted/:type",
-    getArtistType,
-    verifyToken,
-    verifyUserWithToken,
-    async (req, res) => {
-        // validate the body contents
-        const validatedData = artistWantedValidation(req.body);
+// route to post a job offer request
+router.post("/jobOffer", verifyToken, verifyUserWithToken, async (req, res) => {
+    // validate the body contents
+    const validatedData = artistWantedValidation(req.body);
 
-        // if error return error response
-        if (validatedData.error) {
-            return res
-                .status(400)
-                .json({ message: validatedData.error.details[0].message });
-        }
+    // if error return error response
+    if (validatedData.error) {
+        return res
+            .status(400)
+            .json({ message: validatedData.error.details[0].message });
+    }
 
-        // create other user model of logged user
-        const jobProvider = new OtheruserModel({
-            _id: req.loggedUser._id,
-            username: req.loggedUser.name,
-            profileurl: req.loggedUser.profileurl
-        });
+    // create other user model of logged user
+    const jobProvider = new OtheruserModel({
+        _id: req.loggedUser._id,
+        username: req.loggedUser.name,
+        profileurl: req.loggedUser.profileurl
+    });
 
+    try {
         // create artist wanted model
-        const artistWanted = new artistWantedModel({
-            artistType: req.artistType,
+        const jobOffer = new JobOffersModel({
+            artistType: req.body.artistType.toLowerCase(),
+            title: req.body.title,
             jobProvider: jobProvider,
+            workAt: req.body.workAt,
             workDuration: req.body.workDuration,
+            workType: req.body.workType,
             salary: req.body.salary,
             descriptionOfJob: req.body.descriptionOfJob,
-            workAt: req.body.workAt
+            qualifications: req.body.qualifications,
+            responsibilities: req.body.responsibilities
         });
 
-        try {
-            const doc = await artistWanted.save();
-            return res
-                .status(200)
-                .json({ message: "Successfully created job offer", doc: doc });
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ message: "internal server error" });
-        }
-    }
-);
+        const doc = await jobOffer.save();
 
-// route to get all the avaliable artists for work
-router.get(
-    "/getAvailableArtistForWork/:type",
-    getArtistType,
-    async (req, res) => {
+        const currentUser = await UserModel.findById(req.loggedUser._id);
+
+        const newOtherJobOffer = new otherJobOfferModel({
+            _id: doc._id,
+            artistType: doc.artistType,
+            title: doc.title,
+            jobProvider: doc.jobProvider,
+            salary: doc.salary,
+            status: "pending"
+        });
+
+        currentUser.jobsOffered.push(newOtherJobOffer);
+        const updatedUser = await currentUser.save();
+        return res.status(200).json({
+            message: "Successfully created job offer",
+            doc: doc,
+            loggedUser: updatedUser
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+// route to get the job offer with the id given
+router.get("/jobOffer/:id", async (req, res) => {
+    if (req.params.id !== null) {
         try {
-            // fetch the database to get all works of type artists
-            const allArtistsInterested = await jobsAppliedModel
-                .find()
-                .where({ artistType: req.artistType });
-            return res.json(allArtistsInterested);
+            // gets the document with id
+            const jobOfferDoc = await JobOffersModel.findById(req.params.id);
+            if (jobOfferDoc == null) {
+                return res
+                    .status(400)
+                    .json({ message: "No Job exists with such id" });
+            }
+
+            return res.json(jobOfferDoc);
         } catch (error) {
             console.log(error);
             return res.status(500).json({ message: "Internal server error" });
         }
     }
-);
+});
 
 // route to get all the avaliable artists for work
-router.get(
-    "/getAvailableArtistForWork/:type/:area",
-    getArtistType,
-    async (req, res) => {
-        try {
-            // fetch the database to get all works of type artists
-            const allArtistsInterested = await jobsAppliedModel.find().where({
-                artistType: req.artistType,
-                availableAt: req.params.area
-            });
-            return res.json(allArtistsInterested);
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ message: "Internal server error" });
-        }
+router.get("/artistForWork/:type", getArtistType, async (req, res) => {
+    try {
+        // fetch the database to get all works of type artists
+        const allArtistsAvailable = await JobsAvailableModel.find().where({
+            artistType: req.artistType
+        });
+        return res.json(allArtistsAvailable);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
     }
-);
+});
+
+// route to get all the avaliable artists for work
+router.get("/artistForWork/:type/:area", getArtistType, async (req, res) => {
+    try {
+        // fetch the database to get all works of type artists
+        const allArtistsAvailable = await JobsAvailableModel.find().where({
+            artistType: req.artistType,
+            availableAt: req.params.area
+        });
+        return res.json(allArtistsAvailable);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+// route to get jobOffers with options
+router.post("/jobOffers", async (req, res) => {
+    console.log(req.body);
+    const validateData = findJobOffersValidation(req.body);
+
+    // if error return error response
+    if (validateData.error) {
+        return res
+            .status(400)
+            .json({ message: validateData.error.details[0].message });
+    }
+
+    try {
+        // find the jobs based on the sepcified options
+        const jobsList = await JobOffersModel.find({
+            workAt: { $regex: req.body.options.workAt.toLowerCase() },
+            artistType: { $regex: req.body.options.artistType.toLowerCase() },
+            workType: { $in: req.body.options.workTypes }
+        });
+
+        return res.json(jobsList);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
 
 // route to get all job offers for all different artist
-router.get("/getJobOffers/:type", getArtistType, async (req, res) => {
+router.get("/jobOffers/:type", getArtistType, async (req, res) => {
     try {
         // fetches the database to get all job offers for a particular artist type
-        const allJobOffers = await artistWantedModel
-            .find()
-            .where({ artistType: req.artistType });
+        const allJobOffers = await JobOffersModel.find().where({
+            artistType: req.artistType
+        });
 
         return res.status(200).json(allJobOffers);
     } catch (error) {
@@ -177,10 +230,10 @@ router.get("/getJobOffers/:type", getArtistType, async (req, res) => {
 });
 
 // route to get all job offers for all different artist
-router.get("/getJobOffers/:type/:area", getArtistType, async (req, res) => {
+router.get("/JobOffers/:type/:area", getArtistType, async (req, res) => {
     try {
         // fetches the database to get all job offers for a particular artist type
-        const allJobOffers = await artistWantedModel.find().where({
+        const allJobOffers = await JobOffersModel.find().where({
             artistType: req.artistType,
             workAt: req.params.area
         });
@@ -195,7 +248,7 @@ router.get("/getJobOffers/:type/:area", getArtistType, async (req, res) => {
 // route for appling for a job offer
 router.post("/applyJob", verifyToken, verifyUserWithToken, async (req, res) => {
     const validatedData = applyJobValidation(res.body);
-    console.log(validatedData);
+    // console.log(validatedData);
 
     if (validatedData.error) {
         return res
@@ -205,9 +258,7 @@ router.post("/applyJob", verifyToken, verifyUserWithToken, async (req, res) => {
 
     try {
         // apply for job
-        const jobOfferDoc = await artistWantedModel.findById(
-            req.body.jobOfferId
-        );
+        const jobOfferDoc = await JobOffersModel.findById(req.body.jobOfferId);
         if (jobOfferDoc) {
             // check if already applied
             jobOfferDoc.applied.forEach(participatent => {
@@ -216,7 +267,7 @@ router.post("/applyJob", verifyToken, verifyUserWithToken, async (req, res) => {
                     JSON.stringify(req.loggedUser._id)
                 ) {
                     return res
-                        .status(400)
+                        .status(200)
                         .json({ message: "already registered for the job" });
                 }
             });
@@ -228,9 +279,28 @@ router.post("/applyJob", verifyToken, verifyUserWithToken, async (req, res) => {
                 profileurl: req.loggedUser.profileurl
             });
 
+            // push the new other user to the list of appliedusers
             jobOfferDoc.applied.push(newOtheruser);
             const UpdatedOfferdoc = await jobOfferDoc.save();
-            return res.status(200).json(UpdatedOfferdoc);
+
+            // add the otherJobOffer schema to the user list of appliedjobs
+            const newOtherJobOffer = new otherJobOfferModel({
+                _id: jobOfferDoc._id,
+                title: jobOfferDoc.title,
+                artistType: jobOfferDoc.artistType,
+                jobProvider: jobOfferDoc.jobProvider,
+                salary: jobOfferDoc.salary,
+                status: "pending"
+            });
+
+            const currentUser = await UserModel.findById(req.loggedUser._id);
+
+            currentUser.jobsApplied.push(newOtherJobOffer);
+            await currentUser.save();
+
+            return res
+                .status(200)
+                .json({ jobOfferDoc: UpdatedOfferdoc, user: req.loggedUser });
         } else {
             return res.status(400).json({ message: "Invalid jobOffer id" });
         }

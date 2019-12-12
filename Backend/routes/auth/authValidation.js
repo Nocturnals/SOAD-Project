@@ -74,10 +74,19 @@ const editProfileValidation = data => {
     return Joi.validate(data, schema);
 };
 
+const findUserValidation = data => {
+    const schema = {
+        name: Joi.string().required()
+    };
+
+    return Joi.validate(data, schema);
+};
+
 module.exports = {
     RegistrerValidation,
     LoginValidation,
     EmailIDValidation,
     passwordValidation,
-    editProfileValidation
+    editProfileValidation,
+    findUserValidation
 };

@@ -10,12 +10,7 @@ class JobsFilters extends Component {
     }
 
     render() {
-        const {
-            otherJobsSearchInput,
-            locationSearchInput,
-            qualificationSearchInput,
-            jobTypesChecked
-        } = this.props;
+        const { interest, locationSearchInput, jobTypesChecked } = this.props;
 
         return (
             <div className="filters">
@@ -41,10 +36,10 @@ class JobsFilters extends Component {
                                     <h6>Your Interest?</h6>
                                     <input
                                         className="input"
-                                        name="otherJobsSearchInput"
+                                        name="interest"
                                         onChange={this.handleInputChange}
-                                        value={otherJobsSearchInput}
-                                        placeholder="Photography, Painting"
+                                        value={interest}
+                                        placeholder="Photographer, Painter"
                                     />
                                 </div>
                             </div>
@@ -57,18 +52,6 @@ class JobsFilters extends Component {
                                         onChange={this.handleInputChange}
                                         value={locationSearchInput}
                                         placeholder="India, USA, Canada"
-                                    />
-                                </div>
-                            </div>
-                            <div className="row filter qualificationsInput">
-                                <div className="col">
-                                    <h6>Qualifications</h6>
-                                    <textarea
-                                        className="input"
-                                        name="qualificationSearchInput"
-                                        onChange={this.handleInputChange}
-                                        value={qualificationSearchInput}
-                                        placeholder="Wildlife Photography, etc"
                                     />
                                 </div>
                             </div>
@@ -147,6 +130,9 @@ class JobsFilters extends Component {
                                     </div>
                                 </div>
                             </div>
+                            <button type="submit" style={{ display: "none" }}>
+                                Apply Filters
+                            </button>
                         </div>
                     </form>
                 </div>

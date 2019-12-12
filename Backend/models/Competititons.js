@@ -105,6 +105,11 @@ const CompetitionsSchema = new mongoose.Schema({
 
     results: {
         type: [ResultSchema]
+    },
+
+    createdOn: {
+        type: Date,
+        default: Date.now
     }
 });
 
