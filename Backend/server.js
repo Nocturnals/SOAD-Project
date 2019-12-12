@@ -106,6 +106,9 @@ app.use("/api/manageProfile", require("./routes/manageProfile/index"));
 app.use("/api/notifications", require("./routes/notifications/utils"));
 // app.use("api/subscription", require("./routes/subscription/stripefunctions"));
 
+// Route for Service Accounts
+app.use("/api/serviceaccount", require("./routes/serviceaccount/index"));
+
 if (process.env.Node_Env === "production") {
     // for loading the static frontend app
     app.use(express.static("../frontend/build"));

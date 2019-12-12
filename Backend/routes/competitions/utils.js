@@ -29,10 +29,41 @@ const {
     editcommentValidation,
     commentlikeValidation,
     commentreplyValidation,
+    similarCompetitionValidation
+
     findcompetitionmathcValidation
 } = require("./compValidation");
 
+const { upload } = require("./fileUpload");
+
 const router = express.Router();
+
+const Multer = require("multer");
+
+const multer = Multer({
+    storage: Multer.memoryStorage(),
+    limits: {
+        fileSize: 50 * 1024 * 1024 // no larger than 50mb, you can change as needed.
+    }
+});
+
+router.post("/uploadfile", multer.single("file"), upload);
+
+router.post("/submitfile", async (req, res, next) => {
+    try {
+        const comp = await CompetitionsModel.findById(req.body._id);
+
+        comp.fileurls.push(req.body.imageurls);
+        comp.save();
+
+        return res.json(comp);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "internal server error" });
+    }
+});
+
+router.post("/uploadfile", multer.single("file"));
 
 router.get("/allcompetitions", async (req, res) => {
     try {
@@ -782,7 +813,12 @@ router.get(
     verifyToken,
     verifyUserWithToken,
     async (req, res, next) => {
-        console.log("sdihgio");
+        const validatedData = commentreplyValidation(req.body);
+        if (validatedData.error)
+            return res
+                .status(400)
+                .json({ message: validatedData.error.details[0].message });
+        // console.log("sdihgio");
         try {
             const comp = await CompetitionsModel.findById(req.body._id);
             const compparticipants = [];

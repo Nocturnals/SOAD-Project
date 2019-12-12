@@ -10,6 +10,16 @@ const addtoplanValidation = data => {
     return Joi.validate(data, schema);
 };
 
+const showpostsValidation = data => {
+    const schema = {
+        category: Joi.string()
+            .min(4)
+            .required()
+    };
+    return Joi.validate(data.schema);
+};
+
 module.exports = {
-    addtoplanValidation
+    addtoplanValidation,
+    showpostsValidation
 };
