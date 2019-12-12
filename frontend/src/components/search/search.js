@@ -11,7 +11,6 @@ import {
 } from "../../actions/searchActions/searchActions";
 
 import "./search.css";
-import { tsImportEqualsDeclaration } from "@babel/types";
 
 class SearchComp extends Component {
     constructor(props) {

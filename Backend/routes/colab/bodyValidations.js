@@ -2,14 +2,15 @@ const Joi = require("@hapi/joi");
 
 const interestedInWorkValidation = data => {
     const schema = {
+        legalName: Joi.string().required(),
+        email: Joi.string()
+            .email()
+            .required(),
         artistType: Joi.string().required(),
-        availableAt: Joi.string().required(),
-        freeTimeFrom: Joi.number()
-            .integer()
-            .required(),
-        freeTimeTill: Joi.number()
-            .integer()
-            .required(),
+        description: Joi.string().required(),
+        availableLocation: Joi.string().required(),
+        availableFrom: Joi.string().required(),
+        availableTill: Joi.string().required(),
         portpolioSite: Joi.string()
     };
 

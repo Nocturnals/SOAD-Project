@@ -4,6 +4,21 @@ const artistTypes = require("./artistTypes");
 const otherUserSchema = require("./Otheruser");
 
 const JobsAvailableSchema = new mongoose.Schema({
+    legalName: {
+        type: String,
+        required: true
+    },
+
+    email: {
+        type: String,
+        required: true
+    },
+
+    address: {
+        type: String,
+        required: true
+    },
+
     artistType: {
         enum: [...artistTypes],
         type: String,
@@ -16,26 +31,29 @@ const JobsAvailableSchema = new mongoose.Schema({
         required: true
     },
 
-    availableAt: {
+    availableLocation: {
         type: String,
         required: true
     },
 
-    freeTimeFrom: {
-        type: Number,
-        default: 0,
+    availableFrom: {
+        type: String,
         required: true
     },
 
-    freeTimeTill: {
-        type: Number,
-        default: 0,
+    availableTill: {
+        type: String,
         required: true
     },
 
     portpolioSite: {
         type: String,
         default: ""
+    },
+
+    resumeLoc: {
+        type: String,
+        required: true
     },
 
     createdOn: {

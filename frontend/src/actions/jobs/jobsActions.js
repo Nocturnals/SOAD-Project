@@ -5,6 +5,7 @@ import {
     alertConstants,
     userAuthConst
 } from "../../constants/index";
+import alertActions from "../alertActions";
 
 import alertActions from "../../actions/alertActions";
 
