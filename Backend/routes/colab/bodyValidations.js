@@ -12,7 +12,7 @@ const interestedInWorkValidation = data => {
         availableLocation: Joi.string().required(),
         availableFrom: Joi.string().required(),
         availableTill: Joi.string().required(),
-        portpolioSite: Joi.string()
+        portfolioSite: Joi.string()
             .allow("")
             .required()
     };
