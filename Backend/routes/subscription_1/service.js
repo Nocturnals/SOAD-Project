@@ -42,6 +42,30 @@ router.get(
     }
 );
 
+router.get(
+    "/showallplans",
+
+    async (req, res, next) => {
+        // const user = req.loggedUser;
+
+        try {
+            // const serviceaccount = await ServiceaccountModel.find().where({
+            //     key: req.params.key
+            // });
+            const serviceaccount = await ServiceaccountModel.find({
+                key: req.params.key
+            });
+            console.log(serviceaccount);
+
+            const plans = await planModel.find().select("name , _id");
+            if (plans) res.send(plans);
+            else return res.json({ message: "no plans found" });
+        } catch (error) {
+            res.status(500).json({ message: "internal server error" });
+        }
+    }
+);
+
 router.post("/subscribe/:id", async (req, res, next) => {
     try {
         var isalreadypresent = false;
@@ -231,6 +255,31 @@ router.post(
                 return res.json({
                     message: "Register for this Service From our Website"
                 });
+            }
+        } catch (error) {
+            return res.status(500).json({ message: "Internal Server Error" });
+        }
+    }
+);
+
+router.post(
+    "/showcategories/:id",
+
+    async (req, res, next) => {
+        try {
+            const plan = await planModel.findById(req.params.id);
+
+            if (plan) {
+                var categories = [];
+                plan.posts.forEach(i => {
+                    // console.log(i.category);
+                    // console.log("safgsruih");
+                    categories.push(i.category);
+                });
+                // console.log(categories);
+                return res.json(categories);
+            } else {
+                return res.json({ message: "Plan not found" });
             }
         } catch (error) {
             return res.status(500).json({ message: "Internal Server Error" });
