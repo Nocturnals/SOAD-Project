@@ -155,7 +155,7 @@ exports.getAllArtistsOfType = async (req, res) => {
     try {
         // fetch the database to get all works of type artists
         const allArtistsAvailable = await JobsAvailableModel.find().where({
-            artistType: req.artistType
+            artistType: req.artistType.toLowerCase()
         });
         return res.json(allArtistsAvailable);
     } catch (error) {
@@ -168,8 +168,8 @@ exports.getAllArtistsOfTypeAndArea = async (req, res) => {
     try {
         // fetch the database to get all works of type artists
         const allArtistsAvailable = await JobsAvailableModel.find().where({
-            artistType: req.artistType,
-            availableAt: req.params.area
+            artistType: req.artistType.toLowerCase(),
+            availableAt: req.params.area.toLowerCase()
         });
         return res.json(allArtistsAvailable);
     } catch (error) {

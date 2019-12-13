@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const otheruserschema = require("./Otheruser");
 const postschema = require("./Post");
-
+const { ImageSchema } = require("./Image");
 const planpostSchema = new mongoose.Schema({
     id: {
         type: String,
@@ -19,6 +19,9 @@ const planpostSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true
+    },
+    imageurls: {
+        type: ImageSchema
     }
 });
 

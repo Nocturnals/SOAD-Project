@@ -169,6 +169,95 @@ export function getFilteredJobs(options) {
     }
 }
 
+export function getFilteredAvailableJobs(options) {
+    return dispatch => {
+        dispatch(requestAction());
+
+        if (options.location == "") {
+            axios
+                .get(
+                    `http://localhost:4000/api/colab/artistForWork/${options.type}`
+                )
+                .then(res => {
+                    console.log(res);
+                    dispatch(successAction(res.data));
+                })
+                .catch(err => {
+                    console.log(err);
+                    dispatch(failureAction());
+                    try {
+                        // give off error alert
+                        dispatch(alertActions.error(err.response.data.message));
+                    } catch (error) {
+                        dispatch(
+                            alertActions.error(
+                                "Error in searching for job offers"
+                            )
+                        );
+                    }
+                });
+        } else {
+            axios
+                .post(
+                    `http://localhost:4000/api/colab/${options.type}/${options.location}`,
+                    options
+                )
+                .then(res => {
+                    console.log(res);
+                    dispatch(successAction(res.data));
+                })
+                .catch(err => {
+                    console.log(err);
+                    dispatch(failureAction());
+                    try {
+                        // give off error alert
+                        dispatch(alertActions.error(err.response.data.message));
+                    } catch (error) {
+                        dispatch(
+                            alertActions.error(
+                                "Error in searching for job offers"
+                            )
+                        );
+                    }
+                });
+        }
+
+        axios
+            .post("http://localhost:4000/api/colab/availableForJobs", options)
+            .then(res => {
+                console.log(res);
+                dispatch(successAction(res.data));
+            })
+            .catch(err => {
+                console.log(err);
+                dispatch(failureAction());
+                try {
+                    // give off error alert
+                    dispatch(alertActions.error(err.response.data.message));
+                } catch (error) {
+                    dispatch(
+                        alertActions.error("Error in searching for job offers")
+                    );
+                }
+            });
+    };
+
+    function requestAction() {
+        return { type: jobsConstants.GET_FILTERED_AVAILABLEJOBS_REQUEST };
+    }
+    function successAction(jobs) {
+        return {
+            type: jobsConstants.GET_FILTERED_AVAILABLEJOBS_SUCCESS,
+            fileteredJobAvailable: jobs
+        };
+    }
+    function failureAction() {
+        return {
+            type: jobsConstants.GET_FILTERED_AVAILABLEJOBS_FAILURE
+        };
+    }
+}
+
 export function getJobById(job_id) {
     return dispatch => {
         dispatch(requestAction());
