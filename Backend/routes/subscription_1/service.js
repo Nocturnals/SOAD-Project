@@ -149,7 +149,7 @@ router.post(
                     planflag = true;
                 }
             });
-            // console.log(post);
+            console.log(post);
             // console.log(planflag);
             // console.log(typeof post.isPrivate);
             // console.log(req.loggedUser._id, post.owner[0]._id);
@@ -162,10 +162,13 @@ router.post(
                     id: post._id,
                     title: post.title,
                     description: post.description,
-                    category: post.category
+                    category: post.category,
+                    imageurls: post.imageurls[0]
                 });
                 // console.log("d;ofjisrjgio");
                 // console.log(planpost);
+
+                console.log(planpost);
 
                 plan.posts.forEach(i => {
                     if (JSON.stringify(planpost.id) == JSON.stringify(i.id)) {
@@ -239,15 +242,9 @@ router.post(
 );
 
 router.post(
-    "/:key/showposts/:id",
+    "/:key/showposts/:category/:id",
 
     async (req, res, next) => {
-        const validatedData = showpostsValidation(req.body);
-        if (validatedData.error)
-            return res
-                .status(400)
-                .json({ message: validatedData.error.details[0].message });
-
         try {
             const serviceaccount = await ServiceaccountModel.find().where({
                 key: req.params.key
@@ -265,7 +262,7 @@ router.post(
                         // console.log(post);
                         if (
                             JSON.stringify(post.category) ==
-                            JSON.stringify(req.body.category)
+                            JSON.stringify(req.params.category)
                         ) {
                             console.log("eafsag");
                             posts.push(post);
