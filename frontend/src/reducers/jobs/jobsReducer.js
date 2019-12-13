@@ -5,6 +5,7 @@ const initialState = {
     currentJob: null,
     postJobOffer: null,
     postJobAvailable: null,
+    fileteredJobAvailable: null,
     message: null,
     isLoading: true
 };

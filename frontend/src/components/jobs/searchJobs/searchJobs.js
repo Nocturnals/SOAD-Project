@@ -293,6 +293,7 @@ class SearchJobs extends Component {
                     break;
                 case jobStatusConst.PENDING:
                     jobsPending.push(job);
+                    break;
                 default:
                     break;
             }
