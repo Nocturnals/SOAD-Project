@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 
 import "./leftContent.css";
 
+import axios from "axios";
+
 class Organisation {
     constructor(image, title, descr) {
         this.image = image;
@@ -71,33 +73,32 @@ class LeftContent extends Component {
         return orgs;
     };
 
+    onFollow = id => {
+        axios.post("http://localhost:4000/api/manageProfile/addFollowing", {
+            otherUserId: id
+        });
+    };
+
+    // Check Liked?
+    checkFollow = otherUser => {
+        for (
+            let index = 0;
+            index < this.props.auth.user.following.length;
+            index++
+        ) {
+            if (this.props.auth.user.following[index]._id === otherUser._id) {
+                // this.setState({ liked: true });
+                return true;
+            }
+        }
+        // this.setState({ liked: false });
+        return false;
+    };
+
     render() {
         const { userProfile } = this.props;
 
         const userImg = require("../../media/images/categories/photographer.png");
-
-        const organisations = [
-            new Organisation(
-                userImg,
-                "Nocturnals",
-                "This is a Nocturnal's Organisation."
-            ),
-            new Organisation(
-                userImg,
-                "Nocturnals",
-                "This is a Nocturnal's Organisation."
-            ),
-            new Organisation(
-                userImg,
-                "Nocturnals",
-                "This is a Nocturnal's Organisation."
-            ),
-            new Organisation(
-                userImg,
-                "Nocturnals",
-                "This is a Nocturnal's Organisation."
-            )
-        ];
 
         const { auth } = this.props;
 
@@ -130,7 +131,22 @@ class LeftContent extends Component {
                         {auth.user && userProfile._id !== auth.user._id ? (
                             <div className="row">
                                 <div className="col">
-                                    <button></button>
+                                    <button
+                                        className="followButton"
+                                        onClick={
+                                            !this.checkFollow(userProfile)
+                                                ? () => {
+                                                      this.onFollow(
+                                                          userProfile._id
+                                                      );
+                                                  }
+                                                : () => {}
+                                        }
+                                    >
+                                        {this.checkFollow(userProfile)
+                                            ? "Unfollow"
+                                            : "Follow"}
+                                    </button>
                                 </div>
                             </div>
                         ) : null}

@@ -7,3 +7,4 @@ export * from "./jobs/jobsActions";
 export * from "./searchActions/searchActions";
 export * from "./artistTypeActions/artistTypeActions";
 export * from "./otherUsersActions";
+export * from "./subcriptionActions/subcriptionsAction";

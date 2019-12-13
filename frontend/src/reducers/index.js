@@ -11,6 +11,8 @@ import search from "./searchReducer";
 import postsReducer from "./posts/postsReducer";
 import otherUsersReducer from "./otherUsersReducer";
 
+import plans from "./subscriptions/subscriptionsReducer";
+
 export default combineReducers({
     auth: authentication,
     otherUsers: otherUsersReducer,
@@ -21,5 +23,6 @@ export default combineReducers({
     jobs: jobs,
     artistTypes: artistTypes,
     search: search,
-    posts: postsReducer
+    posts: postsReducer,
+    servicePlans: plans
 });

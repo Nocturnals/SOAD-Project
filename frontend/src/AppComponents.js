@@ -10,6 +10,8 @@ import {
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
+import ServicePlans from "./components/services/index";
+
 import LandingPage from "./components/landing page/landing_page";
 import AuthenticationPage from "./components/authentication/authentication";
 import PasswordResetComp from "./components/authentication/passwordReset/passwordReset";
@@ -106,6 +108,13 @@ class MainAppComponents extends Component {
                                         {this.props.alert.message}
                                     </div>
                                 ) : null}
+
+                                {/* Services */}
+                                <Route
+                                    exact
+                                    path="/services/all"
+                                    component={ServicePlans}
+                                />
 
                                 {/* Landing Page */}
                                 <NotAuthenticatedRoute

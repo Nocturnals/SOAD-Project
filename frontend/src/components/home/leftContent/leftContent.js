@@ -57,7 +57,11 @@ class LeftContent extends Component {
                                         <h4>
                                             {auth.user ? auth.user.name : ""}
                                         </h4>
-                                        <h6>Professional Red Hat Hacker</h6>
+                                        <h6>
+                                            {auth.user
+                                                ? auth.user.primaryInterest
+                                                : "No Primary Interest"}
+                                        </h6>
                                     </div>
                                 </div>
                             </div>
