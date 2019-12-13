@@ -57,16 +57,34 @@ export default function(state = initialState, action) {
                 filteredJobs: [],
                 isLoading: true
             };
+        case jobsConstants.GET_FILTERED_AVAILABLEJOBS_REQUEST:
+            return {
+                ...state,
+                fileteredJobAvailable: [],
+                isLoading: true
+            };
         case jobsConstants.GET_FILTERED_JOBS_SUCCESS:
             return {
                 ...state,
                 filteredJobs: action.filteredJobs,
                 isLoading: false
             };
+        case jobsConstants.GET_FILTERED_AVAILABLEJOBS_SUCCESS:
+            return {
+                ...state,
+                fileteredJobAvailable: action.fileteredJobAvailable,
+                isLoading: false
+            };
         case jobsConstants.GET_FILTERED_JOBS_FAILURE:
             return {
                 ...state,
                 filteredJobs: [],
+                isLoading: false
+            };
+        case jobsConstants.GET_FILTERED_AVAILABLEJOBS_FAILURE:
+            return {
+                ...state,
+                fileteredJobAvailable: [],
                 isLoading: false
             };
         case jobsConstants.GET_JOB_REQUEST:
