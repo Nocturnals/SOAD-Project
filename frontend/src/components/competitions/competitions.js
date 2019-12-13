@@ -18,7 +18,7 @@ class CompetitionsList extends Component {
                         <div className="row">
                             <span className="col-8">
                                 <Link
-                                    to={"/competitions/" + competition.name}
+                                    to={"/competitions/" + competition._id}
                                     target="_blank"
                                     style={{ textDecoration: "none" }}
                                 >

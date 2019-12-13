@@ -12,6 +12,7 @@ export default function(state = initialState, action) {
         case compConst.LOAD_COMPETITION_REQUEST:
             return {
                 ...state,
+                competition: null,
                 isLoading: true
             };
         case compConst.CREATE_COMPETITION_SUCCESS:
@@ -25,6 +26,7 @@ export default function(state = initialState, action) {
         case compConst.LOAD_COMPETITION_FAILURE:
             return {
                 ...state,
+                competition: null,
                 error: action.error,
                 isLoading: false
             };
