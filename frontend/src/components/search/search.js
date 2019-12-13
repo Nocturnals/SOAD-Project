@@ -87,7 +87,9 @@ class SearchComp extends Component {
                 name: card.name,
                 descr: card.description.substring(0, 15)
             };
-            pCards.push(<ResultCard result={result} searchIn={searchIn} />);
+            pCards.push(
+                <ResultCard result={result} searchIn={searchIn} key={index} />
+            );
         }
 
         return pCards;
@@ -103,7 +105,9 @@ class SearchComp extends Component {
                 name: card.title,
                 descr: card.shortdescription.substring(0, 15)
             };
-            pCards.push(<ResultCard result={result} searchIn={searchIn} />);
+            pCards.push(
+                <ResultCard result={result} searchIn={searchIn} key={index} />
+            );
         }
 
         return pCards;

@@ -42,6 +42,30 @@ router.get(
     }
 );
 
+router.get(
+    "/showallplans",
+
+    async (req, res, next) => {
+        // const user = req.loggedUser;
+
+        try {
+            // const serviceaccount = await ServiceaccountModel.find().where({
+            //     key: req.params.key
+            // });
+            const serviceaccount = await ServiceaccountModel.find({
+                key: req.params.key
+            });
+            console.log(serviceaccount);
+
+            const plans = await planModel.find().select("name , _id");
+            if (plans) res.send(plans);
+            else return res.json({ message: "no plans found" });
+        } catch (error) {
+            res.status(500).json({ message: "internal server error" });
+        }
+    }
+);
+
 router.post("/subscribe/:id", async (req, res, next) => {
     try {
         var isalreadypresent = false;

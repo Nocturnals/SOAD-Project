@@ -65,32 +65,32 @@ class CommentComp extends Component {
                     <div className="user row">
                         <div className="name">
                             <Link
-                                to={"/artist/" + cmnt.user}
+                                to={"/artist/" + cmnt.owner.username}
                                 style={{ textDecoration: "none" }}
                             >
-                                {cmnt.user}
+                                {cmnt.owner.username}
                             </Link>
                         </div>
                         <div className="time">
                             <i className="fa fa-history" aria-hidden="true"></i>
-                            &nbsp;&nbsp;{cmnt.time} ago
+                            &nbsp;&nbsp;{cmnt.date.split("T")[0]}
                         </div>
                     </div>
-                    <div className="commentText row">{cmnt.comment}</div>
+                    <div className="commentText row">{cmnt.message}</div>
                     <div className="likes-replies row">
                         <button>
                             <i className="fa fa-heart-o" aria-hidden="true"></i>
                             &nbsp;{cmnt.likes}
                         </button>
-                        <button onClick={this.alterReplies}>
+                        {/* <button onClick={this.alterReplies}>
                             <i className="fa fa-reply" aria-hidden="true"></i>
                             &nbsp;{this.state.showReplies
                                 ? "Hide"
                                 : "View"}{" "}
                             {cmnt.replies.length} replies
-                        </button>
+                        </button> */}
                     </div>
-                    <div
+                    {/* <div
                         className={
                             "comment-replies row" +
                             (this.state.showReplies ? " showReplies" : "")
@@ -99,7 +99,7 @@ class CommentComp extends Component {
                         <div className="col">
                             {this.commentRepliesComp(cmnt.replies)}
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         );

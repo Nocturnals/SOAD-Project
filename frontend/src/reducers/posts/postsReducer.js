@@ -60,6 +60,19 @@ export default function(state = initialState, action) {
                 homeFeed: null,
                 isLoading: false
             };
+
+        case postsConstants.LIKE_POST_REQUEST:
+            return {
+                ...state,
+                isLoading: true
+            };
+        case postsConstants.LIKE_POST_SUCCESS:
+        case postsConstants.LIKE_POST_FAILURE:
+            return {
+                ...state,
+                isLoading: false
+            };
+
         default:
             return { ...state };
     }

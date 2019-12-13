@@ -6,8 +6,6 @@ import NavBar from "../nav bar/navBar";
 import { ChatClass, ChatTile } from "./helpers/chatTile";
 import { Chat } from "./chat";
 
-import { getLastMessages } from "../../actions/messages/messagingActions";
-
 import "./chats.css";
 
 class ChatPage extends Component {
@@ -15,10 +13,6 @@ class ChatPage extends Component {
         super(props);
 
         this.profileImage = require("../media/images/categories/photographer.png");
-
-        if (this.props.auth.isAuthed) {
-            this.props.getLastMessages();
-        }
 
         this.chats = [
             new ChatClass(
@@ -240,8 +234,7 @@ class ChatPage extends Component {
 }
 
 ChatPage.propTypes = {
-    auth: PropTypes.object.isRequired,
-    getLastMessages: PropTypes.func.isRequired
+    auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -249,4 +242,4 @@ const mapStateToProps = state => ({
     messaging: state.messaging
 });
 
-export default connect(mapStateToProps, { getLastMessages })(ChatPage);
+export default connect(mapStateToProps)(ChatPage);

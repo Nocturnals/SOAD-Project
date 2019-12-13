@@ -155,7 +155,7 @@ exports.getAllArtistsOfType = async (req, res) => {
     try {
         // fetch the database to get all works of type artists
         const allArtistsAvailable = await JobsAvailableModel.find().where({
-            artistType: req.artistType
+            artistType: req.artistType.toLowerCase()
         });
         return res.json(allArtistsAvailable);
     } catch (error) {
@@ -168,8 +168,8 @@ exports.getAllArtistsOfTypeAndArea = async (req, res) => {
     try {
         // fetch the database to get all works of type artists
         const allArtistsAvailable = await JobsAvailableModel.find().where({
-            artistType: req.artistType,
-            availableAt: req.params.area
+            artistType: req.artistType.toLowerCase(),
+            availableAt: req.params.area.toLowerCase()
         });
         return res.json(allArtistsAvailable);
     } catch (error) {
@@ -247,17 +247,15 @@ exports.applyForJob = async (req, res) => {
         // apply for job
         const jobOfferDoc = await JobOffersModel.findById(req.body.jobOfferId);
         if (jobOfferDoc) {
-            // check if already applied
-            jobOfferDoc.applied.forEach(participatent => {
+            for (let i = 0; i < jobOfferDoc.applied.length; i++) {
                 if (
-                    JSON.stringify(participatent._id) ==
+                    JSON.stringify(jobOfferDoc.applied[i]._id) ===
                     JSON.stringify(req.loggedUser._id)
-                ) {
+                )
                     return res
-                        .status(200)
-                        .json({ message: "already registered for the job" });
-                }
-            });
+                        .status(400)
+                        .json({ message: "already registerd for the job" });
+            }
 
             // apply for that job
             const newOtheruser = new OtheruserModel({
