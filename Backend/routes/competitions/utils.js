@@ -164,7 +164,6 @@ router.post(
                     profileurl: user.profileurl || "random string"
                 }
             ],
-            category: req.body.category,
             prize: req.body.prize,
             rules: req.body.rules
         });
