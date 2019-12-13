@@ -21,6 +21,8 @@ const router = express.Router();
 
 // route to register new user
 router.post("/register", async (req, res) => {
+    console.log(req.body);
+    
     // validate the given user details
     const validatedData = RegistrerValidation(req.body);
     if (validatedData.error)
@@ -43,12 +45,14 @@ router.post("/register", async (req, res) => {
     // hash the passwords
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    
 
     // create new user instance
     const user = new UserModel({
         name: req.body.name,
         email: req.body.email,
-        password: hashedPassword
+        password: hashedPassword,
+        dateofbirth: req.body.dateofbirth
     });
 
     // save the user to cloud or database
