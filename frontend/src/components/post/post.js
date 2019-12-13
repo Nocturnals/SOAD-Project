@@ -289,7 +289,7 @@ class PostComp extends Component {
                         ) : null}
                         <div className="row post-descr">
                             <div className="col-12">
-                                <p>{post_details.description}</p>
+                                <p>{post_details.title}</p>
                             </div>
                         </div>
                         <div className="row post-descr">

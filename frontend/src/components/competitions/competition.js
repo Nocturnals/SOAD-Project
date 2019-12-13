@@ -151,13 +151,15 @@ class Competition extends Component {
                         <div className="row">
                             <Link
                                 className="prName"
-                                to={"/artist/" + participant.name}
+                                to={"/artist/" + participant.username}
                                 style={{ textDecoration: "none" }}
                             >
-                                {participant.name}
+                                {participant.username}
                             </Link>
                         </div>
-                        <div className="prJob row">{participant.job}</div>
+                        <div className="prJob row">
+                            {participant.primaryInterest}
+                        </div>
                     </div>
                     <div className="submission-doc col-3">
                         <button>
@@ -174,16 +176,14 @@ class Competition extends Component {
     // View all participants...
     viewAllParticipantsComp = participants => {
         let comps = [];
-        for (let index1 = 0; index1 < 10; index1++) {
-            for (let index = 0; index < participants.length; index++) {
-                const participant = participants[index];
+        for (let index = 0; index < participants.length; index++) {
+            const participant = participants[index];
 
-                comps.push(
-                    <div className="block col-3" key={index + "" + index1}>
-                        {this.participantsComp([participant])}
-                    </div>
-                );
-            }
+            comps.push(
+                <div className="block col-3" key={index}>
+                    {this.participantsComp([participant])}
+                </div>
+            );
         }
 
         return comps;
@@ -214,6 +214,11 @@ class Competition extends Component {
         return comps;
     };
 
+    // Check Date...
+    onGoingComp = dates => {
+        var date = new Date();
+    };
+
     // Rednering...
     render() {
         const competitionImage = require("../media/images/categories/photographer.png");
@@ -221,8 +226,10 @@ class Competition extends Component {
         const participants = this.participants;
 
         const { competition } = this.props.competitions;
+        const { alert } = this.props;
+        console.log(alert);
 
-        return (
+        return !alert.message ? (
             <div className="competitionPage">
                 <div className="container">
                     <div className="competition row">
@@ -258,7 +265,7 @@ class Competition extends Component {
                                                 </div>
                                             </div>
                                             <div className="row">
-                                                <div className="timeUploaded col-4">
+                                                {/* <div className="timeUploaded col-4">
                                                     <i
                                                         className="fa fa-history"
                                                         aria-hidden="true"
@@ -268,7 +275,7 @@ class Competition extends Component {
                                                     {competition
                                                         ? competition.createdOn
                                                         : ""}
-                                                </div>
+                                                </div> */}
                                                 <div className="hosts col">
                                                     Hosted By:{" "}
                                                     <span>
@@ -280,6 +287,9 @@ class Competition extends Component {
                                                     </span>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div className="col submitButton">
+                                            <button>Upload Files</button>
                                         </div>
                                     </div>
                                     <div className="startEndTime row justify-content-start">
@@ -327,9 +337,14 @@ class Competition extends Component {
                                         </div>
                                     </div>
                                     <div className="row description">
-                                        {competition
-                                            ? competition.fulldescription
-                                            : ""}
+                                        <div className="col">
+                                            <h6 className="header">
+                                                About Competition:
+                                            </h6>
+                                            {competition
+                                                ? competition.fulldescription
+                                                : ""}
+                                        </div>
                                     </div>
                                     <div className="competition-prizes row">
                                         <div className="col">
@@ -341,11 +356,11 @@ class Competition extends Component {
                                             <div className="prizes row justify-content-center">
                                                 <div className="prize">
                                                     {/* <div className="type">
-                                                        Cash Prize
-                                                    </div>
-                                                    <div className="object">
-                                                        1000/-
-                                                    </div> */}
+                                                    Cash Prize
+                                                </div>
+                                                <div className="object">
+                                                    1000/-
+                                                </div> */}
                                                     {competition
                                                         ? competition.prize
                                                         : ""}
@@ -353,20 +368,30 @@ class Competition extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                    {/* <div className="competition-comments row">
+                                    <div className="row rules">
                                         <div className="col">
-                                            <div className="header row">
-                                                {competition
-                                                    ? competition.comments
-                                                          .length
-                                                    : 0}{" "}
-                                                Comments
-                                            </div>
-                                            {this.commentsComp(
-                                                competition.comments
-                                            )}
+                                            <h6 className="header">
+                                                Rules & Regulations:
+                                            </h6>
+                                            {competition
+                                                ? competition.rules
+                                                : ""}
                                         </div>
-                                    </div> */}
+                                    </div>
+                                    {/* <div className="competition-comments row">
+                                    <div className="col">
+                                        <div className="header row">
+                                            {competition
+                                                ? competition.comments
+                                                      .length
+                                                : 0}{" "}
+                                            Comments
+                                        </div>
+                                        {this.commentsComp(
+                                            competition.comments
+                                        )}
+                                    </div>
+                                </div> */}
                                 </div>
                             </div>
                         </div>
@@ -416,14 +441,20 @@ class Competition extends Component {
                                         }
                                     >
                                         <div className="col">
-                                            {this.participantsComp(
-                                                participants.slice(0, 5)
-                                            )}
+                                            {competition
+                                                ? this.participantsComp(
+                                                      competition.participants.slice(
+                                                          0,
+                                                          5
+                                                      )
+                                                  )
+                                                : null}
                                             <div className="count row">
                                                 <div className="col">
                                                     <h6>
-                                                        {participants.length >
-                                                        5 ? (
+                                                        {competition &&
+                                                        competition.participants
+                                                            .length > 5 ? (
                                                             <button
                                                                 onClick={
                                                                     this
@@ -433,9 +464,13 @@ class Competition extends Component {
                                                                 View all
                                                             </button>
                                                         ) : null}
-                                                        {" " +
-                                                            participants.length +
-                                                            " participants"}
+                                                        {competition
+                                                            ? " " +
+                                                              competition
+                                                                  .participants
+                                                                  .length +
+                                                              " participants"
+                                                            : ""}
                                                     </h6>
                                                 </div>
                                             </div>
@@ -479,22 +514,26 @@ class Competition extends Component {
                         </div>
                     </div>
                     <div className="participants-row row">
-                        {this.viewAllParticipantsComp(
-                            this.state.participantSearchList
-                        )}
+                        {competition
+                            ? this.viewAllParticipantsComp(
+                                  competition.participants
+                              )
+                            : null}
                     </div>
                 </div>
             </div>
-        );
+        ) : null;
     }
 }
 
 Competition.propTypes = {
     getCompetitionById: PropTypes.func.isRequired,
-    competitions: PropTypes.object.isRequired
+    competitions: PropTypes.object.isRequired,
+    alert: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
+    alert: state.alert,
     competitions: state.competitions
 });
 
