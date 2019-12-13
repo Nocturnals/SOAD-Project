@@ -9,7 +9,12 @@ const artistType = [
     "dancer",
     "comedian",
     "director",
-    "music director"
+    "music director",
+    "lyricist",
+    "musician",
+    "choreographer",
+    "manga artist",
+    "animator"
 ];
 
 module.exports = artistType;
