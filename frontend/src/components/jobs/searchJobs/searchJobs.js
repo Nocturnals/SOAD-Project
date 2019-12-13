@@ -406,6 +406,20 @@ class SearchJobs extends Component {
                                             )}
                                         </div>
                                     </div>
+                                    <div className="row jobStat jobsDone">
+                                        <div className="col">
+                                            <h6 className="header">
+                                                Jobs you are available for:
+                                            </h6>
+                                            {!auth.user ? (
+                                                <ClipLoader />
+                                            ) : (
+                                                this.displayMyJobs(
+                                                    auth.user.jobsAvailableFor
+                                                )
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         ) : null}
