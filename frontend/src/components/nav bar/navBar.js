@@ -100,7 +100,7 @@ class NavBar extends Component {
                   new LinkClass("/", "Home"),
                   new LinkClass("/search", "Search", "_blank"),
                   new LinkClass("/artists/feed", "Organisations"),
-                  new LinkClass("/jobs", "Jobs")
+                  new LinkClass("/jobs/results", "Jobs")
               ];
 
         return (

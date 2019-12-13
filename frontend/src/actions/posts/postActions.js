@@ -65,13 +65,16 @@ export function getHomeFeed() {
 
 export function alterLike(post_id) {
     return dispatch => {
+        dispatch({ type: postsConstants.LIKE_POST_REQUEST });
         axios
-            .post("http://localhost:4000/api/post/posts")
+            .put(`http://localhost:4000/api/post/like/${post_id}`)
             .then(res => {
                 console.log(res);
+                dispatch({ type: postsConstants.LIKE_POST_SUCCESS });
             })
             .catch(err => {
                 console.log(err);
+                dispatch({ type: postsConstants.LIKE_POST_FAILURE });
             });
     };
 }

@@ -10,6 +10,8 @@ import PostComments from "../helperCards/comments/postComments/comments";
 
 import "./post.css";
 
+import { alterLike } from "../../actions/index";
+
 export class Post {
     constructor(name, time, job, location, liked) {
         this.name = name;
@@ -29,8 +31,6 @@ class Comment {
 }
 
 class PostComp extends Component {
-    _isMounted = false;
-
     constructor(props) {
         super(props);
 
@@ -44,6 +44,7 @@ class PostComp extends Component {
         this.comments = this.post_details.comments;
 
         this.initialState = {
+            // liked: false,
             showCmnts: false,
             moreOptionsDrop: false,
             comments: this.comments,
@@ -54,6 +55,7 @@ class PostComp extends Component {
         this.state = { ...this.initialState };
 
         this.alterLike = this.alterLike.bind(this);
+        this.checkLiked = this.checkLiked.bind(this);
         this.toggleCommentsSection = this.toggleCommentsSection.bind(this);
         this.toggleDropDown = this.toggleDropDown.bind(this);
         this.dropDownEventListener = this.dropDownEventListener.bind(this);
@@ -62,7 +64,6 @@ class PostComp extends Component {
     }
     componentDidMount() {
         this.dropDownEventListener(false);
-        this._isMounted = true;
     }
     componentWillUnmount() {
         this.setState({ ...this.initialState });
@@ -108,13 +109,14 @@ class PostComp extends Component {
     };
 
     // Like Function...
-    alterLike = () => {
+    alterLike = id => {
         this.setState({
             liked: !this.state.liked,
             likes: this.state.liked
                 ? this.state.likes - 1
                 : this.state.likes + 1
         });
+        this.props.alterLike(id);
     };
 
     // Toggle More Options DropDown...
@@ -132,7 +134,6 @@ class PostComp extends Component {
     // DoropDown Event Listener...
     dropDownEventListener = remove => {
         if (remove) {
-            console.log("Asdasd");
             document.removeEventListener("click", event => {
                 this.eventListener(event);
             });
@@ -159,9 +160,11 @@ class PostComp extends Component {
     checkLiked = likedBy => {
         for (let index = 0; index < likedBy.length; index++) {
             if (this.props.auth.user._id === likedBy[index]._id) {
+                // this.setState({ liked: true });
                 return true;
             }
         }
+        // this.setState({ liked: false });
         return false;
     };
 
@@ -319,7 +322,9 @@ class PostComp extends Component {
                                             : "fa fa-heart-o"
                                     }
                                     aria-hidden="true"
-                                    onClick={this.alterLike}
+                                    onClick={() => {
+                                        this.alterLike(post_details._id);
+                                    }}
                                 ></i>
                                 <button>{post_details.likes}</button>
                             </span>
@@ -353,6 +358,7 @@ class PostComp extends Component {
 
 // specifiying the class to have these objects using propTypes
 PostComp.propTypes = {
+    alterLike: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
 };
 
@@ -360,4 +366,4 @@ const mapStateToProps = state => ({
     auth: state.auth
 });
 
-export default connect(mapStateToProps)(PostComp);
+export default connect(mapStateToProps, { alterLike })(PostComp);
