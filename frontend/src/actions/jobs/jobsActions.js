@@ -173,10 +173,15 @@ export function getFilteredAvailableJobs(options) {
     return dispatch => {
         dispatch(requestAction());
 
-        if (options.location == "") {
+        const newOptions = {
+            type: options.artistType,
+            location: options.workAt
+        };
+
+        if (newOptions.location !== "") {
             axios
                 .get(
-                    `http://localhost:4000/api/colab/artistForWork/${options.type}`
+                    `http://localhost:4000/api/colab/artistForWork/${newOptions.type}/${newOptions.location}`
                 )
                 .then(res => {
                     console.log(res);
@@ -199,8 +204,8 @@ export function getFilteredAvailableJobs(options) {
         } else {
             axios
                 .post(
-                    `http://localhost:4000/api/colab/${options.type}/${options.location}`,
-                    options
+                    `http://localhost:4000/api/colab/${newOptions.type}`,
+                    newOptions
                 )
                 .then(res => {
                     console.log(res);
@@ -223,7 +228,10 @@ export function getFilteredAvailableJobs(options) {
         }
 
         axios
-            .post("http://localhost:4000/api/colab/availableForJobs", options)
+            .post(
+                "http://localhost:4000/api/colab/availableForJobs",
+                newOptions
+            )
             .then(res => {
                 console.log(res);
                 dispatch(successAction(res.data));
