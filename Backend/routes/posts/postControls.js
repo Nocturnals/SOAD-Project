@@ -566,13 +566,14 @@ exports.getSpecialPost = async (req, res) => {
                     $gte: firstDay,
                     $lte: lastDay
                 },
-                imageurls: { $ne: [], $ne: [{}] },
+                imageurls: { $ne: [] },
                 isPrivate: { $ne: true },
-                $or: [{ category: "Photographer" }, { category: "Painter" }]
+                $or: [{ category: "photographer" }, { category: "painter" }]
             };
             const posts = await Post.find(query)
                 .limit(10)
-                .select(fields);
+                .select(fields)
+                .sort({ date: -1 });
             console.log(posts);
 
             return res.status(200).json(posts);
