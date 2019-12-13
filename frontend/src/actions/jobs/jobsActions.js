@@ -105,6 +105,10 @@ export function applyForJob(job_id) {
             .catch(err => {
                 console.log(err);
                 dispatch(failureAction(err.data));
+                dispatch({
+                    type: alertConstants.ERROR,
+                    message: err.response.data.message
+                });
             });
     };
 
