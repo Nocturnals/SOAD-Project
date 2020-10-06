@@ -62,26 +62,27 @@ class NavBar extends Component {
 
     // Rednering...
     render() {
-        const { isAuthed } = this.props.auth;
+        const { auth } = this.props;
 
-        const links = this.props.auth.isAuthed
+        const links = auth.isAuthed
             ? [
                   new LinkClass("/feed", "Home"),
                   new LinkClass("/search", "Search", "_blank"),
                   new LinkClass(
-                      "/artists/organisation-1/feed",
+                      "/artists/" +
+                          (auth.user
+                              ? auth.user.organizations[0].name + "/"
+                              : "") +
+                          "feed",
                       "Organisations"
                   ),
-                  new LinkClass("/jobs", "Jobs"),
+                  new LinkClass("/jobs/results/", "Jobs"),
                   new LinkClass("/colab/messages", "Messages")
               ]
             : [
                   new LinkClass("/", "Home"),
                   new LinkClass("/search", "Search", "_blank"),
-                  new LinkClass(
-                      "/artists/organisation-1/feed",
-                      "Organisations"
-                  ),
+                  new LinkClass("/artists/feed", "Organisations"),
                   new LinkClass("/jobs", "Jobs")
               ];
 
@@ -89,20 +90,14 @@ class NavBar extends Component {
             <nav
                 className={
                     "navbar sticky-top navbar-expand-lg" +
-                    (this.props.auth.isAuthed
+                    (auth.isAuthed
                         ? " bg-theme"
                         : this.props.contract
                         ? " bg-theme"
                         : " bg-black-06 nav-min-height") +
                     (this.props.blur ? " blur" : "")
                 }
-                id={
-                    this.props.auth.isAuthed
-                        ? ""
-                        : this.props.contract
-                        ? ""
-                        : "nav-bar"
-                }
+                id={auth.isAuthed ? "" : this.props.contract ? "" : "nav-bar"}
             >
                 <Link to="/">
                     <button className="navbar-brand navTitle">
@@ -131,40 +126,94 @@ class NavBar extends Component {
                         {this.linkComp(links)}
 
                         {/* Notiifcations */}
-                        {this.props.auth.isAuthed ? (
-                            <li className="nav-item dropdown notifications">
-                                <button
-                                    className="nav-link dropdown-toggle"
-                                    id="navbarDropdownMenuLink-333"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                    onClick={this.clearNotificationsBadge}
-                                >
-                                    Notifcations{" "}
-                                    {this.state.newNotifications ? (
-                                        <span className="badge badge-info">
-                                            10
-                                        </span>
-                                    ) : null}
-                                </button>
-                                <div
-                                    className="dropdown-menu dropdown-menu-right dropdown-default"
-                                    aria-labelledby="navbarDropdownMenuLink-333"
-                                >
-                                    <div className="dropdown-item view-all-notifications d-flex justify-content-between">
+                        {auth.isAuthed ? (
+                            <React.Fragment>
+                                <li className="nav-item dropdown notifications">
+                                    <button
+                                        className="nav-link dropdown-toggle"
+                                        id="navbarDropdownMenuLink-333"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        onClick={this.clearNotificationsBadge}
+                                    >
+                                        Notifcations{" "}
+                                        {this.state.newNotifications ? (
+                                            <span className="badge badge-info">
+                                                10
+                                            </span>
+                                        ) : null}
+                                    </button>
+                                    <div
+                                        className="dropdown-menu dropdown-menu-right dropdown-default"
+                                        aria-labelledby="navbarDropdownMenuLink-333"
+                                    >
+                                        <div className="dropdown-item view-all-notifications d-flex justify-content-between">
+                                            <Link
+                                                to="/"
+                                                style={{
+                                                    textDecoration: "none"
+                                                }}
+                                            >
+                                                <button>View All</button>
+                                            </Link>
+                                        </div>
+                                        <div className="dropdown-item notification">
+                                            <div className="">Vishwanth</div>
+                                        </div>
+                                    </div>
+                                </li>
+                                {/* Create New Things */}
+                                <li className="nav-item dropdown user">
+                                    <button
+                                        className="nav-link dropdown-toggle"
+                                        id="navbarDropdownMenuLink-333"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                    >
+                                        <i className="fa fa-plus"></i>{" "}
+                                    </button>
+                                    <div
+                                        className="dropdown-menu dropdown-menu-right dropdown-default"
+                                        aria-labelledby="navbarDropdownMenuLink-333"
+                                    >
                                         <Link
-                                            to="/"
-                                            style={{ textDecoration: "none" }}
+                                            to="/create/artists"
+                                            style={{
+                                                textDecoration: "none",
+                                                textTransform: "uppercase"
+                                            }}
                                         >
-                                            <button>View All</button>
+                                            <button className="dropdown-item">
+                                                Create Organisation
+                                            </button>
+                                        </Link>
+                                        <Link
+                                            to="/create-competition"
+                                            style={{
+                                                textDecoration: "none",
+                                                textTransform: "uppercase"
+                                            }}
+                                        >
+                                            <button className="dropdown-item">
+                                                Create Competition
+                                            </button>
+                                        </Link>
+                                        <Link
+                                            to="/job/ask"
+                                            style={{
+                                                textDecoration: "none",
+                                                textTransform: "uppercase"
+                                            }}
+                                        >
+                                            <button className="dropdown-item">
+                                                Ask for a Job
+                                            </button>
                                         </Link>
                                     </div>
-                                    <div className="dropdown-item notification">
-                                        <div className="">Vishwanth</div>
-                                    </div>
-                                </div>
-                            </li>
+                                </li>
+                            </React.Fragment>
                         ) : null}
 
                         {/* User Profile and Logout */}
@@ -177,9 +226,7 @@ class NavBar extends Component {
                                 aria-expanded="false"
                             >
                                 <i className="fa fa-user"></i>{" "}
-                                {this.props.auth.isAuthed
-                                    ? " " + this.props.auth.user.name
-                                    : null}
+                                {auth.isAuthed ? " " + auth.user.name : null}
                             </button>
                             <div
                                 className="dropdown-menu dropdown-menu-right dropdown-default"
@@ -187,10 +234,9 @@ class NavBar extends Component {
                             >
                                 <Link
                                     to={
-                                        !isAuthed
+                                        !auth.isAuthed
                                             ? "/auth/login"
-                                            : "/artist/" +
-                                              this.props.auth.user.name
+                                            : "/artist/" + auth.user.name
                                     }
                                     style={{
                                         textDecoration: "none",
@@ -198,10 +244,10 @@ class NavBar extends Component {
                                     }}
                                 >
                                     <button className="dropdown-item">
-                                        {!isAuthed ? "Login" : "Profile"}
+                                        {!auth.isAuthed ? "Login" : "Profile"}
                                     </button>
                                 </Link>
-                                {!isAuthed ? (
+                                {!auth.isAuthed ? (
                                     <Link
                                         to="/auth/register"
                                         style={{
@@ -210,7 +256,9 @@ class NavBar extends Component {
                                         }}
                                     >
                                         <button className="dropdown-item">
-                                            {!isAuthed ? "Register" : "Logout"}
+                                            {!auth.isAuthed
+                                                ? "Register"
+                                                : "Logout"}
                                         </button>
                                     </Link>
                                 ) : (
@@ -218,7 +266,7 @@ class NavBar extends Component {
                                         className="dropdown-item"
                                         onClick={this.logoutUser}
                                     >
-                                        {!isAuthed ? "Register" : "Logout"}
+                                        {!auth.isAuthed ? "Register" : "Logout"}
                                     </button>
                                 )}
                             </div>

@@ -10,10 +10,13 @@ export class Input extends Component {
         const {
             type,
             placeholder,
+            autoComplete,
             className,
+            id,
             name,
             value,
             handleInputChange,
+            onClick,
             error
         } = this.props;
 
@@ -23,9 +26,12 @@ export class Input extends Component {
                 className={
                     "styledInput " + className + (error ? " errorInput" : "")
                 }
+                id={id}
+                autoComplete={autoComplete}
                 placeholder={placeholder}
                 name={name}
                 onChange={handleInputChange}
+                onClick={onClick}
                 value={value}
             />
         );

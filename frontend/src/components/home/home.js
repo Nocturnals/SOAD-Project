@@ -4,33 +4,29 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import NavBar from "../nav bar/navBar";
-import PostComp from "../post/post";
+import PostComp, { Post } from "../post/post";
 import LeftContent from "./leftContent/leftContent";
 import RightContent from "./rightContent/rightContent";
 import CreatePostComp from "../post/createPost/createPost";
-import MainLoader from "../helpers/mainLoader/mainLoader";
 
 import "./home.css";
-
-// Post Element Class...
-class Post {
-    constructor(name, time, job, location, liked) {
-        this.name = name;
-        this.time = time;
-        this.job = job;
-        this.location = location;
-        this.liked = liked;
-    }
-}
 
 // Home Page Component...
 class HomePage extends Component {
     constructor(props) {
         super(props);
 
+        // Defining Elements
+        this.postUserImage = require("../media/images/categories/photographer.png");
+        this.posts = [
+            new Post("Shiva Ram Dubey", "3 min", "Epic Coder", "India", false),
+            new Post("Hemanth", "10 min", "Epic Coder", "India", true),
+            new Post("Vishwanth", "20 min", "Epic Coder", "India", false),
+            new Post("Nikhil", "59 min", "Epic Coder", "India", true)
+        ];
+
         this.state = {
-            showUploadPostPopUP: false,
-            isLoading: true
+            showUploadPostPopUP: false
         };
 
         this.toggleUploadPostPopUp = this.toggleUploadPostPopUp.bind(this);
@@ -39,12 +35,6 @@ class HomePage extends Component {
     // After Mounting the Component...
     componentDidMount() {
         document.body.scrollTo(0, 0);
-
-        setTimeout(() => {
-            this.setState({
-                isLoading: false
-            });
-        }, 1000);
     }
 
     // Toggling Upload Post PopUp
@@ -55,10 +45,10 @@ class HomePage extends Component {
     };
 
     // Generates Cards of Posts...
-    postCards = postDetails => {
+    postCards = () => {
         let postCards = [];
-        for (let i = 0; i < postDetails.length; i++) {
-            const post = postDetails[i];
+        for (let i = 0; i < this.posts.length; i++) {
+            const post = this.posts[i];
             const post_details = {
                 name: post.name,
                 time: post.time,
@@ -76,17 +66,10 @@ class HomePage extends Component {
     render() {
         const postUserImage = require("../media/images/categories/photographer.png");
 
-        // Defining Elements
-        const posts = [
-            new Post("Shiva Ram Dubey", "3 min", "Epic Coder", "India", false),
-            new Post("Hemanth", "10 min", "Epic Coder", "India", true),
-            new Post("Vishwanth", "20 min", "Epic Coder", "India", false),
-            new Post("Nikhil", "59 min", "Epic Coder", "India", true)
-        ];
+        const { auth } = this.props;
 
         return (
-            <React.Fragment className="home">
-                {this.state.isLoading ? <MainLoader /> : null}
+            <React.Fragment>
                 <NavBar blur={this.state.showUploadPostPopUP ? true : false} />
                 <div
                     className={
@@ -95,7 +78,7 @@ class HomePage extends Component {
                     }
                 >
                     <div className="personal-content col-3">
-                        <LeftContent email={this.props.auth.email} />
+                        <LeftContent />
                     </div>
                     <div className="posts col-6">
                         <div className="uploadPost row">
@@ -123,7 +106,7 @@ class HomePage extends Component {
                                 </div>
                             </div>
                         </div>
-                        {this.postCards(posts)}
+                        {this.postCards()}
                     </div>
                     <div className="rightContent col-3">
                         <RightContent />

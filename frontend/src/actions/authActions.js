@@ -20,6 +20,7 @@ export function login(email, password) {
             .post("http://localhost:4000/api/auth/login", user)
             .then(res => {
                 const { authorization } = res.headers;
+                console.log(res.data);
 
                 localStorage.setItem("userToken", authorization);
                 setAuthTokenHeader(authorization);
@@ -97,6 +98,9 @@ export function register(email, username, dateofbirth, password) {
 
 export function getUserWithToken(token) {
     return dispatch => {
+        // Request User
+        dispatch({ type: userAuthConst.LOAD_USER_REQUEST });
+
         // set the token to headers
         setAuthTokenHeader(token);
 

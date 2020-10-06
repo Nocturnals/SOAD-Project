@@ -53,16 +53,18 @@ nav .navBarToggler i {
     text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.6);
     font-size: 2rem;
     font-family: "LALORG";
-    transition: 0.2s all linear;
+    transition: 0.1s all linear;
 }
 .navTitle:hover {
     text-shadow: 5px 4px 1px rgba(0, 0, 0, 0.9);
 }
 .navTitle .fname {
     color: rgba(108, 238, 177, 1);
+    transition: 0.1s all linear;
 }
 .navTitle .lname {
     color: rgb(241, 218, 189);
+    transition: 0.1s all linear;
 }
 .navTitle:hover > .fname {
     color: rgb(241, 218, 189);

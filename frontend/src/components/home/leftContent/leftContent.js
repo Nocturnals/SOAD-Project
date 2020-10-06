@@ -32,6 +32,8 @@ class LeftContent extends Component {
     render() {
         const userImg = require("../../media/images/categories/photographer.png");
 
+        const { auth } = this.props;
+
         return (
             <div>
                 <div className="left-content row">
@@ -52,7 +54,9 @@ class LeftContent extends Component {
                                 </div>
                                 <div className="userDetails row">
                                     <div className="col-12">
-                                        <h4>{this.props.auth.user.name}</h4>
+                                        <h4>
+                                            {auth.user ? auth.user.name : ""}
+                                        </h4>
                                         <h6>Professional Red Hat Hacker</h6>
                                     </div>
                                 </div>
@@ -61,18 +65,26 @@ class LeftContent extends Component {
                         <div className="following row">
                             <div className="title">
                                 <h4>Following</h4>
-                                <h6>200</h6>
+                                <h6>
+                                    {auth.user && auth.user.following
+                                        ? auth.user.following.length
+                                        : 0}
+                                </h6>
                             </div>
                         </div>
                         <div className="followers row">
                             <div className="title">
                                 <h4>Followers</h4>
-                                <h6>200</h6>
+                                <h6>
+                                    {auth.user && auth.user.followers
+                                        ? auth.user.followers.length
+                                        : 0}
+                                </h6>
                             </div>
                         </div>
                         <div className="visit-profile row">
                             <Link
-                                to={"/artist/" + this.props.auth.user.name}
+                                to={"/artist/" + (auth.user && auth.user.name)}
                                 className="link"
                                 style={{ textDecoration: "none" }}
                             >

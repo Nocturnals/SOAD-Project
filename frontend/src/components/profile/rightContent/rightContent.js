@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import Competition from "../../competitions/competitionClass";
 
@@ -155,4 +157,12 @@ class RightContent extends Component {
     }
 }
 
-export default RightContent;
+RightContent.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(RightContent);

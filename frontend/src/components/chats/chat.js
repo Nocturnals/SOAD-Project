@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 export class Chat extends Component {
     messagesComp = () => {
+        const { auth } = this.props;
         let messages = [];
         for (let index = 0; index < 3; index++) {
             messages.push(
@@ -13,7 +14,13 @@ export class Chat extends Component {
                                 <span className="datetime">
                                     12:00PM, 11-10-2019&nbsp;&nbsp;
                                 </span>
-                                <Link to="/artist/" className="user">
+                                <Link
+                                    to={
+                                        "/artist/" +
+                                        (auth.user && auth.user.name)
+                                    }
+                                    className="user"
+                                >
                                     You
                                 </Link>
                             </div>
@@ -28,7 +35,10 @@ export class Chat extends Component {
                     <div className="row otherMessage">
                         <div className="col">
                             <div className="row chatDetails">
-                                <Link className="user">
+                                <Link
+                                    to={"/artist/" + this.props.user.name}
+                                    className="user"
+                                >
                                     {this.props.user.name}
                                 </Link>
                                 <h6 className="datetime">

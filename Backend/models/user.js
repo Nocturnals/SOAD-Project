@@ -3,6 +3,9 @@ const mongoose = require("mongoose");
 const { JobsAppliedSchema } = require("./jobsApplied");
 const otheruserschema = require("./Otheruser");
 const othercompetititonschema = require("./Othercompetitions");
+const { NotificationSchema } = require("./Notifications");
+const { OrganizationSchema } = require("./Organizations");
+const artistTypes = require("./artistTypes");
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -10,7 +13,8 @@ const userSchema = new mongoose.Schema({
         required: true,
         min: 4,
         max: 255,
-        trim: true
+        trim: true,
+        unique: true
     },
     email: {
         type: String,
@@ -34,12 +38,12 @@ const userSchema = new mongoose.Schema({
     },
 
     primaryinterest: {
-        enum: ["cat1", "cat2"],
-        type: String
+        enum: artistTypes,
+        type: String,
+        default: null
     },
 
     otherinterest: {
-        enum: ["cat1", "cat2"],
         type: String
     },
 
@@ -83,6 +87,14 @@ const userSchema = new mongoose.Schema({
 
     jobsApplied: {
         type: [JobsAppliedSchema],
+        default: []
+    },
+    notifications: {
+        type: [NotificationSchema],
+        default: []
+    },
+    organizations: {
+        type: [OrganizationSchema],
         default: []
     }
 });
